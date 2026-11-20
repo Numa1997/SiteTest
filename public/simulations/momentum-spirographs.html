@@ -13,26 +13,97 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .sim, .sim-top { max-width: 1560px; }
-        @media (min-width: 901px) { .sim__grid { grid-template-columns: minmax(0, 1fr) 300px; } }
+        /* the sheet's own layout (20 November 2026): on a desktop the lede across the top, the figure and its bar on the left,
+           the pinned pendulum and the rest of the controls on the right; on a phone the figure edge to edge under the title, its bar,
+           the pinned pendulum, then the lede and the other controls */
+        .f13page [hidden] { display: none !important; }
+        .f13page .sim__head { max-width: none; margin-bottom: 12px; }
+        .f13page .sim__head h1 { margin-bottom: 0; }
+        .f13page .sim__head, .f13page .stage, .f13page .panel { animation: none; }
+        .f13 { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "intro intro" "main side"; gap: 18px 24px; align-items: start; }
+        .f13__intro { grid-area: intro; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 40px; }
+        .f13__intro .sim__lede { flex: 1 1 520px; max-width: 920px; margin: 0; }
+        .f13__introside { flex: 0 1 auto; }
+        .f13__main { grid-area: main; min-width: 0; display: grid; gap: 10px; }
+        .f13__side { grid-area: side; min-width: 0; display: grid; gap: 16px; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+        .dedication { margin: 0 0 8px; font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.4; color: var(--muted); }
+        .onpage { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+        .onpage a { display: inline-flex; align-items: center; min-height: 40px; box-sizing: border-box; padding: 0 14px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 999px; background: var(--card); color: var(--accent, #7a1f2b); font: 13px/1.2 var(--mono); text-decoration: none; white-space: nowrap; }
+        .onpage a:hover { border-color: var(--accent); }
         /* the figure: a plate the exposure is drawn on; night or paper */
-        #stage { position: relative; background: var(--card); }
+        #stage { position: relative; background: var(--card); cursor: pointer; overflow: hidden; outline-offset: -3px; }
         #stage.is-night, .stage__canvas#stage.is-night { background: #140d10; background-image: none; }
-        #stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-        .seg { display: inline-flex; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; overflow: hidden; }
-        .seg .btn { border: 0; border-radius: 0; margin: 0; }
-        .seg .btn + .btn { border-left: 1px solid var(--line-strong, #cdc1ae); }
-        .seg .btn.is-on { background: var(--accent); color: var(--card); }
-        .panel .seg { margin-top: 2px; }
-            .read { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font: 12px/1.5 var(--mono); color: var(--ink-2); margin: 8px 0 0; }
+        @media (min-width: 901px) {
+            .f13page.sim { padding-top: 22px; }
+            .f13page .sim__head h1 { font-size: clamp(38px, 4vw, 54px); }
+            .f13__intro .sim__lede { font-size: 19.5px; }
+            .f13page .stage__canvas { max-width: calc((100vh - 100px) * 16 / 9); }
+        }
+        .f13__layers { position: absolute; inset: 0; will-change: transform; }
+        .f13__layers canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        #stage.is-panning { cursor: grabbing; }
+        /* the pin: a ring the reader can take hold of and drag across the sheet */
+        .f13__mark { position: absolute; left: 0; top: 0; width: 52px; height: 52px; margin: -26px 0 0 -26px; padding: 0; border: 2px solid #fff6ea; border-radius: 50%; background: rgba(122, 31, 43, .22); box-shadow: 0 0 0 2px rgba(20, 13, 16, .55), 0 2px 10px rgba(0, 0, 0, .35); touch-action: none; cursor: grab; z-index: 2; }
+        .f13__mark span { position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff6ea; }
+        .f13__mark.is-held { cursor: grabbing; background: rgba(122, 31, 43, .45); width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+        .f13__mark:focus-visible { outline: 3px solid #ffd27a; outline-offset: 2px; }
+        .f13__hint { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); margin: 0; padding: 7px 14px; border-radius: 999px; background: rgba(20, 13, 16, .82); color: #fff6ea; font: 13px/1.2 var(--mono); white-space: nowrap; pointer-events: none; z-index: 1; }
+        /* the bar under the figure: large buttons within reach of a thumb */
+        .f13__bar { display: flex; align-items: stretch; gap: 4px; padding: 6px; border-top: 1px solid var(--rule-soft); background: var(--card); }
+        .f13__bar button { flex: 1 1 0; min-width: 0; min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 4px 2px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--accent); font: 11.5px/1.1 var(--mono); letter-spacing: .02em; cursor: pointer; touch-action: manipulation; transition: background .15s ease, color .15s ease, border-color .15s ease; }
+        .f13__bar button svg { width: 24px; height: 24px; fill: currentColor; flex: none; }
+        .f13__bar button span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+        .f13__bar button:hover { border-color: var(--rule); background: var(--card-soft, #faf6ef); }
+        .f13__bar button:active { transform: scale(.96); }
+        .f13__bar button[aria-pressed="true"]:not(#play) { background: var(--accent); color: var(--card); }
+        #play .i-play, #play[aria-pressed="false"] .i-pause { display: none; }
+        #play[aria-pressed="false"] .i-play { display: inline; }
+        .f13__t { flex: 0 0 auto; align-self: center; min-width: 8.5ch; padding: 0 8px; text-align: right; font: 12px var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+        .f13__keys { margin: 0 2px; font-size: 14px; line-height: 1.55; color: var(--ink-2); max-width: 980px; }
+        .f13__keys b { font-weight: 500; color: var(--ink); }
+        @media (hover: none) and (pointer: coarse) { .f13__fine { display: none; } }
+        /* the pinned pendulum */
+        .f13__probe { display: grid; gap: 10px; }
+        #probe { display: block; width: 100%; aspect-ratio: 1 / 1; background: #140d10; border-radius: 8px; }
+        #probe.is-paper { background: var(--card); border: 1px solid var(--rule-soft); }
+        .read { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font: 12.5px/1.5 var(--mono); color: var(--ink-2); margin: 0; }
         .read dt { color: var(--muted); }
         .read dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
-        #probe { display: block; width: 100%; aspect-ratio: 1 / 1; background: #140d10; border-radius: 8px; }
-        #probe.is-paper { background: var(--card); }
-        #stage { cursor: pointer; }
-        .dedication { margin: 10px 0 0; font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.5; color: var(--muted); }
-        #zin, #zout, #zall, #v-tip, #v-ang, #v-sec { min-height: 44px; }
-        .onpage { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
-        .onpage a { display: inline-block; padding: 9px 13px; min-height: 22px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 999px; background: var(--card); color: var(--accent, #7a1f2b); font: 13px/1.3 var(--mono); text-decoration: none; }
+        .verdict { margin: 8px 0 0; font-size: 14px; line-height: 1.5; min-height: 4.5em; }
+        .seg { display: flex; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; overflow: hidden; }
+        .seg .btn { flex: 1; min-height: 44px; border: 0; border-radius: 0; margin: 0; padding: 8px 6px; }
+        .seg .btn:hover { transform: none; }
+        .seg .btn + .btn { border-left: 1px solid var(--line-strong, #cdc1ae); }
+        .seg .btn.is-on { background: var(--accent); color: var(--card); }
+        .f13__vsay { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+        #unpin { min-height: 44px; }
+        .f13__zsay { margin: 0; font: 12px/1.5 var(--mono); color: var(--ink-2); }
+        .f13__select { width: 100%; min-height: 44px; padding: 8px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; background: var(--card); color: var(--ink); font: 13px/1.3 var(--mono); }
+        @media (max-width: 900px) {
+            .f13 { display: flex; flex-direction: column; gap: 14px; }
+            .f13__side { display: contents; }
+            .f13__main { order: 1; } .f13__pin { order: 2; } .f13__intro { order: 3; } .f13__more { order: 4; }
+            .f13 > *, .f13__side > *, .f13__introside { min-width: 0; max-width: 100%; }
+            .f13__intro { display: block; } .f13__intro .sim__lede { margin-bottom: 10px; }
+            .f13__probe { grid-template-columns: minmax(0, 46%) minmax(0, 1fr); align-items: start; }
+            .f13__probeside .read { grid-template-columns: 1fr; gap: 0; }
+            .f13__probeside .read dd { text-align: left; color: var(--ink); margin-bottom: 4px; }
+            .verdict { min-height: 0; font-size: 13.5px; }
+        }
+        @media (max-width: 640px) {
+            .f13page.sim { padding: 14px 16px 56px; }
+            .f13page .sim__head h1 { font-size: 34px; }
+            .f13page .sim__num { margin-bottom: 6px; }
+            .f13__main .stage { margin: 0 -16px; border-radius: 0; border-left: 0; border-right: 0; box-shadow: none; }
+            .f13__bar { padding: 4px; gap: 2px; }
+            .f13__bar button { min-height: 56px; font-size: 10.5px; letter-spacing: 0; }
+            .f13__t { display: none; }
+            .f13__main .stage__cap { font-size: 14px; padding: 8px 14px; }
+            .f13__intro .sim__lede { font-size: 17px; flex-basis: auto; }
+            .onpage { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 4px; scrollbar-width: none; }
+            .onpage::-webkit-scrollbar { display: none; }
+            .onpage a { min-height: 44px; }
+        }
         .inside { margin: 44px 0 0; }
         .inside > h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 0 0 6px; color: var(--ink); }
         .inside > p { margin: 0 0 16px; font-size: 16px; line-height: 1.6; color: var(--ink-2); max-width: 760px; }
@@ -55,7 +126,7 @@
         .paper__toc li.toc-part { list-style: none; margin: 10px 0 4px; font: 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
     </style>
 </head>
-<body>
+<body data-tex="near">
     <header class="sim-top">
         <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48"></a><a href="../simulations.html">← All simulations</a></span>
         <nav class="sim-nav" aria-label="Simulations">
@@ -75,102 +146,116 @@
     </header>
     <noscript><p style="padding:16px">This figure needs JavaScript.</p></noscript>
 
-    <main class="sim">
+    <main class="sim f13page">
         <div class="sim__head">
             <p class="sim__num">Fig. 13 · classical mechanics · chaos</p>
             <h1>Spirographs in Momentum Space<span class="dot">.</span></h1>
-            <p class="sim__lede">A hundred double pendulums hang still, and each is given a different kick. The tip of each one draws its own curve: a tidy rosette where the motion is regular, a tangle where it is chaotic. Every curve is computed live from Hamilton's equations.</p>
-            <p class="dedication">To Rim</p>
-            <ul class="onpage" aria-label="On this page">
-                <li><a href="#sheet">The sheet</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The flower hunt</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The eight films</a></li><li><a href="#paper">All the theory</a></li>
-            </ul>
         </div>
 
-        <div class="sim__grid">
-            <div class="stack">
+        <div class="f13">
+            <div class="f13__intro">
+                <p class="sim__lede">A hundred double pendulums hang still, and each is given a different kick. The tip of each one draws its own curve: a tidy rosette where the motion is regular, a tangle where it is chaotic. Every curve is computed live from Hamilton's equations.</p>
+                <div class="f13__introside">
+                    <p class="dedication">To Rim</p>
+                    <ul class="onpage" aria-label="On this page">
+                        <li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The flower hunt</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The eight films</a></li><li><a href="#paper">All the theory</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="f13__main">
                 <figure class="stage" id="sheet">
-                    <div class="stage__canvas is-night" id="stage" style="--ar: 16 / 9;">
-                        <canvas id="map" aria-hidden="true"></canvas>
-                        <canvas id="cv" aria-label="Tip paths of a grid of double pendulums, all started hanging straight down with different momenta"></canvas>
-                        <canvas id="rodcv" aria-hidden="true"></canvas>
+                    <div class="stage__canvas is-night" id="stage" style="--ar: 16 / 9;" tabindex="0" aria-describedby="sheet-keys">
+                        <div class="f13__layers" id="layers">
+                            <canvas id="map" aria-hidden="true"></canvas>
+                            <canvas id="cv" aria-label="Tip paths of a grid of double pendulums, all started hanging straight down with different momenta"></canvas>
+                            <canvas id="rodcv" aria-hidden="true"></canvas>
+                        </div>
+                        <button type="button" class="f13__mark" id="mark" hidden aria-label="The pinned strike: drag it across the sheet to strike the pinned pendulum anew"><span></span></button>
+                        <p class="f13__hint" id="hint">Drag the ring · tap a cell</p>
+                    </div>
+                    <div class="f13__bar" role="toolbar" aria-label="The sheet">
+                        <button type="button" id="play" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/><path class="i-play" d="M8 5l11 7-11 7z"/></svg><span>Pause</span></button>
+                        <button type="button" id="restart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.6 4.7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M3.5 4.5l1.9 5.4 5.4-1.9z"/></svg><span>Restart</span></button>
+                        <button type="button" id="zout"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15 15l5.5 5.5M7.5 10.5h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Zoom −</span></button>
+                        <button type="button" id="zin"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15 15l5.5 5.5M7.5 10.5h6M10.5 7.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Zoom +</span></button>
+                        <button type="button" id="zall"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Whole</span></button>
+                        <button type="button" id="anat" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.2"/></svg><span>The eye</span></button>
+                        <button type="button" id="rods" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l-4 8 7 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="3" r="2"/><circle cx="8" cy="11" r="2.4"/><circle cx="15" cy="20" r="2.4"/></svg><span>Rods</span></button>
+                        <output id="cap-t" class="f13__t"><i>t</i> = 0.0 s</output>
                     </div>
                     <figcaption class="stage__cap">
                         <span><b>Fig. 13</b> · one double pendulum per cell, each struck once from hanging still. Left to right the strike on the upper rod <i>p</i><sub>1</sub> grows, bottom to top the strike on the lower rod <i>p</i><sub>2</sub>. Each cell shows the real path of that pendulum's tip. The glow behind is the chaos map: bright where two almost equal strikes part quickly.</span>
-                        <span id="cap-t"><i>t</i> = 0.00 s</span>
                     </figcaption>
                 </figure>
-                <p style="margin:12px 2px 0;font-size:15px;line-height:1.6;color:var(--ink-2)">Tap a cell to pin its pendulum and read its strike. The cells do not touch each other: they are a hundred separate experiments, sorted by how they were struck. Everything made around this figure is further down this page: <a href="#butterfly"><b>the butterfly</b></a>, <a href="#hunt"><b>the flower hunt</b></a>, <a href="#catch"><b>the catch</b></a>, <a href="#films"><b>the eight films</b></a> and <a href="#paper"><b>all the theory</b></a>.</p>
+                <p class="f13__keys" id="sheet-keys"><b>Handles.</b> Tap a cell to pin its pendulum; drag the ring to strike it anew anywhere on the sheet; tap twice to zoom in there.<span class="f13__fine"> With a mouse, drag the sheet to move it. Keys: arrows move the pin, + and − zoom, space pauses.</span> The cells are a hundred separate experiments, sorted by how they were struck.</p>
             </div>
 
-            <aside class="panel" aria-label="Controls">
-                <div class="panel__group">
-                    <p class="panel__label">Run</p>
-                    <div class="actions" style="display:flex;gap:8px">
-                        <button type="button" class="btn" id="play">Pause</button>
-                        <button type="button" class="btn btn--ghost" id="restart">Restart</button>
+            <div class="f13__side">
+                <aside class="panel f13__pin" aria-label="Pinned pendulum">
+                    <div class="panel__group">
+                        <p class="panel__label">Pinned pendulum</p>
+                        <div class="f13__probe">
+                            <canvas id="probe" aria-label="The pinned pendulum: its rods and recent tip path, or its two angles against each other, or its section, as chosen below"></canvas>
+                            <div class="f13__probeside">
+                                <dl class="read">
+                                    <dt>strike <i>p</i><sub>1</sub>, <i>p</i><sub>2</sub></dt><dd id="pr-p">–</dd>
+                                    <dt>energy of the strike</dt><dd id="pr-e">–</dd>
+                                    <dt>chaos map value</dt><dd id="pr-v">–</dd>
+                                </dl>
+                                <p class="verdict" id="pr-say">Tap a cell of the figure.</p>
+                            </div>
+                        </div>
+                        <div class="seg" role="group" aria-label="What the small picture shows"><button type="button" class="btn btn--ghost is-on" id="v-tip">Tip path</button><button type="button" class="btn btn--ghost" id="v-ang">Angles</button><button type="button" class="btn btn--ghost" id="v-sec">Section</button></div>
+                        <p id="v-say" class="f13__vsay">The two rods and the last 3 s of the tip's path.</p>
+                        <button type="button" class="btn btn--ghost" id="unpin" hidden>Let go of the pin</button>
                     </div>
-                    <label class="switch"><span>Show rods</span><input type="checkbox" id="rods"></label>
-                    <label class="switch"><span>Show chaos map</span><input type="checkbox" id="showmap" checked></label>
-                    <label class="switch"><span>Explain the eye</span><input type="checkbox" id="anat"></label>
-                </div>
-                <div class="panel__group">
-                    <p class="panel__label">Pinned pendulum</p>
-                    <div class="seg" role="group" aria-label="What the small picture shows" style="display:flex;margin-bottom:8px"><button type="button" class="btn btn--ghost is-on" id="v-tip" style="flex:1">Tip path</button><button type="button" class="btn btn--ghost" id="v-ang" style="flex:1">Angles</button><button type="button" class="btn btn--ghost" id="v-sec" style="flex:1">Section</button></div>
-                    <canvas id="probe" aria-label="The pinned pendulum: its rods and recent tip path, or its two angles against each other, or its section, as chosen above"></canvas>
-                    <p id="v-say" style="margin:6px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2);min-height:5.6em">The two rods and the last 3 s of the tip's path.</p>
-                    <dl class="read">
-                        <dt>strike <i>p</i><sub>1</sub>, <i>p</i><sub>2</sub></dt><dd id="pr-p">–</dd>
-                        <dt>kinetic energy of the strike</dt><dd id="pr-e">–</dd>
-                        <dt>chaos map value</dt><dd id="pr-v">–</dd>
-                    </dl>
-                    <p class="verdict" id="pr-say" style="margin:8px 0 0;font-size:14px;line-height:1.5;min-height:4.5em">Tap a cell of the figure.</p>
-                </div>
-                <div class="panel__group">
-                    <p class="panel__label">Zoom</p>
-                    <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap">
-                        <button type="button" class="btn" id="zin">Zoom in</button>
-                        <button type="button" class="btn btn--ghost" id="zout">Zoom out</button>
-                        <button type="button" class="btn btn--ghost" id="zall">Whole sheet</button>
+                </aside>
+
+                <aside class="panel f13__more" aria-label="More controls">
+                    <div class="panel__group">
+                        <p class="panel__label">Where on the sheet</p>
+                        <p id="z-say" class="f13__zsay">–</p>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>Atlas: the closed curves found so far</span></span>
+                            <select id="atlas" class="f13__select"><option value="">Choose a curve to go to</option></select>
+                        </label>
+                        <label class="switch"><span>Show chaos map</span><input type="checkbox" id="showmap" checked></label>
                     </div>
-                    <p id="z-say" style="margin:8px 0 0;font:12px/1.5 var(--mono);color:var(--ink-2);min-height:3em">–</p>
-                    <label class="ctl" style="margin-top:8px">
-                        <span class="ctl__row"><span>Atlas: the closed curves found so far</span></span>
-                        <select id="atlas" style="width:100%;min-height:44px;padding:8px;border:1px solid var(--line-strong, #cdc1ae);border-radius:8px;background:var(--card);color:var(--ink);font:13px/1.3 var(--mono)"><option value="">Choose a curve to go to</option></select>
-                    </label>
-                </div>
-                <div class="panel__group">
-                    <p class="panel__label">Picture</p>
-                    <div class="seg" role="group" aria-label="Plate"><button type="button" class="btn btn--ghost is-on" id="look-night">Night plate</button><button type="button" class="btn btn--ghost" id="look-paper">Paper plate</button></div>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Trail memory τ</span><output id="tau-out">1.5 s</output></span>
-                        <input type="range" id="tau" min="0.3" max="6" step="0.1" value="1.5">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Pendulums per row N</span><output id="n-out">10</output></span>
-                        <input type="range" id="n" min="4" max="14" step="1" value="10">
-                    </label>
-                </div>
-                <div class="panel__group">
-                    <p class="panel__label">Pendulum</p>
-                    <div class="seg" role="group" aria-label="Model"><button type="button" class="btn btn--ghost is-on" id="m-rods">Uniform rods</button><button type="button" class="btn btn--ghost" id="m-pts">Point masses</button></div>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Mass ratio <i>m</i><sub>2</sub>/<i>m</i><sub>1</sub></span><output id="mr-out">1.00</output></span>
-                        <input type="range" id="mr" min="-1.6" max="1.6" step="0.05" value="0">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Length ratio <i>l</i><sub>2</sub>/<i>l</i><sub>1</sub></span><output id="lr-out">1.00</output></span>
-                        <input type="range" id="lr" min="-1" max="1" step="0.05" value="0">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Momentum range <i>P</i></span><output id="p-out">20 kg·m²/s</output></span>
-                        <input type="range" id="p" min="2" max="30" step="1" value="20">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Gravity <i>g</i></span><output id="g-out">9.8 m/s²</output></span>
-                        <input type="range" id="g" min="0" max="25" step="0.1" value="9.8">
-                    </label>
-                </div>
-            </aside>
+                    <div class="panel__group">
+                        <p class="panel__label">Picture</p>
+                        <div class="seg" role="group" aria-label="Plate"><button type="button" class="btn btn--ghost is-on" id="look-night">Night plate</button><button type="button" class="btn btn--ghost" id="look-paper">Paper plate</button></div>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>Trail memory τ</span><output id="tau-out">1.5 s</output></span>
+                            <input type="range" id="tau" min="0.3" max="6" step="0.1" value="1.5">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>Pendulums per row N</span><output id="n-out">10</output></span>
+                            <input type="range" id="n" min="4" max="14" step="1" value="10">
+                        </label>
+                    </div>
+                    <div class="panel__group">
+                        <p class="panel__label">Pendulum</p>
+                        <div class="seg" role="group" aria-label="Model"><button type="button" class="btn btn--ghost is-on" id="m-rods">Uniform rods</button><button type="button" class="btn btn--ghost" id="m-pts">Point masses</button></div>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>Mass ratio <i>m</i><sub>2</sub>/<i>m</i><sub>1</sub></span><output id="mr-out">1.00</output></span>
+                            <input type="range" id="mr" min="-1.6" max="1.6" step="0.05" value="0">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>Length ratio <i>l</i><sub>2</sub>/<i>l</i><sub>1</sub></span><output id="lr-out">1.00</output></span>
+                            <input type="range" id="lr" min="-1" max="1" step="0.05" value="0">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>Momentum range <i>P</i></span><output id="p-out">20 kg·m²/s</output></span>
+                            <input type="range" id="p" min="2" max="30" step="1" value="20">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>Gravity <i>g</i></span><output id="g-out">9.8 m/s²</output></span>
+                            <input type="range" id="g" min="0" max="25" step="0.1" value="9.8">
+                        </label>
+                    </div>
+                </aside>
+            </div>
         </div>
 
         <section class="inside" id="inside" aria-labelledby="inside-title">
@@ -318,7 +403,7 @@
 
                     <section class="psec" id="n-eye">
                         <h3><span class="psec__n">05</span>The eye: pupil and iris</h3>
-                        <p class="psec__lead">The eye is drawn by energy. Switch on <em>Explain the eye</em> above to see the curves of this section on the figure.</p>
+                        <p class="psec__lead">The eye is drawn by energy. Press <em>The eye</em> in the bar under the figure to see the curves of this section on the figure.</p>
                         <p>On this map chaos appears only where a rod can go over the top: as long as both rods only rock about the bottom, the motion stays close to two coupled swings, and the twins stay together. Going over the top costs energy, and the strike must pay it. From (2), with the pendulum hanging at \(V = -(U_1 + U_2)\):</p>
                         \[ \text{lower rod up, upper rod down: } K \ge 2U_2 = 9.8\ \mathrm{J};\qquad \text{upper rod up, lower hanging from it: } K \ge 2U_1 = 29.4\ \mathrm{J};\qquad \text{both straight up: } K \ge 2(U_1+U_2) = 39.2\ \mathrm{J}. \tag{7} \]
                         <p>(The first threshold is Heyl's energy argument for a flip; the other two follow the same way.) Each threshold is one of the ellipses of (4).</p>
@@ -385,16 +470,16 @@
                         <h3><span class="psec__n">09</span>Equation to screen</h3>
                         <ul>
                             <li><b>A cell's place</b>: the strike. The small numbers along the left edge are \(p_2\) of each row, those along the bottom \(p_1\) of each column, in kg·m²/s.</li>
-                            <li><b>A cell's drawing</b>: equation (5), the tip in metres; the pin is the cell's centre; 2 m is 0.4 of the cell's shorter side. <em>Show rods</em> draws the two rods themselves.</li>
+                            <li><b>A cell's drawing</b>: equation (5), the tip in metres; the pin is the cell's centre; 2 m is 0.4 of the cell's shorter side. <em>Rods</em>, in the bar under the figure, draws the two rods themselves.</li>
                             <li><b>The glow</b>: \(v\) of (6) for the strike at that point of the sheet; wine to rose, transparent where \(v = 0\).</li>
-                            <li><b>Explain the eye</b>: the green ellipse is \(K = 2U_2\) (the pupil's edge), the yellow one \(K = 2(U_1 + U_2)\), both from (4) and (7) with the sliders' values; the dashed lines are (9), from (8) in its general form.</li>
-                            <li><b>The pinned pendulum</b>: tap a cell. The panel shows its strike, \(K\) from (4), the map's \(v\) at its strike, and which part of the eye it is in. A tap on it again lets it go. The small picture has three views.</li>
+                            <li><b>The eye</b>: the green ellipse is \(K = 2U_2\) (the pupil's edge), the yellow one \(K = 2(U_1 + U_2)\), both from (4) and (7) with the sliders' values; the dashed lines are (9), from (8) in its general form.</li>
+                            <li><b>The pinned pendulum</b>: the page opens with the butterfly's strike pinned; tap a cell to pin another. A ring marks the pinned strike. Drag the ring and the pinned pendulum is struck afresh at the strike under your finger, about eleven times a second while you drag, anywhere on the sheet and not only at the centres of cells; a strike within 8 % of a cell of its centre takes that cell. The panel shows its strike, \(K\) from (4), the map's \(v\) at its strike, and which part of the eye it is in, rewritten at most four times a second. <em>Let go of the pin</em> lets it go. The small picture has three views.</li>
                             <li><b>Tip path</b>: that pendulum enlarged, with the last 3 s of its tip's path.</li>
                             <li><b>Angles</b>: \(\theta_2\) against \(\theta_1\), each taken between −180° and +180°, hanging straight down in the middle. The left edge is the same line as the right one and the bottom the same as the top, so the square is a torus cut open and laid flat. The path is kept from the moment of pinning. A rod that goes over the top leaves through one edge and comes back through the opposite one.</li>
                             <li><b>Section</b>: a Poincaré section. Each time the upper rod passes straight down, \(\theta_1 = 0\) (mod \(2\pi\)), one dot is placed at \((\theta_2, p_2)\). The energy is fixed, so the motion lives on a three-dimensional surface, and the section cuts that surface down to a plane. A regular motion winds round a torus, and its dots fall on the closed curve where the plane cuts that torus. A chaotic motion scatters its dots over an area. A closed orbit returns to the same few dots. A pass with the upper rod turning backwards is drawn at \((-\theta_2, -p_2)\): the mirror image of a motion is again a motion, so all dots belong to one section, the one with \(\dot\theta_1 > 0\). The moment of passing is found inside one integration step of 1/4500 s by a straight line.</li>
-                            <li><b>Zoom</b>: the sheet is a window on the plane of strikes. <em>Zoom in</em> halves its width and height around the pinned strike, which stays pinned; with nothing pinned it narrows around the middle. The pendulums in the cells are computed afresh for the new strikes. The map behind is one stored picture, a value every 0.056 kg·m²/s; zoomed in further than that it shows its own grain and nothing new.</li>
+                            <li><b>Zoom</b>: the sheet is a window on the plane of strikes. <em>Zoom +</em> (or a second tap on the pinned cell) halves its width and height around the pinned strike, which stays pinned; with nothing pinned it narrows around the middle. The pendulums in the cells are computed afresh for the new strikes. The map behind is one stored picture, a value every 0.056 kg·m²/s; zoomed in further than that it shows its own grain and nothing new. With a mouse the sheet can be dragged: the window moves by the strikes the drag covers, and the cells start again. <em>Whole</em> goes back to the whole sheet and keeps the pin.</li>
                             <li><b>Atlas</b>: the list holds the fourteen closed curves of the flower hunt of Part III, ten flowers and four butterflies, read from the same file as the hunt's garden. Choosing one sets the pendulum to equal rods under \(g = 9.8\) m/s², puts that strike on the centre of a cell, pins it, and shows 1 kg·m²/s of \(p_2\) either side of it. The neighbours then show how the curve opens when the strike is slightly off.</li>
-                            <li><b>Where drawing and model differ</b>: the plate forgets (the model does not); the colour is a logarithm of the exposure; the map is 6.67 s of twins, so a strike whose twins part only later counts as regular.</li>
+                            <li><b>Where drawing and model differ</b>: the plate forgets (the model does not); the sheet stops while it is off the screen, and on a slow device it runs slower than real time rather than skipping steps, so \(t\) under the figure is the time of the model, not of the clock; the colour is a logarithm of the exposure; the map is 6.67 s of twins, so a strike whose twins part only later counts as regular.</li>
                         </ul>
                     </section>
 
@@ -405,7 +490,7 @@
                             <span class="pbox__t">Problems</span>
                             <ol>
                                 <li>The butterfly's strike is \(p_1 = 3.557\), \(p_2 = 12.211\) kg·m²/s. Put it into (4) and find its kinetic energy. How many times the eye's outer edge, 39.2 J, is it? Check your number against the panel: choose the butterfly of 24 turns in the atlas.</li>
-                                <li>Where does the pupil's edge, \(K = 9.8\) J, cross the two axes of the sheet? Set \(p_2 = 0\) in (4), then \(p_1 = 0\). Switch on <em>Explain the eye</em> and compare. Why is the pupil wider than it is tall?</li>
+                                <li>Where does the pupil's edge, \(K = 9.8\) J, cross the two axes of the sheet? Set \(p_2 = 0\) in (4), then \(p_1 = 0\). Press <em>The eye</em> and compare. Why is the pupil wider than it is tall?</li>
                                 <li>The dashed lines are the strikes for which the fold-through condition (8) holds with an equals sign. Divide \(3p_1^2 - 114\,p_1p_2 + 75\,p_2^2 = 0\) by \(p_2^2\), solve the quadratic for \(p_1/p_2\), and recover the two slopes of (9).</li>
                                 <li>Go to a closed curve in the atlas and open <em>Section</em>. Count the separate dots after a minute. Then tap a neighbouring cell. Its dots do not repeat; they fill in a ring. Say in one sentence what the ring is a cut through.</li>
                             </ol>
@@ -799,6 +884,31 @@ function rk4(s, h) {
     deriv(tmp, k4); for (let i = 0; i < 4; i++) s[i] += h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
 }
 const H = 1 / 4500, REC = 5;           // RK4 step; the tip is recorded every 5 steps, 900 points per second
+// n steps of the same RK4 in local variables: the same operations in the same order as rk4() and deriv(), so the states are
+// identical bit for bit (checked on 160 runs of 9000 steps, 20 November 2026); it saves the calls and the typed-array traffic.
+function rk4n(s, h, n) {
+    const { A, B, C, U1, U2 } = par, AB = A * B, CC = C * C, hh = 0.5 * h, h6 = h / 6, sin = Math.sin, cos = Math.cos;
+    let a = s[0], b = s[1], p = s[2], q = s[3];
+    for (let k = 0; k < n; k++) {
+        let d = a - b, c = cos(d), sn = sin(d), det = AB - CC * c * c;
+        const a1 = (B * p - C * c * q) / det, b1 = (A * q - C * c * p) / det; let e = C * a1 * b1 * sn;
+        const p1 = -e - U1 * sin(a), q1 = e - U2 * sin(b);
+        let ta = a + hh * a1, tb = b + hh * b1, tp = p + hh * p1, tq = q + hh * q1;
+        d = ta - tb; c = cos(d); sn = sin(d); det = AB - CC * c * c;
+        const a2 = (B * tp - C * c * tq) / det, b2 = (A * tq - C * c * tp) / det; e = C * a2 * b2 * sn;
+        const p2 = -e - U1 * sin(ta), q2 = e - U2 * sin(tb);
+        ta = a + hh * a2; tb = b + hh * b2; tp = p + hh * p2; tq = q + hh * q2;
+        d = ta - tb; c = cos(d); sn = sin(d); det = AB - CC * c * c;
+        const a3 = (B * tp - C * c * tq) / det, b3 = (A * tq - C * c * tp) / det; e = C * a3 * b3 * sn;
+        const p3 = -e - U1 * sin(ta), q3 = e - U2 * sin(tb);
+        ta = a + h * a3; tb = b + h * b3; tp = p + h * p3; tq = q + h * q3;
+        d = ta - tb; c = cos(d); sn = sin(d); det = AB - CC * c * c;
+        const a4 = (B * tp - C * c * tq) / det, b4 = (A * tq - C * c * tp) / det; e = C * a4 * b4 * sn;
+        const p4 = -e - U1 * sin(ta), q4 = e - U2 * sin(tb);
+        a += h6 * (a1 + 2 * a2 + 2 * a3 + a4); b += h6 * (b1 + 2 * b2 + 2 * b3 + b4); p += h6 * (p1 + 2 * p2 + 2 * p3 + p4); q += h6 * (q1 + 2 * q2 + 2 * q3 + q4);
+    }
+    s[0] = a; s[1] = b; s[2] = p; s[3] = q;
+}
 
 // ---------------------------------------------------------------------------------------------
 // The grid of pendulums, and the exposure they leave on the plate.
@@ -810,7 +920,7 @@ const stage = $('stage'), cv = $('cv'), mapCv = $('map'), rodCv = $('rodcv');
 const ctx = cv.getContext('2d'), mctx = mapCv.getContext('2d'), rctx = rodCv.getContext('2d');
 let W = 0, Hh = 0, cw = 0, ch = 0, S = 1;
 let D = new Float32Array(1), img = null, px32 = null;
-let pin = null, anat = false; const trail = [], TRAILN = 2700;      // the pinned pendulum's last 3 s of tip positions (900 a second)
+let pin = null, anat = false; const TRAILN = 2700, trail = new Float64Array(2 * TRAILN); let trailHead = 0, trailN = 0;   // the pinned pendulum's last 3 s of tip positions (900 a second), a ring
 // Two more views of the pinned pendulum. Angles: (theta1, theta2), both taken round the circle, so the square is a torus rolled flat.
 // Section: one dot each time the upper rod passes straight down (theta1 a multiple of 2 pi): (theta2, p2) there. A pass going backwards
 // is shown mirrored, (-theta2, -p2): the mirror image of a motion is a motion, so all dots belong to one section, theta1 = 0 with w1 > 0.
@@ -819,14 +929,28 @@ let view = 'tip', smax = 1, torLast = null; const tor = document.createElement('
 
 function tip(s) { return [par.l1 * Math.sin(s[0]) + par.l2 * Math.sin(s[1]), par.l1 * Math.cos(s[0]) + par.l2 * Math.cos(s[1])]; }
 function build() {
-    const keep = pin ? [pin.i, pin.j] : null; pin = null; trail.length = 0;
-    pend = []; steps = 0; t = 0; acc = 0; D.fill(0);
+    const was = pin; pin = null; trailN = 0;
+    pend = []; steps = 0; t = 0; acc = 0; D.fill(0); decay = 1;
     for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
         const p1 = c1 + ((i + .5) / N - .5) * 2 * P * AR, p2 = c2 - ((j + .5) / N - .5) * 2 * P;
         const q = { i, j, s: new Float64Array([0, 0, p1, p2]), x: 0, y: 0, p0: [p1, p2] };   // p0: the strike, kept for the readout
         [q.x, q.y] = tip(q.s); pend.push(q);
     }
-    if (keep && keep[0] < N && keep[1] < N) setPin(pend[keep[1] * N + keep[0]]);
+    sendBuild();
+    if (was && was.free) strikeAt(was.p0[0], was.p0[1]);
+    else if (was && was.i < N && was.j < N) setPin(pend[was.j * N + was.i]);
+}
+// a strike anywhere on the sheet: the cell's own pendulum if the strike is (nearly) a cell's centre, else a pendulum of its own,
+// computed beside the grid and shown only in the small picture
+function cellOf(p1, p2) { return [Math.floor(((p1 - c1) / (2 * P * AR) + .5) * N), Math.floor((.5 - (p2 - c2) / (2 * P)) * N)]; }
+function strikeAt(p1, p2, quiet) {
+    const [i, j] = cellOf(p1, p2);
+    if (i >= 0 && j >= 0 && i < N && j < N) {
+        const q = pend[j * N + i], d1 = (p1 - q.p0[0]) / (2 * P * AR / N), d2 = (p2 - q.p0[1]) / (2 * P / N);
+        if (Math.hypot(d1, d2) < 0.08) return setPin(q, quiet);      // within 8 % of a cell of its centre: that cell
+    }
+    const q = { i: -1, j: -1, s: new Float64Array([0, 0, p1, p2]), x: 0, y: 0, p0: [p1, p2], free: true };
+    [q.x, q.y] = tip(q.s); setPin(q, quiet);
 }
 // deposit light along a straight piece of path, the same amount per unit length: the exposure counts passes
 function splat(x0, y0, x1, y1) {
@@ -839,31 +963,40 @@ function splat(x0, y0, x1, y1) {
     }
 }
 function advance(sec) {
+    if (decay !== 1) flushDecay();
     acc += sec; const n = Math.floor(acc / H); acc -= n * H;
-    const R = Math.max(par.l1 + par.l2, 1e-9);
     for (const q of pend) {
+        if (q === pin) { stepPinned(q, pinS, n, true); continue; }
         const cx = (q.i + .5) * cw, cy = (q.j + .5) * ch;
-        const isPin = q === pin;
-        for (let k = 1; k <= n; k++) {
-            const a0 = q.s[0], b0 = q.s[1], m0 = q.s[3];
-            rk4(q.s, H);
-            if (isPin) {
-                const k0 = Math.floor(a0 / TAU), k1 = Math.floor(q.s[0] / TAU);
-                if (k0 !== k1) {                                        // the upper rod passed straight down during this step
-                    const f = (Math.max(k0, k1) * TAU - a0) / (q.s[0] - a0), dir = q.s[0] > a0 ? 1 : -1, pp = dir * (m0 + f * (q.s[3] - m0));
-                    sect.push(wrap(dir * (b0 + f * (q.s[1] - b0))), pp); smax = Math.max(smax, Math.abs(pp));
-                    if (sect.length > 2 * SECTN) sect.splice(0, sect.length - 2 * SECTN);
-                }
-            }
-            if ((steps + k) % REC === 0) {
-                const [x, y] = tip(q.s);
-                splat(cx + S * q.x, cy + S * q.y, cx + S * x, cy + S * y); q.x = x; q.y = y;
-                if (isPin) { trail.push(x, y); if (trail.length > 2 * TRAILN) trail.splice(0, trail.length - 2 * TRAILN); angNew.push(q.s[0], q.s[1]); }
-            }
+        for (let k = 0; k < n;) {                      // run to the next recorded point in one go
+            const m = Math.min(REC - (steps + k) % REC, n - k);
+            rk4n(q.s, H, m); k += m;
+            if ((steps + k) % REC === 0) { const [x, y] = tip(q.s); splat(cx + S * q.x, cy + S * q.y, cx + S * x, cy + S * y); q.x = x; q.y = y; }
         }
     }
+    if (pin && pin.free) stepPinned(pin, pinS, n, false);
     steps += n; t = steps * H;
-    if (sec > 0) { const dec = Math.exp(-sec / tau); for (let i = 0; i < D.length; i++) D[i] *= dec; }
+    if (sec > 0) decay *= Math.exp(-sec / tau);       // applied to the plate when it is painted, in the same pass
+}
+// the pinned pendulum, step by step: its trail, its angles and its section; a pendulum of the grid also exposes its cell
+function stepPinned(q, s, n, expose) {
+    const cx = (q.i + .5) * cw, cy = (q.j + .5) * ch;
+    for (let k = 1; k <= n; k++) {
+        const a0 = s[0], b0 = s[1], m0 = s[3];
+        rk4n(s, H, 1);
+        const k0 = Math.floor(a0 / TAU), k1 = Math.floor(s[0] / TAU);
+        if (k0 !== k1) {                                        // the upper rod passed straight down during this step
+            const f = (Math.max(k0, k1) * TAU - a0) / (s[0] - a0), dir = s[0] > a0 ? 1 : -1, pp = dir * (m0 + f * (s[3] - m0));
+            sect.push(wrap(dir * (b0 + f * (s[1] - b0))), pp); smax = Math.max(smax, Math.abs(pp));
+            if (sect.length > 2 * SECTN) sect.splice(0, sect.length - 2 * SECTN);
+        }
+        if ((steps + k) % REC === 0) {
+            const [x, y] = tip(s);
+            if (expose) { splat(cx + S * q.x, cy + S * q.y, cx + S * x, cy + S * y); q.x = x; q.y = y; }
+            trail[2 * trailHead] = x; trail[2 * trailHead + 1] = y; trailHead = (trailHead + 1) % TRAILN; if (trailN < TRAILN) trailN++;
+            angNew.push(s[0], s[1]);
+        }
+    }
 }
 
 // ---- tone map: density -> colour, with the plate's palette ----
@@ -881,9 +1014,41 @@ function makePalette() {
         pal[i] = (a << 24) | (Math.round(b) << 16) | (Math.round(g) << 8) | Math.round(r);   // little-endian RGBA
     }
 }
+// ---- the grid on a second thread (scripts/fig13-sheet-worker.js): this thread paints, the worker integrates ------------------------
+// The page asks for the steps that are due, at most one request at a time; each answer brings the recorded tip positions and the
+// states. The pinned pendulum is integrated here, on its own copy of its state, step by step and in step with the answers. Without
+// workers (or once the test hook drives the sheet) advance() does the same work on this thread.
+let worker = null, wGen = 0, wBusy = false, pinS = null;
+try { worker = new Worker('../scripts/fig13-sheet-worker.js'); worker.onmessage = onWork; worker.onerror = () => { worker = null; wBusy = false; }; } catch (_) { worker = null; }
+function sendBuild() {
+    if (!worker) return; wGen++; wBusy = false;
+    const st = new Float64Array(2 * pend.length); pend.forEach((q, k) => { st[2 * k] = q.p0[0]; st[2 * k + 1] = q.p0[1]; });
+    worker.postMessage({ type: 'build', gen: wGen, par: { ...par }, strikes: st });
+}
+function onWork(e) {
+    const m = e.data; if (!worker || m.gen !== wGen) return; wBusy = false;
+    if (decay !== 1) flushDecay();
+    const r = m.r, pts = m.pts, st = m.st;
+    for (let k = 0; k < pend.length; k++) {
+        const q = pend[k], cx = (q.i + .5) * cw, cy = (q.j + .5) * ch; let o = 2 * k * r;
+        for (let j = 0; j < r; j++) { const x = pts[o++], y = pts[o++]; splat(cx + S * q.x, cy + S * q.y, cx + S * x, cy + S * y); q.x = x; q.y = y; }
+        q.s[0] = st[4 * k]; q.s[1] = st[4 * k + 1]; q.s[2] = st[4 * k + 2]; q.s[3] = st[4 * k + 3];
+    }
+    if (pin) stepPinned(pin, pinS, m.n, false);
+    steps += m.n; t = steps * H; decay *= Math.exp(-m.n * H / tau);
+}
+function request(dt) {          // the steps due after dt seconds; a slow device runs the sheet slower than real time
+    acc = Math.min(acc + dt, 0.1); if (wBusy) return;
+    const n = Math.min(Math.floor(acc / H), Math.round(0.05 / H)); if (n < 1) return;
+    acc -= n * H; wBusy = true; worker.postMessage({ type: 'run', gen: wGen, n, h: H });
+}
+
+let decay = 1;           // the plate's fading since it was last painted: D *= exp(-dt/tau), applied in the paint pass
+function flushDecay() { const f = decay; decay = 1; for (let i = 0; i < D.length; i++) D[i] *= f; }
 function paint() {
-    const sc = (LUTN - 1) / DMAX, n = D.length, last = LUTN - 1;
-    for (let i = 0; i < n; i++) { const d = D[i]; px32[i] = d < 0.004 ? 0 : pal[Math.min(last, (d * sc) | 0)]; }
+    const sc = (LUTN - 1) / DMAX, n = D.length, last = LUTN - 1, f = decay; decay = 1;
+    if (f !== 1) for (let i = 0; i < n; i++) { D[i] *= f; const d = D[i]; px32[i] = d < 0.004 ? 0 : pal[Math.min(last, (d * sc) | 0)]; }
+    else for (let i = 0; i < n; i++) { const d = D[i]; px32[i] = d < 0.004 ? 0 : pal[Math.min(last, (d * sc) | 0)]; }
     ctx.putImageData(img, 0, 0);
 }
 
@@ -896,7 +1061,7 @@ function size() {
     for (const c of [cv, mapCv, rodCv]) { c.width = W; c.height = Hh; }
     cw = W / N; ch = Hh / N; S = 0.4 * Math.min(cw, ch) / (par.l1 + par.l2);     // the reach l1 + l2 is drawn as 0.4 of the cell's shorter side
     D = new Float32Array(W * Hh); img = ctx.createImageData(W, Hh); px32 = new Uint32Array(img.data.buffer);
-    build(); drawMap();
+    build(); drawMap(); dirty = true;
 }
 function drawMap() {
     mctx.clearRect(0, 0, W, Hh);
@@ -962,8 +1127,16 @@ function drawAnatomy() {
     }
     label(small ? 'fold lines' : 'the elbow just fails to fold through', X(P * AR * .42), Y(P * .78));
 }
-function setPin(q) {
-    pin = q; trail.length = 0; sect.length = 0; angNew.length = 0; smax = 1; torLast = null; tctx.clearRect(0, 0, tor.width, tor.height); if (!q) return;
+function setPin(q, quiet) {
+    pin = q; pinS = q ? (worker && !q.free ? q.s.slice() : q.s) : null; trailN = 0; trailHead = 0; sect.length = 0; angNew.length = 0; smax = 1; torLast = null; tctx.clearRect(0, 0, tor.width, tor.height); dirty = true;
+    mark.hidden = !q; $('unpin').hidden = !q;
+    if (!q) return;
+    if (quiet) { pinText = true; return; }       // while the ring is dragged the words follow at most 4 times a second (pinWords)
+    pinWords();
+}
+let pinText = false, pinTextAt = 0;
+function pinWords() {
+    pinText = false; pinTextAt = performance.now(); const q = pin; if (!q) return;
     const [a, b] = q.p0, ke = strikeKE(a, b), { U1, U2 } = par, dp = Math.max(2, digits() + 1);
     $('pr-p').textContent = `${a.toFixed(dp)}, ${b.toFixed(dp)} kg·m²/s`;
     $('pr-e').textContent = `${ke.toFixed(1)} J`;
@@ -986,9 +1159,11 @@ function mapValue(p1, p2) {     // the chaos map's value at a strike: only for t
     const px = (x, y) => Math.pow(mapPx[(y * 1280 + x) * 4 + 3] / 255, 1 / 0.8);      // map_png.py: alpha = 255 v^0.8
     return (px(x0, y0) * (1 - tx) + px(x0 + 1, y0) * tx) * (1 - ty) + (px(x0, y0 + 1) * (1 - tx) + px(x0 + 1, y0 + 1) * tx) * ty;
 }
-const pcv = $('probe'), pctx = pcv.getContext('2d');
+const pcv = $('probe'), pctx = pcv.getContext('2d'); let probeW = 0;
+if ('ResizeObserver' in window) new ResizeObserver(() => { probeW = 0; }).observe(pcv); else addEventListener('resize', () => { probeW = 0; });
 function drawProbe() {
-    const r = pcv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2), w = Math.max(2, Math.round(r.width * dpr));
+    if (!probeW) probeW = Math.max(2, Math.round(pcv.getBoundingClientRect().width * Math.min(window.devicePixelRatio || 1, 2)));
+    const w = probeW;
     if (pcv.width !== w) { pcv.width = w; pcv.height = w; }
     if (tor.width !== w) { tor.width = w; tor.height = w; torLast = null; }
     pctx.clearRect(0, 0, w, w); pcv.classList.toggle('is-paper', !night);
@@ -1008,7 +1183,7 @@ function drawProbe() {
     const cross = () => { pctx.strokeStyle = night ? 'rgba(245,241,234,.22)' : 'rgba(28,21,24,.2)'; pctx.lineWidth = 1; pctx.beginPath(); pctx.moveTo(w / 2, 0); pctx.lineTo(w / 2, w); pctx.moveTo(0, w / 2); pctx.lineTo(w, w / 2); pctx.stroke(); };
     if (view === 'ang') {
         cross(); pctx.drawImage(tor, 0, 0);
-        pctx.fillStyle = ink; pctx.beginPath(); pctx.arc((wrap(pin.s[0]) / TAU + .5) * w, (.5 - wrap(pin.s[1]) / TAU) * w, Math.max(3, w / 70), 0, 7); pctx.fill();
+        pctx.fillStyle = ink; pctx.beginPath(); pctx.arc((wrap(pinS[0]) / TAU + .5) * w, (.5 - wrap(pinS[1]) / TAU) * w, Math.max(3, w / 70), 0, 7); pctx.fill();
         lab('upper rod θ₁ →', w - 5, w - 4, 'right', 'bottom'); lab('↑ lower rod θ₂', 5, 4, 'left', 'top'); lab('−180°', 5, w - 4, 'left', 'bottom'); lab('+180°', w - 5, 4, 'right', 'top');
         return;
     }
@@ -1018,20 +1193,23 @@ function drawProbe() {
         lab('lower rod θ₂ →', w - 5, w - 4, 'right', 'bottom'); lab(`↑ p₂, to ±${m.toFixed(m < 10 ? 1 : 0)}`, 5, 4, 'left', 'top'); lab(`${sect.length / 2} passes`, w - 5, 4, 'right', 'top');
         return;
     }
-    const sc = 0.44 * w / (par.l1 + par.l2), c = w / 2, n = trail.length / 2;
-    pctx.lineCap = 'round'; pctx.lineWidth = Math.max(1.2, w / 260);
-    for (let k = 1; k < n; k++) {
-        pctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${(0.08 + 0.85 * k / n).toFixed(3)})`;
-        pctx.beginPath(); pctx.moveTo(c + sc * trail[2 * k - 2], c + sc * trail[2 * k - 1]); pctx.lineTo(c + sc * trail[2 * k], c + sc * trail[2 * k + 1]); pctx.stroke();
+    const sc = 0.44 * w / (par.l1 + par.l2), c = w / 2, n = trailN, o = (trailHead - trailN + TRAILN) % TRAILN;
+    const tx = k => c + sc * trail[2 * ((o + k) % TRAILN)], ty = k => c + sc * trail[2 * ((o + k) % TRAILN) + 1];
+    pctx.lineCap = 'round'; pctx.lineJoin = 'round'; pctx.lineWidth = Math.max(1.2, w / 260);
+    const BANDS = 16;                     // older path fainter: 16 strokes of rising opacity instead of one stroke per piece
+    for (let b = 0; b < BANDS; b++) {
+        const k0 = Math.max(1, Math.floor(b * n / BANDS)), k1 = Math.floor((b + 1) * n / BANDS); if (k1 < k0) continue;
+        pctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${(0.08 + 0.85 * (b + 1) / BANDS).toFixed(3)})`;
+        pctx.beginPath(); pctx.moveTo(tx(k0 - 1), ty(k0 - 1)); for (let k = k0; k <= k1 && k < n; k++) pctx.lineTo(tx(k), ty(k)); pctx.stroke();
     }
-    const x1 = c + sc * par.l1 * Math.sin(pin.s[0]), y1 = c + sc * par.l1 * Math.cos(pin.s[0]), x2 = x1 + sc * par.l2 * Math.sin(pin.s[1]), y2 = y1 + sc * par.l2 * Math.cos(pin.s[1]);
+    const x1 = c + sc * par.l1 * Math.sin(pinS[0]), y1 = c + sc * par.l1 * Math.cos(pinS[0]), x2 = x1 + sc * par.l2 * Math.sin(pinS[1]), y2 = y1 + sc * par.l2 * Math.cos(pinS[1]);
     pctx.strokeStyle = night ? '#fff6ea' : '#1c1518'; pctx.lineWidth = Math.max(2, w / 90); pctx.beginPath(); pctx.moveTo(c, c); pctx.lineTo(x1, y1); pctx.lineTo(x2, y2); pctx.stroke();
     pctx.fillStyle = '#7a1f2b'; for (const [x, y] of [[x1, y1], [x2, y2]]) { pctx.beginPath(); pctx.arc(x, y, Math.max(3, w / 60), 0, 7); pctx.fill(); }
 }
 function drawRods() {
     rctx.clearRect(0, 0, W, Hh);
     drawAxes(); if (anat) drawAnatomy();
-    if (pin) { rctx.strokeStyle = night ? '#fff6ea' : '#7a1f2b'; rctx.lineWidth = Math.max(1.5, W / 600); rctx.strokeRect(pin.i * cw + 2, pin.j * ch + 2, cw - 4, ch - 4); }
+    if (pin && !pin.free) { rctx.strokeStyle = night ? '#fff6ea' : '#7a1f2b'; rctx.lineWidth = Math.max(1.5, W / 600); rctx.strokeRect(pin.i * cw + 2, pin.j * ch + 2, cw - 4, ch - 4); }
     if (!showRods) return;
     rctx.strokeStyle = night ? '#fff6ea' : '#7a1f2b'; rctx.lineWidth = Math.max(1.5, ch / 70); rctx.lineCap = 'round'; rctx.globalAlpha = .8;
     for (const q of pend) {
@@ -1040,22 +1218,109 @@ function drawRods() {
     }
     rctx.globalAlpha = 1;
 }
-function draw() { paint(); drawRods(); drawProbe(); $('cap-t').innerHTML = `<i>t</i> = ${t.toFixed(2)} s`; }
+// draw(): everything; draw(false), each frame: the plate and the small picture, the overlay only if rods move on it or something
+// changed; the words at most 4 times a second (CLAUDE.md: readable, not flickering)
+let dirty = true, textAt = 0, markAt = '';
+const mark = $('mark');
+function placeMark() {
+    if (!pin) return; const r = stage.getBoundingClientRect(), x = X(pin.p0[0]) / W * r.width, y = Y(pin.p0[1]) / Hh * r.height;
+    const k = x.toFixed(1) + ',' + y.toFixed(1); if (k !== markAt) { markAt = k; mark.style.transform = `translate(${x}px, ${y}px)`; }
+}
+function draw(full = true) {
+    paint();
+    if (full || dirty || showRods) { drawRods(); dirty = false; placeMark(); }
+    drawProbe();
+    const now = performance.now();
+    if (full || now - textAt > 250) { textAt = now; $('cap-t').innerHTML = `<i>t</i> = ${t.toFixed(1)} s`; }
+    if (pinText && now - pinTextAt > 250) pinWords();
+}
 
 // ---- controls ----
 let running = true;
 function rebuild() { setPar(); size(); makePalette(); draw(); }
-$('play').onclick = () => { running = !running; $('play').textContent = running ? 'Pause' : 'Play'; };
+function setRunning(r) { running = r; $('play').setAttribute('aria-pressed', String(r)); $('play').querySelector('span').textContent = r ? 'Pause' : 'Play'; }
+$('play').onclick = () => setRunning(!running);
 $('restart').onclick = () => { build(); draw(); };
-$('rods').onchange = e => { showRods = e.target.checked; draw(); };
+$('rods').onclick = () => { showRods = !showRods; $('rods').setAttribute('aria-pressed', String(showRods)); draw(); };
 $('showmap').onchange = e => { showMap = e.target.checked; drawMap(); };
-$('anat').onchange = e => { anat = e.target.checked; draw(); };
-stage.addEventListener('click', e => {         // tap a cell: pin its pendulum (a tap on the pinned one lets it go)
-    const r = stage.getBoundingClientRect(), i = Math.min(N - 1, Math.floor((e.clientX - r.left) / r.width * N)), j = Math.min(N - 1, Math.floor((e.clientY - r.top) / r.height * N));
-    const q = pend[j * N + i]; if (q === pin) unpin(); else setPin(q);
-    draw();
-});
+$('anat').onclick = () => { anat = !anat; $('anat').setAttribute('aria-pressed', String(anat)); draw(); };
+$('unpin').onclick = () => { unpin(); draw(); };
 function unpin() { setPin(null); $('pr-p').textContent = $('pr-e').textContent = $('pr-v').textContent = '–'; $('pr-say').textContent = 'Tap a cell of the figure.'; }
+
+// ---- handles on the picture -----------------------------------------------------------------------------------------------
+// A tap pins the pendulum of that cell; a second tap on it soon after zooms in around it. The ring on the pin can be dragged:
+// the pinned pendulum is struck anew at the strike under the finger, continuously, not only at cell centres. With a mouse, a drag
+// on the sheet moves the window over the plane of strikes. Nothing here reacts to a pointer that only passes over the figure.
+const layers = $('layers');
+let lastTap = { at: 0, i: -1, j: -1 }, drag = null, swallowClick = false;
+const plateXY = e => { const r = stage.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; };
+const strikeOf = (fx, fy) => [c1 + (fx - .5) * 2 * P * AR, c2 - (fy - .5) * 2 * P];
+stage.addEventListener('click', e => {
+    if (swallowClick) { swallowClick = false; return; }
+    if (mark.contains(e.target)) return;
+    const [fx, fy] = plateXY(e), i = Math.max(0, Math.min(N - 1, Math.floor(fx * N))), j = Math.max(0, Math.min(N - 1, Math.floor(fy * N)));
+    const now = performance.now(), again = now - lastTap.at < 350 && lastTap.i === i && lastTap.j === j;
+    lastTap = { at: now, i, j };
+    if (again && pin) { lastTap.at = 0; goTo(pin.p0[0], pin.p0[1], P * .5); return; }      // tapped twice: zoom in there
+    setPin(pend[j * N + i]); lastTap.i = -2; draw();
+});
+mark.addEventListener('pointerdown', e => {
+    e.preventDefault(); e.stopPropagation(); mark.setPointerCapture(e.pointerId);
+    drag = { kind: 'mark', id: e.pointerId, at: 0, x0: e.clientX, y0: e.clientY, moved: false }; mark.classList.add('is-held');
+});
+stage.addEventListener('pointerdown', () => { $('hint').hidden = true; }, true);
+stage.addEventListener('pointerdown', e => {
+    if (drag || e.pointerType !== 'mouse' || e.button !== 0 || mark.contains(e.target)) return;
+    drag = { kind: 'pan', id: e.pointerId, x0: e.clientX, y0: e.clientY, dx: 0, dy: 0, moved: false };
+});
+addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (drag.kind === 'mark') {
+        if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6) return;     // a tap on the ring, not yet a drag
+        drag.moved = true;
+        const [fx, fy] = plateXY(e), gx = Math.max(0, Math.min(1, fx)), gy = Math.max(0, Math.min(1, fy)), r = stage.getBoundingClientRect();
+        mark.style.transform = `translate(${gx * r.width}px, ${gy * r.height}px)`; markAt = '';
+        const now = performance.now();
+        if (now - drag.at > 90) { drag.at = now; const [s1, s2] = strikeOf(gx, gy); strikeAt(s1, s2, true); }   // a new strike about 11 times a second
+        return;
+    }
+    drag.dx = e.clientX - drag.x0; drag.dy = e.clientY - drag.y0;
+    if (!drag.moved && Math.hypot(drag.dx, drag.dy) > 5) { drag.moved = true; stage.classList.add('is-panning'); try { stage.setPointerCapture(e.pointerId); } catch (_) {} }
+    if (drag.moved) { layers.style.transform = `translate(${drag.dx}px, ${drag.dy}px)`; mark.style.transform = ''; markAt = ''; if (pin) { const r = stage.getBoundingClientRect(); mark.style.transform = `translate(${X(pin.p0[0]) / W * r.width + drag.dx}px, ${Y(pin.p0[1]) / Hh * r.height + drag.dy}px)`; } }
+});
+function endDrag(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    const d = drag; drag = null;
+    if (d.kind === 'mark') {
+        mark.classList.remove('is-held');
+        if (!d.moved) {                       // the ring tapped: a second tap soon after the first zooms in around the pin
+            const now = performance.now(), again = now - lastTap.at < 350 && lastTap.i === -2;
+            lastTap = { at: again ? 0 : now, i: -2, j: -2 }; if (again) goTo(pin.p0[0], pin.p0[1], P * .5); return;
+        }
+        const [fx, fy] = plateXY(e), [s1, s2] = strikeOf(Math.max(0, Math.min(1, fx)), Math.max(0, Math.min(1, fy)));
+        strikeAt(s1, s2); swallowClick = true; setTimeout(() => { swallowClick = false; }, 0); draw(); return;
+    }
+    stage.classList.remove('is-panning');
+    if (!d.moved) return;
+    swallowClick = true; setTimeout(() => { swallowClick = false; }, 0);
+    const r = stage.getBoundingClientRect(), keep = pin && pin.p0.slice();
+    c1 -= d.dx / r.width * 2 * P * AR; c2 += d.dy / r.height * 2 * P;
+    layers.style.transform = ''; pin = null; build();
+    if (keep) { const [i, j] = cellOf(keep[0], keep[1]); if (i >= 0 && j >= 0 && i < N && j < N) strikeAt(keep[0], keep[1]); else unpin(); }
+    showRange(); drawMap(); draw();
+}
+addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
+stage.addEventListener('keydown', e => {       // keys: arrows move the pin one cell, + and - zoom, space pauses
+    const k = e.key;
+    if (k === ' ') { setRunning(!running); e.preventDefault(); return; }
+    if (k === '+' || k === '=') { zoom(.5); e.preventDefault(); return; }
+    if (k === '-' || k === '_') { zoom(2); e.preventDefault(); return; }
+    const mv = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[k]; if (!mv) return;
+    e.preventDefault();
+    if (!pin) { setPin(pend[(N >> 1) * N + (N >> 1)]); draw(); return; }
+    const [i, j] = pin.free ? cellOf(pin.p0[0], pin.p0[1]) : [pin.i, pin.j], ni = Math.max(0, Math.min(N - 1, i + mv[0])), nj = Math.max(0, Math.min(N - 1, j + mv[1]));
+    setPin(pend[nj * N + ni]); draw();
+});
 
 // ---- zoom: the sheet is a window on the plane of strikes; it can be moved and narrowed -----------------------------------------
 // goTo puts the strike (s1, s2) exactly on the centre of the cell just right of and below the middle, pins it, and shows ± Pn around.
@@ -1071,7 +1336,8 @@ function goTo(s1, s2, Pn) {
 }
 function zoom(f) { if (pin) goTo(pin.p0[0], pin.p0[1], P * f); else { P = Math.max(0.005, Math.min(30, P * f)); build(); showRange(); drawMap(); draw(); } }
 $('zin').onclick = () => zoom(.5); $('zout').onclick = () => zoom(2);
-$('zall').onclick = () => { c1 = c2 = 0; P = 20; pin = null; build(); unpin(); showRange(); drawMap(); draw(); $('atlas').value = ''; };
+$('zall').onclick = () => { const keep = pin && pin.p0.slice(); c1 = c2 = 0; P = 20; pin = null; build(); if (keep) strikeAt(keep[0], keep[1]); else unpin(); showRange(); drawMap(); draw(); $('atlas').value = ''; };   // the whole sheet, the pin kept
+$('zin').title = 'Zoom in around the pin (or the middle)'; $('zout').title = 'Zoom out'; $('zall').title = 'The whole sheet';
 // ---- atlas: the closed curves the flower hunt found (scripts/fig13-hunt-data.js, written by tools/fig13/hunt_export.py) ----------
 const GARDEN = (window.FIG13_HUNT && window.FIG13_HUNT.garden) || [];
 GARDEN.forEach((g, n) => { const o = document.createElement('option'); o.value = n; o.textContent = (g.kind === 'butterfly' ? `Butterfly, ${g.k} turns` : `Flower, ${g.k} petals`) + ` · (${g.p1.toFixed(2)}, ${g.p2.toFixed(2)}) · ${g.stability}`; $('atlas').appendChild(o); });
@@ -1090,7 +1356,7 @@ const VSAY = {
 };
 function setView(v) { view = v; for (const k of ['tip', 'ang', 'sec']) $('v-' + k).classList.toggle('is-on', k === v); $('v-say').textContent = VSAY[v]; draw(); }
 $('v-tip').onclick = () => setView('tip'); $('v-ang').onclick = () => setView('ang'); $('v-sec').onclick = () => setView('sec');
-function setLook(n) { night = n; tctx.clearRect(0, 0, tor.width, tor.height); torLast = null; stage.classList.toggle('is-night', n); $('look-night').classList.toggle('is-on', n); $('look-paper').classList.toggle('is-on', !n); makePalette(); drawMap(); draw(); }
+function setLook(n) { night = n; dirty = true; tctx.clearRect(0, 0, tor.width, tor.height); torLast = null; stage.classList.toggle('is-night', n); $('look-night').classList.toggle('is-on', n); $('look-paper').classList.toggle('is-on', !n); makePalette(); drawMap(); draw(); }
 $('look-night').onclick = () => setLook(true); $('look-paper').onclick = () => setLook(false);
 function setModel(r) { par.model = r ? 'rods' : 'points'; $('m-rods').classList.toggle('is-on', r); $('m-pts').classList.toggle('is-on', !r); rebuild(); }
 $('m-rods').onclick = () => setModel(true); $('m-pts').onclick = () => setModel(false);
@@ -1141,17 +1407,22 @@ addEventListener('message', e => {
 addEventListener('resize', () => { if (openStation && openStation.dataset.kind === 'film') sizeFrame(openStation, 1080, 1920, 0); });
 if (/^#(butterfly|hunt|catch|films)$/.test(location.hash)) setTimeout(() => $(location.hash.slice(1)).scrollIntoView(), 300);
 
-let last = null;
+let last = null, onScreen = true;
+// the sheet computes only while some of it is on the screen: reading the note further down, a phone does not integrate 100
+// pendulums nobody sees (t stands still meanwhile and goes on when the sheet comes back)
+if ('IntersectionObserver' in window) new IntersectionObserver(es => { onScreen = es[es.length - 1].isIntersecting; }).observe(stage);
 function frame(ts) {
-    if (running && last !== null) advance(Math.min(0.05, (ts - last) / 1000));
-    last = ts; if (!(openStation && !running)) draw();       // a station is open and the sheet is paused: nothing to redraw
     requestAnimationFrame(frame);
+    if (!onScreen || (openStation && !running)) { last = null; return; }      // off screen, or a station open and the sheet paused
+    if (running && last !== null) { const dt = Math.min(0.05, (ts - last) / 1000); if (worker) request(dt); else advance(dt); }
+    last = ts; draw(false);
 }
 const im = new Image(); im.onload = () => { mapImg = im; drawMap(); const o = document.createElement('canvas'); o.width = 1280; o.height = 720; const oc = o.getContext('2d'); oc.drawImage(im, 0, 0, 1280, 720); mapPx = oc.getImageData(0, 0, 1280, 720).data; if (pin) setPin(pin); }; im.src = '../images/fig13/chaos-map-rods-P20.png';
 let stageW = 0;      // rebuild only when the plate's width changed: a phone fires 'resize' each time its address bar slides away
 window.addEventListener('resize', () => { const w = stage.getBoundingClientRect().width; if (Math.abs(w - stageW) < 1) return; stageW = w; size(); draw(); });
-setPar(); size(); stageW = stage.getBoundingClientRect().width; makePalette(); showRange(); draw();
-window.__fig13 = { advance: s => { advance(s); draw(); }, pause: () => { running = false; }, state: () => ({ t, N, P, c1, c2, par, pend, pin, view }), goTo, sect: () => sect, D: () => D, strikeKE, foldsThrough, mapValue, energy: s => { const c = Math.cos(s[0] - s[1]), det = par.A * par.B - par.C * par.C * c * c; return 0.5 * (par.B * s[2] * s[2] - 2 * par.C * c * s[2] * s[3] + par.A * s[3] * s[3]) / det - par.U1 * Math.cos(s[0]) - par.U2 * Math.cos(s[1]); } };
+setPar(); size(); stageW = stage.getBoundingClientRect().width; makePalette(); showRange();
+strikeAt(3.557, 12.211); draw();          // the page opens with the butterfly's strike pinned (Part II): the small picture is never empty
+window.__fig13 = { advance: s => { if (worker) { worker.terminate(); worker = null; wBusy = false; if (pin && !pin.free) pinS = pin.s; } advance(s); draw(); }, worker: () => !!worker, pause: () => { running = false; }, state: () => ({ t, N, P, c1, c2, par, pend, pin, view }), goTo, sect: () => sect, D: () => D, strikeKE, foldsThrough, mapValue, energy: s => { const c = Math.cos(s[0] - s[1]), det = par.A * par.B - par.C * par.C * c * c; return 0.5 * (par.B * s[2] * s[2] - 2 * par.C * c * s[2] * s[3] + par.A * s[3] * s[3]) / det - par.U1 * Math.cos(s[0]) - par.U2 * Math.cos(s[1]); } };
 requestAnimationFrame(frame);
 })();
 </script>

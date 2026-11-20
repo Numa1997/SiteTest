@@ -26,7 +26,7 @@ momenta p₁, p₂. Hamilton's equations for the general family (masses, lengths
 
 | File | What it is |
 |---|---|
-| `simulations/momentum-spirographs.html` | Fig. 13, the one page that holds everything (11 November 2026): the live grid over the chaos map with its controls and the pinned pendulum; a guide of six jumps at the top; the stations of section `#inside`, each opening in place in a frame (`#butterfly` the dashboard, `#hunt` the flower hunt, `#catch` the live catch, `#films` the eight films, each started by its own button); and one lecture note of four parts, 35 sections and 33 equations, written into the page by `tools/fig13/build_page.py`. |
+| `simulations/momentum-spirographs.html` | Fig. 13, the one page that holds everything (11 November 2026; the sheet's layout, handles and speed redone 20 November 2026, see the end of this page): the live grid over the chaos map with its bar of buttons and the pinned pendulum; a guide of six jumps at the top; the stations of section `#inside`, each opening in place in a frame (`#butterfly` the dashboard, `#hunt` the flower hunt, `#catch` the live catch, `#films` the eight films, each started by its own button); and one lecture note of four parts, 35 sections and 33 equations, written into the page by `tools/fig13/build_page.py`. |
 | `simulations/flower-hunt.html` | The flower hunt: a garden of closed flowers and butterflies, a bench to test any kick, study notes. |
 | `simulations/butterfly-dashboard.html` | The dashboard: complex plane, h(t) to the right joined by a horizontal line, x(t) below joined by a vertical line, both wave panels turned by φ (by itself or by hand). A wheel and the butterfly. Wide and tall (phone) layouts are chosen by the width of the figure. Test hook `window.__dash`. |
 | `simulations/fig13/bell.html` | Film: the bell above the floor (3-D), r = 2l cos(Δ/2). |
@@ -225,3 +225,33 @@ runs), `Run.setTarget`, `Run.whirlTau` and `phase` for the whirling flowers. Mea
 the numbers are in the row of `simulations/fig13/catch.html` above and in section 9 of the catch note. Corrected the same day: an
 earlier count for the butterfly ("median 6.1 s from the press") had counted first catches that then slipped; counted as held six laps
 later it is a median of 16 to 22 s, and the first catch holds in about six of ten tries.
+
+**20 November 2026, the sheet's display and speed.** Only the sheet at the top of the page changed; the stations, the films and the
+catch page did not. State and measurements of the work: `notes/fig13/sheet-display-state.md`.
+- **Layout.** On a desktop: the title, then the lede with the dedication and the links to the stations beside it, then the figure
+  with a bar of large buttons under it (Pause, Restart, Zoom −, Zoom +, Whole, The eye, Rods, and the time *t*), and on the right a
+  column that stays in view: the pinned pendulum first, then "Where on the sheet" (range, atlas, chaos map), Picture and Pendulum.
+  On a phone (up to 900 px the same order in one column): the figure edge to edge directly under the title (a square plate, 390 px on
+  a 390 px phone), its bar (seven buttons 56 px tall), the pinned pendulum with its picture beside its numbers, then the lede and
+  the rest. The "Show rods" and "Explain the eye" switches became the bar's *Rods* and *The eye*; nothing was removed.
+- **Handles.** The page opens with the butterfly's strike (3.557, 12.211) pinned, so the small picture is never empty. A ring marks
+  the pinned strike; dragging it strikes the pinned pendulum afresh at the strike under the finger (at most about 11 times a second,
+  anywhere, snapping to a cell within 8 % of a cell of its centre; `strikeAt`, a pendulum of its own beside the grid when between
+  cells). A second tap on the pinned cell zooms in around it. With a mouse a drag moves the window over the plane of strikes. Keys on
+  the focused figure: arrows move the pin by a cell, + and − zoom, space pauses. *Let go of the pin* unpins; *Whole* keeps the pin.
+  Nothing reacts to a pointer passing over the figure; the panel's words change at most four times a second.
+- **Speed.** The grid is integrated in a Web Worker, `public/scripts/fig13-sheet-worker.js`, which receives the model and the
+  strikes and answers each request of n steps with the tip positions recorded every 5 steps and the states. The page paints, keeps
+  the pinned pendulum (its own copy of the state, stepped in step with the answers) and falls back to integrating on its own thread
+  if there is no worker or the test hook `__fig13.advance` drives the sheet (`__fig13.worker()` says which). `rk4n` performs the same
+  operations in the same order as `rk4`/`deriv`: 160 of 160 runs of 9000 steps identical bit for bit;
+  `node tools/fig13/sheet_worker_check.cjs` fails if the page's and the worker's copies differ. The sheet stops while it is off the
+  screen. The note is typeset only when it comes near (`data-tex="near"`, `docs/scripts/sim.md`). The plate's fading is applied in
+  the paint pass, the pinned trail is a ring drawn in 16 strokes (2700 before), and the overlay (axes, eye, pin) is redrawn only when
+  it changes.
+- **Measured** in headless Chromium (phone = the iPhone 13 profile, 390 × 664 px visible, with the processor slowed four times;
+  desktop 1440 × 900). Before → after. Phone: load event 8.3 → 1.5 s, first lit pixel of the sheet 10.9 → 1.7 s, top of the figure
+  636 → 247 px, share of the first screen that is figure 3.9 → 58.7 %, controls under 40 px tall 13 → 1 (a range slider's label).
+  Desktop: load 1.1 → 0.4 s, first lit pixel 1.3 → 0.5 s, 60 frames a second before and after, figure 31.5 → 42.6 % of the first screen.
+  The phone's frame rate is in the state file. Not measured on a real phone.
+

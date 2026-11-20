@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6788 files, 944.1 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6791 files, 944.1 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -15,7 +15,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Simulation pages](#simulation-pages) | 40 |
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
-| [Shared scripts](#shared-scripts) | 38 |
+| [Shared scripts](#shared-scripts) | 39 |
 | [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4500 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
@@ -40,13 +40,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Template sources](#template-sources) | 2 |
 | [The site’s Worker (Cloudflare)](#the-sites-worker-cloudflare) | 1 |
 | [Documentation](#documentation) | 47 |
-| [Tools](#tools) | 355 |
+| [Tools](#tools) | 356 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 897 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 898 |
 
 ## Repository root
 
@@ -155,7 +155,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/flower-hunt.html`](../public/simulations/flower-hunt.html) | 39.8 kB | Fig. 13 study · The Flower Hunt: closed flowers and butterflies found as periodic orbits by Newton's method, a test bench and study notes. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/guinness-cart-control.html`](../public/simulations/guinness-cart-control.html) | 81.2 kB | Fig. 16 · A Pint of Guinness on a Cart Built to Carry It: the simulation, its data panel, walkthrough and lecture note. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`public/simulations/guinness-kaggle.html`](../public/simulations/guinness-kaggle.html) | 297.0 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-guinness-kaggle.md](simulations/fig12-guinness-kaggle.md) |
-| [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 153.5 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 177.1 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.2 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.3 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 71.3 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
@@ -228,6 +228,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
 | [`public/scripts/fig13-engine.js`](../public/scripts/fig13-engine.js) | 6.0 kB | Fig. 13: the general double pendulum (Hamilton's equations, RK4) and the long-exposure plate, shared by the Fig. 13 pages. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/fig13-hunt-data.js`](../public/scripts/fig13-hunt-data.js) | 17.7 kB | Fig. 13: the flowers and butterflies of the flower hunt, written by tools/fig13/hunt_export.py; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/scripts/fig13-sheet-worker.js`](../public/scripts/fig13-sheet-worker.js) | 3.5 kB | Fig. 13: the sheet's worker, integrating the grid of pendulums on a second thread; rk4n and tip copied from the page (checked by tools/fig13/sheet_worker_check.cjs). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/fig14-iso-worker.js`](../public/scripts/fig14-iso-worker.js) | 3.0 kB | Fig. 14 sheets, off the main thread (module worker): Lanczos resampling of the 3D field and marching cubes for Re psi = +c and -c. | [wave3d-view.md](scripts/wave3d-view.md) |
 | [`public/scripts/fig14-sheet-worker.js`](../public/scripts/fig14-sheet-worker.js) | 7.8 kB | Fig. 14 meshed sheet, off the main thread: band-limited resampling of a stored frame onto the sheet (1/6 a), and the numbers that scale its height. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/scripts/flip.js`](../public/scripts/flip.js) | 3.5 kB | Turns the page over on a change of language (cross-document view transition), and only then. | [i18n.md](i18n.md) |
@@ -246,7 +247,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/rt3d-view.js`](../public/scripts/rt3d-view.js) | 13.6 kB | Fig. 15: the 3D view (three.js): the meshed height sheet in the house colours and the barriers as static lit glass solids at their true place; turning by press and drag. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-worker.js`](../public/scripts/rt3d-worker.js) | 3.0 kB | Fig. 15: the background thread that fetches one stored 3D run, checks its SHA-256, inflates it and turns the 8-bit levels into ψ. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.6 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
-| [`public/scripts/sim.js`](../public/scripts/sim.js) | 43.8 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
+| [`public/scripts/sim.js`](../public/scripts/sim.js) | 45.0 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
 | [`public/scripts/stout-cart.js`](../public/scripts/stout-cart.js) | 132.7 kB | Fig. 12: the solver: 3D Navier–Stokes for the stout in the glass by APIC on a MAC grid (cut-cell wall, ghost-fluid surface, half glass by symmetry), the road, the one-wheel cart, and their two-way coupling. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-gpu-view.js`](../public/scripts/stout-gpu-view.js) | 15.5 kB | Fig. 12: draws the GPU solver’s stout on the graphics chip (screen-space fluid rendering: sphere depth, bilateral smoothing, thickness for Beer–Lambert, the head as the top 12 mm). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-gpu.js`](../public/scripts/stout-gpu.js) | 66.7 kB | Fig. 12: the 3D stout solver on the graphics chip (WebGPU compute shaders): the whole glass, APIC on a MAC grid, level set, Jacobi-preconditioned CG; batches of steps with one read-back. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -5667,7 +5668,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig13/catch_stats.cjs`](../tools/fig13/catch_stats.cjs) | 4.7 kB | Fig. 13: the catch statistics of the lecture note from the browser's own pendulum.js, in Node (random starts, the basin, one strike; any step size and seed). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/catch_targets.cjs`](../tools/fig13/catch_targets.cjs) | 2.1 kB | Fig. 13: the catch measured for every pattern of PEND.TARGETS (ten flowers, four butterflies) from the browser's own pendulum.js, in Node: held or not, time from the press, hold torque. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/chaos_map.py`](../tools/fig13/chaos_map.py) | 6.9 kB | Fig. 13 generator: the chaos map of momentum space (twin pendulums, numba). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`tools/fig13/fig13_note.html`](../tools/fig13/fig13_note.html) | 33.2 kB | Fig. 13: Part I of the page's lecture note (the sheet and the eye); build_page.py joins it with the other parts into momentum-spirographs.html. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/fig13_note.html`](../tools/fig13/fig13_note.html) | 34.0 kB | Fig. 13: Part I of the page's lecture note (the sheet and the eye); build_page.py joins it with the other parts into momentum-spirographs.html. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/butterfly3d.html`](../tools/fig13/gift/butterfly3d.html) | 19.0 kB | Fig. 13 film source (the bell above the floor, 3-D); render.cjs writes its frames. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/calligraphy.py`](../tools/fig13/gift/calligraphy.py) | 2.5 kB | Fig. 13 gift: outlines of Arabic words, shaped by HarfBuzz, flattened by fontTools. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/catch.html`](../tools/fig13/gift/catch.html) | 34.0 kB | Fig. 13 film source (phone first): catching the butterfly with a motor at the top pin, from chaos; the motion is computed live by pendulum.js. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -5710,6 +5711,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig13/hunt_inspect.py`](../tools/fig13/hunt_inspect.py) | 5.0 kB | Fig. 13 generator: Poincare sections and Floquet traces of the hunted orbits. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/map_png.py`](../tools/fig13/map_png.py) | 1.2 kB | Fig. 13 generator: the chaos map as a PNG in the house palette. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/release_check.py`](../tools/fig13/release_check.py) | 2.7 kB | Fig. 13: how long released pendulums stay on the butterfly, by DOP853, from the runs written by catch_stats.cjs. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/sheet_worker_check.cjs`](../tools/fig13/sheet_worker_check.cjs) | 982 B | Fig. 13 check: fails if the sheet worker's rk4n or tip differ from the page's. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig16/build_page.py`](../tools/fig16/build_page.py) | 16.6 kB | Fig. 16: builds the page from its source, every number filled from the stored data; --check. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/fig16/cart16.py`](../tools/fig16/cart16.py) | 13.6 kB | Fig. 16 design study (before the GPU run): decoding Fig. 12's rides, the few-mode stout fitted and validated, the head's spill rule, the early concept studies. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/fig16/check_pint3d.cjs`](../tools/fig16/check_pint3d.cjs) | 3.9 kB | Fig. 16: three-way check of the 3D close-up in Chromium (stored value, projection, pixel read back). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -5747,7 +5749,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 132.0 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 132.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -6964,6 +6966,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
+| [`notes/fig13/sheet-display-state.md`](../notes/fig13/sheet-display-state.md) | 3.1 kB | Fig. 13: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/band_test.cjs`](../notes/fig14/band_test.cjs) | 1.7 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/check.md`](../notes/fig14/check.md) | 32.9 kB | Fig. 14: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 

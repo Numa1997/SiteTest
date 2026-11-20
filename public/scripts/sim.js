@@ -427,6 +427,7 @@
         function show() {
             Array.prototype.forEach.call(papers, function (p) { p.classList.add('is-typeset'); });
         }
+        function run() {
         var fallback = setTimeout(show, 4000);
         load(ROOT + 'vendor/katex/katex.min.js', function () {
             load(ROOT + 'vendor/katex/contrib/auto-render.min.js', function () {
@@ -445,6 +446,19 @@
                 document.dispatchEvent(new CustomEvent('typeset'));
             });
         });
+        }
+        /* <body data-tex="near"> (Fig. 13, 20 November 2026): a long note is typeset only when it comes within about two screens, is
+           linked to, or is printed, so that the figure at the top starts without waiting for it (on a slow phone the note's
+           mathematics took about 2.5 s of the main thread at load). Every other page typesets at once, as before. */
+        if (document.body.getAttribute('data-tex') === 'near' && 'IntersectionObserver' in window) {
+            var started = false, near = new IntersectionObserver(function (es) {
+                if (es.some(function (e) { return e.isIntersecting; })) go();
+            }, { rootMargin: '1600px 0px 1600px 0px' });
+            var go = function () { if (started) return; started = true; near.disconnect(); run(); };
+            Array.prototype.forEach.call(papers, function (p) { near.observe(p); });
+            window.addEventListener('beforeprint', go); window.addEventListener('hashchange', go);
+            if (location.hash && Array.prototype.some.call(papers, function (p) { try { return p.querySelector(location.hash); } catch (e) { return false; } })) go();
+        } else run();
         /* the contents list marks the section being read */
         var links = document.querySelectorAll('.paper__toc a[href^="#"]');
         if (!links.length || !('IntersectionObserver' in window)) return;

@@ -121,6 +121,11 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
    - Each paper gets the class `is-typeset` ([sim.js:427-429](../../public/scripts/sim.js#L427-L429)). The stylesheet hides
      the paper body until then ([paper.css:24](../../public/styles/paper.css#L24)), so the reader never sees raw TeX. If
      KaTeX has not arrived after 4 s the paper is shown anyway ([sim.js:430](../../public/scripts/sim.js#L430)).
+   - Opt-in, since 20 November 2026: a page whose `<body>` carries `data-tex="near"` (only Fig. 13, `simulations/momentum-spirographs.html`)
+     typesets its paper only when the paper comes within 1600 px of the screen (an `IntersectionObserver`), on a jump to a `#hash`
+     inside it, or before printing; the 4 s fallback starts then. The figure at the top therefore starts without waiting for the
+     note: on Fig. 13, in headless Chromium at phone size with the processor slowed four times, the load event came at 1.5 s instead
+     of 8.3 s. Every other page typesets at once, as before.
    - It then fires `typeset` on `document` ([sim.js:445](../../public/scripts/sim.js#L445)). `fold.js` listens for it to
      re-aim a `#hash` link, because the page grew taller ([fold.js:402](../../public/scripts/fold.js#L402)).
    - Independently, an `IntersectionObserver` marks the contents-list link of the section being read with `is-here`. A
