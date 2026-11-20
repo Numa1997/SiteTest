@@ -175,8 +175,7 @@ ahead of time, and the website only hands out what is stored. The rules stated t
 - **Compact on the site, full on Kaggle.** Symmetry is used before storing three-dimensional fields.
 - **Too large for the repository goes to R2**, served under `/r2/`, and the page checks each file's hash against the
   index in the repository, so the bucket needs no trust of its own.
-- The Worker `kaggle-bridge`, which would let a page order a new run, exists only as a design; no pipeline code is
-  deployed (state of 12 November 2026 in that doc).
+- A page cannot order a new run: the on-demand Worker `kaggle-bridge` was dropped on 20 November 2026 (owner's decision).
 
 ---
 

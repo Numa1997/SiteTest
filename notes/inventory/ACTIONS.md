@@ -71,7 +71,7 @@ Nine commits are on no branch of the clone (`c705a42`, `10dc1d6`, `5941f63`, `70
 ## Group H: keep (named so nothing is touched by accident)
 
 R2 prefix `resonant-tunnelling/2026-11-14/runs/`; `public/data/schrodinger-sphere/**` (618.6 MB, all loaded by the page); `public/data/fig12/2026-11-14-run10/`; the three `generations.json`; the Fig. 15 generation-2 index; Workers `phyein-usul` and `stellenrecherche`; the scheduled task `trig_01QPpDyUsC3M8uFbcr13B1EJ` until the R2 key is deleted; the Fig. 12 JAX notebook; all derivation scripts in `notes/` and `tools/` marked provenance (257); live tools (19).
-Worker `kaggle-bridge` (starter code only): **decision for the owner:** keep for the planned bridge, or delete. Opinion: keep; it is empty and free.
+Worker `kaggle-bridge` (starter code only): **decided 20 November 2026 by the owner: delete** (the on-demand link is dropped everywhere; the Worker itself, with the Kaggle key it holds as a secret, is deleted in the Cloudflare dashboard).
 
 ## Totals if everything proposed were done (Facts as measured; Inference where noted)
 

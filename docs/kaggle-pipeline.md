@@ -8,9 +8,13 @@ cart (Fig. 12), can plug in from this page alone.
 
 Think of a bakery that bakes at night and sells all day. Kaggle's graphics cards are the oven: they bake a large tray of runs
 ahead of time, and every run baked is kept. The website is the shop counter: it only hands out what is on the shelf, to any
-number of visitors, at no extra cost. When a visitor asks for something not on the shelf, the counter does not go silent:
-it slows down, shows a rough sketch made on the spot (the live preview), and, once the link is switched on, sends the order to
-the oven through one door, the Worker `kaggle-bridge`.
+number of visitors, at no extra cost. A visitor cannot order a new bake: the shelf holds what was computed, and where a page
+has one, a rough sketch made on the spot (the live preview) shows a stop outside the stored grid, labelled as such.
+
+**Decision of 20 November 2026 (owner):** the on-demand link that would have let a visitor's request start a Kaggle run (the
+Worker `kaggle-bridge`, the client `KaggleFlow.bridge`, the pipeline drawing in the notice) is dropped and deleted everywhere. What
+Kaggle computes is decided by the owner, not by visitors. The automation that remains to be built is the other direction only:
+carrying finished Kaggle output into the repository without a person or a Claude session in between.
 
 ## The parts
 
@@ -21,12 +25,6 @@ the oven through one door, the Worker `kaggle-bridge`.
 | The store the page reads | one base address per page (`DATA_BASE` in the page's script) | on the website itself, `public/data/<project>/<YYYY-MM-DD>/` (Numa's decision, 12 November 2026; see Storage) |
 | The shared page script | [public/scripts/kaggle-flow.js](../public/scripts/kaggle-flow.js), [public/styles/kaggle-flow.css](../public/styles/kaggle-flow.css) | working on Fig. 14 |
 | Live preview | per project, a Web Worker, e.g. [schrodinger-live-worker.js](../public/scripts/schrodinger-live-worker.js) | working on Fig. 14 |
-| The Worker `kaggle-bridge` | Cloudflare, account of the site | exists with Cloudflare's starter code and the secret `KAGGLE_API_TOKEN` (set by Numa); **no pipeline code deployed**; the pages run with `BRIDGE_URL = null` and say so |
-
-Not yet tested, and needed before the bridge can start Kaggle runs: T1, a Worker holding the token starts a notebook run with
-parameters, reads its status and fetches its output (Kaggle's public API, `kaggle kernels push/status/output`); T2, a running
-notebook posts its progress and results out to the Worker. Kaggle's own run log stays empty until a run ends (seen on
-12 November 2026), so live progress has to be pushed by the notebook.
 
 ## Storage: on the website and with the notebook, named by the date of generation
 
@@ -145,53 +143,23 @@ The playback speed as a first-order lag: `step(goal, dt)` moves the speed toward
 
 ### `KaggleFlow.popup(host)`
 
-The loading notice. `set({ stage, broken, title, text, progress })` lights the step now working (0 this page, 1 kaggle-bridge,
-2 Kaggle GPU, 3 stored, 4 back here), draws a step that is not available dashed (`broken`), and moves a dot along the edge being
-worked. `show()` fades it in over 0.6 s, `hide()` fades it out. **A page shows it only when the speed has reached zero because no
-data is left to show**; if data arrives earlier, the notice is never seen.
-
-### `KaggleFlow.bridge({ url, project })`
-
-The client of `kaggle-bridge`. With `url: null` every call answers at once `{ state: 'offline', reason }`, so a page behaves the
-same, honestly, before the bridge exists. With an address: `request(params)` posts to `POST {url}/v1/{project}/block` and
-`status(job)` reads `GET {url}/v1/job/{job}` (the endpoints below).
+The notice for a stop outside the stored grid: `set({ title, text, progress })` sets its title, a line of text and a progress bar
+(Fig. 14: the browser's live preview). `show()` fades it in over 0.6 s, `hide()` fades it out. **A page shows it only when the
+speed has reached zero because no data is left to show**; if data arrives earlier, the notice is never seen.
 
 ## The behaviour every page follows
 
 1. Inside the stored region the page plays stored data at normal speed.
 2. In a soft zone the control is heavier and the playback slows: Fig. 14 sets the goal speed to 1 − 0.8 × the largest closeness
    of its three controls, and slows towards the last stored frame in time over the last quarter of the run.
-3. Entering a soft zone heading out, the page at once asks the bridge for the next block (`heading()`), once per direction and
-   position.
-4. On an uncomputed stop the page starts the live preview and plays its frames as they come; the visitor's time is kept, and
+3. On an uncomputed stop the page starts the live preview and plays its frames as they come; the visitor's time is kept, and
    until the preview reaches that time the last picture is held, dimmed, and the numbers are those of the held picture.
-5. Only when no frame is left to show and the speed has eased to zero does the notice fade in; it fades out when frames arrive.
-6. A change of run or of source (stored, live) cross-fades over 0.45 s from the last picture shown.
-
-## The Worker `kaggle-bridge` (design; not deployed)
-
-One Worker for every project and one GPU budget for the whole account: Kaggle gives 30 GPU hours a week (`get_accelerator_quota`,
-read 12 November 2026: 108 000 s, reset Saturday 00:00 UTC) and at most two GPU runs at once.
-
-| Endpoint | Does |
-|---|---|
-| `GET /v1/{project}/index.json`, `GET /v1/{project}/{block}` | serve stored blocks (free, cached) |
-| `POST /v1/{project}/block` | body: the project's block parameters. Stored: `{ state: 'stored', url }`. Already queued or running for anyone: the same job (identical requests share one job). Otherwise, within budget: queue it and answer `{ state: 'queued', job, stage, progress }`. Over budget: `{ state: 'needs-grant' }` |
-| `GET /v1/job/{job}` | `{ state, stage, progress, lines }` from the notebook's own reports |
-| `POST /v1/job/{job}/progress`, `POST /v1/job/{job}/result` | the notebook reports and delivers; protected by a second secret only the notebook run holds |
-
-Rules: one queue, fair turns between projects, one job per identical request, every finished block stored for good, a daily GPU
-cap Numa chooses, and the weekly quota read before every launch. Reading stored data is always free; budgets and the grant apply
-only to requests that start new computing.
-
-The grant for a visitor who needs more than the budget: the job site (`stellen.phyeinusul.com`) is protected by Cloudflare Access
-with an allow list of e-mail addresses (skill `stellen-job-list-upkeep`, section "Page"). The same mechanism fits here: a path such
-as `/v1/granted/…` of `kaggle-bridge` behind a Cloudflare Access application whose allow list Numa keeps; requests through it skip
-the daily cap but not the weekly quota.
+4. Only when no frame is left to show and the speed has eased to zero does the notice fade in; it fades out when frames arrive.
+5. A change of run or of source (stored, live) cross-fades over 0.45 s from the last picture shown.
 
 ## How a project registers
 
-A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
+A project brings five things; nothing in `kaggle-flow.js` changes.
 
 1. **A notebook** that computes one block from its parameters and writes one file per block plus progress lines. Fig. 14:
    [build_full.py](../tools/kaggle/schrodinger-sphere/build_full.py) writes it, fetching the solver from this repository at a pinned
@@ -201,7 +169,7 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 3. **Its block format** and a converter to the site format. Fig. 14's run file is `SPH1`, a uint32 header length, a JSON header
    (parameters and per-frame curves), then one zlib stream with the frames ([to_site.py](../tools/kaggle/schrodinger-sphere/to_site.py)).
    The browser inflates zlib with `DecompressionStream('deflate')`.
-4. **Its measured cost per block** on Kaggle, so the bridge can size jobs and give an honest time. Fig. 14: 2.3 to 6.9 s per run on a T4
+4. **Its measured cost per block** on Kaggle, so a run can be sized and its time stated honestly. Fig. 14: 2.3 to 6.9 s per run on a T4
    (`wall` in `index.json`), plus the session's start, not yet measured on its own; the whole grid 880.8 s on two T4s.
 5. **Its page**: `kaggle-flow.js` controls, its drawing, and if it can, a live preview checked against Kaggle with the difference
    stated. Fig. 14 states “within 0.08” in probability. A project whose browser solver is not checked shows the held picture and the
@@ -226,13 +194,13 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
   `public/data/fig12/2026-11-14-run10/` since 14 November 2026 (run 10's controlled rides with run 8's other rides; run 8 alone in `2026-11-13-run8/`), listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
   `stout-view2.js`. It follows rules 1, 2, 3 and 5 of "Store first" (one file per ride, an index, a fingerprint check in the
   browser, provenance) and rule 4 (no interpolation: the frame drawn is `round(30 T)`), but uses none of `kaggle-flow.js`: one
-  button per stored ride, no slider, governor, live preview, pop-up or bridge; it plays at real speed and stops at the end of
+  button per stored ride, no slider, governor, live preview or pop-up; it plays at real speed and stops at the end of
   the stored time. The stored rides are run 10's five controlled rides (Kaggle notebook version 10, the controllers with the head's drive
   coefficient 1.241) with run 8's three speed-held rides and free swing (version 8) and the swing without the head (version 6), ten files; runs 6 and 7 stay in
   `2026-11-13/` for the record. Run 8 waited about 40 minutes for a GPU slot: Kaggle runs at most two batch GPU sessions per
   account at a time ("Maximum batch GPU session count of 2 reached"), and Fig. 15's shards held both. The earlier
-  generations (12 and 13 November, the Taichi solver, with `KaggleFlow.slider`, `governor`, `popup`, `bridge` with `url: null`
-  and the live preview `guinness-preview-worker.js`) are described in [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md).
+  generations (12 and 13 November, the Taichi solver, with `KaggleFlow.slider`, `governor`, `popup`, the since deleted `bridge` with `url: null`
+  and the live preview `guinness-preview-worker.js`, deleted on 20 November 2026) are described in [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md).
 - Fig. 15, resonant tunnelling in 3D (`simulations/resonant-tunnelling.html`, 13 November 2026): 115 runs from five notebooks
   (`numakoudsie/fig15-rt3d-shard-{1..4}-of-4`, `numakoudsie/fig15-rt3d-singles-v2`), filed by `file_rt3d.py` under
   `public/data/resonant-tunnelling/2026-11-13/kaggle/` with each file's notebook, version, commit and SHA-256; the page checks the

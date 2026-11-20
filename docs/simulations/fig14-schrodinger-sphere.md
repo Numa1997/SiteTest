@@ -45,11 +45,9 @@ preview in a Web Worker and says so on the figure.
 4. The frame shown is the stored frame at or before the time; nothing is interpolated.
 5. On a stop that is not stored, `startLive` starts the Web Worker (the previous one is terminated) and frames are played as they
    arrive. The visitor's time is kept; until the preview reaches it, the last picture is held, dimmed, and the numbers are those of
-   the held picture. When nothing is left to show and the speed has reached zero, `KaggleFlow.popup` fades in with the pipeline
-   (this page, kaggle-bridge drawn dashed because `BRIDGE_URL` is null, Kaggle GPU, stored, back here) and the preview's progress.
+   the held picture. When nothing is left to show and the speed has reached zero, `KaggleFlow.popup` fades in: the stop was not
+   computed on Kaggle, and the preview's progress.
 6. A change of run or source cross-fades over 0.45 s from the last real picture.
-7. Heading out of the stored band in a soft zone, the page calls `bridge.request(...)`; with the bridge not connected this answers
-   "offline" at once.
 
 ## The store and the data panel
 

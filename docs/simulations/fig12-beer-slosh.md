@@ -3,8 +3,8 @@
 **Deleted (owner, 18 November 2026: no physics is computed in the browser).** The page `beer-slosh.html` is gone from the site; its
 addresses forward to `guinness-kaggle.html` (`public/_redirects`, 301), which is now Fig. 12 in the figure menu and the catalogue. Its
 scripts stay in the repository because the offline tools and the Kaggle port check use them (`stout-cart.js`, `stout-nm.js`,
-`stout-pool.js`, `stout-worker.js`, `stout-gpu.js`, `stout-gpu-view.js`; `guinness-playback.js` and `guinness-preview-worker.js` are
-loaded by no page). Everything below describes the deleted page, kept as the record of what it computed.
+`stout-pool.js`, `stout-worker.js`, `stout-gpu.js`, `stout-gpu-view.js`; `guinness-playback.js` and `guinness-preview-worker.js`, loaded by no
+page, were deleted on 20 November 2026 with the on-demand link to Kaggle). Everything below describes the deleted page, kept as the record of what it computed.
 
 
 Rebuilt from zero on 6 November 2026 (since 7 November 2026 the default fluid is the 3D solver on the reader's graphics chip: "Part A" at the end) after Numa rejected the previous Fig. 12 (modal sloshing in a Blender-sculpted glass, LQR,
@@ -632,7 +632,7 @@ suspension. Measured on Kaggle: 10,000 steps per ride, 21.8 / 20.2 / 20.3 min, 1
 **Edge of the computed data.** Only computed rides can be chosen (the speed control has one position per ride; changing
 it cross-fades the picture over 0.35 s). In the last 3 s of a ride the playback rate falls as sqrt(time left / 3 s), so
 the picture slows smoothly and stops exactly at the end of the data; only then a pop-up fades in that shows the pipeline
-(page -> kaggle-bridge -> Kaggle GPU -> stored -> back) and says that computing on request is not yet connected; "Ride
+(page -> the since dropped kaggle-bridge -> Kaggle GPU -> stored -> back) and says that computing on request is not yet connected; "Ride
 again" cross-fades to the start. (Replaced on 12 November 2026 by the shared pipeline, next section.)
 
 **Tested** in headless Chromium at 360, 390, 1024 and 1440 px: no errors, no sideways scroll, playback advances, the
@@ -725,7 +725,7 @@ read back (wine). Tested at 390 and 1440 px: 84 checks agree, none differ, the d
   the figure says it is a preview from the browser's coarse solver, not Kaggle's result; `source` in the store says the same.
   A finished preview is kept for the visit; an unfinished one is dropped when the speed changes.
 - Asking Kaggle: on a hollow stop, when the control heads out of the band, and at the end of the computed time, the page calls
-  `KaggleFlow.bridge({ url: null })` once per block (road, speed, time span) and writes the answer under the control. With the
+  the since deleted `KaggleFlow.bridge({ url: null })` once per block (road, speed, time span) and writes the answer under the control. With the
   bridge not connected the answer is "not switched on yet". A block the bridge delivers (`state: 'stored'`) is added to the
   rides and, if it is the speed on screen, cross-faded in at the same ride time (`arrive`); not exercised until the bridge exists.
 - Cross-fade: the last picture is copied onto `#cv-old` above the figure and faded out over 0.45 s while the new ride draws.

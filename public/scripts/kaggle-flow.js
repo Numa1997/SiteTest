@@ -1,14 +1,12 @@
 /* Kaggle flow: the page side of the pipeline that brings precomputed data from Kaggle to a simulation page.
-   A page that plays stored runs uses four pieces from here (docs/kaggle-pipeline.md):
+   A page that plays stored runs uses three pieces from here (docs/kaggle-pipeline.md):
    - KaggleFlow.slider: a parameter control over a list of stops that shows which stops are computed and stored
      (filled dots, a solid band) and which are not (hollow dots, a hatched band). Near the edge of the stored band it
      grows heavier: the thumb follows the hand less and less (a soft zone over the last part of the stored range), so a
      visitor slides into the uncomputed region slowly, never with a jump.
    - KaggleFlow.governor: a first-order lag for the playback speed, so speed changes are eased, never stepped.
-   - KaggleFlow.popup: the loading notice, faded in only when there is nothing left to show; it draws the pipeline
-     (this page, kaggle-bridge, Kaggle GPU, stored, back here) with the real stage lit and a dot travelling along it.
-   - KaggleFlow.bridge: the client of the Worker kaggle-bridge. With no address it answers "not connected" at once,
-     so a page behaves the same, honestly, before the bridge exists.
+   - KaggleFlow.popup: the loading notice, faded in only when there is nothing left to show (a title, a line of text and a
+     progress bar, for example the browser's live preview of a stop that was not computed on Kaggle).
    No physics here: a page supplies its own data, its own live solver and its own drawing. */
 (function () {
     'use strict';
@@ -136,59 +134,21 @@
         return { step: function (goal, dt) { s += (goal - s) * (1 - Math.exp(-dt / tau)); if (Math.abs(goal - s) < 1e-4) s = goal; return s; }, get value() { return s; }, set: function (v) { s = v; } };
     };
 
-    /* ---------------- the loading notice with the pipeline ---------------- */
-    var STAGES = ['This page', 'kaggle-bridge', 'Kaggle GPU', 'Stored', 'Back here'];
+    /* ---------------- the loading notice ---------------- */
     KF.popup = function (host) {
         var el = document.createElement('div'); el.className = 'kf-pop'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite');
-        var W = 520, H = 92, xs = STAGES.map(function (_, i) { return 46 + i * (W - 92) / (STAGES.length - 1); });
-        var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="kf-pipe" aria-hidden="true">';
-        for (var i = 0; i < STAGES.length - 1; i++) svg += '<line class="kf-edge" data-e="' + i + '" x1="' + (xs[i] + 14) + '" y1="34" x2="' + (xs[i + 1] - 14) + '" y2="34"/>';
-        STAGES.forEach(function (s, i) { svg += '<g class="kf-node" data-n="' + i + '"><circle cx="' + xs[i] + '" cy="34" r="11"/><text x="' + xs[i] + '" y="70">' + s + '</text></g>'; });
-        svg += '<circle class="kf-packet" r="4.5" cx="' + xs[0] + '" cy="34"/></svg>';
-        el.innerHTML = '<p class="kf-pop__kicker">Computing the next part</p><p class="kf-pop__title"></p>' + svg +
-            '<div class="kf-pop__bar"><span></span></div><p class="kf-pop__text"></p>';
+        el.innerHTML = '<p class="kf-pop__kicker">Not computed yet</p><p class="kf-pop__title"></p><div class="kf-pop__bar"><span></span></div><p class="kf-pop__text"></p>';
         host.appendChild(el);
-        var title = el.querySelector('.kf-pop__title'), text = el.querySelector('.kf-pop__text'), bar = el.querySelector('.kf-pop__bar span'),
-            packet = el.querySelector('.kf-packet'), stage = 0, raf = 0, shown = false, broken = -1;
-        function run(ts) {
-            if (!shown) return;
-            var a = stage, b = Math.min(stage + 1, STAGES.length - 1), f = (ts / 1400) % 1;
-            if (broken === stage) f = 0.5 + 0.08 * Math.sin(ts / 200);
-            packet.setAttribute('cx', (xs[a] + (xs[b] - xs[a]) * f).toFixed(1));
-            raf = requestAnimationFrame(run);
-        }
+        var title = el.querySelector('.kf-pop__title'), text = el.querySelector('.kf-pop__text'), bar = el.querySelector('.kf-pop__bar span'), shown = false;
         return {
-            show: function () { if (shown) return; shown = true; el.classList.add('is-on'); raf = requestAnimationFrame(run); },
-            hide: function () { shown = false; el.classList.remove('is-on'); cancelAnimationFrame(raf); },
+            show: function () { if (shown) return; shown = true; el.classList.add('is-on'); },
+            hide: function () { shown = false; el.classList.remove('is-on'); },
             get shown() { return shown; },
-            /* s.stage: 0..4 the step now working; s.broken: index of a step that is not available (drawn dashed); s.title, s.text, s.progress 0..1 */
+            /* s.title, s.text, s.progress 0..1 */
             set: function (s) {
-                stage = s.stage; broken = s.broken == null ? -1 : s.broken;
-                el.querySelectorAll('.kf-node').forEach(function (g, i) { g.classList.toggle('is-done', i < stage); g.classList.toggle('is-now', i === stage); g.classList.toggle('is-off', i === broken); });
-                el.querySelectorAll('.kf-edge').forEach(function (l, i) { l.classList.toggle('is-done', i < stage); l.classList.toggle('is-off', i === broken || i + 1 === broken); });
                 if (s.title != null) title.textContent = s.title;
                 if (s.text != null) text.innerHTML = s.text;
                 bar.style.width = (100 * clamp(s.progress || 0, 0, 1)).toFixed(1) + '%';
-            }
-        };
-    };
-
-    /* ---------------- the client of the Worker kaggle-bridge ----------------
-       opt.url: the bridge's address, or null while it is not connected; opt.project: this page's project name.
-       request(params) resolves to { state: 'stored', url } | { state: 'queued' | 'running', job, progress, stage } | { state: 'offline', reason } */
-    KF.bridge = function (opt) {
-        var url = opt.url || null;
-        function offline() { return Promise.resolve({ state: 'offline', reason: 'The link from this page to Kaggle (the Worker kaggle-bridge) is not switched on yet, so new regions cannot be computed on Kaggle from here.' }); }
-        return {
-            get connected() { return !!url; },
-            request: function (params) {
-                if (!url) return offline();
-                return fetch(url + '/v1/' + encodeURIComponent(opt.project) + '/block', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(params) })
-                    .then(function (r) { return r.json(); }).catch(function (e) { return { state: 'offline', reason: 'kaggle-bridge did not answer: ' + e.message }; });
-            },
-            status: function (job) {
-                if (!url) return offline();
-                return fetch(url + '/v1/job/' + encodeURIComponent(job)).then(function (r) { return r.json(); }).catch(function (e) { return { state: 'offline', reason: e.message }; });
             }
         };
     };
