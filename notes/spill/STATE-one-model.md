@@ -57,7 +57,7 @@ old branch). Order: A (2-D planar, Kaggle CPU) tests 0-4; B (3-D GPU) smoke + te
 | nu | stout kinematic viscosity | 2.06e-3/1007 m2/s | Benilov et al., arXiv 1205.5233 (stout_jax.py:33) |
 | sigma_y | head yield stress | 10 Pa, sweep 0-50 | owner start; old model derived 5.4 Pa (stout_jax.py:66) |
 | m | Papanastasiou regularisation time | 0.2 s | assumed (explicit viscous step limit) |
-| K, n | head Herschel-Bulkley consistency, index | to be read from Yue et al. 2015 | pending |
+| K_hb, n_hb | head Herschel-Bulkley consistency, index | 5.0 Pa s^0.27, 0.27 | Yue et al. 2015 Table I, "pie" (275 kg/m3, nearest density); assumed for the head |
 | c | sound speed of the stiff equation of state | 50 m/s | owner start |
 | l_s | Navier slip length | stout 0, head infinite (free slip) | owner start |
 | gamma | surface tension | 0 in v1; 0.0442 N/m in stage E | Voelp & Willenbacher 2021 (stout_jax.py:51) |
@@ -98,6 +98,13 @@ Then the kerb ride. Known limit to report: deck film thinner than the particle s
 - 20 Nov: documentation check done (above). Superseded by the owner's MPM decision.
 - 20 Nov: owner's MPM decision recorded. Plan for A.0 sent.
 - 20 Nov: owner's additions recorded (phi_body, Navier slip, stage E gamma, air-drag switch). Waiting for yes to write code.
+- 20 Nov: owner's corrections: implicit wall friction v_t <- v_t/(1 + dt eta A/(m (l_s + d))); Laplace test with gravity off,
+  R >= 8 cells, mean pressure inner half vs outside, noise reported, INCONCLUSIVE if noise > jump; A.0 control built to leak
+  (liquid both sides, b_x = 5 m/s2 for 0.2 s). Yes to write mpm2d.py and a0_wall.py, run nothing.
+- 20 Nov: Yue et al. 2015 read (PDF, cs.columbia.edu/~yonghao/tog15/yue-mpm-shear-dependent-flow.pdf): their law is
+  ELASTO-viscoplastic (shear modulus mu, return map on b_e, implicit backward Euler; Table I: kappa 109 kPa, mu 0.08-50 kPa),
+  not a Papanastasiou viscosity. Version 1 follows the owner's Papanastasiou form; flagged to the owner.
+- 20 Nov: written tools/fig16/mpm/mpm2d.py, a0_wall.py (syntax parsed only; nothing run). Waiting for the owner's review.
 
 ## What is live
 Unchanged: main 12c2e3a, Fig. 12 and Fig. 16 play stored Kaggle rides.

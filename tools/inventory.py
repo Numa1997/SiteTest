@@ -95,6 +95,7 @@ RULES = [
     (r'tools/fig16/kaggle/pack16\.py', "Fig. 16: packs a Kaggle ride into the page's format (no computation).", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/fig16/build_page\.py', 'Fig. 16: builds the page from its source, every number filled from the stored data; --check.', 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/fig16/(rides|slosh_model|spill|validate|fit|gamma_check|holder|sweep|concepts|show_concepts|cart16)\.py', "Fig. 16 design study (before the GPU run): decoding Fig. 12's rides, the few-mode stout fitted and validated, the head's spill rule, the early concept studies.", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/mpm/(mpm2d|a0_wall)\.py', "Fig. 16 one-model spill: the 2-D MLS-MPM solver of stout and head with side-tagged transfers at the glass wall, and test A.0 (the wall leak), run on Kaggle's CPU.", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/fig16/\w+\.json', 'Fig. 16 design study: stored results (fit, validation, sweep, concepts).', 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'notes/fig16/.+', 'Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source.', 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'notes/guinness-rebuild/.+', 'Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction.', 'docs/simulations/fig16-guinness-cart-control.md'),
