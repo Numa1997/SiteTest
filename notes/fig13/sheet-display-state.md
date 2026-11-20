@@ -57,4 +57,8 @@ rate is not. Phone main thread now: paint 25 %, native canvas work 57 %, no phys
 - [x] 1 speed (worker, lazy note, off-screen stop, fused decay, banded trail, overlay on change)
 - [x] 2 layout  - [x] 3 handles (ring drag, double tap, mouse pan, keys; tested with touch and mouse, no page errors)
 - [x] docs (fig13 doc, sim.md, note section 9 via fig13_note.html + build_page.py, inventory)
-- [ ] merged and live
+- [x] merged and live: commit 7efd427 on main, live on https://phyeinusul.com about 80 s after the push; re-tested there at
+  390 x 844 (touch) and 1440 x 900: worker on, ring drag, double tap, off-screen stop all pass; 25 frames a second on the slowed
+  phone. The only console message is Cloudflare's analytics beacon blocked by the site's CSP, on every page, not from this work.
+- Left out on purpose: `tools/i18n/build.py` rewrote 47 German and Arabic files with drift from other sessions (the Fig. 12
+  link, commit stamps); Fig. 13 is English only and this work adds no strings, so they were not committed here.
