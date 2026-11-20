@@ -48,7 +48,7 @@ owner switched R2 on on 13 November 2026. What changed and what did not:
 ## Build and deploy
 
 ```bash
-npm install             # no lockfile is committed; versions follow package.json
+npm ci                  # installs the versions pinned in package-lock.json (since 20 November 2026; before, no lockfile)
 npm run build           # vite build: index.html + everything in public/ -> dist/
 npx wrangler deploy     # publishes dist/ to the Worker phyein-usul (needs a Cloudflare sign-in)
 ```

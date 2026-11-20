@@ -73,6 +73,10 @@ def sim_doc(fig, sid):
 
 # (pattern, description, doc). The first matching pattern wins. A description may be a function of the regex match.
 RULES = [
+    (r'package-lock\.json', 'Pins the exact versions of the build tools (Vite and its dependencies, 141 packages), since 20 November 2026.', 'docs/method/rebuild.md'),
+    (r'tools/kaggle/pinned-code/manifest\.json', 'For each of the 37 commits that a Kaggle notebook or a data index names: every solver file with its SHA-256 and where its exact bytes are kept.', 'docs/method/rebuild.md'),
+    (r'tools/kaggle/pinned-code/([0-9a-f]{7})/(.+)', lambda m: 'Solver file exactly as it was at commit ' + m.group(1) + ' (' + m.group(2).rsplit('/', 1)[-1] + '), kept so the stored runs can be recomputed without the git history.', 'docs/method/rebuild.md'),
+    (r'notes/history-removal/STATE\.md', 'State of the work of 20 November 2026: documenting how the site was built, then removing the history.', 'docs/method/rebuild.md'),
     (r'public/scripts/cart16-view\.js', "Fig. 16: Cart16View, the four-wheel cart drawn on Fig. 12's StoutView2 (its camera and glass); the deck's pose from stored data.", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'public/scripts/guinness16-play\.js', "Fig. 16: the player; Fig. 12's best stored ride and the new cart's on one clock, SHA-256 checked, the comparison table from both indexes.", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'public/data/fig16/(\d{4}-\d\d-\d\d)/index-16\.json', 'Fig. 16 data generated on Kaggle: the notebook, version, commit, design, and per ride its file, size, SHA-256 and measured numbers.', 'docs/simulations/fig16-guinness-cart-control.md'),
