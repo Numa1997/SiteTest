@@ -280,3 +280,6 @@ notes/spill/step4/full_v2/.
   Fact: the error does not shrink with refinement, it changes sign. Inference: not a simple O(dx) error; candidates the yield height's
   place in a cell (z_y/dx = 4.2 and 8.4) and the steep flow law (gdot^0.47) sampled once per cell. Not blocking 4.4 (inside the mark).
 - 21 Nov 17:26:02 UTC: 4.4 smoke launched (T4, step4-pint-head-smoke, code 853578c8). Quota: reset, 1 800 GPU-min until 28 Nov.
+- 21 Nov 17:26:02 and 17:56:38 UTC: 4.4 smoke (T4, step4-pint-head-smoke v1 and v2, code 853578c8) never started: GetKernelSessionStatus
+  and the Kaggle connector's get_notebook_session_status both return empty, no log, GPU quota 0 s used at 18:27 UTC; CPU kernels launched
+  at the same minute ran normally. Stopped for the owner (no blind retries). 4.4 code is untested on the GPU.
