@@ -275,3 +275,8 @@ notes/spill/step4/full_v2/.
   Neither grid is steady at 0.5 s: top speed by 0.1 s windows, 1.5 mm 1.468 / 1.333 / 1.295e-3, 0.75 mm 1.663 / 1.556 / 1.530e-3 m/s,
   still falling 2-3 % per 0.1 s. Diagnostic (not a mark): 4.3 run to 2.0 s at both grids (T43=2), CPU.
   4.1-4.3 all PASS at 1.5 mm -> gate for 4.4 open.
+- 21 Nov 17:26:02-17:29:02 UTC: diagnostic 4.3 to 2.0 s (code 853578c8, CPU step4-plug-2s, 3 min 0 s). Steady top speed (last 0.1 s):
+  1.5 mm 1.2842e-3 m/s (-9.4 %), steady from ~0.6 s; 0.75 mm 1.5264e-3 m/s (+7.7 %), steady from ~0.5 s; plug uniform (< 3e-4).
+  Fact: the error does not shrink with refinement, it changes sign. Inference: not a simple O(dx) error; candidates the yield height's
+  place in a cell (z_y/dx = 4.2 and 8.4) and the steep flow law (gdot^0.47) sampled once per cell. Not blocking 4.4 (inside the mark).
+- 21 Nov 17:26:02 UTC: 4.4 smoke launched (T4, step4-pint-head-smoke, code 853578c8). Quota: reset, 1 800 GPU-min until 28 Nov.
