@@ -341,3 +341,12 @@ Both Part 1 marks fail as predicted before the run: the instruction's two requir
 the head's total equal to the glass volume) cannot both hold with particles kept 0.25 hl inside the wall and uniform volumes. Stopped
 before Part 2 (no GPU launch): which normalisation to use is the owner's decision. The stale GPU session step4-pint-head-smoke still
 returns an empty status (cannot tell whether it is gone).
+
+## Owner, 21 Nov ~20:55 UTC: option 2
+Each wall-ring head particle carries its true share, the strip between it and the wall in its own layer (per layer from the glass
+radius), so the total matches the glass by construction. No vertical jitter for the head, sideways kept. New seed-check marks:
+abs(V_cell / dx^3 - 1) < 1e-3 in interior foam cells (not cut by the wall or the stout-foam interface); wall-ring volume factor in
+[1.0, 1.5] in every layer; total head volume against the glass FILL..FILL + HEAD0 within 1e-4. README stout note corrected (net +1.1 %
+interior, harmless). Then rerun the seed check on CPU; if it passes, the single 4.4 GPU smoke once the queue is clear.
+Code (20:56 UTC): seed_head v3 (ring = lattice points with a 4-neighbour outside the mask; factor = 1 + (V_layer_glass - n t hl^2) /
+(n_ring t hl^2)); seed check v3 (glass volume integrated independently, 200 001 points).

@@ -39,5 +39,13 @@ the physics is fine.
   floor(HEAD0 / (dx/2)) full layers plus one thinner top layer whose particles carry the volume of that thinner slab. HEAD0 = 0.019 m
   stays the physical parameter at every grid (trimming the head to whole layers would make its height depend on dx and confound the
   resolution study of Step 6).
-- **Known offset kept on purpose:** the stout's seed (`stout_jax.seed_lattice`) also rounds its layers: fill 0.125 m / 0.75 mm = 166.67
-  -> 167 layers at 0.7485 mm, 0.9980 cell volumes per cell (-0.20 %). Steps 1-3 were validated with it; it stays.
+- **The head's wall ring (owner, 21 Nov, option 2):** the lattice keeps particles 0.25 hl inside the wall, so the thin strip between the
+  outermost particles and the glass belongs to no particle at hl^3. Counting volume as the region nearest each particle, the ring of
+  particles next to the wall carries that strip as well: in each layer the glass's volume minus the layer's particles at hl^2 t, shared
+  equally by the ring (factor about 1.2-1.3). Interior cells stay exact, the head's total equals the glass's volume, and the cut cells
+  at the wall, where the Cantat friction acts, hold the right foam volume. No vertical jitter for the head (sideways jitter kept).
+- **Known offset of the stout, kept on purpose (corrected 21 Nov after the seed check):** the stout's seed (`stout_jax.seed_lattice`)
+  rounds its layers, fill 0.125 m / 0.75 mm = 166.67 -> 167 layers at 0.7485 mm (0.9980 cell volumes per cell from the layering), and
+  gives every particle the same volume V / N, which spreads the wall strip's 1 % over all particles: V / N = 1.0112 hl^2 hz, so interior
+  stout cells hold 1.011 cell volumes on average, net +1.1 % (notes/spill/step4/seedcheck.json). Harmless for the stout: its pressure
+  solve keeps the volume constant on the grid and never uses particle volumes. Steps 1-3 were validated with it; it stays.

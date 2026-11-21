@@ -402,26 +402,40 @@ def seed_particles(G, ppc=2, seed=1):
     return P
 
 
-def seed_head(G, ppc=2, seed=2, h=None, jitter_z=0.3):
+def seed_head(G, ppc=2, seed=2, h=None, jitter_z=0.0):
     """Step 4: the head's particles on the pint's lattice above the fill, FILL <= z < FILL + h (h = HEAD0, kept at every grid). Layers at
-    exactly the lattice spacing hl = dx / ppc (21 Nov, instruction "step4-seed-fix-gpu-smoke"): n_full = floor(h / hl) full layers from
-    the fill up, plus one top layer of thickness h - n_full hl if that is > 0 (0.25 mm at dx 1.5 mm). Each particle carries the volume of
-    its slab, hl^2 times its layer's thickness, so every cell inside the head holds two full layers, one cell volume (v1 spaced 25 layers
-    at 0.760 mm: 1.0133 cell volumes, the slab test's -9.4 %). Jittered as seed_particles (sideways 0.3 hl, up and down 0.3 of the
-    layer's thickness). Returns the points, the glass's volume between FILL and FILL + h (the integral of pi R(z)^2), and each
-    particle's volume (m^3)."""
+    exactly the lattice spacing hl = dx / ppc: n_full = floor(h / hl) full layers from the fill up, plus one top layer of thickness
+    h - n_full hl if that is > 0 (0.25 mm at dx 1.5 mm). Each particle carries the volume of the region nearest to it: hl^2 times its
+    layer's thickness inside the head, so every interior cell holds exactly one cell volume (v1 spaced 25 layers at 0.760 mm: 1.0133,
+    the slab test's -9.4 %); and the particles of the ring next to the wall (lattice points with a neighbour outside the glass) also
+    carry the strip between them and the wall (the lattice keeps points 0.25 hl inside it): in each layer, the glass's volume of that
+    layer (integral of pi R(z)^2 over its thickness) minus the layer's particles at hl^2 t, shared equally by the ring (21 Nov,
+    instruction option 2). The total then equals the glass's volume by construction. No vertical jitter by default (jitter_z = 0;
+    a vertical jitter moves particles across cell faces); sideways jitter 0.3 hl as seed_particles (it never leaves the cell).
+    Returns the points, the glass's volume between FILL and FILL + h, each particle's volume (m^3), and per layer
+    (z, thickness, particles, ring particles, ring volume factor)."""
     h = HEAD0 if h is None else h
     rng = np.random.default_rng(seed); xs, _, _, mask, hl = seed_lattice(G, ppc)
     n_full = int(math.floor(h / hl + 1e-9)); t_top = h - n_full * hl
-    layers = [(G.fill + hl * (k + 0.5), hl) for k in range(n_full)] + ([(G.fill + n_full * hl + 0.5 * t_top, t_top)] if t_top > 1e-12 else [])
-    X, Y = np.meshgrid(xs, xs, indexing="ij"); pts = []; thick = []
-    for z, t in layers:
-        m = mask(z); pts.append(np.stack([X[m], Y[m], np.full(m.sum(), z)], 1)); thick.append(np.full(m.sum(), t))
-    P = np.concatenate(pts); th = np.concatenate(thick)
+    edges = [(G.fill + k * hl, G.fill + (k + 1) * hl) for k in range(n_full)] + ([(G.fill + n_full * hl, G.fill + h)] if t_top > 1e-12 else [])
+    X, Y = np.meshgrid(xs, xs, indexing="ij"); pts = []; vols = []; info = []
+    for zl, zh in edges:
+        z = 0.5 * (zl + zh); t = zh - zl; m = mask(z)
+        nb = np.ones_like(m)
+        for ax in (0, 1):
+            for d in (-1, 1): nb &= np.roll(m, d, ax)
+        ring = m & ~nb
+        zz = np.linspace(zl, zh, 401); Vlay = float(np.trapezoid(np.pi * G.Rz(zz) ** 2, zz)) if hasattr(np, "trapezoid") else float(np.trapz(np.pi * G.Rz(zz) ** 2, zz))
+        base = hl * hl * t; n = int(m.sum()); nr = int(ring.sum())
+        fac = 1.0 + (Vlay - n * base) / max(nr * base, 1e-300)
+        v = np.where(ring, fac * base, base)[m]
+        pts.append(np.stack([X[m], Y[m], np.full(n, z)], 1)); vols.append(v)
+        info.append(dict(z=z, t=t, n=n, n_ring=nr, ring_factor=float(fac), V_layer_glass=Vlay, V_layer_particles=float(v.sum())))
+    P = np.concatenate(pts); vol = np.concatenate(vols)
+    th = np.concatenate([np.full(i["n"], i["t"]) for i in info])
     P[:, :2] += rng.uniform(-0.3 * hl, 0.3 * hl, (len(P), 2)); P[:, 2] += rng.uniform(-jitter_z, jitter_z, len(P)) * th
-    zz = np.linspace(G.fill, G.fill + h, 20001)
-    V = float(np.trapezoid(np.pi * G.Rz(zz) ** 2, zz)) if hasattr(np, "trapezoid") else float(np.trapz(np.pi * G.Rz(zz) ** 2, zz))
-    return P, V, hl * hl * th
+    V = float(sum(i["V_layer_glass"] for i in info))
+    return P, V, vol, info
 
 
 # ====================================================================== shifted arrays
@@ -479,7 +493,7 @@ class Stout:
         self.N_pint = self.N
         if extra is not None: P = np.concatenate([P, np.asarray(extra, float)]); self.N = len(P)
         if head_mode == "evp":   # Step 4: the head's particles after the stout's (and any extra): FILL <= z < FILL + HEAD0
-            Ph, self.V_head_glass, vol_h = seed_head(G, ppc, seed + 1); self.N_head = len(Ph); self.N_stout = self.N
+            Ph, self.V_head_glass, vol_h, self.head_layers = seed_head(G, ppc, seed + 1); self.N_head = len(Ph); self.N_stout = self.N
             self.Vp_stout = self.V / self.N_pint; self.V_head = float(vol_h.sum())       # the head's particles' volume (m^3)
             self.Vp_head = self.V_head / self.N_head; self.mp_head = RHO_HEAD * self.Vp_head   # means, for the logs only
             # per-particle volume and mass, carried in the state (resort keeps them with their particles); stout as before

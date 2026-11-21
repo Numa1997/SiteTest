@@ -29,19 +29,26 @@ def cells(P, vol, zlo, zhi, margin=2.0):
                 max_abs_dev=float(np.abs(v - 1).max()), layer_means=lay, layer_max_abs_dev=float(np.max(np.abs(np.array(lay) - 1))))
 
 
-out = dict(dx=DX, HEAD0=SJ.HEAD0, hl=hl, n_full=n_full, t_top=t_top, fill=FILL)
-for jz in (0.3, 0.0):
+out = dict(dx=DX, HEAD0=SJ.HEAD0, hl=hl, n_full=n_full, t_top=t_top, fill=FILL, version="v3: option 2 (wall-ring volume), no vertical jitter")
+zz = np.linspace(FILL, FILL + SJ.HEAD0, 200001); V_glass_indep = float(np.trapezoid(np.pi * G.Rz(zz) ** 2, zz)) if hasattr(np, "trapezoid") else float(np.trapz(np.pi * G.Rz(zz) ** 2, zz))
+for jz in (0.0, 0.3):   # 0.0 = the seed as used (marks); 0.3 = with vertical jitter, for comparison only
     try:
-        P, Vg, vol = SJ.seed_head(G, 2, 2, jitter_z=jz)
-        top = np.isclose(vol, hl * hl * t_top, rtol=1e-6, atol=0.0) if t_top > 0 else np.zeros(len(vol), bool)   # v2: atol 0 (v1 used the default 1e-8, larger than the volumes)
-        r = dict(N_head=len(P), top_count=int(top.sum()), top_volume_m3=float(vol[top].sum()), V_head_particles_m3=float(vol.sum()),
-                 V_glass_m3=Vg, V_ratio=float(vol.sum() / Vg), m_head0_kg=float(SJ.RHO_HEAD * vol.sum()),
-                 interior=cells(P, vol, FILL, FILL + n_full * hl))
-        r["marks"] = dict(V_cell_within_1e3_each_cell=r["interior"]["max_abs_dev"] < 1e-3, V_cell_within_1e3_layer_means=r["interior"]["layer_max_abs_dev"] < 1e-3,
-                          V_head_within_1e6=abs(r["V_ratio"] - 1) < 1e-6)
-        out[f"head_jitter_{jz:g}"] = r; print("head", jz, json.dumps({k: v for k, v in r.items() if k != "interior"}), json.dumps({k: v for k, v in r["interior"].items() if k != "layer_means"}), flush=True)
+        P, Vg, vol, info = SJ.seed_head(G, 2, 2, jitter_z=jz)
+        top = np.isclose(vol, hl * hl * t_top, rtol=1e-6, atol=0.0) if t_top > 0 else np.zeros(len(vol), bool)
+        facs = [i["ring_factor"] for i in info]
+        r = dict(N_head=len(P), top_layer=info[-1], top_count_unscaled=int(top.sum()), V_head_particles_m3=float(vol.sum()), V_glass_seed_m3=Vg,
+                 V_glass_independent_m3=V_glass_indep, V_ratio=float(vol.sum() / V_glass_indep), m_head0_kg=float(SJ.RHO_HEAD * vol.sum()),
+                 ring_factor_min=float(min(facs)), ring_factor_max=float(max(facs)), ring_count_per_layer=[i["n_ring"] for i in info],
+                 layers=info, interior=cells(P, vol, FILL, FILL + n_full * hl))
+        r["marks"] = dict(V_cell_within_1e3_interior=r["interior"]["max_abs_dev"] < 1e-3, ring_factor_in_1_1p5=bool(1.0 <= min(facs) and max(facs) <= 1.5),
+                          V_head_within_1e4=abs(r["V_ratio"] - 1) < 1e-4)
+        r["marks_all"] = all(r["marks"].values())
+        out[f"head_jitter_{jz:g}"] = r
+        print("head", jz, json.dumps({k: v for k, v in r.items() if k not in ("interior", "layers", "ring_count_per_layer")}),
+              json.dumps({k: v for k, v in r["interior"].items() if k != "layer_means"}), flush=True)
     except Exception as ex:
         out[f"head_jitter_{jz:g}"] = dict(error=repr(ex)); print("FAILED", jz, repr(ex), flush=True)
+out["marks"] = out.get("head_jitter_0", {}).get("marks"); out["marks_all"] = out.get("head_jitter_0", {}).get("marks_all")
 try:   # the stout, as Steps 1-3 seed it (unchanged): uniform particle volume V / N
     Ps = SJ.seed_particles(G, 2, 1); Vs = SJ.glass_volume(G.R, G.dzp, G.fill); vs = np.full(len(Ps), Vs / len(Ps))
     hz_s = FILL / round(FILL / hl)
