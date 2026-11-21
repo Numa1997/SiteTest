@@ -469,7 +469,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/data/resonant-tunnelling/generations.json`](../public/data/resonant-tunnelling/generations.json) | 4.5 kB | Fig. 15 data: the list of generations, each with its Kaggle index, the exact 1D check, the notebooks and the source scripts. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/data/scenes/2026-11-21/barton.bin`](../public/data/scenes/2026-11-21/barton.bin) | 44.3 kB | Living scenes data computed on Kaggle on 2026-11-21: the frames of the barton scene, played by bg-scenes.js. | [scenes-pipeline.md](scenes-pipeline.md) |
 | [`public/data/scenes/2026-11-21/barton.json`](../public/data/scenes/2026-11-21/barton.json) | 1.7 kB | Living scenes data computed on Kaggle on 2026-11-21: parameters and checks of the barton model run. | [scenes-pipeline.md](scenes-pipeline.md) |
-| [`public/data/scenes/2026-11-21/index-barton.json`](../public/data/scenes/2026-11-21/index-barton.json) | 640 B | Living scenes data computed on Kaggle on 2026-11-21: provenance of the barton run (notebook, commit, machine, files with SHA-256). | [scenes-pipeline.md](scenes-pipeline.md) |
+| [`public/data/scenes/2026-11-21/index-barton.json`](../public/data/scenes/2026-11-21/index-barton.json) | 641 B | Living scenes data computed on Kaggle on 2026-11-21: provenance of the barton run (notebook, commit, machine, files with SHA-256). | [scenes-pipeline.md](scenes-pipeline.md) |
 | [`public/data/scenes/generations.json`](../public/data/scenes/generations.json) | 840 B | Living scenes data: one entry per scene and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/scenes/pipeline.py. | [scenes-pipeline.md](scenes-pipeline.md) |
 
 <details><summary>405 files: Fig. 14 data generated on Kaggle on 2026-11-12: one stored run (header with the probability curves, then the zlib frames of |psi| and arg psi on the half-plane through the flight axis, from which the page spins the 3D wave).</summary>
@@ -5565,7 +5565,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`.github/workflows/scenes-kaggle.yml`](../.github/workflows/scenes-kaggle.yml) | 3.5 kB | Scenes on Kaggle, started when a scene model is added or changed on main: compute it once on Kaggle, check the output by SHA-256, commit it to public/data/scenes/. | [scenes-pipeline.md](scenes-pipeline.md) |
+| [`.github/workflows/scenes-kaggle.yml`](../.github/workflows/scenes-kaggle.yml) | 3.8 kB | Scenes on Kaggle, started when a scene model is added or changed on main: compute it once on Kaggle, check the output by SHA-256, commit it to public/data/scenes/. | [scenes-pipeline.md](scenes-pipeline.md) |
 
 ## Documentation
 
@@ -5588,7 +5588,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/performance.md`](performance.md) | 53.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 68.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
-| [`docs/scenes-pipeline.md`](scenes-pipeline.md) | 8.8 kB | Documentation: The scenes pipeline: Kaggle computes, GitHub stores, Cloudflare serves. | [scenes-pipeline.md](scenes-pipeline.md) |
+| [`docs/scenes-pipeline.md`](scenes-pipeline.md) | 9.4 kB | Documentation: The scenes pipeline: Kaggle computes, GitHub stores, Cloudflare serves. | [scenes-pipeline.md](scenes-pipeline.md) |
 | [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 9.5 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.3 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
@@ -5981,7 +5981,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/redirects.py`](../tools/redirects.py) | 3.6 kB | Writes public/_redirects, the short address of every page served without a round trip; --check fails if the file is out of date. | [usul.md](usul.md) |
 | [`tools/scenes/barton.py`](../tools/scenes/barton.py) | 6.8 kB | Reference model of Barton's pendulums (the right margin of the home page), exactly periodic so the stored loop has no seam. | [PLAN.md](../notes/scenes/PLAN.md) |
 | [`tools/scenes/kaggle_scenes.py`](../tools/scenes/kaggle_scenes.py) | 2.0 kB | Text of the Kaggle notebook scenes-living-backgrounds: fetches tools/scenes at a pinned commit and runs one scene model. | [scenes-pipeline.md](scenes-pipeline.md) |
-| [`tools/scenes/pipeline.py`](../tools/scenes/pipeline.py) | 6.6 kB | The scenes pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation. | [scenes-pipeline.md](scenes-pipeline.md) |
+| [`tools/scenes/pipeline.py`](../tools/scenes/pipeline.py) | 6.7 kB | The scenes pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation. | [scenes-pipeline.md](scenes-pipeline.md) |
 | [`tools/scenes/scenes.json`](../tools/scenes/scenes.json) | 800 B | Registry of the scenes that play Kaggle data: their files and the live pages that play them. | [scenes-pipeline.md](scenes-pipeline.md) |
 | [`tools/scenes/verify_live.py`](../tools/scenes/verify_live.py) | 4.6 kB | Step 10 of the scenes pipeline: wait for the live site, compare the live files by SHA-256, open the live pages and check they play the data. | [scenes-pipeline.md](scenes-pipeline.md) |
 | [`tools/spill/drag_check.py`](../tools/spill/drag_check.py) | 2.9 kB | The continuous spill model: its Kaggle CPU checks (pint at rest and a hard shove; the rest diagnostic; air drag against the textbook law). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
