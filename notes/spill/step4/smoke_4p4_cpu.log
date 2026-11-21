@@ -1,0 +1,36 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 43.0 s
+
+[19:59:43 UTC | +   45.8 s] smoke: grid 211 x 87 x 176, N 1207016 (stout 1001952, head 205064), m_p stout 4.2875e-07 kg, head 1.1738e-07 kg, V_head 88.527 cm^3, K 1207016, dt_el 7.6687e-04 s, extension {'cells': 17272, 'unresolved': 0, 'phi_mm': [-1.041392597270577, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6804}
+
+[19:59:57 UTC | +   60.4 s] smoke: t = 0  in solid 254  stout mean height 72.6948 mm  head mean height 134.3844 mm  H_top 143.921 mm
+
+[20:01:16 UTC | +  139.5 s] smoke: step 1  t 0.0008  dt 7.669e-04  it 269  res 6.65e-06  bowl 0  phantom 0  z stout 72.6948  z head 134.3844  H_top 143.921  books 0.0e+00/0.0e+00  in solid 0  real 0  yielded 0  s_max 0.077  det 1.000000..1.000000  vmax 0.0005  (79 s)
+
+[20:01:52 UTC | +  175.7 s] smoke: step 2  t 0.0015  dt 7.669e-04  it 169  res 9.93e-06  bowl 0  phantom 0  z stout 72.6948  z head 134.3844  H_top 143.921  books 0.0e+00/0.0e+00  in solid 0  real 0  yielded 0  s_max 0.164  det 1.000000..1.000000  vmax 0.0008  (115 s)
+
+[20:02:50 UTC | +  233.4 s] smoke: resort at step 3: {"step": 3, "head_mean_z_before_m": 0.1343843622699712, "head_mean_z_after_m": 0.1343843622699712, "dz_head_m": 0.0, "stout_mean_z_before_m": 0.07269479842894246, "stout_mean_z_after_m": 0.07269479842894246, "books_before": [0.0, 0.0], "books_after": [0.0, 0.0], "n_head_after": 205064, "finite_after": true}
+
+[20:03:55 UTC | +  297.9 s] smoke: step 5  t 0.0038  dt 7.669e-04  it 64  res 9.93e-06  bowl 0  phantom 0  z stout 72.6948  z head 134.3844  H_top 143.921  books 0.0e+00/0.0e+00  in solid 0  real 0  yielded 0  s_max 0.371  det 1.000000..1.000000  vmax 0.0010  (238 s)
+
+[20:03:55 UTC | +  297.9 s] smoke: summary {"sub": "smoke", "steps": 5, "t_end": 0.0038343258591987924, "N": 1207016, "N_stout": 1001952, "N_head": 205064, "mp_stout": 4.2874640044544424e-07, "mp_head": 1.1737666060617733e-07, "V_head_m3": 8.852744687390175e-05, "ext": {"cells": 17272, "unresolved": 0, "phi_mm": [-1.041392597270577, -0.0013351016942144578], "side_vis": true, "cavity_side_cells": 6804}, "dt_rule": "dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s)", "dt_el": 0.0007668651718397585, "stout_mean_z0_mm": 72.69479628534391, "stout_mean_z1_mm": 72.69479999902234, "head_mean_z0_mm": 134.38435921851183, "head_mean_z1_mm": 134.38436512617727, "H_top0_mm": 143.92095804214478, "H_top1_mm": 143.92103254795074, "n_drain_bowl_max": 0, "n_phantom_out_max": 0, "it_max": 269, "res_max": 9.934030458680354e-06, "book_stout_max": 0.0, "book_head_max": 0.0, "in_solid_max": 0, "old_cross_total": 0, "real_cross_total": 0, "ceiling_max": 0, "ds_max_over_dx": 0.6364254513755441, "vmax_max": 0.0009927700739353895, "n_yielded_max": 0, "s_max": 0.3712349534034729, "det_min": 0.9999996423721313, "det_max": 1.0000004768371582, "rm_res_max": 0.0, "ms_per_step": 47511.147356033325, "wall_s": 237.55573916435242, "stout_drift_m": 3.7136784243330114e-09, "head_drift_m": 5.907665439508492e-09, "H_top_minus_0p144_m": -7.896745204924449e-05, "pass_marks": {"all_finite": true, "it_lt_600": true, "res_lt_1e5": true, "drain_bowl_zero": true, "phantom_zero": true, "in_solid_zero": true, "det_dev_lt_1e5": true, "books_lt_1e6": true, "books_across_resort": true, "head_height_across_resort_lt_1e5": true}, "device": "cpu:0", "resort": {"step": 3, "head_mean_z_before_m": 0.1343843622699712, "head_mean_z_after_m": 0.1343843622699712, "dz_head_m": 0.0, "stout_mean_z_before_m": 0.07269479842894246, "stout_mean_z_after_m": 0.07269479842894246, "books_before": [0.0, 0.0], "books_after": [0.0, 0.0], "n_head_after": 205064, "finite_after": true}, "step_s": [79.08, 36.23, 57.7, 32.35, 32.2], "det_dev_max": 4.76837158203125e-07, "pass_marks_all": true}
+
+[20:03:55 UTC | +  297.9 s] smoke: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 276936 bytes to __results__.html
+

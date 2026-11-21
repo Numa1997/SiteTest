@@ -297,3 +297,14 @@ head mean height across the resort within 1e-5 m. Output smoke_4p4_cpu.json. The
 Answer (Fact, code reading + arithmetic): the pint uses the same rounded layering. seed_lattice: hz = fill / round(fill / (dx/2)):
 fill 0.125 m / 0.75 mm = 166.67 -> 167 layers, hz 0.7485 mm, per-cell volume 2 hz / dx = 0.9980 (-0.20 %). seed_head: 0.019 / 0.75 mm
 = 25.33 -> 25 layers, hz 0.760 mm, 1.0133 (+1.33 %).
+- 21 Nov 19:57:56-20:04:09 UTC: Part B, 4.4 smoke on Kaggle CPU (code 58765350, step4-pint-head-cpu-smoke, 6 min 13 s, script 298 s).
+  Fact (notes/spill/step4/smoke_4p4_cpu.json): N 1 207 016 (stout 1 001 952, head 205 064), m_p head 1.1738e-7 kg, V_head 88.527 cm^3.
+  All marks PASS: finite; it <= 269, res <= 9.934e-6; drain bowl 0, phantom 0, in solid 0 every step (254 at t = 0, seed jitter, moved
+  out by step 1); max abs(det be - 1) 4.8e-7; books 0 (stout and head) incl. after the resort at step 3; head mean height across the
+  resort 134.3844 mm -> 134.3844 mm (difference 0.0). No yielding, s_max 0.37 Pa. CPU time per step 79 s (compile), then 32-58 s.
+- 21 Nov 19:59:47-20:04:12 UTC: Part A full (code 58765350, CPU step4-diag43-full, 4 min 24 s). Fact (notes/spill/step4/diag_4p3.json):
+  steady plug speed (last 0.2 s of 2.0 s): C1 1.3490e-3 m/s, err +0.49 % PASS (< 2.5 %); C2 1.3668e-3, err +1.81 % FAIL (< 1.0 %), and
+  abs(err_C2) < 0.5 abs(err_C1) FAIL; C3 2.1593e-3, err +0.65 % PASS (< 2.5 %). V_cell_0 / (A dx) = 1.000 and M_tot / (rho_h A h) = 1.000
+  for C1 and C2 PASS. Mass floor never acted (n_floor 0). Refutation rule not triggered (errors < 3 %).
+  Inference: the layering explains the bulk of 4.3's -9.4 % / +7.7 % (they fall to +0.5 % / +1.8 % with whole layers), but the
+  remainder grows on the finer grid (+1.8 % against +0.5 %): a second, smaller error that does not converge. Stopped for the owner.
