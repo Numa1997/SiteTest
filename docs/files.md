@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6813 files, 944.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6817 files, 944.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -16,7 +16,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 37 |
-| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4500 |
+| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4504 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
@@ -4904,6 +4904,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/data/schrodinger-sphere/generations.json`](../public/data/schrodinger-sphere/generations.json) | 2.2 kB | Fig. 14 data: the list of generations, one dated folder each, with the Kaggle notebook, version and commit; written by to_site.py. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`public/data/sims/barton/2026-11-21/barton.bin`](../public/data/sims/barton/2026-11-21/barton.bin) | 44.3 kB | Simulation data computed on Kaggle on 2026-11-21: the frames of barton, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/barton/2026-11-21/barton.json`](../public/data/sims/barton/2026-11-21/barton.json) | 1.7 kB | Simulation data computed on Kaggle on 2026-11-21: parameters and checks of the barton model run. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/barton/2026-11-21/index-barton.json`](../public/data/sims/barton/2026-11-21/index-barton.json) | 637 B | Simulation data computed on Kaggle on 2026-11-21: provenance of the barton run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/generations.json`](../public/data/sims/generations.json) | 858 B | Simulation data computed on Kaggle: one entry per simulation and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/sims/pipeline.py. | [kaggle-sims.md](kaggle-sims.md) |
 
 ## Stylesheets
 

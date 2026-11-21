@@ -1,0 +1,28 @@
+{
+ "project": "sims",
+ "job": "barton",
+ "date": "2026-11-21",
+ "source": {
+  "repo": "Numa1997/SiteTest",
+  "commit": "2eb38d91c67c6ce52fbc32d962b628e57e2ada77",
+  "path": "tools/sims/barton.py"
+ },
+ "machine": {
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "cpus": 4,
+  "python": "3.13.18",
+  "numpy": "2.1.3",
+  "scipy": "1.16.3"
+ },
+ "files": {
+  "barton.bin": {
+   "bytes": 44279,
+   "sha256": "ccf6b15b3dc71f88e8e35a37803302e02e3737242908b3e3719a2792dd02fd78"
+  },
+  "barton.json": {
+   "bytes": 1720,
+   "sha256": "adfb2dcadca260e932b5f59468fd77447ea525d4bd0e820eaecec903600bd7c1"
+  }
+ },
+ "wall_s": 8.485181331634521
+}
