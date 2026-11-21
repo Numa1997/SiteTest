@@ -43,8 +43,9 @@ its player, and step 10 checks it from then on.
 
 ## How pipeline A starts
 
-By itself, when a file `tools/scenes/<scene>.py` is added or changed on `main` (not `pipeline.py` or `kaggle_scenes.py`, which are
-the machinery); only the changed scenes are computed. It can also be started by hand: GitHub, tab Actions, "Scenes on Kaggle",
+By itself, when a scene's model `tools/scenes/<scene>.py` is added or changed on `main`. Only files whose name is a scene in
+`tools/scenes/scenes.json` count; the other files in that folder are the machinery (`pipeline.py`, `kaggle_scenes.py`,
+`verify_live.py`). Only the changed scenes are computed. It can also be started by hand: GitHub, tab Actions, "Scenes on Kaggle",
 "Run workflow", the scene's name. Two starts never overlap (`concurrency: scenes-kaggle`).
 
 ## Pipeline B in the page
@@ -105,3 +106,8 @@ second run, started by hand: Kaggle accepted notebook version 1 at 19:16:33 UTC,
 matched their SHA-256, the data was committed by github-actions[bot] and was live within about a minute; the live home page
 downloaded it, checked it and played it on 24 bars. `verify_live.py` passed against that live data and failed, as it should, when
 asked for a commit that was never published.
+
+Merging step 10 then set off a wrong run: the workflow took every changed `.py` file in `tools/scenes/` for a scene, so the new
+`verify_live.py` was sent to Kaggle as one (notebook version 2, ended in error, a few seconds of CPU, no GPU). Since then only
+names listed in `scenes.json` count, in the workflow and in `pipeline.py`. The run started by hand right after (version 3)
+passed every step, step 10 included: published 15 s after the commit, live file SHA-256 equal, the live home page played it.

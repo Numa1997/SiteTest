@@ -33,8 +33,9 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument("scene"); ap.add_argument("commit")
     ap.add_argument("--kaggle", default="kaggle"); ap.add_argument("--timeout", type=int, default=1800)
     a = ap.parse_args(); K = a.kaggle.split()
-    if not re.fullmatch(r"[a-z0-9_]+", a.scene) or not os.path.exists(os.path.join(ROOT, "tools/scenes", a.scene + ".py")):
-        sys.exit(f"no model tools/scenes/{a.scene}.py")
+    reg = json.load(open(os.path.join(ROOT, "tools/scenes/scenes.json")))["scenes"]
+    if a.scene not in reg or not os.path.exists(os.path.join(ROOT, reg[a.scene]["model"])):
+        sys.exit(f"{a.scene} is not a scene in tools/scenes/scenes.json (or its model file is missing)")
     if not re.fullmatch(r"[0-9a-f]{40}", a.commit): sys.exit("commit must be a full 40-character hash")
     # 1. the notebook folder
     nb = tempfile.mkdtemp(prefix="nb-")

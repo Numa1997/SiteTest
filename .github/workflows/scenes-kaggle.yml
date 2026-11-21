@@ -6,7 +6,7 @@ name: Scenes on Kaggle
 on:
   push:
     branches: [main]
-    paths: ["tools/scenes/*.py", "!tools/scenes/pipeline.py", "!tools/scenes/kaggle_scenes.py"]
+    paths: ["tools/scenes/*.py"]   # which of them are scenes is decided by tools/scenes/scenes.json, in the step "Which scenes"
   workflow_dispatch:
     inputs:
       scene: { description: "scene to compute (a model file tools/scenes/<scene>.py)", required: true, default: "barton" }
@@ -31,7 +31,9 @@ jobs:
         id: which
         run: |
           if [ -n "${{ github.event.inputs.scene }}" ]; then S="${{ github.event.inputs.scene }}"
-          else S=$(git diff --name-only HEAD~1 HEAD -- 'tools/scenes/*.py' | grep -v -e pipeline.py -e kaggle_scenes.py | xargs -r -n1 basename | sed 's/\.py$//' | tr '\n' ' '); fi
+          else S=$(git diff --name-only HEAD~1 HEAD -- 'tools/scenes/*.py' | xargs -r -n1 basename | sed 's/\.py$//' | tr '\n' ' '); fi
+          # only scenes listed in tools/scenes/scenes.json are computed; other files in the folder are the machinery
+          S=$(python3 -c "import json,sys; r=json.load(open('tools/scenes/scenes.json'))['scenes']; print(' '.join(x for x in sys.argv[1:] if x in r))" $S)
           echo "scenes=$S" >> "$GITHUB_OUTPUT"; echo "scenes: $S"
       - name: Compute on Kaggle, check, store
         if: steps.which.outputs.scenes != ''
