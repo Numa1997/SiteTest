@@ -1,0 +1,92 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 40.2 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[22:19:01 UTC | +   39.8 s] full: grid 211 x 87 x 176, N 1215000 (stout 1001952, head 213048), m_p stout 4.2875e-07 kg, head 1.1298e-07 kg, V_head 88.527 cm^3, K 1215000, dt_el 7.6687e-04 s, extension {'cells': 17272, 'unresolved': 0, 'phi_mm': [-1.041392597270577, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6804}
+
+[22:19:06 UTC | +   45.1 s] full: t = 0  in solid 260  stout mean height 72.6948 mm  head mean height 134.6182 mm  H_top 144.182 mm
+
+[22:19:45 UTC | +   83.4 s] full: step 1  t 0.0008  dt 7.669e-04  it 268  res 8.99e-06  bowl 0  phantom 0  z stout 72.6948  z head 134.6182  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.069  det 1.000000..1.000000  vmax 0.0005  (38 s)
+
+[22:19:45 UTC | +   83.7 s] full: step 2  t 0.0015  dt 7.669e-04  it 138  res 9.77e-06  bowl 0  phantom 0  z stout 72.6948  z head 134.6182  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.144  det 1.000000..1.000000  vmax 0.0007  (39 s)
+
+[22:19:59 UTC | +   97.9 s] full: step 50  t 0.0383  dt 7.669e-04  it 40  res 9.74e-06  bowl 0  phantom 0  z stout 72.6948  z head 134.6182  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.880  det 1.000000..1.000000  vmax 0.0001  (53 s)
+
+[22:20:12 UTC | +  110.8 s] full: step 100  t 0.0767  dt 7.669e-04  it 39  res 9.48e-06  bowl 0  phantom 0  z stout 72.6949  z head 134.6184  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.910  det 1.000000..1.000000  vmax 0.0001  (66 s)
+
+[22:20:25 UTC | +  123.4 s] full: step 150  t 0.1150  dt 7.669e-04  it 101  res 9.63e-06  bowl 0  phantom 0  z stout 72.6950  z head 134.6185  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.893  det 1.000000..1.000000  vmax 0.0001  (78 s)
+
+[22:20:37 UTC | +  136.1 s] full: step 200  t 0.1534  dt 7.669e-04  it 22  res 8.59e-06  bowl 0  phantom 0  z stout 72.6950  z head 134.6186  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.897  det 1.000000..1.000000  vmax 0.0000  (91 s)
+
+[22:20:50 UTC | +  149.0 s] full: step 250  t 0.1917  dt 7.669e-04  it 37  res 9.37e-06  bowl 0  phantom 0  z stout 72.6950  z head 134.6186  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.901  det 1.000000..1.000000  vmax 0.0000  (104 s)
+
+[22:21:03 UTC | +  162.1 s] full: step 300  t 0.2301  dt 7.669e-04  it 41  res 9.87e-06  bowl 0  phantom 0  z stout 72.6951  z head 134.6186  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.901  det 1.000000..1.000000  vmax 0.0000  (117 s)
+
+[22:21:15 UTC | +  173.5 s] full: step 350  t 0.2684  dt 7.669e-04  it 28  res 9.69e-06  bowl 0  phantom 0  z stout 72.6951  z head 134.6187  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.899  det 1.000000..1.000000  vmax 0.0000  (128 s)
+
+[22:21:28 UTC | +  186.7 s] full: step 400  t 0.3067  dt 7.669e-04  it 23  res 9.62e-06  bowl 0  phantom 0  z stout 72.6952  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.899  det 1.000000..1.000000  vmax 0.0000  (142 s)
+
+[22:21:41 UTC | +  199.3 s] full: step 450  t 0.3451  dt 7.669e-04  it 29  res 9.82e-06  bowl 0  phantom 0  z stout 72.6952  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.898  det 1.000000..1.000000  vmax 0.0000  (154 s)
+
+[22:21:55 UTC | +  213.6 s] full: step 500  t 0.3834  dt 7.669e-04  it 88  res 9.38e-06  bowl 0  phantom 0  z stout 72.6953  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.896  det 1.000000..1.000000  vmax 0.0000  (169 s)
+
+[22:22:08 UTC | +  227.0 s] full: step 550  t 0.4218  dt 7.669e-04  it 22  res 9.99e-06  bowl 0  phantom 0  z stout 72.6953  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.895  det 1.000000..1.000000  vmax 0.0000  (182 s)
+
+[22:22:20 UTC | +  239.1 s] full: step 600  t 0.4601  dt 7.669e-04  it 98  res 9.41e-06  bowl 0  phantom 0  z stout 72.6953  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.893  det 1.000000..1.000000  vmax 0.0000  (194 s)
+
+[22:22:32 UTC | +  251.0 s] full: step 650  t 0.4985  dt 7.669e-04  it 19  res 9.27e-06  bowl 0  phantom 0  z stout 72.6954  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.891  det 1.000000..1.000000  vmax 0.0000  (206 s)
+
+[22:22:44 UTC | +  263.0 s] full: step 700  t 0.5368  dt 7.669e-04  it 45  res 9.77e-06  bowl 0  phantom 0  z stout 72.6954  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.890  det 1.000000..1.000000  vmax 0.0000  (218 s)
+
+[22:22:58 UTC | +  276.3 s] full: step 750  t 0.5751  dt 7.669e-04  it 93  res 9.59e-06  bowl 0  phantom 0  z stout 72.6954  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.888  det 1.000000..1.000000  vmax 0.0000  (231 s)
+
+[22:23:11 UTC | +  290.2 s] full: step 800  t 0.6135  dt 7.669e-04  it 36  res 9.95e-06  bowl 0  phantom 0  z stout 72.6955  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.887  det 1.000000..1.000000  vmax 0.0000  (245 s)
+
+[22:23:23 UTC | +  302.0 s] full: step 850  t 0.6518  dt 7.669e-04  it 14  res 9.76e-06  bowl 0  phantom 0  z stout 72.6955  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.885  det 1.000000..1.000000  vmax 0.0000  (257 s)
+
+[22:23:36 UTC | +  315.0 s] full: step 900  t 0.6902  dt 7.669e-04  it 15  res 9.95e-06  bowl 0  phantom 0  z stout 72.6955  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.884  det 1.000000..1.000000  vmax 0.0000  (270 s)
+
+[22:23:48 UTC | +  326.5 s] full: step 950  t 0.7285  dt 7.669e-04  it 16  res 8.06e-06  bowl 0  phantom 0  z stout 72.6956  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.883  det 1.000000..1.000000  vmax 0.0000  (281 s)
+
+[22:23:59 UTC | +  338.0 s] full: step 1000  t 0.7669  dt 7.669e-04  it 15  res 9.64e-06  bowl 0  phantom 0  z stout 72.6956  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.881  det 1.000000..1.000000  vmax 0.0000  (293 s)
+
+[22:24:11 UTC | +  349.4 s] full: step 1050  t 0.8052  dt 7.669e-04  it 18  res 9.30e-06  bowl 0  phantom 0  z stout 72.6957  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.879  det 1.000000..1.000000  vmax 0.0000  (304 s)
+
+[22:24:22 UTC | +  360.9 s] full: step 1100  t 0.8436  dt 7.669e-04  it 15  res 1.00e-05  bowl 0  phantom 0  z stout 72.6957  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.878  det 1.000000..1.000000  vmax 0.0000  (316 s)
+
+[22:24:35 UTC | +  373.7 s] full: step 1150  t 0.8819  dt 7.669e-04  it 106  res 9.81e-06  bowl 0  phantom 0  z stout 72.6957  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.876  det 1.000000..1.000000  vmax 0.0000  (329 s)
+
+[22:24:49 UTC | +  388.0 s] full: step 1200  t 0.9202  dt 7.669e-04  it 22  res 9.83e-06  bowl 0  phantom 0  z stout 72.6958  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.875  det 1.000000..1.000000  vmax 0.0000  (343 s)
+
+[22:25:03 UTC | +  401.8 s] full: step 1250  t 0.9586  dt 7.669e-04  it 19  res 9.75e-06  bowl 0  phantom 0  z stout 72.6958  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.873  det 1.000000..1.000000  vmax 0.0000  (357 s)
+
+[22:25:15 UTC | +  413.4 s] full: step 1300  t 0.9969  dt 7.669e-04  it 20  res 9.84e-06  bowl 0  phantom 0  z stout 72.6958  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.872  det 1.000000..1.000000  vmax 0.0000  (368 s)
+
+[22:25:16 UTC | +  415.2 s] full: step 1305  t 1.0000  dt 7.816e-06  it 542  res 3.32e-01  bowl 0  phantom 0  z stout 72.6958  z head 134.6187  H_top 144.183  books 0.0e+00/1.9e-08  in solid 0  real 0  yielded 0  s_max 0.871  det 1.000000..1.000000  vmax 0.0000  (370 s)
+
+[22:25:16 UTC | +  415.2 s] full: summary {"sub": "full", "steps": 1305, "t_end": 1.0, "N": 1215000, "N_stout": 1001952, "N_head": 213048, "mp_stout": 4.2874640044544424e-07, "mp_head": 1.1297795601257936e-07, "V_head_m3": 8.852744702846005e-05, "ext": {"cells": 17272, "unresolved": 0, "phi_mm": [-1.041392597270577, -0.0013351016942144578], "side_vis": true, "cavity_side_cells": 6804}, "dt_rule": "dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s)", "dt_el": 0.0007668651718397585, "stout_mean_z0_mm": 72.69479628534391, "stout_mean_z1_mm": 72.69583028034636, "head_mean_z0_mm": 134.6181513131222, "head_mean_z1_mm": 134.61867871916232, "H_top0_mm": 144.18187737464905, "H_top1_mm": 144.1825032234192, "n_drain_bowl_max": 0, "n_phantom_out_max": 0, "it_max": 542, "res_max": 0.3322729766368866, "book_stout_max": 0.0, "book_head_max": 1.8635438869195788e-08, "in_solid_max": 0, "old_cross_total": 0, "real_cross_total": 0, "ceiling_max": 0, "ds_max_over_dx": 0.636424170807004, "vmax_max": 0.0008376141777262092, "n_yielded_max": 0, "s_max": 0.9197744727134705, "det_min": 0.9999995827674866, "det_max": 1.0000004768371582, "rm_res_max": 0.0, "ms_per_step": 283.64083063556774, "wall_s": 370.15128684043884, "stout_drift_m": 1.0339950024444988e-06, "head_drift_m": 5.274060401063707e-07, "H_top_minus_0p144_m": 0.00018250322341920033, "pass_marks": {"drain_bowl_zero": true, "phantom_zero": true, "it_lt_600": true, "res_lt_1e5": false, "stout_drift_lt_5e5": true, "head_drift_lt_1e4": true, "H_top_within_3e4": true, "books_lt_1e6": true, "real_cross_zero": true, "in_solid_zero": true}, "pass_marks_all": false}
+
+[22:25:16 UTC | +  415.2 s] full: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 277076 bytes to __results__.html
+

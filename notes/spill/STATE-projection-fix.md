@@ -377,3 +377,16 @@ Code (20:56 UTC): seed_head v3 (ring = lattice points with a 4-neighbour outside
 - 21 Nov 21:37 UTC, owner, before any 4.4 number: the H_top mark is judged as drift, abs(H_top(t) - H_top(0)) < 3e-4 m (H_top(0) =
   144.182 mm carries a 0.18 mm offset of the surface finder, the level-set kernel); the absolute abs(H_top - 0.144 m) is reported too.
   The harness's summary has H_top0_mm and H_top1_mm; the drift mark is evaluated from them (and the per-step H_top_mm) in the report.
+- 21 Nov 21:36:27 launch, 22:17:21 running (41 min in Kaggle's queue), 22:25:58 complete: full 4.4 (code 0da19017, step4-pint-head-rest,
+  T4). Stepping 370 s, 0.284 s a step with the logging. GPU 511.7 s = 8.5 min (quota 966.2 s used; 1 784 min left).
+## Test 4.4 results (Fact; notes/spill/step4/pint_head_rest_summary.json, pint_head_rest.jsonl)
+1 305 steps to 1.0 s. n_drain_bowl 0 and n_phantom_out 0 every step PASS; it_max 542 < 600 PASS (1 304 regular steps <= 268);
+res < 1e-5 every step FAIL: one step, the last (1 305), res 0.332 after 542 iterations, all other 1 304 steps < 1e-5.
+That step has dt = 7.8e-6 s (the harness cuts the last step to land on 1.0 s: dt = min(..., T - t), rest_variants.py:650), 1 % of the
+normal 7.67e-4 s. Inference: its pressure right-hand side is about 100 x smaller and the float32 conjugate gradient stops on
+breakdown before reaching 1e-5 relative; a harness artefact, not a solver drift (nothing else moves at that step: vmax 3.3e-5 m/s).
+stout mean height drift +1.03e-6 m < 5e-5 PASS; head mean height drift +5.3e-7 m < 1e-4 PASS; H_top drift (owner's rule, decided
+before the numbers) max over the run 6.3e-7 m, end 6.3e-7 m < 3e-4 PASS; H_top absolute 144.1825 mm, abs(H_top - 0.144) 1.83e-4 m.
+Books stout 0, head 1.9e-8 (float32 storage) PASS; real crossings 0, old crossings 0 PASS; in solid 0 PASS; ceiling 0.
+No yielding (s_max 0.92 Pa, below tau_y 5.4 Pa); det be 0.9999996 .. 1.0000005; vmax 8.4e-4 m/s; ds/dx max 0.64 (step 1).
+m_floor acted on at most 9 faces (head faces). Stopped for the owner: one mark fails on the harness's cut last step.
