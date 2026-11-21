@@ -1,9 +1,9 @@
 {
- "about": "Registry of the living scenes that play data computed on Kaggle: which files each scene's model writes, and which live pages play them. tools/scenes/verify_live.py reads it to check the live site after every run (docs/scenes-pipeline.md, step 10).",
+ "about": "Registry of the simulations whose data is computed once on Kaggle: which files each model writes, and which live pages play them. Only names listed here are ever sent to Kaggle. tools/sims/verify_live.py reads it to check the live site after every run (docs/kaggle-sims.md, step 10).",
  "site": "https://phyeinusul.com",
- "scenes": {
+ "sims": {
   "barton": {
-   "model": "tools/scenes/barton.py",
+   "model": "tools/sims/barton.py",
    "files": ["barton.bin"],
    "pages": [
     {"path": "/", "width": 1600, "height": 1000, "scroll": 650,
