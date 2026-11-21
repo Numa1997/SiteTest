@@ -24,7 +24,7 @@ jobs:
         with: { fetch-depth: 2 }
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - run: pip install kaggle==2.2.5
+      - run: pip install kaggle==2.2.5 six   # kaggle 2.2.5 imports six without declaring it
       - name: Which scenes
         id: which
         run: |
