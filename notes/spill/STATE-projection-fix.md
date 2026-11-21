@@ -374,3 +374,6 @@ Code (20:56 UTC): seed_head v3 (ring = lattice points with a 4-neighbour outside
   Estimates (Inference, 0.30 s a step without compile or resort): full 4.4, 1.0 s, about 1 304 steps: about 7 min of stepping, about
   8 GPU-min with set-up; full 4.5, 1.5 s, about 1 960 steps if speed does not cut dt: about 10 min stepping, 11-13 GPU-min.
   Waiting for the owner's yes before full 4.4.
+- 21 Nov 21:37 UTC, owner, before any 4.4 number: the H_top mark is judged as drift, abs(H_top(t) - H_top(0)) < 3e-4 m (H_top(0) =
+  144.182 mm carries a 0.18 mm offset of the surface finder, the level-set kernel); the absolute abs(H_top - 0.144 m) is reported too.
+  The harness's summary has H_top0_mm and H_top1_mm; the drift mark is evaluated from them (and the per-step H_top_mm) in the report.
