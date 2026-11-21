@@ -45,7 +45,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/scenes
+          python3 tools/inventory.py >/dev/null   # docs/files.md lists every file, the new data included
+          git add public/data/scenes docs/files.md
           git diff --cached --quiet && { echo "nothing new"; exit 0; }
           git commit -m "Scene data from Kaggle: ${{ steps.which.outputs.scenes }}(notebook numakoudsie/scenes-living-backgrounds, code ${GITHUB_SHA::7})"
           for i in 1 2 3; do git pull --rebase -q origin main && git push origin HEAD:main && exit 0; sleep 5; done; exit 1
