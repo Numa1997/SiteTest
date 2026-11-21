@@ -10,6 +10,9 @@ you write in your report is the only thing the owner sees. Read `CLAUDE.md`, `AG
 `notes/sims/PLAN.md` first. The worked example of the whole road is Barton's pendulums: `tools/sims/barton.py`, its entry in
 `tools/sims/registry.json`, and the loader `sceneData` and the rails player in `public/scripts/bg-scenes.js`.
 
+The machine you run on has Node, Python with NumPy, SciPy and SymPy, and a real browser: headless Chromium through Python's
+playwright (`from playwright.sync_api import sync_playwright`). Serve the built site locally with `python3 -m http.server`.
+
 Rules that hold in both stages:
 - You never run git commit, push, merge or any GitHub command. The workflow commits your files and the owner approves each step.
 - You never touch `.github/`, `.claude/`, `tools/sims/agents/`, `tools/sims/pipeline.py`, `tools/sims/kaggle_sims.py`,

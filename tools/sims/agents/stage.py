@@ -141,7 +141,8 @@ def enforce(stage, slug):
     d = f"notes/sims/reports/{slug}/"
     allowed = (lambda f: f.startswith(d)) if stage in ("study", "caretaker") else (lambda f: not f.startswith(FORBIDDEN))
     kept, dropped = [], []
-    for line in git("status", "--porcelain", "-uall").splitlines():
+    raw = subprocess.run(("git", "status", "--porcelain", "-uall"), cwd=ROOT, text=True, capture_output=True).stdout   # not stripped: the two status letters may be spaces
+    for line in raw.splitlines():
         st, f = line[:2], line[3:].split(" -> ")[-1].strip('"')
         if allowed(f): kept.append(f); continue
         dropped.append(f)
@@ -173,8 +174,12 @@ def required(stage, slug, rnd):
 def commit(stage, title, slug, rnd):
     """Step 5b: docs/files.md, then one commit in the owner's name."""
     subprocess.run([sys.executable, "tools/inventory.py"], cwd=ROOT, stdout=subprocess.DEVNULL)
-    git("add", "-A")
-    for f in FORBIDDEN: git("reset", "-q", "HEAD", "--", f, check=False)
+    if stage in ("study", "caretaker"): git("add", "--", f"notes/sims/reports/{slug}", "docs/files.md")   # second guard: these stages commit their report only
+    else:
+        git("add", "-A")
+        for f in FORBIDDEN: git("reset", "-q", "HEAD", "--", f, check=False)
+    left = [f for f in git("diff", "--cached", "--name-only").splitlines() if f.startswith(FORBIDDEN)]
+    if left: sys.exit("refusing to commit changes to the machinery: " + ", ".join(left))
     if not git("diff", "--cached", "--name-only"): print("nothing to commit"); return
     who = git("log", "-1", "--perl-regexp", "--author=^(?!github-actions)", "--format=%an|%ae", "origin/main").split("|")
     msg = {"study": f"Kaggelize {title}: study", "build": f"Kaggelize {title}: model, player, docs", "caretaker": f"Kaggelize {title}: caretaker, round {rnd}", "fix": f"Kaggelize {title}: correction {rnd}"}[stage]

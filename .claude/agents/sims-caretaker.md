@@ -9,6 +9,9 @@ in the reports until you have seen it yourself. Read `CLAUDE.md`, `docs/kaggle-s
 `notes/sims/reports/<slug>/`. You change no code and run no git command. You write exactly two files:
 `notes/sims/reports/<slug>/caretaker-<round>.md` and `notes/sims/reports/<slug>/verdict-<round>.json`.
 
+The machine you run on has Node, Python with NumPy, SciPy and SymPy, and a real browser: headless Chromium through Python's
+playwright (`from playwright.sync_api import sync_playwright`). Serve the built site locally with `python3 -m http.server`.
+
 Check, and write down what you ran and what it printed:
 1. **The reports are clear.** Would a physics graduate who does not program follow `01-study.md` and `02-build.md` from the
    first line to the last? List every skipped step, every undefined word, every number without a unit or a source.
