@@ -5,21 +5,21 @@
    "scene": "barton",
    "date": "2026-11-21",
    "notebook": "numakoudsie/scenes-living-backgrounds",
-   "version": 1,
-   "commit": "73ca853333f27a58b6241970d7b5b6994629b2a0",
+   "version": 3,
+   "commit": "41e72a825a45c85fc455084f302627bf0e7c49fc",
    "index": "2026-11-21/index-barton.json",
    "files": {
     "barton.bin": {
      "bytes": 44279,
-     "sha256": "2e5e58de4543996dba5a3b5c831ba4099a984906fb8c43ba87561a6944094a41"
+     "sha256": "4326c09ec1a2845bf6432d6eede3aa639aebce237f817cebe1d7c7b373252923"
     },
     "barton.json": {
      "bytes": 1720,
-     "sha256": "3528a9065a6cb87c660a25147957c2bf327dedd3890d6bdc4e8c84f4054f60bb"
+     "sha256": "2f4986c980eb23c01f353eaf27dfb8278c65c4a009a2f75e49354f8df423a653"
     }
    },
-   "wall_s": 8.1,
-   "collected": "2026-11-21T19:17:16+00:00"
+   "wall_s": 9.0,
+   "collected": "2026-11-21T19:24:32+00:00"
   }
  ]
 }
