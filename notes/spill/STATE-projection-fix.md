@@ -202,3 +202,20 @@ off, a particle inside the lip's disc goes out along the disc's radius to lip + 
 the side its old position was nearer (from_in / from_out).
 Reproduction: the run follows Step 3 exactly to step ~113, then drifts (GPU scatter order; vmax 3.07 m/s here, 2.34 m/s in Step 3).
 Decision rule: real_crossing_count = 0 -> Step 3 CLOSED (PASS). Waiting for the owner's yes before Task B (Step 4).
+
+# Task B: Step 4, the head as an elasto-viscoplastic foam (owner's yes 21 Nov 2026 ~13:50 UTC)
+Quota reset 21 Nov 00:00 UTC: 1 800 GPU-min fresh (read before every GPU run).
+## Code so far
+- stout_jax.py: tch_coeffs / EVP_A1 / EVP_A2 (foam_flow_stress written in gdot), RHO_HEAD = PHI_F x 1007 = 271.89, sym_pack /
+  sym_unpack / det3, evp_tau (G dev(be)), evp_return_map (instruction B.1: trial f be f^T normalised, yield test on s_tr, 6 Newton
+  steps in u = gp^0.47 from an upper bound, 5 Newton steps for c from above). Not yet wired into Stout (that comes after 4.1-4.3).
+- tools/spill/step4_slab.py: tests 4.1-4.3, Kaggle CPU. Periodic 8 x 8 x 24 slab, dx 1.5 mm, foam 0..19 mm on the pint's lattice
+  (6 400 particles), MAC trilinear weights and APIC as Stout with periodic x, y, no-slip floor by mirror faces, free top. The slab
+  holds w = 0 (exact for a laterally uniform incompressible slab: the pressure carries rho g cos(alpha)), so only the tangential
+  gravity g sin(alpha) drives it; the pressure step and variable density are tested in 4.4/4.5, not here.
+## Prediction written before any run (Inference), test 4.2
+The column is undamped below yield (no viscosity in pure foam). A linear ramp of 0.25 s leaves ringing of amplitude
+u_s |sin(w Tr/2)| / (w Tr/2) = 0.12 u_s = 2.6e-5 m (w = 2 pi / T1, T1 = 0.0971 s). The marks use instantaneous values: u(h, 4.0 s)
+can then sit anywhere in [1.90e-4, 2.43e-4] m against the window [1.948e-4, 2.380e-4] m, and the "creep" u(4.0) - u(0.5) can reach
+5.2e-5 m against the 5e-5 m mark with no plastic creep at all. The marks may be badly defined for an undamped column; the run also
+reports means over whole periods (supplementary, not marks) so the owner can decide.

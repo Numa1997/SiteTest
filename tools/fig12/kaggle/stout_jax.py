@@ -87,6 +87,76 @@ def head_wall_stress(v):
     return jnp.minimum(slide, carry)
 
 
+# ====================================================================== the head as an elasto-viscoplastic foam (Step 4, 21 Nov 2026)
+# notes/spill/STATE-projection-fix.md, instruction section 6 (B.1). The head is a jammed wet foam (gas fraction GAS = 0.73 > PHI_C):
+# below the yield stress TAU_Y an elastic solid of shear modulus G_HEAD, above it a plastic flow whose excess stress is Tcholakova's
+# viscous stress. Per particle the isochoric elastic left Cauchy-Green tensor be (det = 1, packed xx yy zz xy xz yz), Kirchhoff stress
+# tau = G dev(be), von Mises invariant s = sqrt(tau:tau / 2) (= |tau_xz| in simple shear). Return map, backward Euler, engineering
+# plastic shear rate gp = sqrt(2 Dp:Dp): trial b = f be f^T, f = I + dt C (C the APIC velocity gradient), normalised to det 1;
+# s_tr > TAU_Y: solve s_tr - G dt gp = TAU_Y + tau_v(gp), scale dev(b) by s_new / s_tr, restore det 1 with b = D + c I.
+def tch_coeffs(gamma=GAMMA, R32=RBUB, gas=GAS, mu=MU_STOUT):
+    """tau_v(gdot) = A1 gdot^0.47 + A2 gdot^0.70 (Pa), foam_flow_stress written in gdot: the same law (Tcholakova et al. 2008)."""
+    base = gamma / R32 * gas ** (5.0 / 6.0); k = mu * R32 / gamma
+    return base * 0.7 * k ** 0.47 / (1.0 - gas) ** 0.5, base * 8.0 * k ** 0.70 / (1.0 - gas) ** 0.15
+
+
+EVP_A1, EVP_A2 = tch_coeffs()
+RHO_HEAD = PHI_F * 1007.0            # kg/m^3, 271.89: the head's density, liquid fraction times the stout's (gas mass neglected)
+
+
+def sym_unpack(b6):
+    xx, yy, zz, xy, xz, yz = [b6[..., i] for i in range(6)]
+    return jnp.stack([jnp.stack([xx, xy, xz], -1), jnp.stack([xy, yy, yz], -1), jnp.stack([xz, yz, zz], -1)], -2)
+
+
+def sym_pack(B):
+    return jnp.stack([B[..., 0, 0], B[..., 1, 1], B[..., 2, 2], B[..., 0, 1], B[..., 0, 2], B[..., 1, 2]], -1)
+
+
+def det3(B):
+    return (B[..., 0, 0] * (B[..., 1, 1] * B[..., 2, 2] - B[..., 1, 2] * B[..., 2, 1]) - B[..., 0, 1] * (B[..., 1, 0] * B[..., 2, 2] - B[..., 1, 2] * B[..., 2, 0])
+            + B[..., 0, 2] * (B[..., 1, 0] * B[..., 2, 1] - B[..., 1, 1] * B[..., 2, 0]))
+
+
+def evp_tau(be6, G=G_HEAD):
+    """Kirchhoff stress G dev(be), packed (N, 6)."""
+    tr = (be6[..., 0] + be6[..., 1] + be6[..., 2]) / 3.0
+    return G * (be6 - jnp.stack([tr, tr, tr, 0.0 * tr, 0.0 * tr, 0.0 * tr], -1))
+
+
+def evp_return_map(be6, C, dt, G=G_HEAD, tau_y=TAU_Y, A1=EVP_A1, A2=EVP_A2, n_gp=6, n_c=5):
+    """One backward-Euler step of the elasto-viscoplastic head, per particle. be6 (N, 6) float32, C (N, 3, 3) the velocity gradient
+    (C[i, a] = d u_i / d x_a). Returns be6_new, yielded (bool), gp (1/s), s_new (Pa), det(be_new), the relative residual of the
+    gp equation after n_gp Newton steps. Newton in u = gp^0.47 on h(u) = G dt u^(1/0.47) + A2 u^(0.70/0.47) + A1 u - (s_tr - tau_y),
+    from u0 = min((s_tr - tau_y)/A1, ((s_tr - tau_y)/(G dt))^0.47), an upper bound of the root (h is convex and increasing), so the
+    iterates fall monotonically onto it. det(D + c I) = 1 by Newton on c^3 - I2 c + I3 - 1 = 0 from c0 = 1 + sqrt(4 I2 / 3) (above
+    the largest root, the cubic convex beyond it: monotone)."""
+    f = jnp.eye(3, dtype=F32)[None] + dt * C
+    B = sym_unpack(be6); Bt = f @ B @ jnp.swapaxes(f, -1, -2)
+    Bt = Bt / jnp.cbrt(jnp.maximum(det3(Bt), 1e-30))[..., None, None]
+    tr = jnp.trace(Bt, axis1=-2, axis2=-1) / 3.0; I3m = jnp.eye(3, dtype=F32)[None]
+    D = Bt - tr[..., None, None] * I3m
+    s_tr = G * jnp.sqrt(0.5 * jnp.sum(D * D, (-2, -1)))
+    y = s_tr > tau_y
+    rhs = jnp.maximum(s_tr - tau_y, 0.0)
+    e1 = 1.0 / 0.47; e2 = 0.70 / 0.47
+    u = jnp.minimum(rhs / A1, (rhs / (G * dt)) ** 0.47)
+    for _ in range(n_gp):
+        h = G * dt * u ** e1 + A2 * u ** e2 + A1 * u - rhs
+        dh = G * dt * e1 * u ** (e1 - 1.0) + A2 * e2 * u ** (e2 - 1.0) + A1
+        u = jnp.maximum(u - h / dh, 0.0)
+    gp = jnp.where(y, u ** e1, 0.0)
+    res = jnp.where(y, jnp.abs(G * dt * gp + A2 * u ** e2 + A1 * u - rhs) / jnp.maximum(rhs, 1e-30), 0.0)
+    s_new = jnp.where(y, tau_y + A1 * gp ** 0.47 + A2 * gp ** 0.70, s_tr)
+    Db = jnp.where(y[..., None, None], (s_new / jnp.maximum(s_tr, 1e-30))[..., None, None] * D, D)
+    I2 = 0.5 * jnp.sum(Db * Db, (-2, -1)); I3 = det3(Db)
+    c = 1.0 + jnp.sqrt(4.0 * I2 / 3.0)
+    for _ in range(n_c):
+        c = c - (c ** 3 - I2 * c + I3 - 1.0) / (3.0 * c * c - I2)
+    Bn = jnp.where(y[..., None, None], Db + c[..., None, None] * I3m, Bt)
+    return sym_pack(Bn).astype(F32), y, gp.astype(F32), s_new.astype(F32), det3(Bn), res
+
+
 # ====================================================================== geometry (built once, before the run)
 class Geometry:
     """The glass on the grid: open fractions of every face, wall area per cell, masks. Cell (i, j, k) has its centre at
