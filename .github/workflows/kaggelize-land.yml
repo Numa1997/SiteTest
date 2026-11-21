@@ -1,0 +1,57 @@
+# Kaggelize, the landing (docs/kaggelize.md): PAUSE for the owner's approval, then the existing line "Simulations on Kaggle"
+# computes the data from the session's branch and pushes branch and data to main together (so the live page never has a player
+# without data), then the caretaker session checks the reports, the data and the live page. Used up to three times per simulation.
+# Nothing reaches Kaggle, main or the live site before the owner has approved the pause: the pause cannot be switched off.
+name: Kaggelize, landing
+on:
+  workflow_call:
+    inputs:
+      title:  { type: string, required: true }
+      slug:   { type: string, required: true }
+      round:  { type: string, required: true }
+      sha:    { type: string, required: true }     # the commit of the session's branch that goes to Kaggle and to main
+      model:  { type: string, required: true }
+    outputs:
+      approved: { description: "true when the owner approved the pause", value: "${{ jobs.gate.outputs.approved }}" }
+      clear:    { description: "the caretaker's verdict: true or false", value: "${{ jobs.caretaker.outputs.clear }}" }
+jobs:
+  gate:
+    name: "PAUSE: read the changes, then approve (round ${{ inputs.round }})"
+    runs-on: ubuntu-latest
+    environment: kaggelize-review      # an environment with a required reviewer: GitHub holds the job until the owner approves
+    outputs:
+      approved: ${{ steps.ok.outputs.approved }}
+    steps:
+      - id: ok
+        run: echo "approved=true" >> "$GITHUB_OUTPUT"
+  kaggle:
+    name: Kaggle line
+    needs: gate
+    uses: ./.github/workflows/sims-kaggle.yml
+    with:
+      sim: ${{ inputs.slug }}
+      ref: ${{ inputs.sha }}
+    secrets: inherit
+  caretaker:
+    name: Caretaker (round ${{ inputs.round }})
+    needs: kaggle
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    outputs:
+      clear: ${{ steps.s.outputs.clear }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0, persist-credentials: false }
+      - id: s
+        uses: ./.github/actions/kaggelize-stage
+        with:
+          stage: caretaker
+          title: ${{ inputs.title }}
+          slug: ${{ inputs.slug }}
+          round: ${{ inputs.round }}
+          model: ${{ inputs.model }}
+          label: "caretaker, round ${{ inputs.round }}"
+          next: "checked: the verdict is in the report"
+          next_link: "${{ github.server_url }}/${{ github.repository }}/blob/main/notes/sims/reports/${{ inputs.slug }}/caretaker-${{ inputs.round }}.md"
+          github_token: ${{ github.token }}
+          claude_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

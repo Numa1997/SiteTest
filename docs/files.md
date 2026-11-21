@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6817 files, 944.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6829 files, 944.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -39,15 +39,16 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [The site’s Worker (Cloudflare)](#the-sites-worker-cloudflare) | 1 |
-| [GitHub Actions workflows](#github-actions-workflows) | 1 |
-| [Documentation](#documentation) | 48 |
-| [Tools](#tools) | 363 |
+| [GitHub Actions workflows](#github-actions-workflows) | 4 |
+| [GitHub Actions building blocks used by the workflows](#github-actions-building-blocks-used-by-the-workflows) | 1 |
+| [Documentation](#documentation) | 49 |
+| [Tools](#tools) | 366 |
 | [Translation tables](#translation-tables) | 54 |
-| [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
+| [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 899 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 900 |
 
 ## Repository root
 
@@ -5565,7 +5566,16 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`.github/workflows/sims-kaggle.yml`](../.github/workflows/sims-kaggle.yml) | 3.8 kB | Simulations on Kaggle: when a simulation model listed in tools/sims/registry.json is added or changed on main (or by hand), compute it once on Kaggle, check the output by SHA-256, commit it to public/data/sims/, check the live site. | [kaggle-sims.md](kaggle-sims.md) |
+| [`.github/workflows/kaggelize-land.yml`](../.github/workflows/kaggelize-land.yml) | 2.6 kB | Kaggelize, the landing: the owner's approval, then the Kaggle line from the session's branch, then the caretaker session. | [kaggelize.md](kaggelize.md) |
+| [`.github/workflows/kaggelize-one.yml`](../.github/workflows/kaggelize-one.yml) | 7.3 kB | Kaggelize for one simulation, start to end: study, PAUSE 1, build, landing, corrections, result. | [kaggelize.md](kaggelize.md) |
+| [`.github/workflows/kaggelize.yml`](../.github/workflows/kaggelize.yml) | 3.2 kB | Kaggelize, the Run button: type simulation titles; for each one a study session, the owner's approval, a build session, the owner's approval, the Kaggle line, a caretaker session, and up to two corrections. | [kaggelize.md](kaggelize.md) |
+| [`.github/workflows/sims-kaggle.yml`](../.github/workflows/sims-kaggle.yml) | 4.5 kB | Simulations on Kaggle: when a simulation model listed in tools/sims/registry.json is added or changed on main (or by hand), compute it once on Kaggle, check the output by SHA-256, commit it to public/data/sims/, check the live site. | [kaggle-sims.md](kaggle-sims.md) |
+
+## GitHub Actions building blocks used by the workflows
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`.github/actions/kaggelize-stage/action.yml`](../.github/actions/kaggelize-stage/action.yml) | 4.2 kB | One box of the Kaggelize flow: board row, tools, one Claude Code session through stage.py, push, board row. | [kaggelize.md](kaggelize.md) |
 
 ## Documentation
 
@@ -5577,6 +5587,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/glossary.md`](glossary.md) | 17.0 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
 | [`docs/i18n.md`](i18n.md) | 18.5 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
+| [`docs/kaggelize.md`](kaggelize.md) | 10.3 kB | Documentation: Kaggelize: one button that moves a simulation to data computed once on Kaggle. | [kaggelize.md](kaggelize.md) |
 | [`docs/kaggle-pipeline.md`](kaggle-pipeline.md) | 21.0 kB | Documentation: The Kaggle pipeline: computing on Kaggle, playing on the website. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`docs/kaggle-sims.md`](kaggle-sims.md) | 10.4 kB | Documentation: Simulations on Kaggle: computed once, stored in GitHub, served by Cloudflare, played by the page. | [kaggle-sims.md](kaggle-sims.md) |
 | [`docs/kaggle.md`](kaggle.md) | 4.4 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
@@ -5775,7 +5786,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 135.5 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 137.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -5979,6 +5990,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/perf/tabs.cjs`](../tools/perf/tabs.cjs) | 3.9 kB | The study pages with tabs: time until the first tab is drawn, each tab switch, a repeat visit. | [performance.md](performance.md) |
 | [`tools/perf/trace.cjs`](../tools/perf/trace.cjs) | 2.8 kB | What fills the main thread while a page sits idle, at the top or scrolled down: trace totals, forced layouts, JS self time. | [performance.md](performance.md) |
 | [`tools/redirects.py`](../tools/redirects.py) | 3.6 kB | Writes public/_redirects, the short address of every page served without a round trip; --check fails if the file is out of date. | [usul.md](usul.md) |
+| [`tools/sims/agents/board.py`](../tools/sims/agents/board.py) | 5.6 kB | Kaggelize: the board, one GitHub issue with a row per simulation; also reads the owner's notes and checks that the pauses really pause. | [kaggelize.md](kaggelize.md) |
+| [`tools/sims/agents/stage.py`](../tools/sims/agents/stage.py) | 14.6 kB | Kaggelize: runs one Claude Code session on one simulation inside limits (branch, tools, turns, allowed paths), checks its files and commits them. | [kaggelize.md](kaggelize.md) |
+| [`tools/sims/agents/titles.py`](../tools/sims/agents/titles.py) | 1.8 kB | Kaggelize: turns the titles typed into the Run form into the list of simulations and their short names. | [kaggelize.md](kaggelize.md) |
 | [`tools/sims/barton.py`](../tools/sims/barton.py) | 6.8 kB | Reference model of Barton's pendulums (the right margin of the home page), exactly periodic so the stored loop has no seam. | [PLAN.md](../notes/sims/PLAN.md) |
 | [`tools/sims/kaggle_sims.py`](../tools/sims/kaggle_sims.py) | 2.0 kB | Text of the Kaggle notebook phyein-usul-simulations: fetches tools/sims at a pinned commit and runs one simulation model. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/pipeline.py`](../tools/sims/pipeline.py) | 6.7 kB | The simulations pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation. | [kaggle-sims.md](kaggle-sims.md) |
@@ -6054,6 +6068,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`.claude/agents/derivation-checker.md`](../.claude/agents/derivation-checker.md) | 863 B | Claude Code agent definition: derivation-checker, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/physics-teacher.md`](../.claude/agents/physics-teacher.md) | 1.7 kB | Claude Code agent definition: physics-teacher, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/referee.md`](../.claude/agents/referee.md) | 760 B | Claude Code agent definition: referee, one role of the lecture-note review. | [notes.md](notes.md) |
+| [`.claude/agents/sims-builder.md`](../.claude/agents/sims-builder.md) | 6.3 kB | Claude Code agent definition: sims-builder, one role of the lecture-note review. | [notes.md](notes.md) |
+| [`.claude/agents/sims-caretaker.md`](../.claude/agents/sims-caretaker.md) | 2.6 kB | Claude Code agent definition: sims-caretaker, one role of the lecture-note review. | [notes.md](notes.md) |
+| [`.claude/agents/sims-corrector.md`](../.claude/agents/sims-corrector.md) | 1.5 kB | Claude Code agent definition: sims-corrector, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/walkthrough-keeper.md`](../.claude/agents/walkthrough-keeper.md) | 614 B | Claude Code agent definition: walkthrough-keeper, one role of the lecture-note review. | [notes.md](notes.md) |
 
 ## Working notes of project 07, the electron beam
@@ -7350,6 +7367,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/lucretius/poem-146-224.json`](../notes/lucretius/poem-146-224.json) | 15.8 kB | Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-ar-146-224.json`](../notes/lucretius/poem-ar-146-224.json) | 10.8 kB | The Arabic of Lucretius I 146-224 (tenth version, free verse, fully vowelled), translated from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
 | [`notes/sims/PLAN.md`](../notes/sims/PLAN.md) | 7.6 kB | Plan of the simulations moved to Kaggle: specify, generate once on Kaggle, store, play, document; order and state. | [PLAN.md](../notes/sims/PLAN.md) |
+| [`notes/sims/STATE-agents.md`](../notes/sims/STATE-agents.md) | 2.1 kB | State of the Kaggelize work: aim, what is live, the design, the facts checked, what is open. | [kaggelize.md](kaggelize.md) |
 | [`notes/skills/phyein-usul-data-panel/SKILL.md`](../notes/skills/phyein-usul-data-panel/SKILL.md) | 26.9 kB | The revised skill phyein-usul-data-panel, to be uploaded to Numa's account (the synced copy in a session is read-only). | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/spill/HANDOFF.md`](../notes/spill/HANDOFF.md) | 8.1 kB | The continuous spill model (stout stays liquid over the rim, down the glass, onto the cart): its state and its handoff of 18 November 2026. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/spill/STATE.md`](../notes/spill/STATE.md) | 7.1 kB | The continuous spill model (stout stays liquid over the rim, down the glass, onto the cart): its state and its handoff of 18 November 2026. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
