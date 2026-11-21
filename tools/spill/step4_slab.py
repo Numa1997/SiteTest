@@ -27,7 +27,12 @@ SUB = os.environ.get("SUBRUN", "smoke"); ONLY = os.environ.get("ONLY")
 RAMP = os.environ.get("RAMP", "linear")   # 4.2's load ramp: "linear" over 0.25 s (v2), or "cos": half-cosine over a whole number of T1 (v3)
 DXE = float(os.environ.get("DX", "0.0015"))
 T43 = float(os.environ.get("T43", "0.5"))  # 4.3's duration; 0.5 s is the test, longer only as a diagnostic (steady state)
-TAG = ("" if DXE == 0.0015 else f"_dx{DXE * 1e3:g}mm") + ("" if T43 == 0.5 else f"_T{T43:g}s")   # file-name tag for other grids / durations
+HH = float(os.environ.get("HH", "0.019"))   # m, slab thickness (0.019 = HEAD0; the 4.3 diagnostic of 21 Nov uses 0.018, a whole number of layers)
+JITZ = float(os.environ.get("JITZ", "0.3"))  # vertical jitter of the seed, in layer spacings (0.3 as seed_particles; 0 in the diagnostic)
+FRAC43 = float(os.environ.get("FRAC43", "1.5"))  # 4.3's load in units of tau_y
+QUAD_ONLY = os.environ.get("QUAD_ONLY") == "1"   # only print the seed's quadrature numbers, run nothing
+TAG = (("" if DXE == 0.0015 else f"_dx{DXE * 1e3:g}mm") + ("" if T43 == 0.5 else f"_T{T43:g}s") + ("" if HH == 0.019 else f"_h{HH * 1e3:g}mm")
+       + ("" if JITZ == 0.3 else f"_jz{JITZ:g}") + ("" if FRAC43 == 1.5 else f"_f{FRAC43:g}"))   # file-name tag for other set-ups
 VOUT = os.path.join(OUT, "step4"); os.makedirs(VOUT, exist_ok=True)
 T0 = time.time()
 
@@ -39,7 +44,7 @@ def say(m):
 
 # ---------------------------------------------------------------- parameters (SI), every one named
 DX = DXE; NX = NY = 8; NZ = int(round(24 * 0.0015 / DX)); Z0 = -2.5 * DX   # faces of layer k = 2 lie exactly on the floor (z = 0)
-H = 0.019                                                    # m, head thickness (HEAD0)
+H = HH                                                       # m, head thickness (HEAD0 = 0.019 unless HH is set)
 G = SJ.G_HEAD; TAU_Y = SJ.TAU_Y; A1, A2 = SJ.EVP_A1, SJ.EVP_A2; RHO_H = SJ.RHO_HEAD; GRAV = 9.81
 CS = math.sqrt(G / RHO_H); DT_EL = 0.40 * DX / CS; DT_MAX = 2e-3
 PPC = 2; SEED = 1
@@ -67,11 +72,25 @@ def seed():
     rng = np.random.default_rng(SEED); hl = DX / PPC; nzl = int(round(H / hl)); hz = H / nzl
     xs = hl * (np.arange(NX * PPC) + 0.5); X, Y = np.meshgrid(xs, xs, indexing="ij")
     P = np.concatenate([np.stack([X.ravel(), Y.ravel(), np.full(X.size, z)], 1) for z in hz * (np.arange(nzl) + 0.5)])
-    P[:, :2] += rng.uniform(-0.3 * hl, 0.3 * hl, (len(P), 2)); P[:, 2] += rng.uniform(-0.3 * hz, 0.3 * hz, len(P))
+    P[:, :2] += rng.uniform(-0.3 * hl, 0.3 * hl, (len(P), 2)); P[:, 2] += rng.uniform(-JITZ * hz, JITZ * hz, len(P))
     return P.astype(np.float32), hz, nzl
 
 
 P0, HZ, NZL = seed(); NP = len(P0); VP = LX * LY * H / NP; MP = RHO_H * VP
+
+
+def quadrature():
+    """The seed's quadrature (21 Nov diagnostic): particle volume in the cell layers k = 0..4 above the floor over A dx, total mass over
+    rho_h A h, and the mass in the cell layer holding the top over rho_h A dx (A = the slab's area)."""
+    A = LX * LY; k = np.floor(P0[:, 2] / DX).astype(int); ktop = int(np.floor((H - 1e-12) / DX))
+    return dict(h_m=H, dx_m=DX, layers=NZL, hz_m=HZ, h_over_half_dx=H / (DX / PPC), jitter_z=JITZ,
+                V_cell_over_A_dx=[float((k == i).sum() * VP / (A * DX)) for i in range(5)],
+                M_tot_over_rho_A_h=float(NP * MP / (RHO_H * A * H)), k_top=ktop, M_top_over_rho_A_dx=float((k == ktop).sum() * MP / (RHO_H * A * DX)))
+
+
+QUAD = quadrature()
+if QUAD_ONLY:
+    json.dump(QUAD, open(os.path.join(VOUT, f"quad{TAG}.json"), "w"), indent=1); print("QUAD", json.dumps(QUAD), flush=True); sys.exit(0)
 CORN = jnp.asarray(np.array([(a, b, c) for a in (0, 1) for b in (0, 1) for c in (0, 1)], np.int32))
 ORG = jnp.asarray([0.0, 0.0, Z0], F32)
 
@@ -100,7 +119,7 @@ def mirror_floor(f):
 def step(st, dt, gx):
     X, V, C, be = st["x"], st["v"], st["C"], st["be"]
     tau = SJ.sym_unpack(SJ.evp_tau(be, G))                                           # (N, 3, 3) Kirchhoff stress
-    size = NX * NY * NZ; vel = []
+    size = NX * NY * NZ; vel = []; n_floor = jnp.zeros((), jnp.int32)
     for comp in (0, 1):
         fl, ok, w, gw, dpos = corners(X, comp)
         mom = w * MP * (V[None, :, comp] + jnp.sum(C[None, :, comp, :] * dpos, -1))
@@ -108,6 +127,7 @@ def step(st, dt, gx):
         upd = jnp.stack([jnp.where(ok, mom, 0.0), jnp.where(ok, w * MP, 0.0), jnp.where(ok, w, 0.0), jnp.where(ok, fdev, 0.0)], -1).reshape(-1, 4)
         acc = jnp.zeros((size, 4), F32).at[fl.reshape(-1)].add(upd).reshape(NX, NY, NZ, 4)
         m = acc[..., 1]; occ = acc[..., 2] > 1e-6                                     # occupancy by the sum of weights, never by mass
+        n_floor = n_floor + jnp.sum(occ & (m < M_FLOOR), dtype=jnp.int32)              # faces where the mass floor acts
         gc = gx if comp == 0 else 0.0
         u = jnp.where(occ, acc[..., 0] / jnp.where(occ, m, 1.0) + dt * gc + dt * acc[..., 3] / jnp.maximum(m, M_FLOOR), 0.0)
         vel.append(mirror_floor(u))
@@ -122,7 +142,7 @@ def step(st, dt, gx):
     ben, y, gp, s_new, det, res = SJ.evp_return_map(be, Cn, dt, G, TAU_Y, A1, A2)
     st = dict(x=Xn.astype(F32), v=Vn.astype(F32), C=Cn.astype(F32), be=ben, disp=st["disp"] + dt * Vn[:, 0])
     diag = dict(n_yielded=jnp.sum(y), gp_max=jnp.max(gp), s_max=jnp.max(s_new), det_dev=jnp.max(jnp.abs(det - 1.0)), res_max=jnp.max(res),
-                vmax=jnp.max(jnp.abs(Vn)))
+                vmax=jnp.max(jnp.abs(Vn)), n_floor=n_floor)
     return st, diag
 
 
@@ -149,7 +169,7 @@ def run(label, frac, T, ramp, ramp_kind="linear"):
     say(f"{label}: tau_b {tau_b:.4f} Pa = {frac} tau_y, alpha {math.degrees(alpha):.4f} deg, g_x {gx_full:.5f} m/s^2, ramp {ramp} s, T {T} s, "
         f"N {NP}, layers {NZL} (hz {HZ * 1e3:.3f} mm), dt_el {DT_EL:.4e} s")
     fh = open(os.path.join(VOUT, f"slab_{label}{TAG}_{SUB}.jsonl"), "w")
-    t = 0.0; k = 0; ts, ut, vt, rows = [], [], [], []; agg = dict(n_yielded_max=0, det_dev_max=0.0, res_max=0.0, gp_max=0.0, s_max=0.0, vmax=0.0)
+    t = 0.0; k = 0; ts, ut, vt, rows = [], [], [], []; agg = dict(n_yielded_max=0, det_dev_max=0.0, res_max=0.0, gp_max=0.0, s_max=0.0, vmax=0.0, n_floor_max=0)
     nmax = 20 if SUB == "smoke" else 10 ** 9; prof = []
     while t < T - 1e-12 and k < nmax:
         vmax = agg["vmax"] if k else 0.0
@@ -159,7 +179,7 @@ def run(label, frac, T, ramp, ramp_kind="linear"):
         else: ramp_f = min(1.0, (t + dt) / ramp)
         st, d = step_j(st, dt, gx_full * ramp_f); t += dt; k += 1
         d = {kk: float(v) for kk, v in d.items()}; o = obs_j(st)
-        agg["n_yielded_max"] = max(agg["n_yielded_max"], int(d["n_yielded"])); agg["vmax"] = d["vmax"]
+        agg["n_yielded_max"] = max(agg["n_yielded_max"], int(d["n_yielded"])); agg["vmax"] = d["vmax"]; agg["n_floor_max"] = max(agg["n_floor_max"], int(d["n_floor"]))
         for kk in ("det_dev", "res_max", "gp_max", "s_max"):
             key = kk if kk.endswith("_max") else kk + "_max"; agg[key] = max(agg[key], d[kk])
         ts.append(t); ut.append(float(o["u_top"])); vt.append(float(o["v_top"]))
@@ -241,11 +261,12 @@ if not ONLY or "4.2" in ONLY:
 
 if not ONLY or "4.3" in ONLY:
     try:
-        o, ts, ut, vt, prof = run("4.3", 1.5, T43, 0.0)
+        o, ts, ut, vt, prof = run("4.3", FRAC43, T43, 0.0); o["quadrature"] = QUAD
         ref = plug_reference(o["tau_b_pa"]); o["z_y_ref"] = ref["z_y"]; o["v_h_ref"] = ref["v_h"]
         if SUB == "full":
             m = ts >= ts[-1] - 0.1; vh = float(vt[m].mean()); o["v_h_0p4_0p5"] = vh; o["v_h_window_s"] = [float(ts[-1] - 0.1), float(ts[-1])]
             o["v_h_by_0p1s"] = [[round(a, 2), float(vt[(ts >= a) & (ts < a + 0.1)].mean())] for a in np.arange(0.0, ts[-1] - 1e-9, 0.1)]; o["v_h_std"] = float(vt[m].std())
+            m2 = ts >= ts[-1] - 0.2; o["v_plug_last0p2"] = float(vt[m2].mean()); o["v_plug_err"] = (o["v_plug_last0p2"] - ref["v_h"]) / ref["v_h"]
             zl = HZ * (np.arange(NZL) + 0.5); late = [p for p in prof if p["t"] >= ts[-1] - 0.1 - 1e-9]
             vprof = np.mean([p["v"] for p in late], 0); o["v_profile_z_m"] = zl.tolist(); o["v_profile"] = vprof.tolist()
             o["v_ref_profile"] = np.interp(zl, np.concatenate([ref["z"], [H]]), np.concatenate([ref["v"], [ref["v_h"]]])).tolist()

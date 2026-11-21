@@ -636,21 +636,33 @@ def step4_run():
     zs0, zh0, H0 = float(zs0), float(zh0), float(H0)
     say(f"{sub}: t = 0  in solid {int(isol0)}  stout mean height {zs0 * 1e3:.4f} mm  head mean height {zh0 * 1e3:.4f} mm  H_top {H0 * 1e3:.3f} mm")
     sfx = "" if sub == "full" else f"_{sub}"
-    fh = open(os.path.join(vout, f"pint_head_rest{sfx}.jsonl"), "w"); rows = []; tc = time.time(); t = 0.0; k = 0; vmax = 0.0
-    nmax = 5 if sub == "smoke" else 10 ** 9
+    CPU = os.environ.get("CPU_SMOKE") == "1"            # Part B of 21 Nov: 5 steps on Kaggle CPU, a forced resort at RESORT_AT
+    RESORT_AT = int(os.environ.get("RESORT_AT", "0"))
+    base = "smoke_4p4_cpu" if CPU else f"pint_head_rest{sfx}"
+    fh = open(os.path.join(vout, f"{base}.jsonl"), "w"); rows = []; tc = time.time(); t = 0.0; k = 0; vmax = 0.0
+    nmax = 5 if sub == "smoke" else 10 ** 9; resort_info = None
+    fin_j = jax.jit(lambda s: jnp.all(jnp.isfinite(s["xp"])) & jnp.all(jnp.isfinite(s["vp"])) & jnp.all(jnp.isfinite(s["be"])))
     while t < T - 1e-12 and k < nmax:
         try:
             dt = min(2e-3, dt_el, 0.8 * dxd / max(vmax, 1e-12), T - t)
             pr = prep(s); tot, bowl, pho = [int(v) for v in met_j(pr["liq"])]
             s, d = step(s, pr, dt); t += dt; k += 1
             isol, oc, real, zs, zh, Hm, bs, bh, dsm, ceil, prev = st_j(s, prev)
-            vmax = float(d["vmax"])
+            vmax = float(d["vmax"]); finite = bool(fin_j(s))
+            if RESORT_AT and k == RESORT_AT:   # Part B: reorder the particles in memory; every per-particle array in s must follow
+                _, _, _, zs_b, zh_b, _, bs_b, bh_b, _, _, _ = st_j(s, prev)
+                s = S.resort(s); prev = (s["xp"], S.p_side(s["xp"]))
+                _, _, _, zs_a, zh_a, _, bs_a, bh_a, _, _, _ = st_j(s, prev)
+                resort_info = dict(step=k, head_mean_z_before_m=float(zh_b), head_mean_z_after_m=float(zh_a), dz_head_m=float(zh_a) - float(zh_b),
+                                   stout_mean_z_before_m=float(zs_b), stout_mean_z_after_m=float(zs_a), books_before=[float(bs_b), float(bh_b)],
+                                   books_after=[float(bs_a), float(bh_a)], n_head_after=int(jnp.sum(s["is_head"])), finite_after=bool(fin_j(s)))
+                say(f"{sub}: resort at step {k}: {json.dumps(resort_info)}")
             row = dict(step=k, t=t, dt=dt, it=int(d["it"]), res=float(d["res"]), n_drain_bowl=bowl, n_drain_total=tot, n_phantom_out=pho,
                        stout_mean_z_mm=float(zs) * 1e3, head_mean_z_mm=float(zh) * 1e3, H_top_mm=float(Hm) * 1e3, book_stout=float(bs), book_head=float(bh),
                        in_solid=int(isol), old_cross=int(oc), real_cross=int(real), ceiling=int(ceil), ds_max_over_dx=float(dsm) / dxd, vmax=vmax,
                        n_yielded=int(d["n_yielded"]), gp_max=float(d["gp_max"]), s_max=float(d["s_max"]), det_min=float(d["det_min"]), det_max=float(d["det_max"]),
                        rm_res=float(d["rm_res"]), mom_phys=[float(v) for v in np.asarray(d["mom_phys"])], nsel=int(d["nsel"]), nact=int(d["nact"]),
-                       wall_s=round(time.time() - tc, 2))
+                       finite=finite, wall_s=round(time.time() - tc, 2), step_s=round(time.time() - tc - (rows[-1]["wall_s"] if rows else 0.0), 2))
             rows.append(row); fh.write(json.dumps(row) + "\n"); fh.flush()
             if k < 3 or k % 50 == 0 or t >= T - 1e-12 or k == nmax:
                 say(f"{sub}: step {k}  t {t:.4f}  dt {dt:.3e}  it {row['it']}  res {row['res']:.2e}  bowl {bowl}  phantom {pho}  z stout {row['stout_mean_z_mm']:.4f}  "
@@ -675,8 +687,16 @@ def step4_run():
                                   res_lt_1e5=summ["res_max"] < 1e-5, stout_drift_lt_5e5=abs(dzs) < 5e-5, head_drift_lt_1e4=abs(dzh) < 1e-4,
                                   H_top_within_3e4=abs(summ["H_top_minus_0p144_m"]) < 3e-4, books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6,
                                   real_cross_zero=summ["real_cross_total"] == 0, in_solid_zero=summ["in_solid_max"] == 0)
+        if CPU:   # Part B's marks (instruction "step4-diag-and-cpu-smoke"), plain text with abs( )
+            summ["device"] = str(jax.devices()[0]); summ["resort"] = resort_info; summ["step_s"] = [r["step_s"] for r in rows]
+            summ["det_dev_max"] = max(abs(summ["det_min"] - 1.0), abs(summ["det_max"] - 1.0))
+            summ["pass_marks"] = dict(all_finite=all(r["finite"] for r in rows), it_lt_600=summ["it_max"] < 600, res_lt_1e5=summ["res_max"] < 1e-5,
+                                      drain_bowl_zero=summ["n_drain_bowl_max"] == 0, phantom_zero=summ["n_phantom_out_max"] == 0, in_solid_zero=summ["in_solid_max"] == 0,
+                                      det_dev_lt_1e5=summ["det_dev_max"] < 1e-5, books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6,
+                                      books_across_resort=bool(resort_info and max(resort_info["books_after"]) < 1e-6),
+                                      head_height_across_resort_lt_1e5=bool(resort_info and abs(resort_info["dz_head_m"]) < 1e-5))
         summ["pass_marks_all"] = all(summ["pass_marks"].values())
-        json.dump(summ, open(os.path.join(vout, f"pint_head_rest{sfx}_summary.json"), "w"), indent=1, default=str)
+        json.dump(summ, open(os.path.join(vout, f"{base}.json" if CPU else f"pint_head_rest{sfx}_summary.json"), "w"), indent=1, default=str)
         say(f"{sub}: summary {json.dumps(summ, default=str)}")
     say(f"{sub}: all done")
 

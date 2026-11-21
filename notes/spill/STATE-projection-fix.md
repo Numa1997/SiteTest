@@ -283,3 +283,17 @@ notes/spill/step4/full_v2/.
 - 21 Nov 17:26:02 and 17:56:38 UTC: 4.4 smoke (T4, step4-pint-head-smoke v1 and v2, code 853578c8) never started: GetKernelSessionStatus
   and the Kaggle connector's get_notebook_session_status both return empty, no log, GPU quota 0 s used at 18:27 UTC; CPU kernels launched
   at the same minute ran normally. Stopped for the owner (no blind retries). 4.4 code is untested on the GPU.
+
+## Instruction "step4-diag-and-cpu-smoke" (owner, 21 Nov ~19:55 UTC): CPU only, no GPU launch, no physics change in stout_jax.py
+Part A: 4.3 diagnostic with h = 0.018 m (whole layers) and no vertical jitter, 2.0 s: C1 1.5 mm 1.5 tau_y (exact 1.3424e-3), C2 0.75 mm
+(same), C3 1.5 mm 1.6 tau_y (exact 2.1454e-3); quadrature numbers (V_cell_k / (A dx), k = 0..4; M_tot / (rho_h A h); M_top / (rho_h A dx);
+mass floor acted?) also for the original 0.019 m seeds. Marks: C1 abs(err) < 0.025; C2 abs(err) < 0.010 and abs(err_C2) < 0.5 abs(err_C1);
+C3 abs(err) < 0.025; C1, C2 abs(V_cell_0 / (A dx) - 1) < 1e-3 and abs(M_tot / (rho_h A h) - 1) < 1e-4. Refutation: C1 or C2 error >= 0.03
+with V_cell_0 within 1e-3 and the floor never acting -> stop. Code: step4_slab.py (HH, JITZ, FRAC43, QUAD_ONLY, n_floor, v over the last
+0.2 s), step4_diag43.py (runner, diag_4p3.json).
+Part B: 4.4 smoke on Kaggle CPU, 5 steps, resort forced at step 3 (rest_variants.py STEP4=1 CPU_SMOKE=1 RESORT_AT=3); marks: all finite;
+it < 600, res < 1e-5; drain bowl, phantom, in solid 0 every step; max abs(det be - 1) < 1e-5; books < 1e-6 incl. across the resort;
+head mean height across the resort within 1e-5 m. Output smoke_4p4_cpu.json. The two queued GPU sessions are left alone (owner decides).
+Answer (Fact, code reading + arithmetic): the pint uses the same rounded layering. seed_lattice: hz = fill / round(fill / (dx/2)):
+fill 0.125 m / 0.75 mm = 166.67 -> 167 layers, hz 0.7485 mm, per-cell volume 2 hz / dx = 0.9980 (-0.20 %). seed_head: 0.019 / 0.75 mm
+= 25.33 -> 25 layers, hz 0.760 mm, 1.0133 (+1.33 %).
