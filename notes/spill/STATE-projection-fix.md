@@ -308,3 +308,18 @@ fill 0.125 m / 0.75 mm = 166.67 -> 167 layers, hz 0.7485 mm, per-cell volume 2 h
   for C1 and C2 PASS. Mass floor never acted (n_floor 0). Refutation rule not triggered (errors < 3 %).
   Inference: the layering explains the bulk of 4.3's -9.4 % / +7.7 % (they fall to +0.5 % / +1.8 % with whole layers), but the
   remainder grows on the finer grid (+1.8 % against +0.5 %): a second, smaller error that does not converge. Stopped for the owner.
+
+## Instruction "step4-seed-fix-gpu-smoke" (owner, 21 Nov ~20:35 UTC)
+Decided: 4.3 explained (README notes/spill/step4/README-4p3.md, documented limit; no more runs). Use GPU T4 x2 (no P100). Keep
+HEAD0 = 0.019 m at every grid. Stout seed unchanged (-0.20 % known offset).
+Part 1 (code, written 20:40-20:41 UTC): seed_head at exactly hl = dx/2: n_full = floor(HEAD0 / hl) full layers + a top layer of
+HEAD0 - n_full hl (0.25 mm at 1.5 mm); each particle carries hl^2 x its layer's thickness, in the state (pvol, pmass); books weighted
+by particle mass; diagnostic n_floor / n_floor_head (faces where m_floor acts). CPU seed check: tools/spill/step4_seedcheck.py.
+Marks: abs(V_cell / dx^3 - 1) < 1e-3 in interior foam cells; V_head equal to the glass volume FILL..FILL + HEAD0 within 1e-6.
+Predictions before the run (Inference): (1) the lattice keeps particles 0.25 hl inside the wall, so particles at hl^3 cover about
+pi (R - 0.25 hl)^2 per layer: V_head about 0.5 hl / R = 0.96 % short of the glass volume (the V_head mark may fail); (2) with the seed's
+vertical jitter (0.3 of the layer) single cells scatter by about +-12 % while layer means stay near 1 (the per-cell mark may fail);
+without vertical jitter every interior cell holds exactly 1.
+Part 2: one 4.4 GPU smoke (T4 x2), 5 steps, resort at step 3, only after the two stale queued runs are gone; marks as the CPU smoke
+plus parity: abs(stout mean height GPU - CPU) < 1e-5 m, abs(head mean height GPU - CPU) < 5e-4 m (the CPU smoke used the v1 head
+seed: predicted head-mean difference about +0.24 mm from the re-seeding alone). Then stop for the owner's yes.

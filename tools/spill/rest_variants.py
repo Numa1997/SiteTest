@@ -627,7 +627,9 @@ def step4_run():
         zh = jnp.sum(jnp.where(ha, z, 0.0).astype(jnp.float64)) / jnp.maximum(jnp.sum(ha), 1)
         H = obs(s)["H"]; Hf = jnp.where(jnp.isfinite(H), H, jnp.nan)
         # mass books: each particle keeps its mass; active plus landed (left the grid) against the start, per material
-        bs = jnp.abs(jnp.sum(st) + jnp.sum(s["landed"] & ~hd) - Ns) / Ns; bh = jnp.abs(jnp.sum(ha) + jnp.sum(s["landed"] & hd) - Nh) / Nh
+        pm = s["pmass"].astype(jnp.float64)   # each particle's own mass (the head's top layer is lighter); books weighted by it
+        bs = jnp.abs(jnp.sum(jnp.where(st | (s["landed"] & ~hd), pm, 0.0)) - S.m_stout0) / S.m_stout0
+        bh = jnp.abs(jnp.sum(jnp.where(ha | (s["landed"] & hd), pm, 0.0)) - S.m_head0) / S.m_head0
         return (jnp.sum(in_solid), jnp.sum(old_cross), jnp.sum(real), zs, zh, jnp.nanmedian(Hf), bs, bh, jnp.max(jnp.where(act, ds, 0.0)),
                 jnp.sum(act & (z >= topz - dxd)), (X, side))
     st_j = jax.jit(stats)
@@ -636,9 +638,10 @@ def step4_run():
     zs0, zh0, H0 = float(zs0), float(zh0), float(H0)
     say(f"{sub}: t = 0  in solid {int(isol0)}  stout mean height {zs0 * 1e3:.4f} mm  head mean height {zh0 * 1e3:.4f} mm  H_top {H0 * 1e3:.3f} mm")
     sfx = "" if sub == "full" else f"_{sub}"
-    CPU = os.environ.get("CPU_SMOKE") == "1"            # Part B of 21 Nov: 5 steps on Kaggle CPU, a forced resort at RESORT_AT
+    CPU = os.environ.get("CPU_SMOKE") == "1" or os.environ.get("GPU_SMOKE") == "1"   # 21 Nov: 5-step smokes with a forced resort at RESORT_AT
+    GPUS = os.environ.get("GPU_SMOKE") == "1"
     RESORT_AT = int(os.environ.get("RESORT_AT", "0"))
-    base = "smoke_4p4_cpu" if CPU else f"pint_head_rest{sfx}"
+    base = ("smoke_4p4_gpu" if GPUS else "smoke_4p4_cpu") if CPU else f"pint_head_rest{sfx}"
     fh = open(os.path.join(vout, f"{base}.jsonl"), "w"); rows = []; tc = time.time(); t = 0.0; k = 0; vmax = 0.0
     nmax = 5 if sub == "smoke" else 10 ** 9; resort_info = None
     fin_j = jax.jit(lambda s: jnp.all(jnp.isfinite(s["xp"])) & jnp.all(jnp.isfinite(s["vp"])) & jnp.all(jnp.isfinite(s["be"])))
@@ -662,7 +665,7 @@ def step4_run():
                        in_solid=int(isol), old_cross=int(oc), real_cross=int(real), ceiling=int(ceil), ds_max_over_dx=float(dsm) / dxd, vmax=vmax,
                        n_yielded=int(d["n_yielded"]), gp_max=float(d["gp_max"]), s_max=float(d["s_max"]), det_min=float(d["det_min"]), det_max=float(d["det_max"]),
                        rm_res=float(d["rm_res"]), mom_phys=[float(v) for v in np.asarray(d["mom_phys"])], nsel=int(d["nsel"]), nact=int(d["nact"]),
-                       finite=finite, wall_s=round(time.time() - tc, 2), step_s=round(time.time() - tc - (rows[-1]["wall_s"] if rows else 0.0), 2))
+                       finite=finite, n_floor=int(d["n_floor"]), n_floor_head=int(d["n_floor_head"]), wall_s=round(time.time() - tc, 2), step_s=round(time.time() - tc - (rows[-1]["wall_s"] if rows else 0.0), 2))
             rows.append(row); fh.write(json.dumps(row) + "\n"); fh.flush()
             if k < 3 or k % 50 == 0 or t >= T - 1e-12 or k == nmax:
                 say(f"{sub}: step {k}  t {t:.4f}  dt {dt:.3e}  it {row['it']}  res {row['res']:.2e}  bowl {bowl}  phantom {pho}  z stout {row['stout_mean_z_mm']:.4f}  "
@@ -690,11 +693,22 @@ def step4_run():
         if CPU:   # Part B's marks (instruction "step4-diag-and-cpu-smoke"), plain text with abs( )
             summ["device"] = str(jax.devices()[0]); summ["resort"] = resort_info; summ["step_s"] = [r["step_s"] for r in rows]
             summ["det_dev_max"] = max(abs(summ["det_min"] - 1.0), abs(summ["det_max"] - 1.0))
+            summ["n_floor_max"] = max(r["n_floor"] for r in rows); summ["n_floor_head_max"] = max(r["n_floor_head"] for r in rows)
+            summ["m_stout0"] = S.m_stout0; summ["m_head0"] = S.m_head0; summ["V_head_glass_m3"] = S.V_head_glass; summ["V_head_particles_m3"] = S.V_head
+            summ["step_s_no_compile_mean"] = float(np.mean([r["step_s"] for r in rows[1:]])) if len(rows) > 1 else None
             summ["pass_marks"] = dict(all_finite=all(r["finite"] for r in rows), it_lt_600=summ["it_max"] < 600, res_lt_1e5=summ["res_max"] < 1e-5,
                                       drain_bowl_zero=summ["n_drain_bowl_max"] == 0, phantom_zero=summ["n_phantom_out_max"] == 0, in_solid_zero=summ["in_solid_max"] == 0,
                                       det_dev_lt_1e5=summ["det_dev_max"] < 1e-5, books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6,
                                       books_across_resort=bool(resort_info and max(resort_info["books_after"]) < 1e-6),
                                       head_height_across_resort_lt_1e5=bool(resort_info and abs(resort_info["dz_head_m"]) < 1e-5))
+            if GPUS:   # parity with the CPU smoke (committed notes/spill/step4/smoke_4p4_cpu.json; that run used the v1 head seed)
+                try:
+                    cpu = json.load(open(os.path.join(ROOT, "notes", "spill", "step4", "smoke_4p4_cpu.json")))
+                    dzs_p = (summ["stout_mean_z1_mm"] - cpu["stout_mean_z1_mm"]) * 1e-3; dzh_p = (summ["head_mean_z1_mm"] - cpu["head_mean_z1_mm"]) * 1e-3
+                    summ["parity"] = dict(stout_gpu_minus_cpu_m=dzs_p, head_gpu_minus_cpu_m=dzh_p, cpu_steps=cpu.get("steps"))
+                    summ["pass_marks"]["parity_stout_lt_1e5"] = abs(dzs_p) < 1e-5; summ["pass_marks"]["parity_head_lt_5e4"] = abs(dzh_p) < 5e-4
+                except Exception as ex_:
+                    summ["parity"] = dict(error=repr(ex_)); summ["pass_marks"]["parity_stout_lt_1e5"] = False; summ["pass_marks"]["parity_head_lt_5e4"] = False
         summ["pass_marks_all"] = all(summ["pass_marks"].values())
         json.dump(summ, open(os.path.join(vout, f"{base}.json" if CPU else f"pint_head_rest{sfx}_summary.json"), "w"), indent=1, default=str)
         say(f"{sub}: summary {json.dumps(summ, default=str)}")

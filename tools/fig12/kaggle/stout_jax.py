@@ -402,19 +402,26 @@ def seed_particles(G, ppc=2, seed=1):
     return P
 
 
-def seed_head(G, ppc=2, seed=2, h=None):
-    """Step 4: the head's particles on the pint's lattice above the fill, FILL <= z < FILL + h (h = HEAD0), layers every
-    hz = h / round(h / (dx / ppc)) so the top lands exactly at FILL + h, jittered as seed_particles. Returns the points and the head's
-    volume (m^3), the integral of pi R(z)^2 over the layer (the head fills the glass's section)."""
+def seed_head(G, ppc=2, seed=2, h=None, jitter_z=0.3):
+    """Step 4: the head's particles on the pint's lattice above the fill, FILL <= z < FILL + h (h = HEAD0, kept at every grid). Layers at
+    exactly the lattice spacing hl = dx / ppc (21 Nov, instruction "step4-seed-fix-gpu-smoke"): n_full = floor(h / hl) full layers from
+    the fill up, plus one top layer of thickness h - n_full hl if that is > 0 (0.25 mm at dx 1.5 mm). Each particle carries the volume of
+    its slab, hl^2 times its layer's thickness, so every cell inside the head holds two full layers, one cell volume (v1 spaced 25 layers
+    at 0.760 mm: 1.0133 cell volumes, the slab test's -9.4 %). Jittered as seed_particles (sideways 0.3 hl, up and down 0.3 of the
+    layer's thickness). Returns the points, the glass's volume between FILL and FILL + h (the integral of pi R(z)^2), and each
+    particle's volume (m^3)."""
     h = HEAD0 if h is None else h
-    rng = np.random.default_rng(seed); xs, _, _, mask, hl = seed_lattice(G, ppc); hz = h / max(1, round(h / hl))
-    X, Y = np.meshgrid(xs, xs, indexing="ij"); pts = []
-    for z in G.fill + hz * (np.arange(int(round(h / hz))) + 0.5):
-        m = mask(z); pts.append(np.stack([X[m], Y[m], np.full(m.sum(), z)], 1))
-    P = np.concatenate(pts)
-    P[:, :2] += rng.uniform(-0.3 * hl, 0.3 * hl, (len(P), 2)); P[:, 2] += rng.uniform(-0.3 * hz, 0.3 * hz, len(P))
-    zz = np.linspace(G.fill, G.fill + h, 2001); V = float(np.trapezoid(np.pi * G.Rz(zz) ** 2, zz)) if hasattr(np, "trapezoid") else float(np.trapz(np.pi * G.Rz(zz) ** 2, zz))
-    return P, V
+    rng = np.random.default_rng(seed); xs, _, _, mask, hl = seed_lattice(G, ppc)
+    n_full = int(math.floor(h / hl + 1e-9)); t_top = h - n_full * hl
+    layers = [(G.fill + hl * (k + 0.5), hl) for k in range(n_full)] + ([(G.fill + n_full * hl + 0.5 * t_top, t_top)] if t_top > 1e-12 else [])
+    X, Y = np.meshgrid(xs, xs, indexing="ij"); pts = []; thick = []
+    for z, t in layers:
+        m = mask(z); pts.append(np.stack([X[m], Y[m], np.full(m.sum(), z)], 1)); thick.append(np.full(m.sum(), t))
+    P = np.concatenate(pts); th = np.concatenate(thick)
+    P[:, :2] += rng.uniform(-0.3 * hl, 0.3 * hl, (len(P), 2)); P[:, 2] += rng.uniform(-jitter_z, jitter_z, len(P)) * th
+    zz = np.linspace(G.fill, G.fill + h, 20001)
+    V = float(np.trapezoid(np.pi * G.Rz(zz) ** 2, zz)) if hasattr(np, "trapezoid") else float(np.trapz(np.pi * G.Rz(zz) ** 2, zz))
+    return P, V, hl * hl * th
 
 
 # ====================================================================== shifted arrays
@@ -472,9 +479,13 @@ class Stout:
         self.N_pint = self.N
         if extra is not None: P = np.concatenate([P, np.asarray(extra, float)]); self.N = len(P)
         if head_mode == "evp":   # Step 4: the head's particles after the stout's (and any extra): FILL <= z < FILL + HEAD0
-            Ph, self.V_head = seed_head(G, ppc, seed + 1); self.N_head = len(Ph); self.N_stout = self.N
-            self.Vp_stout = self.V / self.N_pint; self.Vp_head = self.V_head / self.N_head
-            self.mp_head = RHO_HEAD * self.Vp_head
+            Ph, self.V_head_glass, vol_h = seed_head(G, ppc, seed + 1); self.N_head = len(Ph); self.N_stout = self.N
+            self.Vp_stout = self.V / self.N_pint; self.V_head = float(vol_h.sum())       # the head's particles' volume (m^3)
+            self.Vp_head = self.V_head / self.N_head; self.mp_head = RHO_HEAD * self.Vp_head   # means, for the logs only
+            # per-particle volume and mass, carried in the state (resort keeps them with their particles); stout as before
+            self.pvol0 = np.concatenate([np.full(self.N_stout, self.Vp_stout), vol_h]).astype(np.float32)
+            self.pmass0 = np.concatenate([np.full(self.N_stout, self.mp), RHO_HEAD * vol_h]).astype(np.float32)
+            self.m_stout0 = float(np.sum(self.pmass0[:self.N_stout].astype(np.float64))); self.m_head0 = float(np.sum(RHO_HEAD * vol_h))
             P = np.concatenate([P, Ph]); self.N = len(P)
         self.K = int(K_frac * self.N); self.M = M_drops
         self.P0 = P.astype(np.float32)
@@ -592,7 +603,8 @@ class Stout:
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
                     bptr=jnp.zeros((), I32),
                     **(dict(xprop=jnp.asarray(self.P0), g2p_glass=jnp.zeros(N, bool)) if self.diag_g2p else {}),
-                    **(dict(is_head=jnp.arange(N) >= self.N_stout, be=jnp.tile(jnp.asarray([1, 1, 1, 0, 0, 0], F32), (N, 1))) if self.evp else {}))
+                    **(dict(is_head=jnp.arange(N) >= self.N_stout, be=jnp.tile(jnp.asarray([1, 1, 1, 0, 0, 0], F32), (N, 1)),
+                           pvol=jnp.asarray(self.pvol0), pmass=jnp.asarray(self.pmass0)) if self.evp else {}))
 
     def heff(self, hf):
         """Height of glass over which a head of thickness hf slides, weighted by its sliding speed to the power 5/3."""
@@ -645,7 +657,7 @@ class Stout:
         g = (X - self.origin) / dx
         ci = jnp.floor(g).astype(I32); cfl, cok = self.flat(ci, self.dims)
         cnt = jnp.zeros(math.prod(self.dims), I32).at[cfl].add((cok & act).astype(I32)).reshape(self.dims)
-        mpart = jnp.where(ish, self.mp_head, self.mp).astype(F32); vpart = jnp.where(ish, self.Vp_head, self.Vp_stout).astype(F32)
+        mpart = s["pmass"]; vpart = s["pvol"]                                  # per particle (state), so resort keeps them
         tau = sym_unpack(jnp.where(ish[:, None], evp_tau(s["be"]), 0.0))
         vel, mass, ex = [], [], dict(M=[], Vf=[], Vh=[], Fdev=[])
         for comp in range(3):
@@ -1387,10 +1399,13 @@ class Stout:
             ben, yl, gp, s_new, det, rres = evp_return_map(s["be"], s["C"], dt)
             hd = s["is_head"] & s["act"]
             s = dict(s, be=jnp.where(hd[:, None], ben, s["be"]))
-            mpart = jnp.where(s["is_head"], self.mp_head, self.mp).astype(F64)
+            mpart = s["pmass"].astype(F64)
+            okf = [(self.th[c] > 0) & (mass[c] > 1e-6) for c in range(3)]
+            n_floor = sum(jnp.sum(okf[c] & (ex["M"][c] < self.m_floor), dtype=I32) for c in range(3))           # diagnostic: faces where
+            n_floor_head = sum(jnp.sum(okf[c] & (ex["M"][c] < self.m_floor) & (ex["fh"][c] > 0.5), dtype=I32) for c in range(3))  # m_floor acts
             evd = dict(n_yielded=jnp.sum(hd & yl, dtype=I32), gp_max=jnp.max(jnp.where(hd, gp, 0.0)), s_max=jnp.max(jnp.where(hd, s_new, 0.0)),
                        det_min=jnp.min(jnp.where(hd, det, 1.0)), det_max=jnp.max(jnp.where(hd, det, 1.0)), rm_res=jnp.max(jnp.where(hd, rres, 0.0)),
-                       mom_phys=jnp.sum(jnp.where(s["act"][:, None], mpart[:, None] * s["vp"].astype(F64), 0.0), 0))
+                       mom_phys=jnp.sum(jnp.where(s["act"][:, None], mpart[:, None] * s["vp"].astype(F64), 0.0), 0), n_floor=n_floor, n_floor_head=n_floor_head)
         if self.head: s = self.head_spill(s, H, dt, gx, gz, rot)
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
