@@ -361,3 +361,16 @@ Code (20:56 UTC): seed_head v3 (ring = lattice points with a 4-neighbour outside
   Fact: 5 steps, it <= 269, res <= 9.62e-6, drain/phantom/in-solid 0, det 0.9999996 .. 1.0000005, books 0; stout mean height
   72.6948003 mm (CPU smoke 72.6948 mm), head 134.38436 mm; wall 35.23 s at step 1 (compile and set-up), then 0.34 s per step.
   Whether version 1 is still queued cannot be seen from the API. Waiting for the owner's confirmation before the new GPU smoke.
+- 21 Nov 21:31:50-21:34:35 UTC: 4.4 GPU smoke (code 5074138e, Kaggle step4-pint-head-smoke v3, T4, 2 min 45 s, script 81 s).
+  GPU 154.2 s = 2.6 min (quota 300.3 -> 454.5 s used; 1 792 min left until 28 Nov 00:00 UTC).
+  Fact (notes/spill/step4/smoke_4p4_gpu.json): N 1 215 000 (stout 1 001 952, head 213 048, seed v3), m_head0 0.0240697 kg,
+  V_head = glass volume (8.852745e-5 m^3). All marks PASS: finite; it <= 268, res <= 9.902e-6; drain bowl, phantom, in solid 0 from
+  step 1 (260 at t = 0: the stout's seed jitter and the wall ring, moved out by step 1); max abs(det be - 1) 4.8e-7; books stout 0,
+  head 1.9e-8 (constant from step 1: the head masses stored in float32 against m_head0 summed in float64), same across the resort;
+  head mean height across the resort 134.61815 mm before and after (difference 0); parity with the CPU smoke: stout 7.1e-11 m (mark 1e-5),
+  head +2.34e-4 m (mark 5e-4; the seed change alone, predicted about +0.35 mm). m_floor acted on at most 9 faces, all head faces
+  (f_h > 0.5) (report, not a mark). Step times 36.57 s (set-up and compile), 0.36, 1.68 (with the resort), 0.22, 0.32 s.
+  H_top at t = 0 reads 144.182 mm (4.4's mark: within 0.3 mm of 144 mm). No yielding (s_max 0.35 Pa).
+  Estimates (Inference, 0.30 s a step without compile or resort): full 4.4, 1.0 s, about 1 304 steps: about 7 min of stepping, about
+  8 GPU-min with set-up; full 4.5, 1.5 s, about 1 960 steps if speed does not cut dt: about 10 min stepping, 11-13 GPU-min.
+  Waiting for the owner's yes before full 4.4.
