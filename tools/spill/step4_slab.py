@@ -24,6 +24,9 @@ import jax.numpy as jnp  # noqa: E402
 import stout_jax as SJ  # noqa: E402
 F32 = jnp.float32
 SUB = os.environ.get("SUBRUN", "smoke"); ONLY = os.environ.get("ONLY")
+RAMP = os.environ.get("RAMP", "linear")   # 4.2's load ramp: "linear" over 0.25 s (v2), or "cos": half-cosine over a whole number of T1 (v3)
+DXE = float(os.environ.get("DX", "0.0015"))
+TAG = "" if DXE == 0.0015 else f"_dx{DXE * 1e3:g}mm"          # file-name tag for other grids
 VOUT = os.path.join(OUT, "step4"); os.makedirs(VOUT, exist_ok=True)
 T0 = time.time()
 
@@ -34,7 +37,7 @@ def say(m):
 
 
 # ---------------------------------------------------------------- parameters (SI), every one named
-DX = 0.0015; NX = NY = 8; NZ = 24; Z0 = -2.5 * DX            # the u and v faces of layer k = 2 lie exactly on the floor (z = 0)
+DX = DXE; NX = NY = 8; NZ = int(round(24 * 0.0015 / DX)); Z0 = -2.5 * DX   # faces of layer k = 2 lie exactly on the floor (z = 0)
 H = 0.019                                                    # m, head thickness (HEAD0)
 G = SJ.G_HEAD; TAU_Y = SJ.TAU_Y; A1, A2 = SJ.EVP_A1, SJ.EVP_A2; RHO_H = SJ.RHO_HEAD; GRAV = 9.81
 CS = math.sqrt(G / RHO_H); DT_EL = 0.40 * DX / CS; DT_MAX = 2e-3
@@ -138,19 +141,21 @@ def obs(st):
 obs_j = jax.jit(obs)
 
 
-def run(label, frac, T, ramp):
+def run(label, frac, T, ramp, ramp_kind="linear"):
     tau_b = frac * TAU_Y; alpha = math.asin(tau_b / (RHO_H * GRAV * H)); gx_full = GRAV * math.sin(alpha)
     st = dict(x=jnp.asarray(P0), v=jnp.zeros((NP, 3), F32), C=jnp.zeros((NP, 3, 3), F32),
               be=jnp.tile(jnp.asarray([1, 1, 1, 0, 0, 0], F32), (NP, 1)), disp=jnp.zeros(NP, F32))
     say(f"{label}: tau_b {tau_b:.4f} Pa = {frac} tau_y, alpha {math.degrees(alpha):.4f} deg, g_x {gx_full:.5f} m/s^2, ramp {ramp} s, T {T} s, "
         f"N {NP}, layers {NZL} (hz {HZ * 1e3:.3f} mm), dt_el {DT_EL:.4e} s")
-    fh = open(os.path.join(VOUT, f"slab_{label}_{SUB}.jsonl"), "w")
+    fh = open(os.path.join(VOUT, f"slab_{label}{TAG}_{SUB}.jsonl"), "w")
     t = 0.0; k = 0; ts, ut, vt, rows = [], [], [], []; agg = dict(n_yielded_max=0, det_dev_max=0.0, res_max=0.0, gp_max=0.0, s_max=0.0, vmax=0.0)
     nmax = 20 if SUB == "smoke" else 10 ** 9; prof = []
     while t < T - 1e-12 and k < nmax:
         vmax = agg["vmax"] if k else 0.0
         dt = min(DT_MAX, DT_EL, 0.8 * DX / max(vmax, 1e-12), T - t)
-        ramp_f = min(1.0, (t + dt) / ramp) if ramp > 0 else 1.0
+        if ramp <= 0: ramp_f = 1.0
+        elif ramp_kind == "cos": ramp_f = 0.5 * (1.0 - math.cos(math.pi * min(1.0, (t + dt) / ramp)))
+        else: ramp_f = min(1.0, (t + dt) / ramp)
         st, d = step_j(st, dt, gx_full * ramp_f); t += dt; k += 1
         d = {kk: float(v) for kk, v in d.items()}; o = obs_j(st)
         agg["n_yielded_max"] = max(agg["n_yielded_max"], int(d["n_yielded"])); agg["vmax"] = d["vmax"]
@@ -167,8 +172,8 @@ def run(label, frac, T, ramp):
     out = dict(label=label, sub=SUB, steps=k, t_end=t, tau_b_pa=tau_b, frac=frac, alpha_deg=math.degrees(alpha), g_x=gx_full, ramp_s=ramp, N=NP,
                layers=NZL, hz_m=HZ, dt_rule="dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s)", dt_el=DT_EL, c_s=CS, G=G, tau_y=TAU_Y, A1=A1, A2=A2,
                rho_h=RHO_H, tau_v_10=tau_v(10.0), **agg)
-    np.savez(os.path.join(VOUT, f"slab_{label}_{SUB}_series.npz"), t=ts, u_top=ut, v_top=vt)
-    json.dump(prof, open(os.path.join(VOUT, f"slab_{label}_{SUB}_profiles.json"), "w"))
+    np.savez(os.path.join(VOUT, f"slab_{label}{TAG}_{SUB}_series.npz"), t=ts, u_top=ut, v_top=vt)
+    json.dump(prof, open(os.path.join(VOUT, f"slab_{label}{TAG}_{SUB}_profiles.json"), "w"))
     return out, ts, ut, vt, prof
 
 
@@ -205,14 +210,18 @@ if not ONLY or "4.1" in ONLY:
             o["pass_marks"] = dict(n_yielded_zero=o["n_yielded_max"] == 0, T1_within_5pct=bool(9.228e-2 <= F["T_fit"] <= 1.020e-1),
                                    u_mean_within_8pct=bool(1.137e-4 <= o["u_cycle_mean"] <= 1.335e-4), det_dev_lt_1e5=o["det_dev_max"] < 1e-5)
             o["pass_marks_all"] = all(o["pass_marks"].values())
-        results["4.1"] = o; json.dump(o, open(os.path.join(VOUT, f"slab_4.1_{SUB}_summary.json"), "w"), indent=1, default=str)
+        results["4.1"] = o; json.dump(o, open(os.path.join(VOUT, f"slab_4.1{TAG}_{SUB}_summary.json"), "w"), indent=1, default=str)
         say(f"4.1 done: {json.dumps(o, default=str)}")
     except Exception as ex:
         say(f"4.1 FAILED: {ex!r}"); traceback.print_exc()
 
 if not ONLY or "4.2" in ONLY:
     try:
-        o, ts, ut, vt, _ = run("4.2", 0.7, 4.0, 0.25)
+        if RAMP == "cos":   # v3 (owner, 21 Nov): half-cosine over n whole periods, n = ceil(0.25 s / T1) = 3; predicted ringing 1/(4 n^2 - 1) u_s
+            n_rp = math.ceil(0.25 / T1); o, ts, ut, vt, _ = run("4.2", 0.7, 4.0, n_rp * T1, "cos")
+            o["ramp_kind"] = "half-cosine"; o["ramp_periods"] = n_rp; o["ringing_predicted"] = o["tau_b_pa"] * H / (2 * G) / (4 * n_rp ** 2 - 1)
+        else:
+            o, ts, ut, vt, _ = run("4.2", 0.7, 4.0, 0.25); o["ramp_kind"] = "linear"
         us = o["tau_b_pa"] * H / (2 * G); o["u_static_ref"] = us
         if SUB == "full":
             u05 = float(np.interp(0.5, ts, ut)); u40 = float(ut[-1])
@@ -224,7 +233,7 @@ if not ONLY or "4.2" in ONLY:
             o["ringing_amp_after_0p5"] = float(0.5 * np.ptp(ut[ts >= 0.5]))
             o["pass_marks"] = dict(n_yielded_zero=o["n_yielded_max"] == 0, creep_lt_5e5=o["creep"] < 5e-5, u_4p0_within_10pct=bool(1.948e-4 <= u40 <= 2.380e-4))
             o["pass_marks_all"] = all(o["pass_marks"].values())
-        results["4.2"] = o; json.dump(o, open(os.path.join(VOUT, f"slab_4.2_{SUB}_summary.json"), "w"), indent=1, default=str)
+        results["4.2"] = o; json.dump(o, open(os.path.join(VOUT, f"slab_4.2{TAG}_{SUB}_summary.json"), "w"), indent=1, default=str)
         say(f"4.2 done: {json.dumps(o, default=str)}")
     except Exception as ex:
         say(f"4.2 FAILED: {ex!r}"); traceback.print_exc()
@@ -241,10 +250,10 @@ if not ONLY or "4.3" in ONLY:
             vzy = float(np.interp(ref["z_y"] + DX, zl, vprof)); o["v_zy_plus_dx"] = vzy; o["uniformity"] = abs(vprof[-1] - vzy) / max(abs(vprof[-1]), 1e-30)
             o["pass_marks"] = dict(v_h_within_12pct=bool(1.247e-3 <= vh <= 1.587e-3), plug_uniform_lt_5pct=o["uniformity"] < 0.05)
             o["pass_marks_all"] = all(o["pass_marks"].values())
-        results["4.3"] = o; json.dump(o, open(os.path.join(VOUT, f"slab_4.3_{SUB}_summary.json"), "w"), indent=1, default=str)
+        results["4.3"] = o; json.dump(o, open(os.path.join(VOUT, f"slab_4.3{TAG}_{SUB}_summary.json"), "w"), indent=1, default=str)
         say(f"4.3 done: {json.dumps(o, default=str)}")
     except Exception as ex:
         say(f"4.3 FAILED: {ex!r}"); traceback.print_exc()
 
-json.dump(results, open(os.path.join(VOUT, f"slab_{SUB}_all.json"), "w"), indent=1, default=str)
+json.dump(results, open(os.path.join(VOUT, f"slab{TAG}_{SUB}_all.json"), "w"), indent=1, default=str)
 say("all done")

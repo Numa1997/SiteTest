@@ -250,3 +250,10 @@ reports means over whole periods (supplementary, not marks) so the owner can dec
   exact one (yield height and shape right). det_dev 9.5e-7, Newton residual 1.5e-7.
 Decision (B.6): 4.4 and 4.5 wait until 4.1-4.3 pass; 4.2 fails one mark that was flagged before the run as badly defined. Stopped for
 the owner. Nothing is wired into Stout yet.
+
+## Owner, 21 Nov ~17:15 UTC: rerun 4.2 with a half-cosine ramp over a whole number of T1 (marks unchanged); rerun 4.3 at dx = 0.75 mm
+on CPU (does the 8.6 % shortfall shrink?); then wire the foam into Stout for 4.4, smoke first.
+Prediction before the run (Inference): half-cosine over n T1 leaves ringing u_s / (4 n^2 - 1); n = ceil(0.25 s / T1) = 3, Tr = 0.2914 s,
+ringing 2.9 % of u_s = 6.2e-6 m, so u(h, 4.0 s) should fall in [2.10e-4, 2.23e-4] m. (A linear ramp over a whole number of periods
+would leave none: sin(w Tr / 2) = 0.) Code: step4_slab.py RAMP=cos, DX env (NZ scales, files tagged _dx0.75mm). v2 outputs kept in
+notes/spill/step4/full_v2/.
