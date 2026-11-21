@@ -356,3 +356,8 @@ Code (20:56 UTC): seed_head v3 (ring = lattice points with a 4-neighbour outside
   integrated independently: ratio 1 - 2.6e-11 (mark 1e-4). N_head 213 048; ring 280-292 particles per layer; top layer 7 876 particles,
   0.25 mm, factor 1.288; m_head0 0.0240697 kg. (With a vertical jitter of 0.3 the per-cell mark would fail: 0.5 .. 1.5.)
   Next: the single 4.4 GPU smoke once the two stale queued runs are confirmed cancelled (the API cannot cancel or see them).
+- 21 Nov ~20:53-20:55 UTC: one stale queued GPU run (step4-pint-head-smoke, latest version 2, code 853578c8: old head seed, no resort)
+  started by itself and completed; GPU quota 300.3 s used (5.0 min of 1 800). Outputs kept in notes/spill/step4/stale_gpu_853578c/.
+  Fact: 5 steps, it <= 269, res <= 9.62e-6, drain/phantom/in-solid 0, det 0.9999996 .. 1.0000005, books 0; stout mean height
+  72.6948003 mm (CPU smoke 72.6948 mm), head 134.38436 mm; wall 35.23 s at step 1 (compile and set-up), then 0.34 s per step.
+  Whether version 1 is still queued cannot be seen from the API. Waiting for the owner's confirmation before the new GPU smoke.
