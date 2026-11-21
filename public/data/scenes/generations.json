@@ -1,0 +1,25 @@
+{
+ "about": "Data of the living scenes (public/scripts/bg-scenes.js), computed on Kaggle by the notebook numakoudsie/scenes-living-backgrounds and carried here by .github/workflows/scenes-kaggle.yml. Newest last; a scene plays its newest entry.",
+ "generations": [
+  {
+   "scene": "barton",
+   "date": "2026-11-21",
+   "notebook": "numakoudsie/scenes-living-backgrounds",
+   "version": 1,
+   "commit": "73ca853333f27a58b6241970d7b5b6994629b2a0",
+   "index": "2026-11-21/index-barton.json",
+   "files": {
+    "barton.bin": {
+     "bytes": 44279,
+     "sha256": "2e5e58de4543996dba5a3b5c831ba4099a984906fb8c43ba87561a6944094a41"
+    },
+    "barton.json": {
+     "bytes": 1720,
+     "sha256": "3528a9065a6cb87c660a25147957c2bf327dedd3890d6bdc4e8c84f4054f60bb"
+    }
+   },
+   "wall_s": 8.1,
+   "collected": "2026-11-21T19:17:16+00:00"
+  }
+ ]
+}

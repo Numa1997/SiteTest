@@ -1,0 +1,28 @@
+{
+ "project": "scenes",
+ "job": "barton",
+ "date": "2026-11-21",
+ "source": {
+  "repo": "Numa1997/SiteTest",
+  "commit": "73ca853333f27a58b6241970d7b5b6994629b2a0",
+  "path": "tools/scenes/barton.py"
+ },
+ "machine": {
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "cpus": 4,
+  "python": "3.13.18",
+  "numpy": "2.1.3",
+  "scipy": "1.16.3"
+ },
+ "files": {
+  "barton.bin": {
+   "bytes": 44279,
+   "sha256": "2e5e58de4543996dba5a3b5c831ba4099a984906fb8c43ba87561a6944094a41"
+  },
+  "barton.json": {
+   "bytes": 1720,
+   "sha256": "3528a9065a6cb87c660a25147957c2bf327dedd3890d6bdc4e8c84f4054f60bb"
+  }
+ },
+ "wall_s": 8.08572769165039
+}
