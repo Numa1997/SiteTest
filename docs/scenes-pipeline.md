@@ -54,7 +54,7 @@ each frame the page draws the stored frame nearest in time. It integrates nothin
 ## Keys
 
 - **`KAGGLE_API_TOKEN`**, a repository secret (GitHub → repository Settings → Secrets and variables → Actions). The official Kaggle
-  tool (`pip install kaggle==2.2.5`) reads it from the environment. GitHub never shows a secret again, never prints it in logs, and
+  tool (`pip install kaggle==2.2.5 six`; that version imports `six` without installing it, seen on the first real run, 21 November 2026) reads it from the environment. GitHub never shows a secret again, never prints it in logs, and
   does not give it to copies (forks) of the repository.
 - **No GitHub key is needed**: GitHub gives every workflow run its own short-lived token; `permissions: contents: write` lets it
   commit to this repository and nothing else.
