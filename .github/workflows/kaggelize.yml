@@ -1,0 +1,62 @@
+# Kaggelize (docs/kaggelize.md): the button. Type the titles of one or more simulations; for each of them a Claude Code session
+# studies the page, the owner approves (always: there is no way to run without the pauses), a session builds the model and the
+# player, the owner approves, Kaggle computes the data
+# once, a second session checks the result, and a third repairs it if the check fails (at most twice). This file only makes the
+# list and starts one copy of kaggelize-one.yml per simulation: it is the "mother", and it is plain code, not a session.
+name: Kaggelize
+run-name: "Kaggelize: ${{ inputs.titles }}"
+on:
+  workflow_dispatch:
+    inputs:
+      titles:   { description: "Titles of the simulations, separated by commas (for example: Wave Interference)", required: true, type: string }
+      together: { description: "How many simulations may be in work at the same time", type: choice, options: ["1", "2", "3"], default: "1" }
+      model:    { description: "Model for the sessions", type: choice, options: ["default", "opus", "sonnet"], default: "default" }
+permissions:
+  contents: write     # push the sessions' branches, the data and the reports
+  issues: write       # the board
+  actions: read       # a corrector reads the log of a failed step
+concurrency:          # one Kaggelize run at a time; a second one waits
+  group: kaggelize
+  cancel-in-progress: false
+jobs:
+  plan:
+    name: Make the list
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      list: ${{ steps.titles.outputs.list }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: The titles
+        id: titles
+        env: { TITLES: "${{ inputs.titles }}" }
+        run: L=$(python3 tools/sims/agents/titles.py "$TITLES"); echo "list=$L" >> "$GITHUB_OUTPUT"; echo "$L"
+      - name: The secret for the sessions is there
+        env: { T: "${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}" }
+        run: test -n "$T" || { echo "::error::The repository secret CLAUDE_CODE_OAUTH_TOKEN is missing (docs/kaggelize.md, 'Setting up')"; exit 1; }
+      - name: The pauses really pause     # there is no switch to run without them
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: python3 tools/sims/agents/board.py check-pause kaggelize-review
+      - name: Board, queued
+        env: { GH_TOKEN: "${{ github.token }}", LIST: "${{ steps.titles.outputs.list }}" }
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          run = f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+          for s in json.loads(os.environ["LIST"]):
+              subprocess.run(["python3", "tools/sims/agents/board.py", "set", s["slug"], s["title"], "queued", "waiting for its turn", run], check=True)
+          PY
+  sim:
+    name: ${{ matrix.sim.title }}
+    needs: plan
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJSON(inputs.together) }}
+      matrix:
+        sim: ${{ fromJSON(needs.plan.outputs.list) }}
+    uses: ./.github/workflows/kaggelize-one.yml
+    with:
+      title: ${{ matrix.sim.title }}
+      slug: ${{ matrix.sim.slug }}
+      model: ${{ inputs.model }}
+    secrets: inherit

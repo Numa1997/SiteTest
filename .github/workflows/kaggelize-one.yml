@@ -1,0 +1,157 @@
+# Kaggelize, one simulation from start to end (docs/kaggelize.md). Read the jobs top to bottom: that is the order they run in.
+#   study -> PAUSE 1 -> build -> [PAUSE 2 -> Kaggle line -> caretaker] -> clear? done.
+#   not clear -> correction 1 -> [PAUSE -> Kaggle line -> caretaker] -> not clear -> correction 2 -> [...] -> still not clear: the owner decides.
+# Each bracket is kaggelize-land.yml. Every session runs through .github/actions/kaggelize-stage and tools/sims/agents/stage.py.
+# Every pause waits for the owner's approval (the environment "kaggelize-review"); no input switches the pauses off.
+name: Kaggelize, one simulation
+on:
+  workflow_call:
+    inputs:
+      title:  { type: string, required: true }
+      slug:   { type: string, required: true }
+      model:  { type: string, required: true }
+jobs:
+  study:
+    name: Study (builder session)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0, persist-credentials: false }
+      - uses: ./.github/actions/kaggelize-stage
+        with:
+          stage: study
+          title: ${{ inputs.title }}
+          slug: ${{ inputs.slug }}
+          model: ${{ inputs.model }}
+          label: "study"
+          next: "waiting for you: PAUSE 1, read the study, then approve on the run page"
+          next_link: "${{ github.server_url }}/${{ github.repository }}/blob/kaggelize/${{ inputs.slug }}/notes/sims/reports/${{ inputs.slug }}/01-study.md"
+          github_token: ${{ github.token }}
+          claude_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+  pause1:
+    name: "PAUSE 1: read the study, then approve"
+    needs: study
+    runs-on: ubuntu-latest
+    environment: kaggelize-review
+    steps:
+      - run: echo "approved"
+  build:
+    name: Build (builder session)
+    needs: pause1
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    outputs:
+      sha: ${{ steps.s.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0, persist-credentials: false }
+      - id: s
+        uses: ./.github/actions/kaggelize-stage
+        with:
+          stage: build
+          title: ${{ inputs.title }}
+          slug: ${{ inputs.slug }}
+          model: ${{ inputs.model }}
+          label: "build"
+          next: "waiting for you: PAUSE 2, read the changes, then approve on the run page"
+          next_link: "${{ github.server_url }}/${{ github.repository }}/compare/main...kaggelize/${{ inputs.slug }}"
+          github_token: ${{ github.token }}
+          claude_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+  land1:
+    name: Landing 1
+    needs: build
+    uses: ./.github/workflows/kaggelize-land.yml
+    with: { title: "${{ inputs.title }}", slug: "${{ inputs.slug }}", round: "1", sha: "${{ needs.build.outputs.sha }}", model: "${{ inputs.model }}" }
+    secrets: inherit
+  fix1:
+    name: Correction 1 (corrector session)
+    needs: [build, land1]
+    # only when the owner approved landing 1 and it did not come out clear (a failed Kaggle run counts as not clear)
+    if: always() && needs.land1.outputs.approved == 'true' && needs.land1.outputs.clear != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    outputs:
+      sha: ${{ steps.s.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0, persist-credentials: false }
+      - id: s
+        uses: ./.github/actions/kaggelize-stage
+        with:
+          stage: fix
+          round: "1"
+          title: ${{ inputs.title }}
+          slug: ${{ inputs.slug }}
+          model: ${{ inputs.model }}
+          label: "correction 1"
+          next: "waiting for you: read the correction, then approve on the run page"
+          next_link: "${{ github.server_url }}/${{ github.repository }}/compare/main...kaggelize/${{ inputs.slug }}-fix1"
+          github_token: ${{ github.token }}
+          claude_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+  land2:
+    name: Landing 2
+    needs: fix1
+    uses: ./.github/workflows/kaggelize-land.yml
+    with: { title: "${{ inputs.title }}", slug: "${{ inputs.slug }}", round: "2", sha: "${{ needs.fix1.outputs.sha }}", model: "${{ inputs.model }}" }
+    secrets: inherit
+  fix2:
+    name: Correction 2 (corrector session)
+    needs: [fix1, land2]
+    if: always() && needs.land2.outputs.approved == 'true' && needs.land2.outputs.clear != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    outputs:
+      sha: ${{ steps.s.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0, persist-credentials: false }
+      - id: s
+        uses: ./.github/actions/kaggelize-stage
+        with:
+          stage: fix
+          round: "2"
+          title: ${{ inputs.title }}
+          slug: ${{ inputs.slug }}
+          model: ${{ inputs.model }}
+          label: "correction 2"
+          next: "waiting for you: read the correction, then approve on the run page"
+          next_link: "${{ github.server_url }}/${{ github.repository }}/compare/main...kaggelize/${{ inputs.slug }}-fix2"
+          github_token: ${{ github.token }}
+          claude_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+  land3:
+    name: Landing 3
+    needs: fix2
+    uses: ./.github/workflows/kaggelize-land.yml
+    with: { title: "${{ inputs.title }}", slug: "${{ inputs.slug }}", round: "3", sha: "${{ needs.fix2.outputs.sha }}", model: "${{ inputs.model }}" }
+    secrets: inherit
+  verdict:
+    name: Result
+    needs: [study, pause1, build, land1, fix1, land2, fix2, land3]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Board, the end state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ inputs.title }}
+          SLUG: ${{ inputs.slug }}
+          CLEAR: "${{ needs.land1.outputs.clear }} ${{ needs.land2.outputs.clear }} ${{ needs.land3.outputs.clear }}"
+          STUDY: ${{ needs.study.result }}
+          PAUSE1: ${{ needs.pause1.result }}
+          BUILD: ${{ needs.build.result }}
+          APPROVED1: ${{ needs.land1.outputs.approved }}
+          RESULTS: "land1=${{ needs.land1.result }} fix1=${{ needs.fix1.result }} land2=${{ needs.land2.result }} fix2=${{ needs.fix2.result }} land3=${{ needs.land3.result }}"
+        run: |
+          RUN="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          REP="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/main/notes/sims/reports/$SLUG"
+          b() { python3 tools/sims/agents/board.py set "$SLUG" "$TITLE" "$1" "$2" "$3"; }
+          echo "study=$STUDY pause1=$PAUSE1 build=$BUILD approved1=$APPROVED1 clear=[$CLEAR] $RESULTS"
+          case " $CLEAR " in *" true "*) b "done" "clear: data from Kaggle, live, checked" "$REP"; exit 0 ;; esac
+          if [ "$STUDY" != success ]; then b "study" "failed: open the run" "$RUN"; exit 1; fi
+          if [ "$PAUSE1" != success ]; then b "PAUSE 1" "stopped at the pause after the study: nothing was built" "$RUN"; exit 1; fi
+          if [ "$BUILD" != success ]; then b "build" "failed: open the run" "$RUN"; exit 1; fi
+          if [ "$APPROVED1" != true ]; then b "PAUSE 2" "stopped at the pause before Kaggle: nothing reached the live site" "$RUN"; exit 1; fi
+          b "needs you" "needs you: not clear, open the run and the last caretaker report" "$RUN"; exit 1
