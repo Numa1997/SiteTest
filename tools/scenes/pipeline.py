@@ -81,6 +81,7 @@ def main():
     gp = os.path.join(ROOT, "public/data/scenes/generations.json")
     g = json.load(open(gp)) if os.path.exists(gp) else dict(about="Data of the living scenes (public/scripts/bg-scenes.js), computed on Kaggle by the notebook "
         f"{REF} and carried here by .github/workflows/scenes-kaggle.yml. Newest last; a scene plays its newest entry.", generations=[])
+    g["generations"] = [q for q in g["generations"] if not (q["scene"] == a.scene and q["date"] == day)]   # one entry per scene and day: a rerun the same day replaces it
     g["generations"].append(dict(scene=a.scene, date=day, notebook=REF, version=version, commit=a.commit,
                                  index=f"{day}/index-{a.scene}.json", files={f: v for f, v in index["files"].items()},
                                  wall_s=round(index.get("wall_s", 0), 1), collected=datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")))

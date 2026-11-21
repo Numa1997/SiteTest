@@ -1,0 +1,14 @@
+{
+ "about": "Registry of the living scenes that play data computed on Kaggle: which files each scene's model writes, and which live pages play them. tools/scenes/verify_live.py reads it to check the live site after every run (docs/scenes-pipeline.md, step 10).",
+ "site": "https://phyeinusul.com",
+ "scenes": {
+  "barton": {
+   "model": "tools/scenes/barton.py",
+   "files": ["barton.bin"],
+   "pages": [
+    {"path": "/", "width": 1600, "height": 1000, "scroll": 650,
+     "probe": "(()=>{const h=document.querySelector('[data-bg=rails]');const s=h&&h.__bgScene;if(!s)return {error:'no rails scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,bars:s.Bs.length};})()"}
+   ]
+  }
+ }
+}
