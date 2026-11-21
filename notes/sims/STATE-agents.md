@@ -12,7 +12,14 @@ one Run button and watches one board.
   `kaggle_sims.py`, `verify_live.py`, `registry.json`. Proven on the Barton pendulums of the home page (rails scene).
 - Order of conversion: `notes/sims/PLAN.md`.
 
-## Design agreed in chat (nothing of it built yet)
+## Built on 21 November 2026 (guide: docs/kaggelize.md; not yet run on GitHub)
+- Button: `.github/workflows/kaggelize.yml` -> `kaggelize-one.yml` -> `kaggelize-land.yml` -> `sims-kaggle.yml` (now callable with a branch commit).
+- Sessions: `.claude/agents/sims-builder.md`, `sims-caretaker.md`, `sims-corrector.md`, run by `tools/sims/agents/stage.py`.
+- Board: `tools/sims/agents/board.py` (one issue). Pauses: environment `kaggelize-review`, always on, no switch.
+- Tested in the workspace with a stand-in for Claude. Waiting for the owner: secret `CLAUDE_CODE_OAUTH_TOKEN`, environment
+  `kaggelize-review`, then the trial run with one title.
+
+## Design agreed in chat
 - Builder (one simulation at a time, then moves on) → automatic Kaggle line → Caretaker reads the report →
   clear: done; not clear: Corrector, at most 2 rounds, then the user is asked.
 - The user's plan: try it on ONE simulation, then make it a function and run it on TWO, then on all the rest.
@@ -27,5 +34,6 @@ one Run button and watches one board.
   GitHub App, so for owner-name commits run the CLI directly and commit with `git -c user.name=...`.
 
 ## Open
-- Which design the user picks (see the chat reply of 21 November, 22:00).
+- The trial on one simulation (Fig. 1, Wave Interference); then two titles in one run; then the rest.
+- Usage per simulation: unknown until the trial; write it into docs/kaggelize.md, 'Costs'.
 - "The one with a circle" (spinners or seeds strip) and the Fig. 14 live preview: unanswered.
