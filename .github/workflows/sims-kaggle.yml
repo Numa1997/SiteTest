@@ -1,0 +1,67 @@
+# The simulations pipeline (docs/kaggle-sims.md): making a simulation's data. It starts by itself when a simulation's model
+# tools/sims/<sim>.py is added or changed on main, and can be started by hand (Actions -> "Simulations on Kaggle" -> Run workflow).
+# Kaggle computes the simulation's whole data once (every run and every random start, each recorded by its seed), this workflow checks
+# the output by SHA-256 and commits it to public/data/sims/, and Cloudflare publishes. No timer: an unchanged model never reruns.
+name: Simulations on Kaggle
+on:
+  push:
+    branches: [main]
+    paths: ["tools/sims/*.py"]   # which of them are simulations is decided by tools/sims/registry.json, in the step "Which simulations"
+  workflow_dispatch:
+    inputs:
+      sim: { description: "simulation to compute (a model file tools/sims/<sim>.py, listed in tools/sims/registry.json)", required: true, default: "barton" }
+permissions:
+  contents: write
+concurrency:            # one Kaggle run at a time: each run is a new version of the same notebook
+  group: sims-kaggle
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      sims: ${{ steps.which.outputs.sims }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install kaggle==2.2.5 six   # kaggle 2.2.5 imports six without declaring it
+      - name: Which simulations
+        id: which
+        run: |
+          if [ -n "${{ github.event.inputs.sim }}" ]; then S="${{ github.event.inputs.sim }}"
+          else S=$(git diff --name-only HEAD~1 HEAD -- 'tools/sims/*.py' | xargs -r -n1 basename | sed 's/\.py$//' | tr '\n' ' '); fi
+          # only simulations listed in tools/sims/registry.json are computed; other files in the folder are the machinery
+          S=$(python3 -c "import json,sys; r=json.load(open('tools/sims/registry.json'))['sims']; print(' '.join(x for x in sys.argv[1:] if x in r))" $S)
+          echo "sims=$S" >> "$GITHUB_OUTPUT"; echo "simulations: $S"
+      - name: Compute on Kaggle, check, store
+        if: steps.which.outputs.sims != ''
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          test -n "$KAGGLE_API_TOKEN" || { echo "the repository secret KAGGLE_API_TOKEN is missing"; exit 1; }
+          for s in ${{ steps.which.outputs.sims }}; do python3 tools/sims/pipeline.py "$s" "$GITHUB_SHA"; done
+      - name: Commit the data
+        if: steps.which.outputs.sims != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 tools/inventory.py >/dev/null   # docs/files.md lists every file, the new data included
+          git add public/data/sims docs/files.md
+          git diff --cached --quiet && { echo "nothing new"; exit 0; }
+          git commit -m "Simulation data from Kaggle: ${{ steps.which.outputs.sims }}(notebook numakoudsie/phyein-usul-simulations, code ${GITHUB_SHA::7})"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push origin HEAD:main && exit 0; sleep 5; done; exit 1
+  live:
+    # step 10: wait for Cloudflare to publish, then check the live files and the live pages (tools/sims/verify_live.py)
+    needs: run
+    if: needs.run.outputs.sims != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install playwright==1.65.2 && python -m playwright install --with-deps chromium
+      - name: Check the live site
+        run: for s in ${{ needs.run.outputs.sims }}; do python3 tools/sims/verify_live.py "$s" "$GITHUB_SHA"; done

@@ -30,16 +30,16 @@
     round: 'radial-gradient(ellipse closest-side at center,#000 55%,transparent 100%)',
     sides: 'linear-gradient(to right,#000 0,#000 calc(50% - 720px),rgba(0,0,0,.07) calc(50% - 590px),rgba(0,0,0,.07) calc(50% + 590px),#000 calc(50% + 720px),#000 100%)' };
 
-  /* ---- stored scene data (docs/scenes-pipeline.md): computed once on Kaggle, kept under data/scenes/ on this site. A scene asks
+  /* ---- stored simulation data (docs/kaggle-sims.md): computed once on Kaggle, kept under data/sims/<name>/<date>/ on this site. A scene asks
      for its data by name; the newest generation of that scene is downloaded, its SHA-256 is checked against generations.json, and
      only then is it handed over. The file: 4 bytes of label, a uint32 header length, a JSON header, then int16 frames. ---- */
-  var DATA = new URL('../data/scenes/', (document.currentScript || {}).src || location.href).href, GEN = null, STORE = {};
+  var DATA = new URL('../data/sims/', (document.currentScript || {}).src || location.href).href, GEN = null, STORE = {};
   function sceneData(name, file) {
     if (STORE[name]) return STORE[name];
     GEN = GEN || fetch(DATA + 'generations.json').then(function (r) { if (!r.ok) throw new Error('no generations.json'); return r.json(); });
     return STORE[name] = GEN.then(function (g) {
-      var e = g.generations.filter(function (q) { return q.scene === name; }).pop(); if (!e) throw new Error('no data for ' + name);
-      return fetch(DATA + e.date + '/' + file).then(function (r) { if (!r.ok) throw new Error(file + ' ' + r.status); return r.arrayBuffer(); }).then(function (buf) {
+      var e = g.generations.filter(function (q) { return q.sim === name; }).pop(); if (!e) throw new Error('no data for ' + name);
+      return fetch(DATA + name + '/' + e.date + '/' + file).then(function (r) { if (!r.ok) throw new Error(file + ' ' + r.status); return r.arrayBuffer(); }).then(function (buf) {
         return crypto.subtle.digest('SHA-256', buf).then(function (d) {
           var hex = Array.prototype.map.call(new Uint8Array(d), function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join('');
           if (hex !== e.files[file].sha256) throw new Error(file + ': SHA-256 differs from generations.json');
@@ -390,7 +390,7 @@
         var s = top + o.y; if (s > -5 && s < H + 5) dot(g.l0 + o.x, s, 1.1, .45 * fade(o.y)); return true; });
       if (this.flow.length > 160) this.flow.splice(0, this.flow.length - 160);
       x.restore();
-      /* right: Barton's pendulums, played from the stored run (tools/scenes/barton.py, computed on Kaggle). Nothing is computed
+      /* right: Barton's pendulums, played from the stored run (tools/sims/barton.py, computed on Kaggle). Nothing is computed
          here: each frame gives the driver's angle and length, the bar's travel and the eight angles; the frame nearest in time is drawn. */
       var D = this.D; if (!D) { if (!this.asked) { this.asked = 1; sceneData('barton', 'barton.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } return; }
       var hd = D.hdr, nf = hd.frames, C = D.cols, F = D.frames, sc = hd.params.scale, fps = hd.params.fps;

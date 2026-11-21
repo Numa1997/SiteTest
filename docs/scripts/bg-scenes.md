@@ -81,11 +81,11 @@ direction of its pulls (plus a slight downward pull and a little noise), 20 step
 radius is the sum of its children's cubes, so line width grows as the cube root of the number of tips it feeds), and sap dots
 climb from the tips back up towards the trees.
 
-**Right: Barton's pendulums, played from stored data.** The motion is computed once on Kaggle by `tools/scenes/barton.py`
+**Right: Barton's pendulums, played from stored data.** The motion is computed once on Kaggle by `tools/sims/barton.py`
 (a heavy driver of slowly swept length shakes a bar; eight light pendulums, lengths 0.10 to 0.34 m, obey
 θ'' = −(g/L) sin θ − γ θ' − (ẍ_bar/L) cos θ; integrated by DOP853; the sweep period is chosen so the motion repeats exactly) and
-stored as `data/scenes/<date>/barton.bin`. The page draws it at 420 px per metre and computes nothing; how the data gets here and
-how it is played: [../scenes-pipeline.md](../scenes-pipeline.md). Every 200 px a bar hangs a random choice of the stored
+stored as `data/sims/<date>/barton.bin`. The page draws it at 420 px per metre and computes nothing; how the data gets here and
+how it is played: [../kaggle-sims.md](../kaggle-sims.md). Every 200 px a bar hangs a random choice of the stored
 pendulums and starts at a random moment of the loop.
 
 ## How it runs
