@@ -224,3 +224,6 @@ reports means over whole periods (supplementary, not marks) so the owner can dec
   the foam's free surface is a sliver of a cell. Fix as instruction B.3.5: u += dt F_dev / max(M_f, m_floor), m_floor = 0.05 rho_h dx^3.
   References in that log match the instruction: A1 2.53178, A2 0.84796, tau_v(10/s) 11.7217 Pa, c_s 0.78241 m/s, T1 9.71363e-2 s,
   v_h 1.41705e-3 m/s, z_y 6.333 mm, u_s 1.2363e-4 m (4.1) and 2.1635e-4 m (4.2).
+- 21 Nov 14:00:04-14:01:27 UTC: slab smoke v2 (code b8d894ef, CPU, 1 min 23 s): stable, 20 steps each; 4.1 n_yielded 0, det_dev
+  3.6e-7, s_max 2.76 Pa; 4.3 yields one layer (256) by step 20. v1 outputs kept in notes/spill/step4/smoke_v1/.
+- 21 Nov 14:01:51 UTC: slab full run launched (Kaggle CPU, step4-slab-full).
