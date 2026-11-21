@@ -39,6 +39,7 @@ H = 0.019                                                    # m, head thickness
 G = SJ.G_HEAD; TAU_Y = SJ.TAU_Y; A1, A2 = SJ.EVP_A1, SJ.EVP_A2; RHO_H = SJ.RHO_HEAD; GRAV = 9.81
 CS = math.sqrt(G / RHO_H); DT_EL = 0.40 * DX / CS; DT_MAX = 2e-3
 PPC = 2; SEED = 1
+M_FLOOR = 0.05 * RHO_H * DX ** 3                            # kg: the deviatoric force divides by max(M_f, M_FLOOR) (instruction B.3.5)
 LX, LY = NX * DX, NY * DX
 
 
@@ -102,7 +103,7 @@ def step(st, dt, gx):
         acc = jnp.zeros((size, 4), F32).at[fl.reshape(-1)].add(upd).reshape(NX, NY, NZ, 4)
         m = acc[..., 1]; occ = acc[..., 2] > 1e-6                                     # occupancy by the sum of weights, never by mass
         gc = gx if comp == 0 else 0.0
-        u = jnp.where(occ, (acc[..., 0] + dt * (acc[..., 3] + m * gc)) / jnp.where(occ, m, 1.0), 0.0)
+        u = jnp.where(occ, acc[..., 0] / jnp.where(occ, m, 1.0) + dt * gc + dt * acc[..., 3] / jnp.maximum(m, M_FLOOR), 0.0)
         vel.append(mirror_floor(u))
     vs, Cs = [], []
     for comp in (0, 1):

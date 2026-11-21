@@ -219,3 +219,8 @@ u_s |sin(w Tr/2)| / (w Tr/2) = 0.12 u_s = 2.6e-5 m (w = 2 pi / T1, T1 = 0.0971 s
 can then sit anywhere in [1.90e-4, 2.43e-4] m against the window [1.948e-4, 2.380e-4] m, and the "creep" u(4.0) - u(0.5) can reach
 5.2e-5 m against the 5e-5 m mark with no plastic creep at all. The marks may be badly defined for an undamped column; the run also
 reports means over whole periods (supplementary, not marks) so the owner can decide.
+- 21 Nov 13:57:57-13:59:16 UTC: slab smoke v1 (code 647f1956, Kaggle CPU, step4-slab-smoke, 1 min 19 s, script 4 s): all three tests blew
+  up within 10 steps (vmax 23 m/s, det_dev 1e8): failure mode 1 of B.7. The deviatoric force was divided by the face's own mass, which at
+  the foam's free surface is a sliver of a cell. Fix as instruction B.3.5: u += dt F_dev / max(M_f, m_floor), m_floor = 0.05 rho_h dx^3.
+  References in that log match the instruction: A1 2.53178, A2 0.84796, tau_v(10/s) 11.7217 Pa, c_s 0.78241 m/s, T1 9.71363e-2 s,
+  v_h 1.41705e-3 m/s, z_y 6.333 mm, u_s 1.2363e-4 m (4.1) and 2.1635e-4 m (4.2).
