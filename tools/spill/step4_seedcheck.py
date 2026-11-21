@@ -33,7 +33,7 @@ out = dict(dx=DX, HEAD0=SJ.HEAD0, hl=hl, n_full=n_full, t_top=t_top, fill=FILL)
 for jz in (0.3, 0.0):
     try:
         P, Vg, vol = SJ.seed_head(G, 2, 2, jitter_z=jz)
-        top = np.isclose(vol, hl * hl * t_top) if t_top > 0 else np.zeros(len(vol), bool)
+        top = np.isclose(vol, hl * hl * t_top, rtol=1e-6, atol=0.0) if t_top > 0 else np.zeros(len(vol), bool)   # v2: atol 0 (v1 used the default 1e-8, larger than the volumes)
         r = dict(N_head=len(P), top_count=int(top.sum()), top_volume_m3=float(vol[top].sum()), V_head_particles_m3=float(vol.sum()),
                  V_glass_m3=Vg, V_ratio=float(vol.sum() / Vg), m_head0_kg=float(SJ.RHO_HEAD * vol.sum()),
                  interior=cells(P, vol, FILL, FILL + n_full * hl))
