@@ -234,3 +234,19 @@ reports means over whole periods (supplementary, not marks) so the owner can dec
   Inference: a harness bug at the floor. The mirror floor (faces at -dx/2, +dx/2, u(-z) = -u(z)) gives the first face above the floor
   the wall's support from half a cell of particles only, so the bottom layer must carry about twice the true stress (8.5 = 2 x 4.3 Pa).
   Fix (v2): faces on the floor, z = 0, hold u = 0 (Z0 = -2.5 dx). Marks unchanged. The return map itself is not changed.
+- 21 Nov 14:06:02-14:07:41 UTC: slab smoke v3 (code 54953ba7, CPU): stable, no yield; 4.1 s_max at step 20 halved (1.35 vs 2.76 Pa).
+- 21 Nov 14:08:00-14:11:00 UTC: slab full run v2 (code 54953ba7, Kaggle CPU step4-slab-full v2, 3 min 0 s). GPU used today: 0.
+
+## Tests 4.1-4.3 results, v2 (Fact; notes/spill/step4/slab_4.*_full_summary.json, *_series.npz, slab_full.log)
+4.1 elastic step (0.4 tau_y, 0.5 s): n_yielded 0 PASS; T1 0.09674 s by fit (0.09683 by up-crossings), mark [0.09228, 0.1020] PASS
+  (-0.41 % of 0.09714); cycle-mean top displacement 1.2273e-4 m, mark [1.137e-4, 1.335e-4] PASS (-0.73 % of 1.2363e-4);
+  max abs(det be - 1) 6.0e-7 PASS; s_max 4.21 Pa (exact peak 2 tau_b = 4.33 Pa). All PASS.
+4.2 sub-yield hold (0.7 tau_y, ramp 0.25 s, 4.0 s): n_yielded 0 PASS; creep abs(u(4.0) - u(0.5)) 4.9e-6 m < 5e-5 PASS;
+  u(h, 4.0 s) 1.9027e-4 m, mark [1.948e-4, 2.380e-4] FAIL. As predicted before the run: ringing 2.65e-5 m (predicted 2.6e-5) about the
+  mean; mean over the last two periods 2.1432e-4 m (-0.94 % of 2.1635e-4); creep of the period means 1.8e-7 m. The instantaneous mark
+  is badly defined for an undamped column (rule 5): the raw numbers are reported, the owner decides.
+4.3 plug flow (1.5 tau_y, 0.5 s): v(h) mean over 0.4-0.5 s 1.2953e-3 m/s (std 9.7e-5), mark [1.247e-3, 1.587e-3] PASS (-8.6 % of
+  1.4170e-3; a factor-2 return map would give 2.83e-3); plug uniformity 0.00064 < 0.05 PASS. The whole profile sits 8-10 % below the
+  exact one (yield height and shape right). det_dev 9.5e-7, Newton residual 1.5e-7.
+Decision (B.6): 4.4 and 4.5 wait until 4.1-4.3 pass; 4.2 fails one mark that was flagged before the run as badly defined. Stopped for
+the owner. Nothing is wired into Stout yet.
