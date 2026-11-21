@@ -26,7 +26,8 @@ F32 = jnp.float32
 SUB = os.environ.get("SUBRUN", "smoke"); ONLY = os.environ.get("ONLY")
 RAMP = os.environ.get("RAMP", "linear")   # 4.2's load ramp: "linear" over 0.25 s (v2), or "cos": half-cosine over a whole number of T1 (v3)
 DXE = float(os.environ.get("DX", "0.0015"))
-TAG = "" if DXE == 0.0015 else f"_dx{DXE * 1e3:g}mm"          # file-name tag for other grids
+T43 = float(os.environ.get("T43", "0.5"))  # 4.3's duration; 0.5 s is the test, longer only as a diagnostic (steady state)
+TAG = ("" if DXE == 0.0015 else f"_dx{DXE * 1e3:g}mm") + ("" if T43 == 0.5 else f"_T{T43:g}s")   # file-name tag for other grids / durations
 VOUT = os.path.join(OUT, "step4"); os.makedirs(VOUT, exist_ok=True)
 T0 = time.time()
 
@@ -164,7 +165,7 @@ def run(label, frac, T, ramp, ramp_kind="linear"):
         ts.append(t); ut.append(float(o["u_top"])); vt.append(float(o["v_top"]))
         if k % 10 == 0 or k < 3:
             row = dict(step=k, t=t, dt=dt, gx=gx_full * ramp_f, u_top=ut[-1], v_top=vt[-1], **d); fh.write(json.dumps(row) + "\n"); fh.flush()
-        if k % 100 == 0 or (label == "4.3" and t > 0.4 - 1e-9):
+        if k % 100 == 0 or (label == "4.3" and t > T - 0.1 - 1e-9):
             prof.append(dict(t=t, u=np.asarray(o["lay_u"]).tolist(), v=np.asarray(o["lay_v"]).tolist()))
         if k % 500 == 0: say(f"{label}: step {k}  t {t:.4f}  u_top {ut[-1]:.4e} m  v_top {vt[-1]:.4e} m/s  yielded {int(d['n_yielded'])}  det_dev {d['det_dev']:.2e}")
     fh.close()
@@ -240,11 +241,12 @@ if not ONLY or "4.2" in ONLY:
 
 if not ONLY or "4.3" in ONLY:
     try:
-        o, ts, ut, vt, prof = run("4.3", 1.5, 0.5, 0.0)
+        o, ts, ut, vt, prof = run("4.3", 1.5, T43, 0.0)
         ref = plug_reference(o["tau_b_pa"]); o["z_y_ref"] = ref["z_y"]; o["v_h_ref"] = ref["v_h"]
         if SUB == "full":
-            m = ts >= 0.4; vh = float(vt[m].mean()); o["v_h_0p4_0p5"] = vh; o["v_h_std"] = float(vt[m].std())
-            zl = HZ * (np.arange(NZL) + 0.5); late = [p for p in prof if p["t"] >= 0.4 - 1e-9]
+            m = ts >= ts[-1] - 0.1; vh = float(vt[m].mean()); o["v_h_0p4_0p5"] = vh; o["v_h_window_s"] = [float(ts[-1] - 0.1), float(ts[-1])]
+            o["v_h_by_0p1s"] = [[round(a, 2), float(vt[(ts >= a) & (ts < a + 0.1)].mean())] for a in np.arange(0.0, ts[-1] - 1e-9, 0.1)]; o["v_h_std"] = float(vt[m].std())
+            zl = HZ * (np.arange(NZL) + 0.5); late = [p for p in prof if p["t"] >= ts[-1] - 0.1 - 1e-9]
             vprof = np.mean([p["v"] for p in late], 0); o["v_profile_z_m"] = zl.tolist(); o["v_profile"] = vprof.tolist()
             o["v_ref_profile"] = np.interp(zl, np.concatenate([ref["z"], [H]]), np.concatenate([ref["v"], [ref["v_h"]]])).tolist()
             vzy = float(np.interp(ref["z_y"] + DX, zl, vprof)); o["v_zy_plus_dx"] = vzy; o["uniformity"] = abs(vprof[-1] - vzy) / max(abs(vprof[-1]), 1e-30)

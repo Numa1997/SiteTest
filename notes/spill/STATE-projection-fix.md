@@ -269,3 +269,9 @@ notes/spill/step4/full_v2/.
   update u - beta grad p; after G2P evp_return_map on head particles; diag n_yielded, gp_max, s_max, det range, physical momentum.
 - head_sheet, head_spill, the head's weight and Robin load, and the skin are off in "evp".
 - rest_variants.py STEP4=1: test 4.4 harness (marks of B.5 4.4).
+- 21 Nov 17:21:43-17:25:04 UTC: full reruns (code 7e5a35db, CPU, 3 min 21 s). 4.2 half-cosine over 3 T1 (0.2914 s): n_yielded 0 PASS;
+  creep 6.6e-6 m PASS; u(h, 4.0 s) 2.1101e-4 m, mark [1.948e-4, 2.380e-4] PASS; ringing 6.26e-6 m (predicted 6.18e-6). 4.2 PASS.
+  4.3 at dx 0.75 mm: v(h, 0.4-0.5 s) 1.5300e-3 m/s = +8.0 % (1.5 mm: -8.6 %), both inside the 12 % mark; uniformity 0.0003 PASS.
+  Neither grid is steady at 0.5 s: top speed by 0.1 s windows, 1.5 mm 1.468 / 1.333 / 1.295e-3, 0.75 mm 1.663 / 1.556 / 1.530e-3 m/s,
+  still falling 2-3 % per 0.1 s. Diagnostic (not a mark): 4.3 run to 2.0 s at both grids (T43=2), CPU.
+  4.1-4.3 all PASS at 1.5 mm -> gate for 4.4 open.
