@@ -350,3 +350,9 @@ abs(V_cell / dx^3 - 1) < 1e-3 in interior foam cells (not cut by the wall or the
 interior, harmless). Then rerun the seed check on CPU; if it passes, the single 4.4 GPU smoke once the queue is clear.
 Code (20:56 UTC): seed_head v3 (ring = lattice points with a 4-neighbour outside the mask; factor = 1 + (V_layer_glass - n t hl^2) /
 (n_ring t hl^2)); seed check v3 (glass volume integrated independently, 200 001 points).
+- 21 Nov 20:57:17-20:59:11 UTC: seed check v3 (code 6ccb2d7a, CPU step4-seedcheck v3, 1 min 54 s). All marks PASS (Fact,
+  notes/spill/step4/seedcheck.json; v2 outputs in seedcheck_v2/): interior foam cells (19 371) abs(V_cell / dx^3 - 1) max 1.8e-14;
+  wall-ring factor 1.196 .. 1.345 in every layer (in [1.0, 1.5]); head volume 8.852745e-5 m^3 against the glass's 8.852745e-5 m^3
+  integrated independently: ratio 1 - 2.6e-11 (mark 1e-4). N_head 213 048; ring 280-292 particles per layer; top layer 7 876 particles,
+  0.25 mm, factor 1.288; m_head0 0.0240697 kg. (With a vertical jitter of 0.3 the per-cell mark would fail: 0.5 .. 1.5.)
+  Next: the single 4.4 GPU smoke once the two stale queued runs are confirmed cancelled (the API cannot cancel or see them).
