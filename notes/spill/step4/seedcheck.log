@@ -1,0 +1,28 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 43.5 s
+
+head 0.3 {"N_head": 213048, "top_count": 7876, "top_volume_m3": 1.1075625000000014e-06, "V_head_particles_m3": 8.766450000000004e-05, "V_glass_m3": 8.852744702947344e-05, "V_ratio": 0.990252209247759, "m_head0_kg": 0.023835100905000014, "marks": {"V_cell_within_1e3_each_cell": false, "V_cell_within_1e3_layer_means": false, "V_head_within_1e6": false}} {"n_cells": 19371, "mean": 1.0001161530122349, "min": 0.5, "max": 1.5000000000000002, "std": 0.14802896646881636, "max_abs_dev": 0.5000000000000002, "layer_max_abs_dev": 0.005549231644849106}
+
+head 0.0 {"N_head": 213048, "top_count": 7876, "top_volume_m3": 1.1075625000000014e-06, "V_head_particles_m3": 8.766450000000004e-05, "V_glass_m3": 8.852744702947344e-05, "V_ratio": 0.990252209247759, "m_head0_kg": 0.023835100905000014, "marks": {"V_cell_within_1e3_each_cell": true, "V_cell_within_1e3_layer_means": true, "V_head_within_1e6": false}} {"n_cells": 19371, "mean": 0.9999999999999998, "min": 0.9999999999999999, "max": 0.9999999999999999, "std": 1.1102230246251565e-16, "max_abs_dev": 1.1102230246251565e-16, "layer_max_abs_dev": 1.1102230246251565e-16}
+
+stout {"N": 1001952, "V_glass_m3": 0.0004265971334847207, "Vp_m3": 4.2576603817819685e-10, "Vp_over_hl2_hz": 1.0112416480107929, "hz_m": 0.0007485029940119761, "layering_ratio_2hz_over_dx": 0.9980039920159681} {"n_cells": 92977, "mean": 1.011049479113525, "min": 0.5046116008037889, "max": 1.5138348024113664, "std": 0.07915904153168696, "max_abs_dev": 0.5138348024113664, "layer_max_abs_dev": 0.016365227530766857}
+
+done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 276272 bytes to __results__.html
+

@@ -323,3 +323,21 @@ without vertical jitter every interior cell holds exactly 1.
 Part 2: one 4.4 GPU smoke (T4 x2), 5 steps, resort at step 3, only after the two stale queued runs are gone; marks as the CPU smoke
 plus parity: abs(stout mean height GPU - CPU) < 1e-5 m, abs(head mean height GPU - CPU) < 5e-4 m (the CPU smoke used the v1 head
 seed: predicted head-mean difference about +0.24 mm from the re-seeding alone). Then stop for the owner's yes.
+- 21 Nov 20:42:00-20:43:44 UTC: seed check v1 (code 08502d64, CPU): top_count wrong (np.isclose default atol 1e-8 > particle volumes);
+  outputs kept in notes/spill/step4/seedcheck_v1/. v2 (code 6db80bc1, CPU step4-seedcheck v2, 20:44:32-20:46:05 UTC, 1 min 33 s).
+## Part 1 results (Fact; notes/spill/step4/seedcheck.json)
+Head at dx 1.5 mm: 25 full layers + a 0.25 mm top layer; N_head 213 048, top layer 7 876 particles, 1.1076e-6 m^3; V_head (particles)
+8.76645e-5 m^3 against the glass's 8.85274e-5 m^3 between FILL and FILL + HEAD0: ratio 0.99025 (-0.975 %; predicted -0.96 %);
+m_head0 0.0238351 kg.
+Interior foam cells (19 371 cells, z range inside FILL .. FILL + 25 hl, centre > 2 dx inside the wall):
+- with the seed's vertical jitter (0.3 of the layer, as now): mean 1.00012, each cell 0.5 .. 1.5 (std 0.148); layer means within 0.0055.
+- without vertical jitter: every cell 1.0000000 (deviation 1e-16).
+Marks: abs(V_cell / dx^3 - 1) < 1e-3: FAIL with the jitter (each cell 0.5; layer means 0.0055), PASS without it.
+       V_head within 1e-6 of the glass volume: FAIL (0.99025).
+Stout (unchanged, for comparison): Vp = V / N = 1.0112 x hl^2 hz, so interior stout cells hold 1.011 cell volumes on average (the
+uniform V / N spreads the wall inset's 1 % deficit over every particle), layering 0.9980; i.e. the known -0.20 % is in fact about
++1.1 % net in the interior.
+Both Part 1 marks fail as predicted before the run: the instruction's two requirements (interior cells at exactly one cell volume, and
+the head's total equal to the glass volume) cannot both hold with particles kept 0.25 hl inside the wall and uniform volumes. Stopped
+before Part 2 (no GPU launch): which normalisation to use is the owner's decision. The stale GPU session step4-pint-head-smoke still
+returns an empty status (cannot tell whether it is gone).
