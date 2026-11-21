@@ -30,6 +30,26 @@
     round: 'radial-gradient(ellipse closest-side at center,#000 55%,transparent 100%)',
     sides: 'linear-gradient(to right,#000 0,#000 calc(50% - 720px),rgba(0,0,0,.07) calc(50% - 590px),rgba(0,0,0,.07) calc(50% + 590px),#000 calc(50% + 720px),#000 100%)' };
 
+  /* ---- stored scene data (docs/scenes-pipeline.md): computed once on Kaggle, kept under data/scenes/ on this site. A scene asks
+     for its data by name; the newest generation of that scene is downloaded, its SHA-256 is checked against generations.json, and
+     only then is it handed over. The file: 4 bytes of label, a uint32 header length, a JSON header, then int16 frames. ---- */
+  var DATA = new URL('../data/scenes/', (document.currentScript || {}).src || location.href).href, GEN = null, STORE = {};
+  function sceneData(name, file) {
+    if (STORE[name]) return STORE[name];
+    GEN = GEN || fetch(DATA + 'generations.json').then(function (r) { if (!r.ok) throw new Error('no generations.json'); return r.json(); });
+    return STORE[name] = GEN.then(function (g) {
+      var e = g.generations.filter(function (q) { return q.scene === name; }).pop(); if (!e) throw new Error('no data for ' + name);
+      return fetch(DATA + e.date + '/' + file).then(function (r) { if (!r.ok) throw new Error(file + ' ' + r.status); return r.arrayBuffer(); }).then(function (buf) {
+        return crypto.subtle.digest('SHA-256', buf).then(function (d) {
+          var hex = Array.prototype.map.call(new Uint8Array(d), function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join('');
+          if (hex !== e.files[file].sha256) throw new Error(file + ': SHA-256 differs from generations.json');
+          var hl = new DataView(buf).getUint32(4, true), hdr = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, hl)));
+          return { hdr: hdr, frames: new Int16Array(buf.slice(8 + hl)), cols: hdr.columns.length, gen: e, sha_ok: true };
+        });
+      });
+    });
+  }
+
   function mount(host) {
   var name = host.getAttribute('data-bg'), fixed = getComputedStyle(host).position === 'fixed';
   var cv = document.createElement('canvas'), x = cv.getContext('2d'), W = 0, H = 0;
@@ -310,7 +330,8 @@
      they scroll with the page. Left: the forest's roots go on growing down the page (space colonisation: each tip grows towards
      the scattered water it can sense; thickness by Murray's law, r^3 of a parent = sum of r^3 of its children; sap climbs back
      up to the trees). Right: Barton's pendulums: on every bar a heavy driver swings with a slowly changing length, and of the
-     light pendulums hanging beside it only the one whose length matches swings wide (resonance under an outside force). ---- */
+     light pendulums hanging beside it only the one whose length matches swings wide (resonance under an outside force); this
+     half is not computed here but played from data computed once on Kaggle (sceneData above). ---- */
   S.rails = {
     geo: function () {
       var lay = document.querySelector(host.getAttribute('data-bg-around') || 'main'), fo = document.querySelector('[data-bg=forest]'), end = document.querySelector(host.getAttribute('data-bg-until') || 'footer');
@@ -334,12 +355,13 @@
       var G = 200; for (var y = Math.max(40, Math.ceil((y0 - 40) / G) * G + 40); y < L - 160; y += G) this.bar(y);
       this.yLen = L;
     },
+    /* a bar of Barton's pendulums: which of the eight stored pendulums hang on it and in which order, and where in the stored
+       loop this bar starts (a random moment, so no two bars and no two visits look alike) */
     bar: function (y) {
-      var n = Math.max(3, Math.min(8, Math.floor((this.rw - 24) / 24))), Ls = [], P = [];
-      for (var i = 0; i < n; i++) Ls.push(42 + 100 * i / (n - 1));
-      for (i = Ls.length - 1; i > 0; i--) { var j = (R() * (i + 1)) | 0, t = Ls[i]; Ls[i] = Ls[j]; Ls[j] = t; }
-      var di = (n / 2) | 0; for (i = 0; i < n; i++) P.push({ x: 12 + (this.rw - 24) * (i + .5) / n, L: Ls[i], th: 0, w: 0, drv: i === di });
-      this.Bs.push({ y: y, P: P, ph: R() * 6.28, phi: 0, sw: v(50, 80) });
+      var n = Math.max(2, Math.min(8, Math.floor((this.rw - 24) / 24) - 1)), ids = [0, 1, 2, 3, 4, 5, 6, 7], i, j, t;
+      for (i = 7; i > 0; i--) { j = (R() * (i + 1)) | 0; t = ids[i]; ids[i] = ids[j]; ids[j] = t; }
+      ids = ids.slice(0, n); ids.splice((n / 2) | 0, 0, -1);   /* -1 marks the driver, hung in the middle */
+      this.Bs.push({ y: y, ids: ids, off: R() });
     },
     add: function (px, py, par) { var i = this.N.length; this.N.push({ x: px, y: py, p: par, c: 1, k: 0 }); var key = ((px / 32) | 0) + ',' + ((py / 32) | 0); (this.grid[key] = this.grid[key] || []).push(i); return i; },
     near: function (px, py, D) { var best = -1, bd = D * D, cx = (px / 32) | 0, cy = (py / 32) | 0, m = Math.ceil(D / 32); for (var a = -m; a <= m; a++) for (var b = -m; b <= m; b++) { var c = this.grid[(cx + a) + ',' + (cy + b)]; if (!c) continue; for (var k = 0; k < c.length; k++) { var q = this.N[c[k]], dx = q.x - px, dy = q.y - py, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = c[k]; } } } return [best, bd]; },
@@ -368,17 +390,18 @@
         var s = top + o.y; if (s > -5 && s < H + 5) dot(g.l0 + o.x, s, 1.1, .45 * fade(o.y)); return true; });
       if (this.flow.length > 160) this.flow.splice(0, this.flow.length - 160);
       x.restore();
-      /* right: Barton's pendulums; g in px/s^2, so a 42 px pendulum swings with a period of about 0.6 s */
-      var G = 4000, A = .32, eps = 9, gam = .35, sub = 4, h = dt / sub;
+      /* right: Barton's pendulums, played from the stored run (tools/scenes/barton.py, computed on Kaggle). Nothing is computed
+         here: each frame gives the driver's angle and length, the bar's travel and the eight angles; the frame nearest in time is drawn. */
+      var D = this.D; if (!D) { if (!this.asked) { this.asked = 1; sceneData('barton', 'barton.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } return; }
+      var hd = D.hdr, nf = hd.frames, C = D.cols, F = D.frames, sc = hd.params.scale, fps = hd.params.fps;
       x.save(); x.beginPath(); x.rect(g.r0 - 4, 0, this.rw + 8, H); x.clip();
       this.Bs.forEach(function (B) {
-        var Ld = 42 + 100 * (.5 + .5 * Math.sin(self.t * 6.2832 / B.sw + B.ph)), wd = Math.sqrt(G / Ld), xb = 0;
-        for (var s = 0; s < sub; s++) { B.phi += wd * h; var ab = -eps * A * wd * wd * Math.sin(B.phi);
-          B.P.forEach(function (p) { if (p.drv) { p.L = Ld; p.th = A * Math.sin(B.phi); return; } var w0 = G / p.L; p.w += (-w0 * p.th - gam * p.w - ab / p.L) * h; p.th = cl(p.th + p.w * h, -1.1, 1.1); }); }
-        xb = eps * A * Math.sin(B.phi); var by = top + B.y; if (by < -170 || by > H + 10) return; var f = fade(B.y);
+        var by = top + B.y; if (by < -170 || by > H + 10) return; var f = fade(B.y), k = (Math.round(self.t * fps + B.off * nf) % nf) * C;
+        var xb = F[k + 2] * 1e-6 * sc, m = B.ids.length;
         x.strokeStyle = col(.4 * f); x.lineWidth = 1; ln(g.r0 + 6 + xb, by, g.r1 - 6 + xb, by);
-        B.P.forEach(function (p) { var px0 = g.r0 + p.x + xb, ex = px0 + p.L * Math.sin(p.th), ey = by + p.L * Math.cos(p.th);
-          x.strokeStyle = col((p.drv ? .55 : .3) * f); x.lineWidth = p.drv ? 1.2 : .8; ln(px0, by, ex, ey); dot(ex, ey, p.drv ? 4 : 2.2, (p.drv ? .8 : .4 + .4 * Math.min(1, Math.abs(p.th) * 3)) * f); });
+        B.ids.forEach(function (id, q) { var drv = id < 0, th = F[k + (drv ? 0 : 3 + id)] * 1e-4, L = (drv ? F[k + 1] * 1e-4 : hd.L[id]) * sc;
+          var px0 = g.r0 + 12 + (self.rw - 24) * (q + .5) / m + xb, ex = px0 + L * Math.sin(th), ey = by + L * Math.cos(th);
+          x.strokeStyle = col((drv ? .55 : .3) * f); x.lineWidth = drv ? 1.2 : .8; ln(px0, by, ex, ey); dot(ex, ey, drv ? 4 : 2.2, (drv ? .8 : .4 + .4 * Math.min(1, Math.abs(th) * 3)) * f); });
       });
       x.restore();
     }
