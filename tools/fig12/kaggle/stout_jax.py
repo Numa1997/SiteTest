@@ -402,6 +402,21 @@ def seed_particles(G, ppc=2, seed=1):
     return P
 
 
+def seed_head(G, ppc=2, seed=2, h=None):
+    """Step 4: the head's particles on the pint's lattice above the fill, FILL <= z < FILL + h (h = HEAD0), layers every
+    hz = h / round(h / (dx / ppc)) so the top lands exactly at FILL + h, jittered as seed_particles. Returns the points and the head's
+    volume (m^3), the integral of pi R(z)^2 over the layer (the head fills the glass's section)."""
+    h = HEAD0 if h is None else h
+    rng = np.random.default_rng(seed); xs, _, _, mask, hl = seed_lattice(G, ppc); hz = h / max(1, round(h / hl))
+    X, Y = np.meshgrid(xs, xs, indexing="ij"); pts = []
+    for z in G.fill + hz * (np.arange(int(round(h / hz))) + 0.5):
+        m = mask(z); pts.append(np.stack([X[m], Y[m], np.full(m.sum(), z)], 1))
+    P = np.concatenate(pts)
+    P[:, :2] += rng.uniform(-0.3 * hl, 0.3 * hl, (len(P), 2)); P[:, 2] += rng.uniform(-0.3 * hz, 0.3 * hz, len(P))
+    zz = np.linspace(G.fill, G.fill + h, 2001); V = float(np.trapezoid(np.pi * G.Rz(zz) ** 2, zz)) if hasattr(np, "trapezoid") else float(np.trapz(np.pi * G.Rz(zz) ** 2, zz))
+    return P, V
+
+
 # ====================================================================== shifted arrays
 def sh(a, d, ax, fill=0):
     """out[..., i, ...] = a[..., i + d, ...] along axis ax; `fill` where i + d falls outside."""
@@ -430,7 +445,7 @@ def cut_lo(f, ax):     # the face below each cell (index i), cell-shaped
 # ====================================================================== the solver
 class Stout:
     def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600, head_mass=True, vol_corr=0.0,
-                 extra=None):
+                 extra=None, head_mode="sheet"):
         self.G = G; self.rho = rho; self.ppc = ppc
         # the volume correction (Fig. 16 run 4, 15 Nov 2026): 0 = off, Fig. 12's runs unchanged. After violent stirring the particle cloud
         # stayed spread out (the stored surface of the uncontrolled kerb stood 24 mm above the height its remaining stout fills at rest):
@@ -456,6 +471,11 @@ class Stout:
         # Step 2 (20 Nov 2026): extra particles (positions, m) after the pint's, each of the pint's particle mass; None: unchanged
         self.N_pint = self.N
         if extra is not None: P = np.concatenate([P, np.asarray(extra, float)]); self.N = len(P)
+        if head_mode == "evp":   # Step 4: the head's particles after the stout's (and any extra): FILL <= z < FILL + HEAD0
+            Ph, self.V_head = seed_head(G, ppc, seed + 1); self.N_head = len(Ph); self.N_stout = self.N
+            self.Vp_stout = self.V / self.N_pint; self.Vp_head = self.V_head / self.N_head
+            self.mp_head = RHO_HEAD * self.Vp_head
+            P = np.concatenate([P, Ph]); self.N = len(P)
         self.K = int(K_frac * self.N); self.M = M_drops
         self.P0 = P.astype(np.float32)
         f = lambda a: jnp.asarray(a, F32)
@@ -472,6 +492,9 @@ class Stout:
         self.ls_extend = False   # test switch (20 Nov 2026, notes/spill/STATE-projection-fix.md): see enable_ls_extend; off = the v8 code unchanged
         self.side_vis = False    # Step 2 switch (20 Nov 2026): see enable_side_vis; off = unchanged
         self.wall_guard = False  # Step 3 switch (20 Nov 2026): _g2p_cont keeps cavity particles 1e-5 m inside the inner wall; off = unchanged
+        # Step 4 (21 Nov 2026): head_mode "sheet" = the head as before (bit for bit); "evp" = the head as elasto-viscoplastic foam
+        # particles (see _init_evp); then the 2-D head (head_sheet, head_spill, its weight and Robin load) and the skin are off
+        self.evp = head_mode == "evp"
         self.diag_g2p = False    # Step 3 verify (diagnostic only): the state also carries each particle's position before _g2p_cont's
                                  # collisions (xprop) and whether it touched the glass (g2p_glass); the motion is unchanged
         if self.cont: self.floor_w = jnp.asarray(G.thw == 0)
@@ -483,6 +506,7 @@ class Stout:
         self.corners = jnp.asarray(np.array([(a, b, c) for a in (0, 1) for b in (0, 1) for c in (0, 1)], np.int32))
         # the head of foam lives on the columns of the grid (n x n), as a thickness h_f on top of the stout's surface
         self.head = M["head"]; self.rho_f = PHI_F * rho; self.sheet = M.get("sheet", True)
+        if self.evp: self.head = False; self.sheet = False; self.skin = False; self.m_floor = 0.05 * RHO_HEAD * dx ** 3
         # the head's mass (13 Nov 2026, run 8): the head moves up and down with the stout's surface, so the stout must accelerate
         # it; set False to recover runs 6 and 7 (weight only)
         self.head_mass = head_mass
@@ -567,7 +591,8 @@ class Stout:
                     hf=hf0, wh=jnp.zeros((self.nx, self.ny), F32), foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
                     bptr=jnp.zeros((), I32),
-                    **(dict(xprop=jnp.asarray(self.P0), g2p_glass=jnp.zeros(N, bool)) if self.diag_g2p else {}))
+                    **(dict(xprop=jnp.asarray(self.P0), g2p_glass=jnp.zeros(N, bool)) if self.diag_g2p else {}),
+                    **(dict(is_head=jnp.arange(N) >= self.N_stout, be=jnp.tile(jnp.asarray([1, 1, 1, 0, 0, 0], F32), (N, 1))) if self.evp else {}))
 
     def heff(self, hf):
         """Height of glass over which a head of thickness hf slides, weighted by its sliding speed to the power 5/3."""
@@ -610,6 +635,53 @@ class Stout:
             acc = jnp.zeros((math.prod(shape), 2), F32).at[fl.reshape(-1)].add(upd)
             vel.append(acc[:, 0].reshape(shape)); mass.append(acc[:, 1].reshape(shape))
         return vel, mass, cnt
+
+    def p2g_evp(self, s):
+        """Step 4, head_mode "evp": p2g with two materials. Per face: momentum, mass M (kg), the sum of weights (occupancy, returned as
+        `mass` so every occupancy test stays a weight test), volume V_f and the head's volume V_hf (m^3), and the explicit deviatoric
+        force F_dev = -sum over head particles of V_p tau_p . grad w (N). `vel` is returned as (momentum / M) x (sum of weights), so that
+        normalize_force (vel / sum of weights) gives the mass-weighted velocity."""
+        dx = self.dx; X, V, C, act, ish = s["xp"], s["vp"], s["C"], s["act"], s["is_head"]
+        g = (X - self.origin) / dx
+        ci = jnp.floor(g).astype(I32); cfl, cok = self.flat(ci, self.dims)
+        cnt = jnp.zeros(math.prod(self.dims), I32).at[cfl].add((cok & act).astype(I32)).reshape(self.dims)
+        mpart = jnp.where(ish, self.mp_head, self.mp).astype(F32); vpart = jnp.where(ish, self.Vp_head, self.Vp_stout).astype(F32)
+        tau = sym_unpack(jnp.where(ish[:, None], evp_tau(s["be"]), 0.0))
+        vel, mass, ex = [], [], dict(M=[], Vf=[], Vh=[], Fdev=[])
+        for comp in range(3):
+            shape = self.fshape[comp]
+            fl, ok, w, wv, cf, fr = self._corners(g, comp, shape)
+            dpos = (cf - fr[None]) * dx
+            val = w * (V[None, :, comp] + jnp.sum(C[None, :, comp, :] * dpos, -1))
+            sg = 2.0 * cf - 1.0
+            gw = jnp.stack([sg[..., 0] * wv[..., 1] * wv[..., 2], wv[..., 0] * sg[..., 1] * wv[..., 2], wv[..., 0] * wv[..., 1] * sg[..., 2]], -1) / dx
+            fdev = -vpart[None] * jnp.sum(tau[None, :, comp, :] * gw, -1)
+            m = ok & act[None]
+            cols = [val * mpart[None], w * mpart[None], w, w * vpart[None], w * jnp.where(ish, vpart, 0.0)[None], fdev]
+            upd = jnp.stack([jnp.where(m, c_, 0.0) for c_ in cols], -1).reshape(-1, 6)
+            acc = jnp.zeros((math.prod(shape), 6), F32).at[fl.reshape(-1)].add(upd)
+            M_ = acc[:, 1].reshape(shape); ws = acc[:, 2].reshape(shape)
+            vel.append(jnp.where(M_ > 0, acc[:, 0].reshape(shape) / jnp.where(M_ > 0, M_, 1.0), 0.0) * ws); mass.append(ws)
+            ex["M"].append(M_); ex["Vf"].append(acc[:, 3].reshape(shape)); ex["Vh"].append(acc[:, 4].reshape(shape)); ex["Fdev"].append(acc[:, 5].reshape(shape))
+        # face density rho_f = clip(M / V_f, rho_h, rho); faces with no volume take the stout's; beta = rho / rho_f; head fraction f_h
+        ex["rho_f"] = [jnp.where(vf > 0, jnp.clip(M_ / jnp.where(vf > 0, vf, 1.0), RHO_HEAD, self.rho), self.rho).astype(F32) for M_, vf in zip(ex["M"], ex["Vf"])]
+        ex["beta"] = [(self.rho / r).astype(F32) for r in ex["rho_f"]]
+        ex["fh"] = [jnp.where(vf > 0, jnp.clip(vh / jnp.where(vf > 0, vf, 1.0), 0.0, 1.0), 0.0).astype(F32) for vh, vf in zip(ex["Vh"], ex["Vf"])]
+        return vel, mass, cnt, ex
+
+    def friction_evp(self, vel, mass, dt, ex):
+        """Step 4, head_mode "evp": the glass's stress on the faces beside it, implicit, u <- u / (1 + dt lambda), lambda = (a_f / rho_f)
+        [(1 - f_h) rho g_s + f_h tau_w(|u|) / max(|u|, 1e-4 m/s)]: the stout's Stokes layer (g_s = sqrt(nu omega / 2)) and the head's
+        Cantat wall stress (head_wall_stress), each on its share f_h of the face. Returns the velocities and the energy taken (J)."""
+        dV = self.dx ** 3; ew = jnp.zeros((), F64); out = []
+        for comp in range(3):
+            u0 = vel[comp]; ok = (self.th[comp] > 0) & (mass[comp] > 1e-6); fh = ex["fh"][comp]; rf = ex["rho_f"][comp]
+            au = jnp.abs(u0)
+            lam = self.af[comp] / rf * ((1.0 - fh) * self.rho * self.gs + fh * head_wall_stress(au) / jnp.maximum(au, 1e-4))
+            u = jnp.where(ok & (self.af[comp] > 0), u0 / (1.0 + dt * lam), u0)
+            ew = ew + 0.5 * jnp.sum(jnp.where(ok, rf * dV * (u0 * u0 - u * u), 0.0).astype(F64))
+            out.append(u.astype(F32))
+        return out, ew
 
     def normalize_force(self, vel, mass, dt, gx, gz):
         out = []
@@ -779,14 +851,15 @@ class Stout:
         return ph, liq, nsel, phr
 
     # ---------------------------------------------------------------- viscosity and friction (Taichi viscosity, friction)
-    def viscosity(self, vel, mass, dt):
+    def viscosity(self, vel, mass, dt, fh=None):
         c = self.nu * dt / self.dx ** 2; out = []
         for comp in range(3):
             f = vel[comp]; ok = (self.th[comp] > 0) & (mass[comp] > 1e-6); lap = jnp.zeros_like(f)
             for ax in range(3):
                 for d in (-1, 1):
                     lap = lap + jnp.where(sh(ok, d, ax, False), sh(f, d, ax, 0.0) - f, 0.0)
-            out.append(jnp.where(ok, f + c * lap, f))
+            cc = c if fh is None else c * (1.0 - fh[comp])     # Step 4: the stout's viscosity on its share of the face only
+            out.append(jnp.where(ok, f + cc * lap, f))
         return out
 
     def friction(self, vel, mass, ph, liq, dt, hf):
@@ -945,7 +1018,7 @@ class Stout:
         bare = jnp.broadcast_to((hf <= 0)[:, :, None], self.dims) | ~self.cavc
         return jnp.where(bare & (jnp.abs(ph) < 2.0 * dx), self.gamma * kap * dt / self.rho, 0.0).astype(F32)
 
-    def air_drag(self, vel, mass, ph, liq, dt, wind):
+    def air_drag(self, vel, mass, ph, liq, dt, wind, beta=None):
         """The air's drag on stout outside the glass (continuous model, 18 Nov 2026; notes/spill/STATE.md, 'Air'). The air is at rest on
         the ground, so in the glass's frame it blows at wind = (-v_x, -v_z) of the glass. On each surface cell of liquid outside the
         cavity the wind presses on the frontal area dx^2 max(0, -n . U_hat) (n the liquid's outward normal), with the sphere's drag
@@ -973,6 +1046,7 @@ class Stout:
         for ax in range(3):
             ac = a * U[ax]; aL, aR = lo(ac, ax, 0.0), hi(ac, ax, 0.0)
             af = (aL + aR) / jnp.maximum(1.0, (aL != 0).astype(F32) + (aR != 0).astype(F32))   # a face beside air takes its liquid cell's whole value
+            if beta is not None: af = af * beta[ax]                                   # Step 4: the drag over the face's own density
             out.append(jnp.where((mass[ax] > 1e-6) & (self.th[ax] > 0), vel[ax] + dt * af, vel[ax]).astype(F32))
         return out
 
@@ -980,7 +1054,7 @@ class Stout:
         liqL, liqR, tLR, tRL = self._faces(ph, liq, 2)
         return liqL & ~liqR & (self.th[2] > 0)
 
-    def pressure(self, vel, ph, liq, p_prev, ps, mu=None, w_old=None, geff_dt=0.0, src=None, pst=None):
+    def pressure(self, vel, ph, liq, p_prev, ps, mu=None, w_old=None, geff_dt=0.0, src=None, pst=None, beta=None):
         """ps: the pressure on the free surface (the weight of the head), in the solver's units (Pa x dt / rho), one value per
         column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
         reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta.
@@ -996,7 +1070,8 @@ class Stout:
         ps3 = jnp.broadcast_to(ps[:, :, None], self.dims).astype(F32)
         if pst is not None: ps3 = (ps3 + pst).astype(F32)               # surface tension (continuous model): gamma kappa, solver units
         for ax in range(3):
-            th = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax)
+            thv = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax)
+            th = thv if beta is None else thv * beta[ax]   # Step 4: variable density in the coefficients only (rho / rho_f); the divergence stays volume-based
             surf = None
             if ax == 2 and mu is not None:                                   # the head's mass on the faces the surface crosses
                 surf = liqL & ~liqR & (th > 0); muF = jnp.broadcast_to(mu[:, :, None], tLR.shape)
@@ -1014,7 +1089,7 @@ class Stout:
             sR = jnp.where(open_ & liqR & ~liqL, th * psL / tRL, 0.0)
             rhs = rhs + cut_hi(sL, ax) + cut_lo(sR, ax)
             cp.append(cut_hi(th * liqR, ax)); cm.append(cut_lo(th * liqL, ax))
-            flux = th * vel[ax]; div = div + cut_hi(flux, ax) - cut_lo(flux, ax)
+            flux = thv * vel[ax]; div = div + cut_hi(flux, ax) - cut_lo(flux, ax)
         if src is not None: div = div - src                              # the volume correction's target outflow (m/s), see __init__
         A = liq & (diag > 0)
         diag = jnp.where(A, diag, 0.0); cp = [jnp.where(A, c, 0.0) for c in cp]; cm = [jnp.where(A, c, 0.0) for c in cm]
@@ -1053,7 +1128,8 @@ class Stout:
             psR = jnp.where(liqR, pR, jnp.where(liqL, pL * (1.0 - 1.0 / tLR) + qR / tLR, 0.0))
             psL = jnp.where(liqL, pL, jnp.where(liqR, pR * (1.0 - 1.0 / tRL) + qL / tRL, 0.0))
             upd = (self.th[ax] > 0) & (liqL | liqR)
-            f = jnp.where(upd, vel[ax] - (psR - psL) / dx, vel[ax]); k = upd
+            bta = 1.0 if beta is None else beta[ax]
+            f = jnp.where(upd, vel[ax] - bta * (psR - psL) / dx, vel[ax]); k = upd
             if ax == 2:
                 f = jnp.where(self.floor_w, 0.0, f); k = k | self.floor_w
             out.append(f.astype(F32)); known.append(k)
@@ -1209,10 +1285,11 @@ class Stout:
         """The part of a step that depends only on the particles: their velocities on the grid, the level set, the surface. The
         ride computes it before the cart's sub-steps, so the wall probes read the surface the last fluid step left (as
         World.readProbes in stout-cart.js), and the step then reuses it."""
-        vel, mass, cnt = self.p2g(s)
+        if self.evp: vel, mass, cnt, ex = self.p2g_evp(s)
+        else: vel, mass, cnt = self.p2g(s); ex = None
         ph, liq, nsel, phr = self.level_set(s, cnt)
         H, _ = self.surface(phr)
-        return dict(vel=vel, mass=mass, cnt=cnt, ph=ph, liq=liq, nsel=nsel, phr=phr, H=H)
+        return dict(vel=vel, mass=mass, cnt=cnt, ph=ph, liq=liq, nsel=nsel, phr=phr, H=H, **({"ex": ex} if self.evp else {}))
 
     def probes(self, H):
         """The two level probes on the glass's wall at r = R(fill), theta = 0 (front) and pi (back), read as
@@ -1267,11 +1344,16 @@ class Stout:
         # the stout's velocity at the surface, and the head's momentum equation must close step by step)
         w_old = jnp.broadcast_to(s["wh"][:, :, None], vel[2].shape)
         ph, liq, nsel, H = pr["ph"], pr["liq"], pr["nsel"], pr["H"]
-        if self.nu > 0: vel = self.viscosity(vel, mass, dt)
+        ex = pr.get("ex") if self.evp else None
+        if self.nu > 0: vel = self.viscosity(vel, mass, dt, fh=None if ex is None else ex["fh"])
         z = jnp.zeros((), F64); ew = es = ef = z
-        if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
+        if self.evp:   # Step 4: the glass's stress (stout and head), then the head's deviatoric force u += dt F_dev / max(M_f, m_floor)
+            vel, ew = self.friction_evp(vel, mass, dt, ex)
+            vel = [jnp.where((self.th[c] > 0) & (mass[c] > 1e-6), vel[c] + dt * ex["Fdev"][c] / jnp.maximum(ex["M"][c], self.m_floor), vel[c]).astype(F32)
+                   for c in range(3)]
+        elif self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
         vel = self.body_force(vel, mass, dt, gx, gz, rot)
-        if self.cont and wind is not None: vel = self.air_drag(vel, mass, pr["ph"], pr["liq"], dt, wind)
+        if self.cont and wind is not None: vel = self.air_drag(vel, mass, pr["ph"], pr["liq"], dt, wind, beta=None if ex is None else ex["beta"])
         # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho); with rot, the
         # vertical field of each column at the fill height
         gzh = gz if rot is None else self.frame_accel(self.colx, self.G.fill, 0.0, 0.0, gx, gz, rot)[1]
@@ -1288,7 +1370,8 @@ class Stout:
             uc, kc, _, _, _ = self.pressure(zf, ph, liq, jnp.zeros_like(s["p"]), jnp.zeros((self.nx, self.ny), F32), src=src)
             uc = self.extrapolate(uc, kc)
         pst = self.tension(ph, s["hf"], dt) if self.cont else None
-        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt, pst=pst)
+        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt, pst=pst,
+                                               beta=None if ex is None else ex["beta"])
         if mu is not None:   # the head's new vertical velocity: that of the face its surface crosses (liquid below, air above)
             sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
             wh = jnp.where(nsf > 0, jnp.sum(jnp.where(sf, vel[2], 0.0), 2) / jnp.maximum(nsf, 1), s["wh"]).astype(F32)
@@ -1299,11 +1382,20 @@ class Stout:
         else:
             vel = self.extrapolate(vel, known); vel_out = None
         s, mom = self.g2p(s, vel, dt, gx, gz, rot, uc=uc, vel_out=vel_out)
+        evd = {}
+        if self.evp:   # Step 4: the head's return map, after G2P, with the APIC velocity gradient C of the new step
+            ben, yl, gp, s_new, det, rres = evp_return_map(s["be"], s["C"], dt)
+            hd = s["is_head"] & s["act"]
+            s = dict(s, be=jnp.where(hd[:, None], ben, s["be"]))
+            mpart = jnp.where(s["is_head"], self.mp_head, self.mp).astype(F64)
+            evd = dict(n_yielded=jnp.sum(hd & yl, dtype=I32), gp_max=jnp.max(jnp.where(hd, gp, 0.0)), s_max=jnp.max(jnp.where(hd, s_new, 0.0)),
+                       det_min=jnp.min(jnp.where(hd, det, 1.0)), det_max=jnp.max(jnp.where(hd, det, 1.0)), rm_res=jnp.max(jnp.where(hd, rres, 0.0)),
+                       mom_phys=jnp.sum(jnp.where(s["act"][:, None], mpart[:, None] * s["vp"].astype(F64), 0.0), 0))
         if self.head: s = self.head_spill(s, H, dt, gx, gz, rot)
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
         mhead = self.rho_f * jnp.sum((s["hf"] * self.afill).astype(F64)) * self.dx ** 2
-        diag = dict(it=it, res=res, mom=mom, nact=jnp.sum(s["act"], dtype=I32), nsel=nsel, vmax=vmax, mhead=mhead)
+        diag = dict(it=it, res=res, mom=mom, nact=jnp.sum(s["act"], dtype=I32), nsel=nsel, vmax=vmax, mhead=mhead, **evd)
         return s, diag
 
     def resort(self, s):

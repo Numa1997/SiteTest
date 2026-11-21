@@ -257,3 +257,15 @@ Prediction before the run (Inference): half-cosine over n T1 leaves ringing u_s 
 ringing 2.9 % of u_s = 6.2e-6 m, so u(h, 4.0 s) should fall in [2.10e-4, 2.23e-4] m. (A linear ramp over a whole number of periods
 would leave none: sin(w Tr / 2) = 0.) Code: step4_slab.py RAMP=cos, DX env (NZ scales, files tagged _dx0.75mm). v2 outputs kept in
 notes/spill/step4/full_v2/.
+- 21 Nov 17:19:33-17:20:51 UTC: rerun smoke (code 7e5a35db, CPU): 4.2 RAMP=cos and 4.3 at dx 0.75 mm (13 056 particles, 51 layers,
+  dt 3.83e-4 s) both exit 0. Full reruns launched 17:21:43 UTC (CPU, step4-slab-full v3).
+## Foam wired into Stout (head_mode = "evp"; "sheet" unchanged), written 17:21-17:23 UTC, not yet run
+- seed_head: head particles FILL <= z < FILL + HEAD0 on the pint's lattice (hz = HEAD0 / round(HEAD0 / (dx/2)), top exactly 144 mm);
+  V_head = integral of pi R(z)^2; m_head = RHO_HEAD V_head / N_head. State carries is_head and be (N x 6), so resort keeps them.
+- p2g_evp: momentum, mass M, sum of weights (occupancy, still `mass`), V_f, V_hf, F_dev = -sum V_p tau_p . grad w; rho_f = clip(M/V_f,
+  rho_h, rho), beta = rho / rho_f, f_h = V_hf / V_f.
+- step: viscosity x (1 - f_h); friction_evp implicit u / (1 + dt lambda), lambda = (a_f / rho_f)[(1 - f_h) rho g_s + f_h tau_w(|u|) /
+  max(|u|, 1e-4)]; then u += dt F_dev / max(M_f, m_floor); air drag x beta; pressure coefficients x beta, divergence volume-based,
+  update u - beta grad p; after G2P evp_return_map on head particles; diag n_yielded, gp_max, s_max, det range, physical momentum.
+- head_sheet, head_spill, the head's weight and Robin load, and the skin are off in "evp".
+- rest_variants.py STEP4=1: test 4.4 harness (marks of B.5 4.4).
