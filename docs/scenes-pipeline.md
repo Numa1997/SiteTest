@@ -31,8 +31,15 @@ Kaggle cannot animate: it only produces files. The picture is always drawn by th
 | 7 | It commits as `github-actions[bot]` and pushes to `main` | GitHub | the workflow's last step |
 | 8 | Cloudflare Workers Builds sees the push, builds and publishes the site; the files appear at `https://phyeinusul.com/data/scenes/<date>/…` | Cloudflare | Cloudflare, by itself (since 21 October 2026) |
 | 9 | Pipeline B (below) plays it | the visitor's browser | `bg-scenes.js` |
+| 10 | A second job waits until the live site lists the new generation, downloads the files from phyeinusul.com and compares their SHA-256, then opens every live page that plays the scene in headless Chromium and requires: no page errors, the file loaded, the scene reports it checked and from the same commit. The result is written to the run's summary page | GitHub Actions, [tools/scenes/verify_live.py](../tools/scenes/verify_live.py), pages listed in [tools/scenes/scenes.json](../tools/scenes/scenes.json) | GitHub, by itself |
 
 The output also stays on Kaggle with the notebook version that made it (the notebook page, tab Output).
+
+## The registry of scenes
+
+[tools/scenes/scenes.json](../tools/scenes/scenes.json) names, for every scene that plays Kaggle data, the files its model writes
+and the live pages that play it, with a small probe the check runs in the page. A new scene is added there, beside its model and
+its player, and step 10 checks it from then on.
 
 ## How pipeline A starts
 
@@ -76,7 +83,10 @@ each frame the page draws the stored frame nearest in time. It integrates nothin
 | A downloaded file differs from the index | stops naming the file; nothing is committed |
 | Someone else pushed to `main` meanwhile | pulls, puts the data commit on top, pushes (three tries) |
 
-A failed run leaves the site exactly as it was. GitHub e-mails the repository owner about failed workflow runs.
+A failed run leaves the site exactly as it was. GitHub e-mails the repository owner about failed workflow runs. A rerun on the
+same day replaces that day's entry in `generations.json`, so each scene has one entry per date.
+
+| The live site does not list the new data within 15 min, a live file differs, or a page does not play it | step 10 fails and names what failed; the data stays committed, so the cause is on the site's side |
 
 ## Tested (20 November 2026)
 
@@ -87,3 +97,11 @@ matches, the pendulums play at 30 frames a second (English and Arabic home page)
 reports "SHA-256 differs from generations.json" and draws no pendulums. Not yet tested: a real Kaggle run, and whether a commit
 made by the workflow sets off Cloudflare's build as a person's commit does. Both are tested by the first real run, which needs
 the secret.
+
+## First real runs (21 November 2026)
+
+The first automatic run stopped before reaching Kaggle: `kaggle` 2.2.5 imports `six` without installing it (fixed, PR 166). The
+second run, started by hand: Kaggle accepted notebook version 1 at 19:16:33 UTC, finished in 41 s (the model 8 s), both files
+matched their SHA-256, the data was committed by github-actions[bot] and was live within about a minute; the live home page
+downloaded it, checked it and played it on 24 bars. `verify_live.py` passed against that live data and failed, as it should, when
+asked for a commit that was never published.

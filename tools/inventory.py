@@ -156,6 +156,8 @@ RULES = [
     (r'\.github/workflows/scenes-kaggle\.yml', 'Scenes on Kaggle, started when a scene model is added or changed on main: compute it once on Kaggle, check the output by SHA-256, commit it to public/data/scenes/.', 'docs/scenes-pipeline.md'),
     (r'tools/scenes/pipeline\.py', 'The scenes pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation.', 'docs/scenes-pipeline.md'),
     (r'tools/scenes/kaggle_scenes\.py', 'Text of the Kaggle notebook scenes-living-backgrounds: fetches tools/scenes at a pinned commit and runs one scene model.', 'docs/scenes-pipeline.md'),
+    (r'tools/scenes/verify_live\.py', 'Step 10 of the scenes pipeline: wait for the live site, compare the live files by SHA-256, open the live pages and check they play the data.', 'docs/scenes-pipeline.md'),
+    (r'tools/scenes/scenes\.json', 'Registry of the scenes that play Kaggle data: their files and the live pages that play them.', 'docs/scenes-pipeline.md'),
     (r'tools/scenes/barton\.py', "Reference model of Barton's pendulums (the right margin of the home page), exactly periodic so the stored loop has no seam.", 'notes/scenes/PLAN.md'),
     (r'docs/scenes-pipeline\.md', 'Plain-words guide to the scenes pipeline: every step, key, cost and failure.', 'docs/scenes-pipeline.md'),
     (r'notes/scenes/PLAN\.md', 'Plan of the living scenes: specify, generate on Kaggle, store, play, document; order of the scenes.', 'notes/scenes/PLAN.md'),
