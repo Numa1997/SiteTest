@@ -8,8 +8,8 @@ EVP_A1, EVP_A2, RHO_HEAD, the staggered (MAC) trilinear weights and the APIC tra
 periodic x and y. What is the slab's own: a laterally uniform slab on a floor moves only along x, u = u(z, t); incompressibility then
 gives w = 0 exactly (dw/dz = 0 with w(0) = 0) and the pressure exactly carries the normal part of gravity, rho g cos(alpha). So the
 slab solves the x and y momentum with the tangential gravity g sin(alpha) and the foam's stress, and holds w = 0: the pressure step and
-the variable density are not tested here (they are in 4.4 and 4.5). No-slip floor at z = 0: the faces below it take the mirror image,
-u(-z) = -u(z). The top (z = h) is free: no grid mass above it, so the stress force there is the traction-free one of the particles.
+the variable density are not tested here (they are in 4.4 and 4.5). No-slip floor at z = 0: a layer of faces lies on the floor and holds u = 0 with those
+below it (standard MPM sticky wall). The top (z = h) is free: no grid mass above it, so the stress force there is the traction-free one of the particles.
 
 Exact references (computed below, and checked against the instruction's numbers): shear wave speed c_s = sqrt(G / rho_h), period of
 the first mode T1 = 4 h / c_s; static top displacement u_s = tau_b h / (2 G) (tau(z) = tau_b (1 - z/h), strain tau / G); plug flow
@@ -34,7 +34,7 @@ def say(m):
 
 
 # ---------------------------------------------------------------- parameters (SI), every one named
-DX = 0.0015; NX = NY = 8; NZ = 24; Z0 = -2 * DX              # two ghost layers below the floor (z = 0)
+DX = 0.0015; NX = NY = 8; NZ = 24; Z0 = -2.5 * DX            # the u and v faces of layer k = 2 lie exactly on the floor (z = 0)
 H = 0.019                                                    # m, head thickness (HEAD0)
 G = SJ.G_HEAD; TAU_Y = SJ.TAU_Y; A1, A2 = SJ.EVP_A1, SJ.EVP_A2; RHO_H = SJ.RHO_HEAD; GRAV = 9.81
 CS = math.sqrt(G / RHO_H); DT_EL = 0.40 * DX / CS; DT_MAX = 2e-3
@@ -87,8 +87,10 @@ def corners(X, comp):
 
 
 def mirror_floor(f):
-    """No-slip at z = 0: the faces whose centres are at z = -dx/2 and -3dx/2 (k = 1, 0) take -u at +dx/2 and +3dx/2 (k = 2, 3)."""
-    return f.at[:, :, 1].set(-f[:, :, 2]).at[:, :, 0].set(-f[:, :, 3])
+    """No-slip at z = 0 (v2, 21 Nov 14:06 UTC): the faces on the floor (k = 2, z = 0) and below it hold u = 0. v1 put the faces at
+    z = -dx/2 and +dx/2 and mirrored them (u(-z) = -u(z)): the first face above the floor then took the wall's support from only half a
+    cell of particles, so the bottom layer carried twice the stress (full run v1: s_max 8.5 Pa against 2 tau_b = 4.33 Pa in 4.1)."""
+    return f.at[:, :, :3].set(0.0)
 
 
 def step(st, dt, gx):

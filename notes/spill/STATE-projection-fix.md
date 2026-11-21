@@ -227,3 +227,10 @@ reports means over whole periods (supplementary, not marks) so the owner can dec
 - 21 Nov 14:00:04-14:01:27 UTC: slab smoke v2 (code b8d894ef, CPU, 1 min 23 s): stable, 20 steps each; 4.1 n_yielded 0, det_dev
   3.6e-7, s_max 2.76 Pa; 4.3 yields one layer (256) by step 20. v1 outputs kept in notes/spill/step4/smoke_v1/.
 - 21 Nov 14:01:51 UTC: slab full run launched (Kaggle CPU, step4-slab-full).
+- 21 Nov 14:01:51-14:04:41 UTC: slab full run v1 (code b8d894ef, CPU, 2 min 50 s). FAIL, outputs in notes/spill/step4/full_v1/:
+  4.1: n_yielded 256 (one layer), s_max 8.52 Pa (exact max 2 tau_b = 4.33 Pa), T_fit 0.1007 s (mark [0.09228, 0.1020] PASS),
+  cycle mean 1.464e-4 m (mark [1.137e-4, 1.335e-4] FAIL), det_dev 8.3e-7 PASS. 4.2: yields one layer, drifts to 1.30e-3 m (FAIL all).
+  4.3: v(h) 7.25e-3 m/s (ref 1.417e-3, 5.1 x; FAIL), shear concentrated in the bottom 1 mm; uniformity 0.0003 (PASS).
+  Inference: a harness bug at the floor. The mirror floor (faces at -dx/2, +dx/2, u(-z) = -u(z)) gives the first face above the floor
+  the wall's support from half a cell of particles only, so the bottom layer must carry about twice the true stress (8.5 = 2 x 4.3 Pa).
+  Fix (v2): faces on the floor, z = 0, hold u = 0 (Z0 = -2.5 dx). Marks unchanged. The return map itself is not changed.
