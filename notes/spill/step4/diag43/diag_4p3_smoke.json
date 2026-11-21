@@ -1,0 +1,136 @@
+{
+ "sub": "smoke",
+ "quad_original": {
+  "0.0015": {
+   "h_m": 0.019,
+   "dx_m": 0.0015,
+   "layers": 25,
+   "hz_m": 0.0007599999999999999,
+   "h_over_half_dx": 25.333333333333332,
+   "jitter_z": 0.3,
+   "V_cell_over_A_dx": [
+    1.0133333333333334,
+    1.0133333333333334,
+    1.0133333333333334,
+    1.0133333333333334,
+    1.0133333333333334
+   ],
+   "M_tot_over_rho_A_h": 1.0000000000000002,
+   "k_top": 12,
+   "M_top_over_rho_A_dx": 0.5957291666666666
+  },
+  "0.00075": {
+   "h_m": 0.019,
+   "dx_m": 0.00075,
+   "layers": 51,
+   "hz_m": 0.00037254901960784314,
+   "h_over_half_dx": 50.666666666666664,
+   "jitter_z": 0.3,
+   "V_cell_over_A_dx": [
+    0.9934640522875817,
+    0.9934640522875817,
+    0.9934640522875817,
+    0.9934640522875817,
+    0.9934640522875817
+   ],
+   "M_tot_over_rho_A_h": 1.0000000000000002,
+   "k_top": 25,
+   "M_top_over_rho_A_dx": 0.4016544117647059
+  }
+ },
+ "cases": {
+  "C1": {
+   "rc": 0,
+   "summary_file": "slab_4.3_T2s_h18mm_jz0_smoke_summary.json",
+   "v_ref_given": 0.0013424,
+   "v_ref_computed": 0.0013424658854580933,
+   "z_y_ref": 0.006,
+   "v_plug": null,
+   "quadrature": {
+    "h_m": 0.018,
+    "dx_m": 0.0015,
+    "layers": 24,
+    "hz_m": 0.0007499999999999999,
+    "h_over_half_dx": 23.999999999999996,
+    "jitter_z": 0.0,
+    "V_cell_over_A_dx": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "M_tot_over_rho_A_h": 1.0,
+    "k_top": 11,
+    "M_top_over_rho_A_dx": 1.0
+   },
+   "n_floor_max": 0,
+   "steps": 20,
+   "n_yielded_max": 0,
+   "det_dev_max": 5.364418029785156e-07,
+   "v_by_0p1s": null
+  },
+  "C2": {
+   "rc": 0,
+   "summary_file": "slab_4.3_dx0.75mm_T2s_h18mm_jz0_smoke_summary.json",
+   "v_ref_given": 0.0013424,
+   "v_ref_computed": 0.0013424658854580933,
+   "z_y_ref": 0.006,
+   "v_plug": null,
+   "quadrature": {
+    "h_m": 0.018,
+    "dx_m": 0.00075,
+    "layers": 48,
+    "hz_m": 0.00037499999999999995,
+    "h_over_half_dx": 47.99999999999999,
+    "jitter_z": 0.0,
+    "V_cell_over_A_dx": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "M_tot_over_rho_A_h": 1.0,
+    "k_top": 23,
+    "M_top_over_rho_A_dx": 1.0
+   },
+   "n_floor_max": 0,
+   "steps": 20,
+   "n_yielded_max": 0,
+   "det_dev_max": 5.960464477539062e-07,
+   "v_by_0p1s": null
+  },
+  "C3": {
+   "rc": 0,
+   "summary_file": "slab_4.3_T2s_h18mm_jz0_f1.6_smoke_summary.json",
+   "v_ref_given": 0.0021454,
+   "v_ref_computed": 0.002145366466798755,
+   "z_y_ref": 0.006749999999999999,
+   "v_plug": null,
+   "quadrature": {
+    "h_m": 0.018,
+    "dx_m": 0.0015,
+    "layers": 24,
+    "hz_m": 0.0007499999999999999,
+    "h_over_half_dx": 23.999999999999996,
+    "jitter_z": 0.0,
+    "V_cell_over_A_dx": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "M_tot_over_rho_A_h": 1.0,
+    "k_top": 11,
+    "M_top_over_rho_A_dx": 1.0
+   },
+   "n_floor_max": 0,
+   "steps": 20,
+   "n_yielded_max": 500,
+   "det_dev_max": 7.152557373046875e-07,
+   "v_by_0p1s": null
+  }
+ }
+}
