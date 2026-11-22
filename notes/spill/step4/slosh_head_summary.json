@@ -1,0 +1,86 @@
+{
+ "sub": "full",
+ "device": "cuda:0",
+ "steps": 1957,
+ "t_end": 1.5007551412904279,
+ "N": 1215000,
+ "N_stout": 1001952,
+ "N_head": 213048,
+ "m_head0": 0.024069727572568016,
+ "push": {
+  "A": 3.4,
+  "tau": 0.15,
+  "t0": 0.05
+ },
+ "dt_rule": "dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s), never cut",
+ "atol": 1e-10,
+ "it_max": 268,
+ "res_max": 9.999746907851659e-06,
+ "all_converged": true,
+ "book_stout_max": 0.0,
+ "book_head_max": 1.8635438869195788e-08,
+ "in_solid_max_from_step1": 0,
+ "real_cross_total": 0,
+ "ceiling_max": 0,
+ "head_outside_max": 0,
+ "stout_outside_max": 0,
+ "vmax_max": 0.2505127191543579,
+ "ds_max_over_dx": 0.636424170807004,
+ "n_yielded_max": 211607,
+ "s_max": 68.6924057006836,
+ "det_min": 0.9999989867210388,
+ "det_max": 1.0000007152557373,
+ "ewall_end_J": 0.0012397954970520086,
+ "n_floor_max": 4266,
+ "q13_peak_mm": 11.741597205400467,
+ "H_top0_mm": 144.18187737464905,
+ "step_s": [
+  32.83,
+  0.36,
+  0.41,
+  0.34,
+  0.26,
+  0.32,
+  0.28,
+  0.26,
+  0.24,
+  0.23
+ ],
+ "ms_per_step": 363.97349401950595,
+ "wall_s": 712.2961292266846,
+ "fit_first_three_half_cycles": {
+  "f": 2.813694702719213,
+  "f0": 2.831145269746504,
+  "zeta": 0.110858356217861,
+  "A_mm": 11.657644212275844,
+  "rms_mm": 0.14082090443784134
+ },
+ "fit_window_s": [
+  0.2,
+  0.7
+ ],
+ "fit_long_0p2_1p2": {
+  "f": 2.7968288315993566,
+  "f0": 2.816500626771117,
+  "zeta": 0.11798380848984799,
+  "A_mm": 11.825926614020204,
+  "rms_mm": 0.18615331242171895
+ },
+ "zero_crossings_after_push_s": [
+  0.3036786080485468,
+  0.4785238672280144,
+  0.6602709129540398,
+  0.829748115930629,
+  1.0283661954371295,
+  1.2116469715068345
+ ],
+ "pass_marks": {
+  "f_d_in_2p75_3p15": true,
+  "zeta_in_0p32_0p52": false,
+  "books_lt_1e6": true,
+  "real_cross_zero": true,
+  "in_solid_zero": true
+ },
+ "pass_marks_all": false,
+ "setup_peak_wall_amplitude_in_8_12mm": true
+}

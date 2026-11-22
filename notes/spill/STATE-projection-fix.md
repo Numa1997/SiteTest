@@ -417,3 +417,21 @@ of the undamped peak: A = 10 / (0.6 x 63 x 0.078) = 3.4 m/s^2, uncertain by abou
   Fact: at rest the absolute residual at the relative stop is 0.96-1.13e-10 (bnorm about 1.1e-5 m^2/s), i.e. at the floor atol 1e-10:
   the floor and the relative test coincide at rest; 1e-11 would act only on near-empty right-hand sides (option for the owner).
 - 22 Nov 00:35:50 UTC: full 4.5 launched (T4, step4-slosh-head); quota before: 966.2 s used (1 784 min left); estimate 13-14 GPU-min.
+- 22 Nov 00:35:50 launch, 00:36:02 running, 00:50:44 complete: full 4.5 (code 13c4c9f9, step4-slosh-head, T4, 14 min 54 s; stepping
+  712 s, 0.364 s a step). GPU 857.9 s = 14.3 min (quota 1 824.1 s used; 1 770 min left until 28 Nov 00:00 UTC).
+## Test 4.5 results (Fact; notes/spill/step4/slosh_head_summary.json, slosh_head.jsonl, slosh_head.log)
+1 957 steps to 1.5008 s (no cut). Push 3.4 m/s^2 half-sine 0.15 s from 0.05 s; peak wall (ring 13) amplitude 11.74 mm (set-up window
+8-12 mm: yes). Fit over the first three half-cycles (0.20-0.70 s): f_d 2.814 Hz (f0 2.831), zeta 0.111, A 11.66 mm, rms 0.14 mm.
+Long fit 0.2-1.2 s: f_d 2.797 Hz, zeta 0.118. Zero crossings 0.304, 0.479, 0.660, 0.830, 1.028, 1.212 s.
+Marks: f_d in [2.75, 3.15] PASS; zeta in [0.32, 0.52] FAIL (0.111); books stout 0, head 1.9e-8 PASS; real crossings 0 PASS; in solid 0
+PASS. Also: all steps converged (it <= 268, res <= 9.9997e-6), ceiling 0, no head or stout over the rim (head_outside 0), vmax 0.25 m/s,
+ds/dx <= 0.64, det be 0.999999 .. 1.0000007.
+B.6 rule: zeta < 0.25 with 4.1-4.3 passing -> stop and report n_yielded, H_top and the wall dissipation; no parameter changed.
+Time series (Fact): n_yielded 0 to 0.065 s; 6 177 at 0.08 s, 167 814 at 0.11 s, 207 431 at 0.14 s (of 213 048: nearly the whole head),
+> 50 % of the head yielded in 57 % of the steps, 109 826 at 1.0 s, 3 655 at 1.4 s, 534 at 1.5 s. s_max up to 56.7 Pa (0.17 s) and 68.7 Pa
+overall; gp_max up to 136 1/s. Median top surface H_top 143.91-144.90 mm (144.18 at rest). Wall dissipation (cumulative ewall):
+0.302 mJ in 0.05-0.20 s, 0.621 mJ in 0.20-0.50 s, 0.283 mJ in 0.5-1.0 s, 0.032 mJ in 1.0-1.5 s; 1.240 mJ total. Mass floor active on up
+to 4 266 faces during the motion (9 at rest).
+Inference (not tested): the old model's 2.915 Hz / zeta 0.425 (cart4.py:77-78, "run 8's measured swing with the head (free_full_1.5,
+ring 13)") came from model "full": the 2-D head sheet plus the skin (the surface that cannot stretch, a Stokes-layer stress on every top
+liquid cell). Step 4 switches the skin off with head_mode "evp" (instruction B.3.10). The skin may be most of the old 0.425.

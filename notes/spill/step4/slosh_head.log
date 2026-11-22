@@ -1,0 +1,82 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 40.7 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[00:37:56 UTC | +   39.8 s] full: grid 211 x 87 x 176, N 1215000 (stout 1001952, head 213048), m_head0 0.024070 kg, push 3.4 m/s^2 half-sine 0.15 s from 0.05 s, dt_el 7.6687e-04 s, atol 1e-10, device cuda:0
+
+[00:38:02 UTC | +   45.2 s] full: t = 0  stout mean z 72.6948 mm  head mean z 134.6182 mm  H_top 144.182 mm  q13 -0.0004 mm
+
+[00:38:34 UTC | +   78.1 s] full: step 1  t 0.0008  gx 0.000  it 268  res 8.99e-06  q13 -0.000 mm  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 0  s_max 0.07  vmax 0.0005  ewall 0.000e+00 J  (33 s)
+
+[00:38:35 UTC | +   78.4 s] full: step 2  t 0.0015  gx 0.000  it 138  res 9.20e-06  q13 -0.000 mm  H_top 144.182  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 0  s_max 0.14  vmax 0.0007  ewall 4.842e-12 J  (33 s)
+
+[00:39:05 UTC | +  108.2 s] full: step 100  t 0.0767  gx 1.780  it 124  res 9.74e-06  q13 0.302 mm  H_top 144.188  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 3375  s_max 16.17  vmax 0.0318  ewall 7.676e-07 J  (63 s)
+
+[00:39:42 UTC | +  146.0 s] full: step 200  t 0.1534  gx 2.832  it 104  res 1.00e-05  q13 7.828 mm  H_top 144.295  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 210919  s_max 59.88  vmax 0.1807  ewall 1.782e-04 J  (101 s)
+
+[00:40:24 UTC | +  188.0 s] full: step 300  t 0.2301  gx 0.000  it 194  res 9.81e-06  q13 10.334 mm  H_top 144.846  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 202578  s_max 28.15  vmax 0.1240  ewall 3.117e-04 J  (143 s)
+
+[00:41:00 UTC | +  223.7 s] full: step 400  t 0.3067  gx 0.000  it 138  res 9.62e-06  q13 -0.473 mm  H_top 144.082  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 210362  s_max 50.83  vmax 0.2296  ewall 5.316e-04 J  (178 s)
+
+[00:41:36 UTC | +  259.6 s] full: step 500  t 0.3834  gx 0.000  it 150  res 9.29e-06  q13 -7.918 mm  H_top 144.827  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 164720  s_max 30.48  vmax 0.0562  ewall 7.784e-04 J  (214 s)
+
+[00:42:16 UTC | +  299.4 s] full: step 600  t 0.4601  gx 0.000  it 225  res 9.16e-06  q13 -2.389 mm  H_top 144.323  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 209313  s_max 45.46  vmax 0.2132  ewall 8.344e-04 J  (254 s)
+
+[00:42:55 UTC | +  339.0 s] full: step 700  t 0.5368  gx 0.000  it 101  res 9.77e-06  q13 5.136 mm  H_top 143.910  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 204356  s_max 33.21  vmax 0.0677  ewall 9.862e-04 J  (294 s)
+
+[00:43:31 UTC | +  374.7 s] full: step 800  t 0.6135  gx 0.000  it 94  res 9.86e-06  q13 3.825 mm  H_top 144.281  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 178869  s_max 36.98  vmax 0.1234  ewall 1.015e-03 J  (329 s)
+
+[00:44:09 UTC | +  413.1 s] full: step 900  t 0.6902  gx 0.000  it 75  res 9.48e-06  q13 -2.140 mm  H_top 144.256  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 203369  s_max 36.48  vmax 0.1119  ewall 1.101e-03 J  (368 s)
+
+[00:44:43 UTC | +  446.9 s] full: step 1000  t 0.7669  gx 0.000  it 105  res 9.71e-06  q13 -3.186 mm  H_top 144.418  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 73642  s_max 17.09  vmax 0.0631  ewall 1.130e-03 J  (402 s)
+
+[00:45:21 UTC | +  484.2 s] full: step 1100  t 0.8436  gx 0.000  it 205  res 8.43e-06  q13 0.668 mm  H_top 144.261  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 183223  s_max 30.21  vmax 0.1121  ewall 1.169e-03 J  (439 s)
+
+[00:45:53 UTC | +  517.1 s] full: step 1200  t 0.9202  gx 0.000  it 65  res 9.83e-06  q13 2.806 mm  H_top 144.197  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 105934  s_max 17.07  vmax 0.0183  ewall 1.197e-03 J  (472 s)
+
+[00:46:28 UTC | +  551.2 s] full: step 1300  t 0.9969  gx 0.000  it 85  res 9.62e-06  q13 1.181 mm  H_top 144.484  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 104539  s_max 26.75  vmax 0.0712  ewall 1.206e-03 J  (506 s)
+
+[00:47:01 UTC | +  584.8 s] full: step 1400  t 1.0736  gx 0.000  it 76  res 9.33e-06  q13 -1.087 mm  H_top 144.172  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 121675  s_max 20.51  vmax 0.0227  ewall 1.228e-03 J  (540 s)
+
+[00:47:34 UTC | +  617.4 s] full: step 1500  t 1.1503  gx 0.000  it 119  res 9.21e-06  q13 -0.964 mm  H_top 144.226  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 22473  s_max 15.72  vmax 0.0201  ewall 1.231e-03 J  (572 s)
+
+[00:48:06 UTC | +  650.2 s] full: step 1600  t 1.2270  gx 0.000  it 119  res 8.47e-06  q13 0.165 mm  H_top 144.279  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 54590  s_max 17.03  vmax 0.0211  ewall 1.237e-03 J  (605 s)
+
+[00:48:37 UTC | +  680.9 s] full: step 1700  t 1.3037  gx 0.000  it 79  res 9.62e-06  q13 0.651 mm  H_top 144.411  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 15846  s_max 11.51  vmax 0.0093  ewall 1.239e-03 J  (636 s)
+
+[00:49:08 UTC | +  711.3 s] full: step 1800  t 1.3804  gx 0.000  it 63  res 9.35e-06  q13 0.328 mm  H_top 144.330  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 3170  s_max 10.31  vmax 0.0095  ewall 1.239e-03 J  (666 s)
+
+[00:49:37 UTC | +  741.0 s] full: step 1900  t 1.4570  gx 0.000  it 56  res 8.72e-06  q13 0.154 mm  H_top 144.297  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 2837  s_max 9.45  vmax 0.0089  ewall 1.240e-03 J  (696 s)
+
+[00:49:54 UTC | +  757.5 s] full: step 1957  t 1.5008  gx 0.000  it 53  res 9.72e-06  q13 0.249 mm  H_top 144.326  books 0.0e+00/1.9e-08  in solid 0  real 0  head out 0  yielded 517  s_max 7.26  vmax 0.0098  ewall 1.240e-03 J  (712 s)
+
+<string>:6: RuntimeWarning: overflow encountered in exp
+
+<string>:12: OptimizeWarning: Covariance of the parameters could not be estimated
+
+[00:49:56 UTC | +  759.8 s] full: summary {"sub": "full", "device": "cuda:0", "steps": 1957, "t_end": 1.5007551412904279, "N": 1215000, "N_stout": 1001952, "N_head": 213048, "m_head0": 0.024069727572568016, "push": {"A": 3.4, "tau": 0.15, "t0": 0.05}, "dt_rule": "dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s), never cut", "atol": 1e-10, "it_max": 268, "res_max": 9.999746907851659e-06, "all_converged": true, "book_stout_max": 0.0, "book_head_max": 1.8635438869195788e-08, "in_solid_max_from_step1": 0, "real_cross_total": 0, "ceiling_max": 0, "head_outside_max": 0, "stout_outside_max": 0, "vmax_max": 0.2505127191543579, "ds_max_over_dx": 0.636424170807004, "n_yielded_max": 211607, "s_max": 68.6924057006836, "det_min": 0.9999989867210388, "det_max": 1.0000007152557373, "ewall_end_J": 0.0012397954970520086, "n_floor_max": 4266, "q13_peak_mm": 11.741597205400467, "H_top0_mm": 144.18187737464905, "step_s": [32.83, 0.36, 0.41, 0.34, 0.26, 0.32, 0.28, 0.26, 0.24, 0.23], "ms_per_step": 363.97349401950595, "wall_s": 712.2961292266846, "fit_first_three_half_cycles": {"f": 2.813694702719213, "f0": 2.831145269746504, "zeta": 0.110858356217861, "A_mm": 11.657644212275844, "rms_mm": 0.14082090443784134}, "fit_window_s": [0.2, 0.7], "fit_long_0p2_1p2": {"f": 2.7968288315993566, "f0": 2.816500626771117, "zeta": 0.11798380848984799, "A_mm": 11.825926614020204, "rms_mm": 0.18615331242171895}, "zero_crossings_after_push_s": [0.3036786080485468, 0.4785238672280144, 0.6602709129540398, 0.829748115930629, 1.0283661954371295, 1.2116469715068345], "pass_marks": {"f_d_in_2p75_3p15": true, "zeta_in_0p32_0p52": false, "books_lt_1e6": true, "real_cross_zero": true, "in_solid_zero": true}, "pass_marks_all": false, "setup_peak_wall_amplitude_in_8_12mm": true}
+
+[00:49:56 UTC | +  759.8 s] full: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 277072 bytes to __results__.html
+
