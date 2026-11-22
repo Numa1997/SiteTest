@@ -26,8 +26,8 @@ CASES = dict(A=(F12, "wall"), B=(F12, "full"), C=(F16, "wall"), D=(F16, "full"),
              F=(F16, "full", "no tension"))      # F: D with the surface tension switched off (19 Nov 2026: is it what settles the pint?)
 only = os.environ.get("ONLY"); rep = {"dx_mm": dx * 1e3, "rest_s": REST, "device": str(jax.devices()[0])}
 DRAIN = os.environ.get("DRAIN") == "1"; STEP2 = os.environ.get("STEP2") == "1"; STEP3 = os.environ.get("STEP3") == "1"
-STEP3V = os.environ.get("STEP3_VERIFY") == "1"; STEP4 = os.environ.get("STEP4") == "1"
-for key, case in (() if (DRAIN or STEP2 or STEP3 or STEP3V or STEP4) else CASES.items()):
+STEP3V = os.environ.get("STEP3_VERIFY") == "1"; STEP4 = os.environ.get("STEP4") == "1"; STEP45 = os.environ.get("STEP45") == "1"
+for key, case in (() if (DRAIN or STEP2 or STEP3 or STEP3V or STEP4 or STEP45) else CASES.items()):
     body, model = case[0], case[1]
     if only and key not in only.split(","): continue
     t0 = time.time()
@@ -44,7 +44,7 @@ for key, case in (() if (DRAIN or STEP2 or STEP3 or STEP3V or STEP4) else CASES.
              mean_z_mm=[round(z0 * 1e3, 2), round(float(X[act, 2].mean()) * 1e3, 2)], below_floor=int((act & (X[:, 2] < 0)).sum()),
              outside_cavity=int((act & ~((X[:, 2] > 0) & (rr < Rr))).sum()), wall_s=round(time.time() - t0, 1))
     rep[key] = r; print(key, json.dumps(r), flush=True)
-if not (DRAIN or STEP2 or STEP3 or STEP3V or STEP4): json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
+if not (DRAIN or STEP2 or STEP3 or STEP3V or STEP4 or STEP45): json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
 
 
 # ====================================================================================================================================
@@ -647,7 +647,7 @@ def step4_run():
     fin_j = jax.jit(lambda s: jnp.all(jnp.isfinite(s["xp"])) & jnp.all(jnp.isfinite(s["vp"])) & jnp.all(jnp.isfinite(s["be"])))
     while t < T - 1e-12 and k < nmax:
         try:
-            dt = min(2e-3, dt_el, 0.8 * dxd / max(vmax, 1e-12), T - t)
+            dt = min(2e-3, dt_el, 0.8 * dxd / max(vmax, 1e-12))   # never cut to land on T (owner, 22 Nov): the last step ends at t >= T
             pr = prep(s); tot, bowl, pho = [int(v) for v in met_j(pr["liq"])]
             s, d = step(s, pr, dt); t += dt; k += 1
             isol, oc, real, zs, zh, Hm, bs, bh, dsm, ceil, prev = st_j(s, prev)
@@ -660,7 +660,7 @@ def step4_run():
                                    stout_mean_z_before_m=float(zs_b), stout_mean_z_after_m=float(zs_a), books_before=[float(bs_b), float(bh_b)],
                                    books_after=[float(bs_a), float(bh_a)], n_head_after=int(jnp.sum(s["is_head"])), finite_after=bool(fin_j(s)))
                 say(f"{sub}: resort at step {k}: {json.dumps(resort_info)}")
-            row = dict(step=k, t=t, dt=dt, it=int(d["it"]), res=float(d["res"]), n_drain_bowl=bowl, n_drain_total=tot, n_phantom_out=pho,
+            row = dict(step=k, t=t, dt=dt, it=int(d["it"]), res=float(d["res"]), res_abs=float(d["res_abs"]), bnorm=float(d["bnorm"]), conv=bool(d["conv"]), n_drain_bowl=bowl, n_drain_total=tot, n_phantom_out=pho,
                        stout_mean_z_mm=float(zs) * 1e3, head_mean_z_mm=float(zh) * 1e3, H_top_mm=float(Hm) * 1e3, book_stout=float(bs), book_head=float(bh),
                        in_solid=int(isol), old_cross=int(oc), real_cross=int(real), ceiling=int(ceil), ds_max_over_dx=float(dsm) / dxd, vmax=vmax,
                        n_yielded=int(d["n_yielded"]), gp_max=float(d["gp_max"]), s_max=float(d["s_max"]), det_min=float(d["det_min"]), det_max=float(d["det_max"]),
@@ -687,7 +687,7 @@ def step4_run():
         dzs = (summ["stout_mean_z1_mm"] - summ["stout_mean_z0_mm"]) * 1e-3; dzh = (summ["head_mean_z1_mm"] - summ["head_mean_z0_mm"]) * 1e-3
         summ.update(stout_drift_m=dzs, head_drift_m=dzh, H_top_minus_0p144_m=summ["H_top1_mm"] * 1e-3 - 0.144)
         summ["pass_marks"] = dict(drain_bowl_zero=summ["n_drain_bowl_max"] == 0, phantom_zero=summ["n_phantom_out_max"] == 0, it_lt_600=summ["it_max"] < 600,
-                                  res_lt_1e5=summ["res_max"] < 1e-5, stout_drift_lt_5e5=abs(dzs) < 5e-5, head_drift_lt_1e4=abs(dzh) < 1e-4,
+                                  res_lt_1e5_or_abs_floor=all(r["conv"] for r in rows), stout_drift_lt_5e5=abs(dzs) < 5e-5, head_drift_lt_1e4=abs(dzh) < 1e-4,
                                   H_top_within_3e4=abs(summ["H_top_minus_0p144_m"]) < 3e-4, books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6,
                                   real_cross_zero=summ["real_cross_total"] == 0, in_solid_zero=summ["in_solid_max"] == 0)
         if CPU:   # Part B's marks (instruction "step4-diag-and-cpu-smoke"), plain text with abs( )
@@ -696,7 +696,7 @@ def step4_run():
             summ["n_floor_max"] = max(r["n_floor"] for r in rows); summ["n_floor_head_max"] = max(r["n_floor_head"] for r in rows)
             summ["m_stout0"] = S.m_stout0; summ["m_head0"] = S.m_head0; summ["V_head_glass_m3"] = S.V_head_glass; summ["V_head_particles_m3"] = S.V_head
             summ["step_s_no_compile_mean"] = float(np.mean([r["step_s"] for r in rows[1:]])) if len(rows) > 1 else None
-            summ["pass_marks"] = dict(all_finite=all(r["finite"] for r in rows), it_lt_600=summ["it_max"] < 600, res_lt_1e5=summ["res_max"] < 1e-5,
+            summ["pass_marks"] = dict(all_finite=all(r["finite"] for r in rows), it_lt_600=summ["it_max"] < 600, res_lt_1e5_or_abs_floor=all(r["conv"] for r in rows),
                                       drain_bowl_zero=summ["n_drain_bowl_max"] == 0, phantom_zero=summ["n_phantom_out_max"] == 0, in_solid_zero=summ["in_solid_max"] == 0,
                                       det_dev_lt_1e5=summ["det_dev_max"] < 1e-5, books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6,
                                       books_across_resort=bool(resort_info and max(resort_info["books_after"]) < 1e-6),
@@ -716,3 +716,124 @@ def step4_run():
 
 
 if STEP4: step4_run()
+
+
+# ====================================================================================================================================
+# Step 4, test 4.5 (22 Nov 2026; instruction B.5): free slosh of the pint with the head as elasto-viscoplastic foam. Set-up as 4.4
+# (Fig. 16 deck, Step 3's grid and lip, model "wall" + head_mode "evp" with the Cantat wall stress, gamma 0, side visibility, solid
+# extension, wall guard, seed v3). The glass is pushed along x by a half-sine a(t) = A sin(pi (t - t0) / tau), t0 <= t < t0 + tau
+# (A = PUSH_A, default 3.4 m/s^2, tau = PUSH_T, default 0.15 s, t0 = 0.05 s; a(t) at each step's middle, as make_advance), then
+# left free to 1.5 s. dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s), never cut to land on an end time. The swing is the cos(theta) part
+# of ring 13 of the stored top surface (as Step 3), every step; fitted with run_b.py's fit_swing over the first three half-cycles
+# after the push (t0 + tau .. t0 + tau + 0.5 s). Marks (B.5 4.5): f_d in [2.75, 3.15] Hz; zeta in [0.32, 0.52]; both mass books
+# < 1e-6 every step; 0 real crossings and 0 particles in solids from step 1. The set-up aims at a peak wall amplitude of 8-12 mm (logged).
+# Run with STEP45=1, SUBRUN "smoke" (5 steps; CPU_SMOKE=1 for Kaggle CPU) or "full".
+def step45_run():
+    import datetime, math
+    import jax.numpy as jnp
+    T0 = time.time()
+    def say(m):
+        print(f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%S')} UTC | +{time.time() - T0:7.1f} s] {m}", flush=True)
+    sub = os.environ.get("SUBRUN", "smoke"); vout = os.path.join(OUT, "step4"); os.makedirs(vout, exist_ok=True)
+    CPU = os.environ.get("CPU_SMOKE") == "1"
+    base = "smoke_4p5_cpu" if CPU else ("slosh_head" if sub == "full" else f"slosh_head_{sub}")
+    dxd = float(os.environ.get("DX", "0.0015")); T = 1.5
+    PA = float(os.environ.get("PUSH_A", "3.4")); PT = float(os.environ.get("PUSH_T", "0.15")); P0 = 0.05
+    _src = open(os.path.join(ROOT, "tools", "fig12", "kaggle", "run_b.py")).read()
+    _a = _src.index("def fit_swing"); _b = _src.index("\n\n\n", _a); _ns = {"np": np}; exec(_src[_a:_b], _ns); fit_swing = _ns["fit_swing"]
+    G = SJ.Geometry(R, DZP, FILL, dxd, body=F16, top=0.08, lip=0.00125)
+    topz = G.z0 + G.nz * dxd; hx, hy, zt = F16; lip = G.lip; zcl = G.zlip
+    cs = math.sqrt(SJ.G_HEAD / SJ.RHO_HEAD); dt_el = 0.40 * dxd / cs
+    S = SJ.Stout(G, model="wall", K_frac=1.0, M_drops=4096, head_mode="evp"); S.gamma = 0.0
+    S.enable_side_vis(); info = S.enable_ls_extend(); S.wall_guard = True
+    s = S.init_state(); N = S.N; Ns = S.N_stout; Nh = S.N_head
+    say(f"{sub}: grid {G.nx} x {G.ny} x {G.nz}, N {N} (stout {Ns}, head {Nh}), m_head0 {S.m_head0:.6f} kg, push {PA} m/s^2 half-sine {PT} s from {P0} s, "
+        f"dt_el {dt_el:.4e} s, atol {S.atol:g}, device {jax.devices()[0]}")
+    prep = jax.jit(S.prepare); step = jax.jit(lambda s, pr, dt, gx: S.step(s, dt, gx, -9.81, prep=pr)); obs = jax.jit(S.observe)
+    pol = jax.jit(lambda H: S.polar(H))
+    def stats(s, prev):
+        X = s["xp"]; act = s["act"]; hd = s["is_head"]; r = jnp.hypot(X[:, 0], X[:, 1]); z = X[:, 2]
+        Rin = S.Rz(jnp.clip(z, 0.0, G.zrim - 1e-6)); Rout = S.Rz(jnp.clip(z, 0.008, G.zrim - 1e-6)) + G.WALL; e = 1e-5
+        in_wall = (z > 0) & (z < zcl) & (r > Rin + e) & (r < Rout - e)
+        in_cap = (z >= zcl) & (jnp.sqrt((r - G.Rm) ** 2 + (z - zcl) ** 2) < lip - e)
+        in_foot = (z < -e) & (z > zt + e) & (r < Rout - e)
+        in_deck = (z < zt - e) & (jnp.abs(X[:, 0]) < hx) & (jnp.abs(X[:, 1]) < hy)
+        in_solid = act & (in_wall | in_cap | in_foot | in_deck)
+        side = S.p_side(X); X0, side0 = prev
+        chg = act & (side != side0); ds = jnp.linalg.norm(X - X0, axis=1)
+        real = chg & (((z < zcl) & (X0[:, 2] < zcl)) | ((z < G.zrim) & (X0[:, 2] < G.zrim) & (ds > G.WALL)))
+        st = act & ~hd; ha = act & hd; pm = s["pmass"].astype(jnp.float64)
+        zs = jnp.sum(jnp.where(st, z, 0.0).astype(jnp.float64)) / jnp.maximum(jnp.sum(st), 1)
+        zh = jnp.sum(jnp.where(ha, z, 0.0).astype(jnp.float64)) / jnp.maximum(jnp.sum(ha), 1)
+        bs = jnp.abs(jnp.sum(jnp.where(st | (s["landed"] & ~hd), pm, 0.0)) - S.m_stout0) / S.m_stout0
+        bh = jnp.abs(jnp.sum(jnp.where(ha | (s["landed"] & hd), pm, 0.0)) - S.m_head0) / S.m_head0
+        out_h = jnp.sum(ha & ~side)                                   # head particles on the outside's side (over the rim)
+        out_s = jnp.sum(st & ~side)
+        return (jnp.sum(in_solid), jnp.sum(real), zs, zh, bs, bh, jnp.max(jnp.where(act, ds, 0.0)), jnp.sum(act & (z >= topz - dxd)),
+                out_h, out_s, (X, side))
+    st_j = jax.jit(stats)
+    def ring13(s):
+        H = obs(s)["H"]; P = pol(H); th = 2 * jnp.pi * jnp.arange(P.shape[1]) / P.shape[1]
+        Hf = jnp.where(jnp.isfinite(H), H, jnp.nan)
+        return 2.0 / P.shape[1] * jnp.sum(P[13] * jnp.cos(th)), jnp.nanmedian(Hf)
+    r13_j = jax.jit(ring13)
+    prev = (s["xp"], S.p_side(s["xp"]))
+    _, _, zs0, zh0, _, _, _, _, _, _, prev = st_j(s, prev); q0, H0 = [float(v) for v in r13_j(s)]
+    say(f"{sub}: t = 0  stout mean z {float(zs0) * 1e3:.4f} mm  head mean z {float(zh0) * 1e3:.4f} mm  H_top {H0 * 1e3:.3f} mm  q13 {q0 * 1e3:.4f} mm")
+    fh = open(os.path.join(vout, f"{base}.jsonl"), "w"); rows = []; tc = time.time(); t = 0.0; k = 0; vmax = 0.0
+    nmax = 5 if sub == "smoke" else 10 ** 9
+    while t < T - 1e-12 and k < nmax:
+        try:
+            dt = min(2e-3, dt_el, 0.8 * dxd / max(vmax, 1e-12))     # never cut to land on T
+            tm = t + 0.5 * dt; gx = PA * math.sin(math.pi * (tm - P0) / PT) if P0 <= tm < P0 + PT else 0.0
+            pr = prep(s); s, d = step(s, pr, dt, gx); t += dt; k += 1
+            isol, real, zs, zh, bs, bh, dsm, ceil, oh, os_, prev = st_j(s, prev); q, Hm = [float(v) for v in r13_j(s)]
+            vmax = float(d["vmax"])
+            row = dict(step=k, t=t, dt=dt, gx=gx, it=int(d["it"]), res=float(d["res"]), res_abs=float(d["res_abs"]), conv=bool(d["conv"]), q13_mm=q * 1e3,
+                       H_top_mm=Hm * 1e3, stout_mean_z_mm=float(zs) * 1e3, head_mean_z_mm=float(zh) * 1e3, book_stout=float(bs), book_head=float(bh),
+                       in_solid=int(isol), real_cross=int(real), ceiling=int(ceil), head_outside=int(oh), stout_outside=int(os_), vmax=vmax,
+                       ds_max_over_dx=float(dsm) / dxd, n_yielded=int(d["n_yielded"]), gp_max=float(d["gp_max"]), s_max=float(d["s_max"]),
+                       det_min=float(d["det_min"]), det_max=float(d["det_max"]), ewall_J=float(s["ewall"]), n_floor=int(d["n_floor"]),
+                       nsel=int(d["nsel"]), nact=int(d["nact"]), wall_s=round(time.time() - tc, 2))
+            rows.append(row); fh.write(json.dumps(row) + "\n"); fh.flush()
+            if k < 3 or k % 100 == 0 or t >= T - 1e-12 or k == nmax:
+                say(f"{sub}: step {k}  t {t:.4f}  gx {gx:.3f}  it {row['it']}  res {row['res']:.2e}  q13 {row['q13_mm']:.3f} mm  H_top {row['H_top_mm']:.3f}  "
+                    f"books {bs:.1e}/{bh:.1e}  in solid {row['in_solid']}  real {row['real_cross']}  head out {oh}  yielded {row['n_yielded']}  "
+                    f"s_max {row['s_max']:.2f}  vmax {vmax:.4f}  ewall {row['ewall_J']:.3e} J  ({row['wall_s']:.0f} s)")
+        except Exception as ex:
+            import traceback; say(f"{sub}: step {k + 1} FAILED: {ex!r}"); traceback.print_exc(); break
+    fh.close()
+    if rows:
+        mx = lambda key: max(r[key] for r in rows)
+        summ = dict(sub=sub, device=str(jax.devices()[0]), steps=k, t_end=t, N=N, N_stout=Ns, N_head=Nh, m_head0=S.m_head0, push=dict(A=PA, tau=PT, t0=P0),
+                    dt_rule="dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s), never cut", atol=S.atol, it_max=mx("it"), res_max=mx("res"),
+                    all_converged=all(r["conv"] for r in rows), book_stout_max=mx("book_stout"), book_head_max=mx("book_head"),
+                    in_solid_max_from_step1=mx("in_solid"), real_cross_total=sum(r["real_cross"] for r in rows), ceiling_max=mx("ceiling"),
+                    head_outside_max=mx("head_outside"), stout_outside_max=mx("stout_outside"), vmax_max=mx("vmax"), ds_max_over_dx=mx("ds_max_over_dx"),
+                    n_yielded_max=mx("n_yielded"), s_max=mx("s_max"), det_min=min(r["det_min"] for r in rows), det_max=mx("det_max"),
+                    ewall_end_J=rows[-1]["ewall_J"], n_floor_max=mx("n_floor"), q13_peak_mm=max(abs(r["q13_mm"]) for r in rows), H_top0_mm=H0 * 1e3,
+                    step_s=[round(rows[i]["wall_s"] - (rows[i - 1]["wall_s"] if i else 0.0), 3) for i in range(min(len(rows), 10))],
+                    ms_per_step=1e3 * (time.time() - tc) / k, wall_s=time.time() - tc)
+        if sub == "full":
+            try:
+                ts = np.array([r["t"] for r in rows]); q = np.array([r["q13_mm"] for r in rows]) * 1e-3
+                t1 = P0 + PT; m3 = (ts >= t1) & (ts <= t1 + 0.5)
+                F3 = fit_swing(ts[m3] - ts[m3][0], q[m3]); summ["fit_first_three_half_cycles"] = F3; summ["fit_window_s"] = [t1, t1 + 0.5]
+                mL = (ts >= t1) & (ts <= 1.2); summ["fit_long_0p2_1p2"] = fit_swing(ts[mL] - ts[mL][0], q[mL])
+                zc = np.nonzero(np.diff(np.sign(q[ts >= t1])))[0]; summ["zero_crossings_after_push_s"] = [float(ts[ts >= t1][i]) for i in zc[:8]]
+                summ["pass_marks"] = dict(f_d_in_2p75_3p15=bool(F3.get("f") and 2.75 <= F3["f"] <= 3.15), zeta_in_0p32_0p52=bool(F3.get("zeta") and 0.32 <= F3["zeta"] <= 0.52),
+                                          books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6, real_cross_zero=summ["real_cross_total"] == 0,
+                                          in_solid_zero=summ["in_solid_max_from_step1"] == 0)
+                summ["pass_marks_all"] = all(summ["pass_marks"].values())
+                summ["setup_peak_wall_amplitude_in_8_12mm"] = bool(8.0 <= summ["q13_peak_mm"] <= 12.0)
+            except Exception as ex:
+                summ["fit_error"] = repr(ex)
+        else:
+            summ["pass_marks"] = dict(all_finite=bool(np.all(np.isfinite(np.asarray(s["xp"])))), converged=summ["all_converged"],
+                                      books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6, in_solid_zero=summ["in_solid_max_from_step1"] == 0)
+        json.dump(summ, open(os.path.join(vout, f"{base}_summary.json" if not CPU else f"{base}.json"), "w"), indent=1, default=str)
+        say(f"{sub}: summary {json.dumps(summ, default=str)}")
+    say(f"{sub}: all done")
+
+
+if STEP45: step45_run()

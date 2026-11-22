@@ -483,6 +483,12 @@ class Stout:
         dx = G.dx; self.dx = dx; self.Hb = 2.0 * dx; self.rls = 0.9 * dx      # the pressure step's level set: closes the gaps between the sparse particles at the glass
         self.rread = 0.505 * dx  # the read-out's: derived 13 Nov 2026, reads a flat seeded layer to -0.09..+0.02 cell (0.9 dx reads 0.5-1.0 cell high)
         self.tol = tol; self.maxit = maxit
+        # absolute floor of the pressure residual (owner, 22 Nov 2026): the conjugate gradient also stops when max |r| < atol, so a
+        # near-empty right-hand side counts as converged. Units: the solver's pressure p dt / rho, residual in m^2/s (b = -div dx).
+        # A residual r leaves a cell's net outflow wrong by r / dx (m/s), its volume by r dt / dx^2 per step: with r = 1e-10 m^2/s,
+        # dx 1.5 mm, dt 7.67e-4 s and 1 300 steps a second, even if every cell erred the same way the pint's height would move 5.5 um in a
+        # second, ten times below Step 4.4's 50 um mark. Typical steps stop on the relative test (1e-5 of max |b|) long before it.
+        self.atol = 1e-10
         n, nz = G.n, G.nz; self.n, self.nz = n, nz
         nx, ny = G.nx, G.ny; self.nx, self.ny = nx, ny          # nx = ny = n on the old square grid (bit for bit as before)
         self.dims = (nx, ny, nz)
@@ -1134,7 +1140,7 @@ class Stout:
 
         def cond(c):
             p, r, d, rz, it, rn, ok = c
-            return (it < self.maxit) & (rn >= self.tol * bn) & ok & (bn > 0)
+            return (it < self.maxit) & (rn >= self.tol * bn) & (rn >= self.atol) & ok & (bn > 0)
 
         def body(c):
             p, r, d, rz, it, rn, ok = c
@@ -1159,7 +1165,7 @@ class Stout:
             if ax == 2:
                 f = jnp.where(self.floor_w, 0.0, f); k = k | self.floor_w
             out.append(f.astype(F32)); known.append(k)
-        return out, known, p, it, rn / jnp.maximum(bn, 1e-30)
+        return out, known, p, it, rn / jnp.maximum(bn, 1e-30), rn, bn
 
     def extrapolate(self, vel, known, layers=3):
         out = []
@@ -1393,10 +1399,10 @@ class Stout:
             # it stirred the pint at rest at 1.5 mm (rest guard: 1.54 mm, limit 0.75 mm)
             gate = jnp.clip((self.swelling(liq, s["act"]) - 0.04) / 0.04, 0.0, 1.0).astype(F32)
             src = self.volume_source(pr["cnt"], liq, dt, gate); zf = [jnp.zeros_like(v) for v in vel]
-            uc, kc, _, _, _ = self.pressure(zf, ph, liq, jnp.zeros_like(s["p"]), jnp.zeros((self.nx, self.ny), F32), src=src)
+            uc, kc, _, _, _, _, _ = self.pressure(zf, ph, liq, jnp.zeros_like(s["p"]), jnp.zeros((self.nx, self.ny), F32), src=src)
             uc = self.extrapolate(uc, kc)
         pst = self.tension(ph, s["hf"], dt) if self.cont else None
-        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt, pst=pst,
+        vel, known, p, it, res, res_abs, bnorm = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt, pst=pst,
                                                beta=None if ex is None else ex["beta"])
         if mu is not None:   # the head's new vertical velocity: that of the face its surface crosses (liquid below, air above)
             sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
@@ -1424,7 +1430,8 @@ class Stout:
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
         mhead = self.rho_f * jnp.sum((s["hf"] * self.afill).astype(F64)) * self.dx ** 2
-        diag = dict(it=it, res=res, mom=mom, nact=jnp.sum(s["act"], dtype=I32), nsel=nsel, vmax=vmax, mhead=mhead, **evd)
+        diag = dict(it=it, res=res, res_abs=res_abs, bnorm=bnorm, conv=(res < self.tol) | (res_abs < self.atol), mom=mom, nact=jnp.sum(s["act"], dtype=I32),
+                    nsel=nsel, vmax=vmax, mhead=mhead, **evd)
         return s, diag
 
     def resort(self, s):
@@ -1693,15 +1700,19 @@ class Cart:
 
 
 # ====================================================================== advancing to the next frame (one compiled loop)
-def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
+def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None, cut_to_frame=False):
     """Returns advance(state, t, t_end, extra) -> (state, t, extra, stats), compiled once. mode "free": glass held still,
     pushed along x by a(t) = push_a sin(pi (t - t0) / push_T) for t0 <= t < t0 + push_T (push = (t0, push_a, push_T)).
-    mode "ride": the cart drives the glass; extra carries the cart's state, the stout's last momentum and its push."""
+    mode "ride": the cart drives the glass; extra carries the cart's state, the stout's last momentum and its push.
+    cut_to_frame (owner, 22 Nov 2026): False = dt is never shortened to land on t_end; the frame is the first step that reaches it, and
+    advance returns that step's true time t >= t_end (record it). True = the old rule (last step cut to t_end), kept only to rerun old
+    figures bit for bit."""
     dx = S.dx
 
     def body(c):
         s, t, ex, st = c
-        dt = jnp.minimum(jnp.minimum(dtmax, cfl * dx / jnp.maximum(ex["vmax"], 1e-6)), ex["t_end"] - t)
+        dt = jnp.minimum(dtmax, cfl * dx / jnp.maximum(ex["vmax"], 1e-6))
+        if cut_to_frame: dt = jnp.minimum(dt, ex["t_end"] - t)
         if mode == "free":
             t0, pa, pT = push; tm = t + 0.5 * dt
             ax = jnp.where((tm >= t0) & (tm < t0 + pT), pa * jnp.sin(jnp.pi * (tm - t0) / pT), 0.0)

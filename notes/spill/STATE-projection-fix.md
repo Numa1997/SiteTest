@@ -390,3 +390,25 @@ before the numbers) max over the run 6.3e-7 m, end 6.3e-7 m < 3e-4 PASS; H_top a
 Books stout 0, head 1.9e-8 (float32 storage) PASS; real crossings 0, old crossings 0 PASS; in solid 0 PASS; ceiling 0.
 No yielding (s_max 0.92 Pa, below tau_y 5.4 Pa); det be 0.9999996 .. 1.0000005; vmax 8.4e-4 m/s; ds/dx max 0.64 (step 1).
 m_floor acted on at most 9 faces (head faces). Stopped for the owner: one mark fails on the harness's cut last step.
+
+## Owner, 22 Nov ~00:20 UTC: 4.4 PASSES on its 1 304 full steps (option 1)
+The cut step: step 1 305 of the full 4.4, dt 7.8e-6 s (1 % of 7.67e-4 s), made by the harness to land on T = 1.0 s
+(dt = min(..., T - t), rest_variants.py:650 at 0da19017). Its right-hand side was about 100 x smaller while the warm start p_prev came
+from a full step (the solver's p dt / rho scales with dt), so the float32 conjugate gradient broke down at 542 iterations, residual
+0.332 relative. Not a solver drift: the 1 304 full steps all reached < 1e-5 with <= 268 iterations, and nothing moved at that step.
+Rules from now on (owner): (1) every harness (4.5, the ride): never shorten dt to hit an end or frame time; take the frame at the first
+step that reaches it and record its true time. Done: step4_run, step45_run (dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s)), and
+make_advance(cut_to_frame=False by default; True only to rerun old figures bit for bit; advance already returns the true t).
+(2) the pressure solver also stops when the absolute residual max |r| < atol: Stout.atol = 1e-10 (solver units m^2/s, b = -div dx).
+Why 1e-10: a residual r leaves a cell's net outflow wrong by r / dx and its volume by r dt / dx^2 per step; at dx 1.5 mm, dt 7.67e-4 s,
+1 300 steps a second, even with every cell erring the same way the pint's height would move 5.5 um per second, ten times below 4.4's
+50 um mark. The step's diag now carries res (relative), res_abs, bnorm (max |b|) and conv = res < tol or res_abs < atol; marks use conv.
+(Inference, untested: whether 1e-10 would have closed the cut step is unknown, its bnorm was not logged; the no-cut rule removes it.)
+## Test 4.5 set-up (22 Nov, written before any run)
+rest_variants.py STEP45=1: as 4.4, plus a half-sine push A sin(pi (t - t0) / tau) along x, A = 3.4 m/s^2, tau = 0.15 s, t0 = 0.05 s,
+free to 1.5 s; ring 13's cos part of the top surface every step; fit (run_b fit_swing) over t0 + tau .. t0 + tau + 0.5 s (first three
+half-cycles); marks f_d in [2.75, 3.15] Hz, zeta in [0.32, 0.52], books < 1e-6, 0 real crossings, 0 in solid from step 1; the peak
+wall amplitude aimed at 8-12 mm is logged (set-up check, not a mark). Push sized (Inference): Step 3's 1 m/s^2 x 0.146 s gave 6.0 mm
+(gain about 63 mm per m/s of the pulse's Fourier weight); half-sine 0.15 s at 3.0 Hz weighs 0.078 s per m/s^2; zeta 0.45 keeps about 0.6
+of the undamped peak: A = 10 / (0.6 x 63 x 0.078) = 3.4 m/s^2, uncertain by about +-30 %. Prediction (Inference): the foam's top is
+3.5 mm below the rim (144 vs 147.5 mm); a 10 mm swing will likely carry foam over the rim at the wall (logged as head_outside).
