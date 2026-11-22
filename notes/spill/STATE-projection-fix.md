@@ -412,3 +412,8 @@ wall amplitude aimed at 8-12 mm is logged (set-up check, not a mark). Push sized
 (gain about 63 mm per m/s of the pulse's Fourier weight); half-sine 0.15 s at 3.0 Hz weighs 0.078 s per m/s^2; zeta 0.45 keeps about 0.6
 of the undamped peak: A = 10 / (0.6 x 63 x 0.078) = 3.4 m/s^2, uncertain by about +-30 %. Prediction (Inference): the foam's top is
 3.5 mm below the rim (144 vs 147.5 mm); a 10 mm swing will likely carry foam over the rim at the wall (logged as head_outside).
+- 22 Nov 00:29:32-00:35:19 UTC: 4.5 CPU smoke (code 13c4c9f9, step4-slosh-head-cpu-smoke, 5 min 47 s). All smoke marks PASS: finite,
+  all converged (it <= 268, res <= 9.997e-6), books 0 / 1.9e-8, in solid 0, real crossings 0, det within 4.8e-7; 31.7-67.2 s a step.
+  Fact: at rest the absolute residual at the relative stop is 0.96-1.13e-10 (bnorm about 1.1e-5 m^2/s), i.e. at the floor atol 1e-10:
+  the floor and the relative test coincide at rest; 1e-11 would act only on near-empty right-hand sides (option for the owner).
+- 22 Nov 00:35:50 UTC: full 4.5 launched (T4, step4-slosh-head); quota before: 966.2 s used (1 784 min left); estimate 13-14 GPU-min.
