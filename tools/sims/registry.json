@@ -4,13 +4,17 @@
  "sims": {
   "barton": {
    "dataset": "numakoudsie/phyein-usul-barton",
-   "dataset_title": "Phyein Usul simulation data: barton",
+   "dataset_title": "Barton's pendulums: simulation data",
    "model": "tools/sims/barton.py",
    "files": [
     "barton.bin"
    ],
    "pages": [],
-   "note": "Replaced on the home page by coupled (23 November 2026); kept until the coupled pendulums are verified live."
+   "note": "Replaced on the home page by coupled (23 November 2026); kept until the coupled pendulums are verified live.",
+   "figure": "Barton's pendulums (home page)",
+   "page_url": "https://phyeinusul.com",
+   "dataset_subtitle": "Barton's pendulums on the Phyein Usul home page: every Kaggle run",
+   "dataset_about": "A row of pendulums of different lengths driven by one heavy pendulum: resonance, drawn in the margin of the home page."
   },
   "double_pendulum": {
    "model": "tools/sims/double_pendulum.py",
@@ -38,7 +42,11 @@
      "scroll": 0,
      "probe": "(()=>{const s=window.__simData;if(!s)return {error:'no stored-data loader on the page'};if(s.err)return {error:s.err};if(!s.sha_ok||!s.gen)return {waiting:true};const d=Sim.data.ds;return {sha_ok:s.sha_ok,commit:s.gen.commit,date:s.gen.date,files:s.files,lambda:d.get('lambda'),damp:d.get('damp'),builds:d.get('builds'),renders:d.get('renders')};})()"
     }
-   ]
+   ],
+   "figure": "Fig. 1 Circular Wave Interference",
+   "page_url": "https://phyeinusul.com/simulations/Circular%20Wave%20Interference%20Visualization.html",
+   "dataset_subtitle": "Fig. 1 Circular Wave Interference: every Kaggle run behind the page",
+   "dataset_about": "Two point sources and the pattern their circular waves make: the field the page draws, computed on Kaggle."
   },
   "double_pendulum_smoke": {
    "dataset": "numakoudsie/fig2-double-pendulum",
@@ -54,7 +62,11 @@
     "double_pendulum.json"
    ],
    "about_files": "Engine test for GPU runs with large data: one pack in the GitHub release sims-double_pendulum_smoke-<date>, the summary with every fingerprint committed. No page plays it.",
-   "pages": []
+   "pages": [],
+   "figure": "Fig. 2 Double Pendulum",
+   "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
+   "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
+   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames."
   },
   "double_pendulum_gpu": {
    "dataset": "numakoudsie/fig2-double-pendulum",
@@ -70,7 +82,11 @@
     "double_pendulum.json"
    ],
    "about_files": "Fig. 2 in full: 25 packs (one per mass-length cell) in the GitHub release sims-double_pendulum_gpu-<date>; the summary with every runs file's pack, offset, size and SHA-256 is committed. No page is listed until the page plays it.",
-   "pages": []
+   "pages": [],
+   "figure": "Fig. 2 Double Pendulum",
+   "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
+   "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
+   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames."
   },
   "coupled": {
    "model": "tools/sims/coupled.py",
@@ -85,7 +101,13 @@
      "scroll": 650,
      "probe": "(()=>{const h=document.querySelector('[data-bg=rails]');const s=h&&h.__bgScene;if(!s)return {error:'no rails scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,bars:s.Bs.length};})()"
     }
-   ]
+   ],
+   "dataset": "numakoudsie/phyein-usul-coupled",
+   "dataset_title": "Coupled pendulums: simulation data",
+   "figure": "Coupled pendulums (home page)",
+   "page_url": "https://phyeinusul.com",
+   "dataset_subtitle": "Coupled pendulums on the Phyein Usul home page: every Kaggle run",
+   "dataset_about": "Two pendulums joined by a spring trade their swing back and forth: the scene in the margin of the home page."
   }
  }
 }
