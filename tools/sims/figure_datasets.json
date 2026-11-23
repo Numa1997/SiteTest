@@ -1,0 +1,37 @@
+{
+ "fig15": {
+  "dataset": "numakoudsie/fig15-resonant-tunnelling",
+  "title": "Fig. 15 Resonant Tunnelling: simulation data",
+  "subtitle": "Fig. 15 Resonant Tunnelling: every Kaggle run behind the page",
+  "figure": "Fig. 15 Resonant Tunnelling",
+  "page_url": "https://phyeinusul.com/simulations/resonant-tunnelling.html",
+  "about": "A quantum wave packet meets two (or more) barriers and gets through almost completely at the resonant energies: 3D Schrodinger runs (Strang split-step Fourier, JAX on Kaggle's GPUs), the exact references that corrected them, and the filed generations the page plays.",
+  "doc": "docs/simulations/fig15-resonant-tunnelling.md",
+  "site_indexes": [
+   "public/data/resonant-tunnelling/2026-11-13/kaggle/index.json",
+   "public/data/resonant-tunnelling/2026-11-14/kaggle/index.json"
+  ],
+  "notebooks": [
+   "numakoudsie/fig15-rt3d-shard-1-of-4",
+   "numakoudsie/fig15-rt3d-shard-2-of-4",
+   "numakoudsie/fig15-rt3d-shard-3-of-4",
+   "numakoudsie/fig15-rt3d-shard-4-of-4",
+   "numakoudsie/fig15-rt3d-singles-v2",
+   "numakoudsie/fig15-rt3d2-shard-1-of-6",
+   "numakoudsie/fig15-rt3d2-shard-2-of-6",
+   "numakoudsie/fig15-rt3d2-shard-3-of-6",
+   "numakoudsie/fig15-rt3d2-shard-4-of-6",
+   "numakoudsie/fig15-rt3d2-shard-5-of-6",
+   "numakoudsie/fig15-rt3d2-shard-6-of-6",
+   "numakoudsie/fig15-rt3d2-fix1",
+   "numakoudsie/fig15-correction-walls-gpu",
+   "numakoudsie/fig15-correction-2d-1-of-4",
+   "numakoudsie/fig15-correction-2d-2-of-4",
+   "numakoudsie/fig15-correction-2d-3-of-4",
+   "numakoudsie/fig15-correction-2d-4-of-4",
+   "numakoudsie/fig15-correction-2d-shells-1-of-2",
+   "numakoudsie/fig15-correction-2d-shells-2-of-2",
+   "numakoudsie/fig15-filer-2026-11-18"
+  ]
+ }
+}

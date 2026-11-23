@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       sim: { description: "simulation to compute (a model file tools/sims/<sim>.py, listed in tools/sims/registry.json)", required: true, default: "barton" }
-      mode: { description: "run = compute on Kaggle; dataset = file the output of an existing notebook version as the simulation's Kaggle dataset", required: false, default: "run" }
+      mode: { description: "run = compute on Kaggle; dataset = file the output of an existing notebook version as the simulation's Kaggle dataset; figure = file every Kaggle notebook run of a figure (sim = its key in tools/sims/figure_datasets.json, e.g. fig15) as the figure's dataset", required: false, default: "run" }
       version: { description: "for mode dataset: the version of the notebook numakoudsie/phyein-usul-simulations whose output is filed", required: false, default: "" }
   workflow_call:        # used by the Kaggelize flow (kaggelize-land.yml), after the owner approved: compute <sim> from the commit <ref>
     inputs:             # of a session's branch; the commit step below then puts that branch and its data on main in one push
@@ -19,7 +19,7 @@ on:
 permissions:
   contents: write
 concurrency:            # one Kaggle run at a time (each run is a new version of the same notebook); filing a dataset has its own group per simulation
-  group: ${{ inputs.mode == 'dataset' && format('sims-dataset-{0}', inputs.sim) || 'sims-kaggle' }}
+  group: ${{ (inputs.mode == 'dataset' || inputs.mode == 'figure') && format('sims-dataset-{0}', inputs.sim) || 'sims-kaggle' }}
   cancel-in-progress: false
 jobs:
   run:
@@ -36,8 +36,9 @@ jobs:
       - run: pip install kaggle==2.2.5 six   # kaggle 2.2.5 imports six without declaring it
       - name: Which simulations
         id: which
-        env: { SIM: "${{ inputs.sim }}" }
+        env: { SIM: "${{ inputs.sim }}", MODE: "${{ inputs.mode }}" }
         run: |
+          if [ "$MODE" = "figure" ]; then echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"; echo "sims=$SIM" >> "$GITHUB_OUTPUT"; exit 0; fi
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"     # the commit whose code Kaggle runs (a branch's commit when called with ref)
           if [ -n "$SIM" ]; then S="$SIM"
           else S=$(git diff --name-only HEAD~1 HEAD -- 'tools/sims/*.py' | xargs -r -n1 basename | sed 's/\.py$//' | tr '\n' ' '); fi
@@ -57,10 +58,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}   # large data goes into a GitHub release (tools/sims/pipeline.py, step 5a); contents: write allows it
         run: |
           test -n "$KAGGLE_API_TOKEN" || { echo "the repository secret KAGGLE_API_TOKEN is missing"; exit 1; }
+          if [ "$MODE" = "figure" ]; then python3 tools/sims/file_figure.py "${{ steps.which.outputs.sims }}"; exit $?; fi
           if [ "$MODE" = "dataset" ]; then python3 tools/sims/dataset.py "${{ steps.which.outputs.sims }}" "$VERSION"; exit $?; fi
           for s in ${{ steps.which.outputs.sims }}; do python3 tools/sims/pipeline.py "$s" "${{ steps.which.outputs.sha }}"; done
       - name: Commit the data
-        if: steps.which.outputs.sims != ''
+        if: steps.which.outputs.sims != '' && inputs.mode != 'figure'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -70,7 +72,7 @@ jobs:
   live:
     # step 10: wait for Cloudflare to publish, then check the live files and the live pages (tools/sims/verify_live.py)
     needs: run
-    if: needs.run.outputs.sims != '' && inputs.mode != 'dataset'
+    if: needs.run.outputs.sims != '' && inputs.mode != 'dataset' && inputs.mode != 'figure'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
