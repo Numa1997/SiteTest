@@ -457,3 +457,5 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
   A_grid = 1.000; books 0 / 1.9e-8; in solid 0. Energy logs live (E_wall_foam 1.3e-11 J, E_wall_stout 8.5e-14 J at rest; E_plastic 0).
 - 23 Nov 08:55:42 UTC: Part C launched: Kaggle numakoudsie/step4-slosh-head version 2 (T4, code 5acb7181, launcher l45g.py in the
   session scratchpad). Quota before: 1 824 s used of 108 000 s. Queued (empty status) at least until 09:25 UTC.
+- 23 Nov 13:56 UTC: the Part C run is still queued after 5 h (status empty, no session output, no GPU time used). Not relaunched or
+  cancelled; that is the owner's call (the API cannot cancel).
