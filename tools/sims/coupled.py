@@ -48,10 +48,10 @@ from scipy.optimize import fsolve
 P = dict(
     g=9.81,        # m/s^2, gravity
     L=1.5,         # m, pivot to bob (period 2π√(L/g) = 2.46 s: a calm swing)
-    m=1.0,         # kg, each bob (a steel ball about 6 cm across)
+    m=10.0,        # kg, each bob: a steel ball (7850 kg/m³) of radius rb weighs 4/3 π rb³ · 7850 = 9.9 kg
     a=0.5,         # m, where the spring meets each rod, measured down from the pivot
     d=0.8,         # m, distance between the pivots = the spring's natural length; wide enough that the bobs never touch (checked)
-    rb=0.04,       # m, radius of a bob (drawn; the check min_bob_gap_m must stay positive)
+    rb=0.067,      # m, radius of a bob (drawn; the check min_bob_gap_m must stay positive)
     theta0=0.20,   # rad, the swing pendulum 1 starts with (about 11°); pendulum 2 starts hanging still
     M=11,          # swings of pendulum 1 per beat: ω₂/ω₁ = (M+1)/M, so the beat lasts M periods (about 27 s)
     fps=30,        # stored frames per second (the loop's frame count is rounded, the exact dt is in the header)
