@@ -26,7 +26,8 @@ def log(*a): print(time.strftime("%H:%M:%S"), *a, flush=True)
 
 def kaggle(K, args, check=True):
     r = subprocess.run(K + args, capture_output=True, text=True); out = (r.stdout or "") + (r.stderr or "")
-    log("$ kaggle " + " ".join(args)); log(out.strip()[-1200:])
+    # Kaggle's answer is on stdout, its progress bars on stderr: log the answer whole and only the last bar
+    log("$ kaggle " + " ".join(args)); log((r.stdout or "").strip()[-1200:]); log((r.stderr or "").strip()[-300:])
     if check and r.returncode: sys.exit(f"kaggle {args[0]} {args[1]} failed")
     return out
 
@@ -67,7 +68,10 @@ def file_dataset(sim, version, src, K=("kaggle",)):
     json.dump(dict(title=title[:50], id=ref, licenses=[dict(name="CC-BY-4.0")],
                   subtitle=f"Every run of the website's {sim} model, as computed on Kaggle"[:80]),
               open(os.path.join(stage, "dataset-metadata.json"), "w"), indent=1)
-    exists = "403" not in (st := kaggle(K, ["datasets", "status", ref], check=False)) and "404" not in st and "not found" not in st.lower() and "error" not in st.lower()
+    def ver():   # the dataset's newest version number, or None if it does not exist
+        o = kaggle(K, ["datasets", "status", ref, "--format", "json"], check=False)
+        m = re.search(r'"current_version_number"\s*:\s*(\d+)', o); return int(m.group(1)) if m else None
+    before = ver(); exists = before is not None
     if exists:
         # A Kaggle dataset version holds only what is uploaded with it. The rule is that the dataset holds every run of the figure,
         # so the runs already in it are downloaded and uploaded again beside the new one. Files outside <notebook>/ (the flat layout
@@ -86,16 +90,21 @@ def file_dataset(sim, version, src, K=("kaggle",)):
     else:
         out = kaggle(K, ["datasets", "create", "-p", stage, "-r", "tar"])
         if "being created" not in out: sys.exit("Kaggle did not accept the new dataset (its answer is above)")
+    # Wait for THIS version. "ready" alone is not enough: while Kaggle unpacks a new version, the status still reports the previous
+    # version as ready (23 November 2026: a 7 GB version was reported ready after 30 s and was not yet there). So wait until the
+    # version number has risen and that version is ready.
     t0 = time.time(); state = ""
-    while time.time() - t0 < 3600:   # Kaggle unpacks and indexes the upload; large data takes minutes
-        time.sleep(float(os.environ.get("POLL_S", 30)))
+    while time.time() - t0 < 3 * 3600:   # Kaggle unpacks and indexes the upload; large data takes many minutes
+        time.sleep(float(os.environ.get("POLL_S", 60)))
         state = kaggle(K, ["datasets", "status", ref], check=False).strip().lower()
-        if "ready" in state: break
         if "error" in state or "failed" in state: sys.exit(f"Kaggle reports the dataset as: {state}")
+        v = ver()
+        if "ready" in state and v is not None and (before is None or v > before): break
+        log(f"newest version {v} (before the upload: {before}), state {state}: waiting")
     else:
-        sys.exit(f"the dataset was not ready within an hour (last state: {state})")
+        sys.exit(f"the new dataset version was not there within 3 hours (last state: {state})")
     shutil.rmtree(stage)
-    log(f"dataset {ref} ready with {folder}/ ({total} bytes) after {round(time.time() - t0)} s")
+    log(f"dataset {ref} version {v} ready with {folder}/ ({total} bytes) after {round(time.time() - t0)} s")
     return ref, folder, total
 
 def record(sim, version, ref, folder, total):
