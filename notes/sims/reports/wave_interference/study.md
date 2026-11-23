@@ -206,4 +206,7 @@ and every control changes the picture (Pause stops it, Play moves it, Line of 16
 λ, γ; f changes the phase speed: 3.14 rad/s at 0.5 Hz, 12.57 rad/s at 2 Hz). The data panel's checks at the centre cell and the
 comparisons are in the page's doc ("Proof") and in section 7.
 
-Not done yet: the first generation on Kaggle (it starts when the model reaches `main`), and the live check.
+Kaggle, 23 November 2026: the model reached `main` alone first (PR 177; the old page stayed until the data was checked), the workflow
+"Simulations on Kaggle" ran it as notebook version 2 (code 5f98017, 171 s on 4 CPUs, NumPy 2.1.3), checked every file by SHA-256 and
+committed 64 files, 16 150 677 bytes, as 6be1fd7. Every check in its output equals the local run's. The page switch followed in a second
+pull request.

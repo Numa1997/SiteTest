@@ -75,6 +75,10 @@
   "src": "Three sliders set the waves: <em>Wavelength</em> \\(\\lambda\\) from 16 to \\(64\\ \\mathrm{px}\\) (default \\(30\\ \\mathrm{px}\\)), <em>Frequency</em> \\(f\\) from 0.2 to \\(2\\ \\mathrm{Hz}\\) (default \\(1.1\\ \\mathrm{Hz}\\)) and <em>Damping</em> \\(\\gamma\\) from 0 to 0.6 (default 0.15). The buttons place the sources: <em>Reset</em> puts two at \\(x = 200\\) and \\(600\\ \\mathrm{px}\\), <em>Line of 16</em> spreads sixteen evenly from 64 to \\(736\\ \\mathrm{px}\\), and a click on the field adds one on the source line, at the horizontal position of the click.",
   "tr": "Drei Schieber stellen die Wellen ein: <em>Wellenlänge</em> \\(\\lambda\\) von 16 bis \\(64\\ \\mathrm{px}\\) (Vorgabe \\(30\\ \\mathrm{px}\\)), <em>Frequenz</em> \\(f\\) von 0.2 bis \\(2\\ \\mathrm{Hz}\\) (Vorgabe \\(1.1\\ \\mathrm{Hz}\\)) und <em>Dämpfung</em> \\(\\gamma\\) von 0 bis 0.6 (Vorgabe 0.15). Die Schaltflächen setzen die Quellen: <em>Zurücksetzen</em> stellt zwei bei \\(x = 200\\) und \\(600\\ \\mathrm{px}\\) auf, <em>Reihe mit 16</em> verteilt sechzehn gleichmäßig von 64 bis \\(736\\ \\mathrm{px}\\), und ein Klick auf das Feld setzt eine Quelle auf die Quellenlinie, an die waagerechte Stelle des Klicks."
  },
+ "1eccfad18177": {
+  "src": "Equation (6) asks for one cosine per source, per point, per frame. The page takes none of them itself. Expanding \\(\\cos(kr_i - \\omega t) = \\cos kr_i\\cos\\omega t + \\sin kr_i\\sin\\omega t\\) separates space from time:",
+  "tr": "Gleichung (6) verlangt einen Kosinus pro Quelle, pro Punkt, pro Bild. Die Seite berechnet selbst keinen davon. Das Ausmultiplizieren von \\(\\cos(kr_i - \\omega t) = \\cos kr_i\\cos\\omega t + \\sin kr_i\\sin\\omega t\\) trennt Raum und Zeit:"
+ },
  "1f778cd8fc45": {
   "src": "Real water waves are dispersive: the frequency fixes the wavelength, and longer waves run faster (Fig. 5 of this site). Here \\(f\\) and \\(\\lambda\\) are set separately, and every wave moves at \\(v = f\\lambda\\).",
   "tr": "Echte Wasserwellen sind dispersiv: Die Frequenz legt die Wellenlänge fest, und längere Wellen laufen schneller (Abb. 5 dieser Website). Hier werden \\(f\\) und \\(\\lambda\\) getrennt eingestellt, und jede Welle bewegt sich mit \\(v = f\\lambda\\)."
@@ -147,6 +151,10 @@
   "src": "<span class=\"psub__n\">7.1</span>Which sources build the front<span class=\"star\" title=\"heavier mathematics\">★</span>",
   "tr": "<span class=\"psub__n\">7.1</span>Welche Quellen die Front aufbauen<span class=\"star\" title=\"heavier mathematics\">★</span>"
  },
+ "386a2f6edc0d": {
+  "src": "The stored data of this figure has not arrived yet; the field stays empty until it has.",
+  "tr": "Die gespeicherten Daten dieser Abbildung sind noch nicht angekommen; bis dahin bleibt das Feld leer."
+ },
  "38af3f4ef234": {
   "src": "Speed v = fλ",
   "tr": "Geschwindigkeit v = fλ"
@@ -163,6 +171,10 @@
   "src": "<span>5</span>Two sources: calm hyperbolae",
   "tr": "<span>5</span>Zwei Quellen: ruhige Hyperbeln"
  },
+ "42af152f5d2b": {
+  "src": "<b>Abstract.</b> Drop a row of pebbles into a pond and, a little way off, their rings merge into one straight ripple. This note explains that everyday sight with a single idea: waves add. It starts from the ring sent out by one source, adds two rings to find the calm lines between them, adds a whole row to find a beam and its unwanted side beams, and then shows when the ripples of a row really merge into the straight front that Huygens drew in 1690. It ends with how the field is computed once, stored, and coloured on every frame. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>Zusammenfassung.</b> Werfen Sie eine Reihe Kieselsteine in einen Teich, und ein Stück weiter verschmelzen ihre Ringe zu einer einzigen geraden Welle. Diese Notiz erklärt diesen alltäglichen Anblick mit einer einzigen Idee: Wellen addieren sich. Sie beginnt mit dem Ring, den eine Quelle aussendet, addiert zwei Ringe, um die ruhigen Linien zwischen ihnen zu finden, addiert eine ganze Reihe, um einen Strahl und seine unerwünschten Nebenstrahlen zu finden, und zeigt dann, wann die Wellen einer Reihe wirklich zu der geraden Front verschmelzen, die Huygens 1690 zeichnete. Sie endet damit, wie das Feld einmal berechnet, gespeichert und in jedem Bild eingefärbt wird. Mit ★ markierte Abschnitte enthalten die schwerere Mathematik und können beim ersten Lesen übersprungen werden, ohne den Faden zu verlieren."
+ },
  "42f234519e3c": {
   "src": "<span class=\"psec__n\">04</span>Adding the rings",
   "tr": "<span class=\"psec__n\">04</span>Die Ringe addieren"
@@ -178,6 +190,10 @@
  "4b8b263a87f8": {
   "src": "Figure 4 follows the amplitude \\(A\\) of (7) along a line parallel to the row: the centre row of the field on a wide screen, \\(169.1\\ \\mathrm{px}\\) above the sources. It spreads \\(N = 2\\), 4 and 16 sources over the same \\(672\\ \\mathrm{px}\\), as <em>Line of 16</em> does, at \\(\\lambda = 64\\ \\mathrm{px}\\), and compares them with a continuous row. With two sources the line crosses calm and loud bands in turn, and between \\(x = 200\\) and \\(600\\ \\mathrm{px}\\) the amplitude swings from 0.009 to 0.829. Four sources still leave deep fringes, from 0.036 to 0.765. Sixteen sources, now \\(44.8\\ \\mathrm{px}\\) apart and so closer than one wavelength, keep the amplitude between 0.119 and 0.168, never more than 0.050 from the continuous row: the ripples have merged into one front, as in Figure 1. The slow ripple that remains, in the continuous row as well, comes from its ends, where the front bends round.",
   "tr": "Abbildung 4 verfolgt die Amplitude \\(A\\) aus (7) entlang einer Linie parallel zur Reihe: der Mittellinie des Feldes auf einem breiten Bildschirm, \\(169.1\\ \\mathrm{px}\\) über den Quellen. Sie zeigt \\(N = 2\\), 4 und 16 Quellen, die über dieselben \\(672\\ \\mathrm{px}\\) verteilt sind, wie es <em>Reihe mit 16</em> tut, bei \\(\\lambda = 64\\ \\mathrm{px}\\), und vergleicht sie mit einer kontinuierlichen Reihe. Bei zwei Quellen durchquert die Linie abwechselnd ruhige und laute Streifen, und zwischen \\(x = 200\\) und \\(600\\ \\mathrm{px}\\) schwankt die Amplitude von 0.009 bis 0.829. Bei vier Quellen bleiben noch ausgeprägte Streifen, von 0.036 bis 0.765. Sechzehn Quellen, nun \\(44.8\\ \\mathrm{px}\\) auseinander und damit enger als eine Wellenlänge, halten die Amplitude zwischen 0.119 und 0.168, nie mehr als 0.050 von der kontinuierlichen Reihe entfernt: Die Wellen sind zu einer einzigen Front verschmolzen, wie in Abbildung 1. Die langsame Welligkeit, die übrig bleibt, auch in der kontinuierlichen Reihe, kommt von ihren Enden, wo sich die Front krümmt."
+ },
+ "4e35d2d7947f": {
+  "src": "Wavelength, damping and the place of a source take only the stored values: \\(\\lambda\\) in steps of \\(1\\ \\mathrm{px}\\), \\(\\gamma\\) in steps of 0.05, a source on the nearest of 501 places \\(1.6\\ \\mathrm{px}\\) apart.",
+  "tr": "Wellenlänge, Dämpfung und der Platz einer Quelle nehmen nur die gespeicherten Werte an: \\(\\lambda\\) in Schritten von \\(1\\ \\mathrm{px}\\), \\(\\gamma\\) in Schritten von 0.05, eine Quelle auf dem nächsten von 501 Plätzen im Abstand von \\(1.6\\ \\mathrm{px}\\)."
  },
  "5286e5b2b3a5": {
   "src": "E. Hecht, <a href=\"https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793\"><em>Optics</em></a>, 5th edition, Pearson, 2017: chapters 4 (Huygens’ principle), 7 (the superposition of waves), 9 (interference) and 10 (diffraction).",
@@ -242,6 +258,10 @@
  "6ca700f429e8": {
   "src": "All sources are in step: the delays of (14) that steer a phased array cannot be set.",
   "tr": "Alle Quellen sind im Gleichtakt: Die Verzögerungen aus (14), mit denen sich ein phasengesteuertes Array lenken lässt, können nicht eingestellt werden."
+ },
+ "6d0f21178844": {
+  "src": "For <em>Line of 16</em> on the wide screen one rebuild reads \\(2 \\times 16 \\times 28\\,250 = 904\\,000\\) stored numbers; it took 2.8–26 ms in five headless Chromium runs, while a frame took 0.6–0.8 ms. These times depend on the machine.",
+  "tr": "Für <em>Reihe mit 16</em> auf dem breiten Bildschirm liest ein Neuaufbau \\(2 \\times 16 \\times 28\\,250 = 904\\,000\\) gespeicherte Zahlen; er dauerte in fünf Läufen in Headless Chromium 2.8–26 ms, ein Bild dagegen 0.6–0.8 ms. Diese Zeiten hängen vom Rechner ab."
  },
  "702b201c4b40": {
   "src": "Phyein Usul",
@@ -331,6 +351,10 @@
   "src": "Home page",
   "tr": "Startseite"
  },
+ "963e1b52cc62": {
+  "src": "Three sliders set the waves: <em>Wavelength</em> \\(\\lambda\\) from 16 to \\(64\\ \\mathrm{px}\\) in steps of \\(1\\ \\mathrm{px}\\) (default \\(30\\ \\mathrm{px}\\)), <em>Frequency</em> \\(f\\) from 0.2 to \\(2\\ \\mathrm{Hz}\\) (default \\(1.1\\ \\mathrm{Hz}\\)) and <em>Damping</em> \\(\\gamma\\) from 0 to 0.6 in steps of 0.05 (default 0.15). The buttons place the sources: <em>Reset</em> puts two at \\(x = 200\\) and \\(600\\ \\mathrm{px}\\), <em>Line of 16</em> spreads sixteen evenly from 64 to \\(736\\ \\mathrm{px}\\), and a click on the field adds one on the source line, at the nearest of 501 places \\(1.6\\ \\mathrm{px}\\) apart.",
+  "tr": "Drei Schieberegler stellen die Wellen ein: <em>Wellenlänge</em> \\(\\lambda\\) von 16 bis \\(64\\ \\mathrm{px}\\) in Schritten von \\(1\\ \\mathrm{px}\\) (Vorgabe \\(30\\ \\mathrm{px}\\)), <em>Frequenz</em> \\(f\\) von 0.2 bis \\(2\\ \\mathrm{Hz}\\) (Vorgabe \\(1.1\\ \\mathrm{Hz}\\)) und <em>Dämpfung</em> \\(\\gamma\\) von 0 bis 0.6 in Schritten von 0.05 (Vorgabe 0.15). Die Schaltflächen setzen die Quellen: <em>Zurücksetzen</em> setzt zwei bei \\(x = 200\\) und \\(600\\ \\mathrm{px}\\), <em>Reihe mit 16</em> verteilt sechzehn gleichmäßig von 64 bis \\(736\\ \\mathrm{px}\\), und ein Klick auf das Feld fügt eine auf der Quellenlinie hinzu, am nächsten von 501 Plätzen im Abstand von \\(1.6\\ \\mathrm{px}\\)."
+ },
  "993dd84d70b4": {
   "src": "<span class=\"psec__n\">08</span>Two maps and a turning phase",
   "tr": "<span class=\"psec__n\">08</span>Zwei Karten und eine sich drehende Phase"
@@ -342,6 +366,10 @@
  "9a8e3e617433": {
   "src": "Each ring runs outward as if it were alone: a crest of ring \\(i\\) keeps \\(kr_i - \\omega t\\) fixed and travels at",
   "tr": "Jeder Ring läuft nach außen, als wäre er allein. Für einen Kamm von Ring \\(i\\) bleibt \\(kr_i - \\omega t\\) fest, er läuft also mit"
+ },
+ "9ab613428997": {
+  "src": "The grid is the one the tables were computed on, the same on every screen: 250 columns of \\(3.2\\ \\mathrm{px}\\), and rows of \\(3.2\\ \\mathrm{px}\\) counted up from the bottom edge, at most 250; each value belongs to the centre of its cell. A source sits on the nearest of 501 places \\(1.6\\ \\mathrm{px}\\) apart, so every distance from a source to a grid point is one of 125 000 stored values. Measured in headless Chromium: 250 × 113 = 28 250 points in windows 1100–1600 px wide, and 250 × 250 = 62 500 on a phone 390 px wide. At the shortest wavelength, \\(16\\ \\mathrm{px}\\), that is 5 points per wavelength, still more than the two needed to show a wave at all.",
+  "tr": "Das Gitter ist das, auf dem die Tabellen berechnet wurden, auf jedem Bildschirm dasselbe: 250 Spalten zu \\(3.2\\ \\mathrm{px}\\) und Zeilen zu \\(3.2\\ \\mathrm{px}\\), vom unteren Rand aufwärts gezählt, höchstens 250; jeder Wert gehört zur Mitte seiner Zelle. Eine Quelle sitzt auf dem nächsten von 501 Plätzen im Abstand von \\(1.6\\ \\mathrm{px}\\), daher ist jeder Abstand zwischen einer Quelle und einem Gitterpunkt einer von 125 000 gespeicherten Werten. Gemessen in Headless Chromium: 250 × 113 = 28 250 Punkte in Fenstern von 1100–1600 px Breite und 250 × 250 = 62 500 auf einem 390 px breiten Telefon. Bei der kürzesten Wellenlänge, \\(16\\ \\mathrm{px}\\), sind das 5 Punkte pro Wellenlänge, immer noch mehr als die zwei, die man braucht, um überhaupt eine Welle zu zeigen."
  },
  "9bedb58097fa": {
   "src": "<span class=\"psub__n\">3.1</span>The page’s version of one ring",
@@ -535,9 +563,17 @@
   "src": "<span class=\"pfig__n\">Figure 3</span>Far-field amplitude \\(|F|\\) of <em>Line of 16</em> (\\(N = 16\\), \\(s = 44.8\\ \\mathrm{px}\\)), computed from equation (12) every \\(0.1^\\circ\\) from \\(-90^\\circ\\) to \\(90^\\circ\\). At the default \\(\\lambda = 30\\ \\mathrm{px}\\) (burgundy) the main beam, \\(2.40^\\circ\\) from its centre to its first zero, is joined by two side beams of full strength at \\(\\pm 42.04^\\circ\\). At \\(\\lambda = 64\\ \\mathrm{px}\\), longer than the spacing, the side beams are gone and the main beam is wider, \\(5.12^\\circ\\) to its first zero.",
   "tr": "<span class=\"pfig__n\">Abbildung 3</span>Fernfeld-Amplitude \\(|F|\\) von <em>Reihe mit 16</em> (\\(N = 16\\), \\(s = 44.8\\ \\mathrm{px}\\)), berechnet aus Gleichung (12) alle \\(0.1^\\circ\\) von \\(-90^\\circ\\) bis \\(90^\\circ\\). Bei der Vorgabe \\(\\lambda = 30\\ \\mathrm{px}\\) (bordeauxrot) wird der Hauptstrahl, \\(2.40^\\circ\\) von seiner Mitte bis zu seiner ersten Nullstelle, von zwei Nebenstrahlen voller Stärke bei \\(\\pm 42.04^\\circ\\) begleitet. Bei \\(\\lambda = 64\\ \\mathrm{px}\\), länger als der Abstand, sind die Nebenstrahlen verschwunden, und der Hauptstrahl ist breiter, \\(5.12^\\circ\\) bis zu seiner ersten Nullstelle."
  },
+ "f72d8cd39f19": {
+  "src": "The rings were computed once, on Kaggle, by the model <code>tools/sims/wave_interference.py</code>, and are stored with the site: for each wavelength \\(\\lambda = 16, 17, \\dots, 64\\ \\mathrm{px}\\) the angle \\(kr\\) of a ring, and for each damping \\(\\gamma = 0, 0.05, \\dots, 0.60\\) its height \\(a\\), at every distance from a source to a grid point that can occur, with a table of cosines. When sources are added, cleared or reset, or the <em>Wavelength</em> or <em>Damping</em> slider moves, the page reads those numbers and adds the rings into \\(C\\) and \\(S\\): an angle and a height per source at each grid point. A slider between two stored values uses the nearest. The <em>Frequency</em> slider does not trigger this, because \\(f\\) enters only through \\(\\omega t\\): it changes how fast the pattern runs, never its shape.",
+  "tr": "Die Ringe wurden einmal auf Kaggle vom Modell <code>tools/sims/wave_interference.py</code> berechnet und sind mit der Website gespeichert: für jede Wellenlänge \\(\\lambda = 16, 17, \\dots, 64\\ \\mathrm{px}\\) der Winkel \\(kr\\) eines Rings und für jede Dämpfung \\(\\gamma = 0, 0.05, \\dots, 0.60\\) seine Höhe \\(a\\), bei jedem Abstand zwischen einer Quelle und einem Gitterpunkt, der vorkommen kann, dazu eine Kosinustabelle. Wenn Quellen hinzugefügt, gelöscht oder zurückgesetzt werden oder sich der Regler <em>Wellenlänge</em> oder <em>Dämpfung</em> bewegt, liest die Seite diese Zahlen und addiert die Ringe zu \\(C\\) und \\(S\\): einen Winkel und eine Höhe pro Quelle an jedem Gitterpunkt. Ein Regler zwischen zwei gespeicherten Werten nimmt den nächstgelegenen. Der Regler <em>Frequenz</em> löst das nicht aus, denn \\(f\\) geht nur über \\(\\omega t\\) ein: Er ändert, wie schnell das Muster läuft, nie seine Form."
+ },
  "f72f0eda6052": {
   "src": "Simulations",
   "tr": "Simulationen"
+ },
+ "f8350ac7257a": {
+  "src": "The stored angles and heights are whole numbers, in steps of \\(2\\pi/65536\\) and \\(1/65535\\). Against the field computed straight from (6), \\(C\\) and \\(S\\) differ by at most 0.00006, and the colour drawn differs by one step of the next section’s table at about 0.1 % of points and instants. \\(C\\), \\(S\\) and \\(\\psi\\) are kept as 32-bit floating-point numbers, about seven significant figures.",
+  "tr": "Die gespeicherten Winkel und Höhen sind ganze Zahlen, in Schritten von \\(2\\pi/65536\\) und \\(1/65535\\). Gegenüber dem direkt aus (6) berechneten Feld weichen \\(C\\) und \\(S\\) um höchstens 0.00006 ab, und die gezeichnete Farbe weicht an etwa 0.1 % der Punkte und Zeitpunkte um eine Stufe der Tabelle des nächsten Abschnitts ab. \\(C\\), \\(S\\) und \\(\\psi\\) werden als 32-Bit-Gleitkommazahlen gehalten, etwa sieben signifikante Stellen."
  },
  "f89bb8cef3bf": {
   "src": "The medium is <em>non-dispersive</em>: every wave travels at the same speed \\(v = f\\lambda\\), with \\(\\lambda\\) the wavelength.",

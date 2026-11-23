@@ -49,6 +49,12 @@ By itself, when a simulation's model `tools/sims/<sim>.py` is added or changed o
 `verify_live.py`). Only the changed simulations are computed. It can also be started by hand: GitHub, tab Actions, "Simulations on Kaggle",
 "Run workflow", the scene's name. Two starts never overlap (`concurrency: sims-kaggle`).
 
+## Figures on the line
+
+| Simulation | Model | What is stored | Page that plays it |
+|---|---|---|---|
+| Fig. 1, Wave interference (`wave_interference`) | [tools/sims/wave_interference.py](../tools/sims/wave_interference.py) | 64 files, 16.2 MB: the distance table of a fixed 250 × 250 grid, a ring's angle for each λ = 16 … 64 px and height for each γ = 0 … 0.60, a cosine table; the page adds the rings of the reader's sources ([fig01-wave-sources.md](simulations/fig01-wave-sources.md)) | `simulations/Circular Wave Interference Visualization.html`, its own loader (`stored()`), not `bg-scenes.js` |
+
 ## Pipeline B in the page
 
 `sceneData(name, file)` in `bg-scenes.js` reads `data/sims/generations.json`, takes the newest entry of that simulation, downloads
