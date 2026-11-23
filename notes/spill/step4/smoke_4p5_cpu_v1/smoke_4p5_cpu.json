@@ -1,0 +1,52 @@
+{
+ "sub": "smoke",
+ "device": "cpu:0",
+ "steps": 5,
+ "t_end": 0.0038343258591987924,
+ "N": 1215000,
+ "N_stout": 1001952,
+ "N_head": 213048,
+ "m_head0": 0.024069727572568016,
+ "push": {
+  "A": 3.4,
+  "tau": 0.15,
+  "t0": 0.05
+ },
+ "dt_rule": "dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s), never cut",
+ "atol": 1e-10,
+ "it_max": 268,
+ "res_max": 9.997153028962202e-06,
+ "all_converged": true,
+ "book_stout_max": 0.0,
+ "book_head_max": 1.8635438869195788e-08,
+ "in_solid_max_from_step1": 0,
+ "real_cross_total": 0,
+ "ceiling_max": 0,
+ "head_outside_max": 0,
+ "stout_outside_max": 0,
+ "vmax_max": 0.0008375471807084978,
+ "ds_max_over_dx": 0.6364254513755441,
+ "n_yielded_max": 0,
+ "s_max": 0.35146695375442505,
+ "det_min": 0.9999995827674866,
+ "det_max": 1.0000004768371582,
+ "ewall_end_J": 2.955834467160919e-11,
+ "n_floor_max": 9,
+ "q13_peak_mm": 0.0003869645297527313,
+ "H_top0_mm": 144.18187737464905,
+ "step_s": [
+  67.2,
+  34.14,
+  33.42,
+  32.14,
+  31.7
+ ],
+ "ms_per_step": 39719.93341445923,
+ "wall_s": 198.59966850280762,
+ "pass_marks": {
+  "all_finite": true,
+  "converged": true,
+  "books_lt_1e6": true,
+  "in_solid_zero": true
+ }
+}

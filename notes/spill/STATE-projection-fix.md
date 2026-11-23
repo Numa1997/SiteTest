@@ -453,3 +453,5 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
   faces 0. After one step the same. A_applied_new (fixed formula) = A_grid. Energy from the old slosh_head.jsonl at the swing's extremes
   (approximate PE from mean heights): per half-cycle dE_mech -0.326 / -0.153 / -0.080 / -0.035 mJ against logged ewall 0.222 / 0.128 /
   0.068 / 0.033 mJ.
+- 23 Nov 08:46:55-08:54:02 UTC: Part B CPU smoke of 4.5 (code 5acb7181): all marks PASS: finite; it <= 268, res <= 9.73e-6; A_applied_new /
+  A_grid = 1.000; books 0 / 1.9e-8; in solid 0. Energy logs live (E_wall_foam 1.3e-11 J, E_wall_stout 8.5e-14 J at rest; E_plastic 0).
