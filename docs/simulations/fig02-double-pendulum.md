@@ -18,6 +18,59 @@ a second burgundy bob, inside a faint protractor marked every 30° ([L44–52](.
 energy and its numerical drift ([L50](../../public/simulations/Double%20Pendulum.html#L50), [L101–105](../../public/simulations/Double%20Pendulum.html#L101-L105)). Under the figure sit the Data panel and the Read values switch (added by
 `datalog.js`), the walkthrough ([L443](../../public/simulations/Double%20Pendulum.html#L443)) and the lecture note ([L115–441](../../public/simulations/Double%20Pendulum.html#L115-L441)).
 
+## Since 23 November 2026: the page plays runs computed once on Kaggle
+
+**In plain words.** The page used to work out the pendulum's motion in the visitor's browser, step by step (RK4, h = 1/600 s).
+Now that work is done once, ahead of time, on Kaggle, a service that rents out computers. The page only downloads the stored
+motion, checks that the file is exactly the one Kaggle made, and draws it. The study behind this change, with every measured
+number: [notes/sims/reports/double_pendulum/study.md](../../notes/sims/reports/double_pendulum/study.md) (branch `kaggelize/double_pendulum`).
+
+**How the data is made.** The model [tools/sims/double_pendulum.py](../../tools/sims/double_pendulum.py) solves the same equations (9) of the
+lecture note with SciPy's DOP853, a Runge–Kutta method of order 8 that chooses its own step size (tolerances 10⁻¹⁰ relative,
+10⁻¹² absolute). It computes 1296 starts: mass ratio m₂/m₁ = 0.100, 1, 9.97; length ratio l₂/l₁ = 0.202, 1, 4.95; both starting
+angles every 30° (the protractor marks), every start released from rest; each start together with its chaos twin (θ₁ + 0.001
+rad); 20 s each. It writes 108 files `dp_<mass><length>_<θ₁ index>.bin`, twelve runs each (one per θ₂), and `double_pendulum.json`
+with the grid and the checks. Merging the model into `main` (PR #179) started the workflow "Simulations on Kaggle"
+([docs/kaggle-sims.md](../kaggle-sims.md)), which ran the model on Kaggle, checked every file by SHA-256 and committed the data
+to `public/data/sims/double_pendulum/<date>/`. Each file: the label `DPN1`, the header length, a JSON header (the cell, the frame rate,
+the steps of every column, and per run its starting energy E₀, its largest energy error and its twin distance at the end), then
+2-byte integers, nine per frame: θ₁, θ₂ (steps of 10⁻⁴ rad), ω₁, ω₂, α₁, α₂ (the file's own steps), the twin's θ′₁, θ′₂, and log₁₀ of
+the twin distance. The frame rate is chosen per file, 20 to 100 frames a second: the lowest at which no angle turns more than
+1 rad between frames and the drawn lower bob stays within 0.2 % of l₁ + l₂ of its true path (twin 0.4 %).
+
+**What the page does now** (line numbers of the page as of this change):
+
+| What | Where | What it does |
+|---|---|---|
+| Sliders | [L73](../../public/simulations/Double%20Pendulum.html#L73), [L77](../../public/simulations/Double%20Pendulum.html#L77), [L85](../../public/simulations/Double%20Pendulum.html#L85), [L89](../../public/simulations/Double%20Pendulum.html#L89), note [L91](../../public/simulations/Double%20Pendulum.html#L91) | mass and length ratio in steps of the stored grid (2.3 and 1.6 in ln), angles in steps of 30°; the ω sliders are gone, every run starts from rest |
+| Waiting sentence | [L46](../../public/simulations/Double%20Pendulum.html#L46) | shown in the figure until the file has arrived and passed its check, or with the reason when it cannot be loaded; nothing is drawn meanwhile |
+| `load(name)` | [L549](../../public/simulations/Double%20Pendulum.html#L549) | reads `data/sims/generations.json`, takes the newest `double_pendulum` generation, downloads the file, compares its SHA-256 with the one listed, and decodes the header and the frames |
+| `restart()`, `start(d)` | [L569](../../public/simulations/Double%20Pendulum.html#L569), [L578](../../public/simulations/Double%20Pendulum.html#L578) | from the sliders, the file name and the run (θ₂) in it; m₂, l₂, E₀ and the energy check come from the file header, never from the sliders |
+| `frame(k)` | [L593](../../public/simulations/Double%20Pendulum.html#L593) | one stored frame, the integers times their steps |
+| `anglesAt(t)`, `herm()` | [L601](../../public/simulations/Double%20Pendulum.html#L601), [L598](../../public/simulations/Double%20Pendulum.html#L598) | the angles drawn at time t: a cubic between frames k and k + 1 through both stored angles, with the stored angular velocities as slopes (Hermite); the twin takes its slopes from the frames before and after |
+| the clock | [L757](../../public/simulations/Double%20Pendulum.html#L757) | advances the played time t by the real time times the Time scale; at 20 s the run starts again; the trail gets a segment every 1/600 s of the run |
+| `play(dt)`, `bookkeeping(s)` | [L709](../../public/simulations/Double%20Pendulum.html#L709), [L727](../../public/simulations/Double%20Pendulum.html#L727) | write the stored frame k and the drawn angles into the store; positions, energies, mass matrix and momenta of the frame are closed formulas of its stored numbers, nothing is advanced in time |
+| readouts | [L698](../../public/simulations/Double%20Pendulum.html#L698) | caption: t of the stored 20 s; Energy E: the model's E₀; Energy drift: the model's largest error over the run; Twin separation: the stored distance |
+| data panel | [L828](../../public/simulations/Double%20Pendulum.html#L828) | groups Stored data, Physical parameters, Stored frame, Bookkeeping of the frame, Chaos twin, Player and drawing; every stored number is checked as integer × step (`rawCheck`, [L780](../../public/simulations/Double%20Pendulum.html#L780)), α₁ and α₂ against (9) recomputed from the stored θ and ω, the drawn angles against the cubic (`drawnCheck`, [L816](../../public/simulations/Double%20Pendulum.html#L816)), the bobs' pixels read back from the canvas |
+| `window.DPstate` | [L463](../../public/simulations/Double%20Pendulum.html#L463) | what the live check (`tools/sims/verify_live.py`) asks the page: file checked, commit, date |
+
+**Where the drawing and the store differ.** The table shows frame k, the last stored frame at or before the time played; the bobs
+are drawn between frames k and k + 1, so the drawn angles differ from frame k by up to one frame of motion. The energy of a frame
+recomputed from its 2-byte numbers differs from E₀ by the rounding (shown as ε₂ B); the model's own error is ε_max.
+
+**What the page can no longer do.** Start at angles between the 30° marks, with mass or length ratios between the three stored
+values, or with a push (ω₁, ω₂ ≠ 0); run for more than 20 s without starting again; pour sand into the lower bob (the parameter
+curve can only change the Time scale now).
+
+**Checks the model wrote** (in `double_pendulum.json`; measured on the local test run of 23 November 2026, repeated by Kaggle): largest
+energy error over all 1296 runs 6.2 × 10⁻⁹; small swings: the two normal-mode periods within 6.3 × 10⁻⁶ and 1.4 × 10⁻⁴ of (11) at 0.5°,
+four times closer at 0.25°; the page's former RK4 agrees with the model within 1 mm until 10.86 s from the default start; twin
+growth rate λ = 1.38 per second.
+
+The sections below describe the page before 23 November 2026, when it computed the motion itself; they are kept as the record of
+that version (the code is in the git history). The lecture note, the walkthrough ([public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js), 13 steps,
+quoting the model and the page) and the data panel describe the page as it is now.
+
 ## The physics in one picture
 
 **Everyday picture.** Let your arm hang and swing it: the upper arm turns about the shoulder, the forearm about the elbow, and
