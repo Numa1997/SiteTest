@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6896 files, 960.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6897 files, 960.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -42,7 +42,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [GitHub Actions workflows](#github-actions-workflows) | 4 |
 | [GitHub Actions building blocks used by the workflows](#github-actions-building-blocks-used-by-the-workflows) | 1 |
 | [Documentation](#documentation) | 49 |
-| [Tools](#tools) | 367 |
+| [Tools](#tools) | 368 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -5675,7 +5675,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/scripts/twoway.md`](scripts/twoway.md) | 7.5 kB | Documentation: public/scripts/twoway.js. | [twoway.md](scripts/twoway.md) |
 | [`docs/scripts/walk.md`](scripts/walk.md) | 28.0 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
 | [`docs/scripts/wave3d-view.md`](scripts/wave3d-view.md) | 4.4 kB | Documentation: `public/scripts/wave3d-view.js` · the lit 3D views of Fig. 14. | [wave3d-view.md](scripts/wave3d-view.md) |
-| [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 47.5 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
+| [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 47.6 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`docs/simulations/fig02-double-pendulum.md`](simulations/fig02-double-pendulum.md) | 54.7 kB | Documentation: Fig. 2 · Double Pendulum. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`docs/simulations/fig03-double-slit.md`](simulations/fig03-double-slit.md) | 47.9 kB | Documentation: Fig. 3 · Double-Slit Interference. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`docs/simulations/fig04-transverse-longitudinal.md`](simulations/fig04-transverse-longitudinal.md) | 44.6 kB | Documentation: Fig. 4 · Transverse and Longitudinal Waves. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
@@ -6059,9 +6059,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/sims/agents/stage.py`](../tools/sims/agents/stage.py) | 14.6 kB | Kaggelize: runs one Claude Code session on one simulation inside limits (branch, tools, turns, allowed paths), checks its files and commits them. | [kaggelize.md](kaggelize.md) |
 | [`tools/sims/agents/titles.py`](../tools/sims/agents/titles.py) | 1.8 kB | Kaggelize: turns the titles typed into the Run form into the list of simulations and their short names. | [kaggelize.md](kaggelize.md) |
 | [`tools/sims/barton.py`](../tools/sims/barton.py) | 6.8 kB | Reference model of Barton's pendulums (the right margin of the home page), exactly periodic so the stored loop has no seam. | [PLAN.md](../notes/sims/PLAN.md) |
+| [`tools/sims/double_pendulum.py`](../tools/sims/double_pendulum.py) | 17.3 kB | Reference model of one simulation, run once on Kaggle (written by a Kaggelize build session; its report is in notes/sims/reports/). | [kaggelize.md](kaggelize.md) |
 | [`tools/sims/kaggle_sims.py`](../tools/sims/kaggle_sims.py) | 2.0 kB | Text of the Kaggle notebook phyein-usul-simulations: fetches tools/sims at a pinned commit and runs one simulation model. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/pipeline.py`](../tools/sims/pipeline.py) | 6.7 kB | The simulations pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation. | [kaggle-sims.md](kaggle-sims.md) |
-| [`tools/sims/registry.json`](../tools/sims/registry.json) | 1.8 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/registry.json`](../tools/sims/registry.json) | 2.2 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/verify_live.py`](../tools/sims/verify_live.py) | 4.6 kB | Step 10 of the simulations pipeline: wait for the live site, compare the live files by SHA-256, open the live pages and check they play the data. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/wave_interference.py`](../tools/sims/wave_interference.py) | 12.8 kB | Reference model of Fig. 1, Wave interference: the distance, angle and height tables of every ring on a fixed grid, computed once on Kaggle; the page adds the rings of the chosen sources. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`tools/spill/drag_check.py`](../tools/spill/drag_check.py) | 2.9 kB | The continuous spill model: its Kaggle CPU checks (pint at rest and a hard shove; the rest diagnostic; air drag against the textbook law). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -7434,7 +7435,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/lucretius/poem-ar-146-224.json`](../notes/lucretius/poem-ar-146-224.json) | 10.8 kB | The Arabic of Lucretius I 146-224 (tenth version, free verse, fully vowelled), translated from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
 | [`notes/sims/PLAN.md`](../notes/sims/PLAN.md) | 7.9 kB | Plan of the simulations moved to Kaggle: specify, generate once on Kaggle, store, play, document; order and state. | [PLAN.md](../notes/sims/PLAN.md) |
 | [`notes/sims/STATE-agents.md`](../notes/sims/STATE-agents.md) | 2.8 kB | State of the Kaggelize work: aim, what is live, the design, the facts checked, what is open. | [kaggelize.md](kaggelize.md) |
-| [`notes/sims/reports/wave_interference/study.md`](../notes/sims/reports/wave_interference/study.md) | 17.0 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
+| [`notes/sims/reports/wave_interference/study.md`](../notes/sims/reports/wave_interference/study.md) | 17.3 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/skills/phyein-usul-data-panel/SKILL.md`](../notes/skills/phyein-usul-data-panel/SKILL.md) | 26.9 kB | The revised skill phyein-usul-data-panel, to be uploaded to Numa's account (the synced copy in a session is read-only). | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/spill/HANDOFF.md`](../notes/spill/HANDOFF.md) | 8.1 kB | The continuous spill model (stout stays liquid over the rim, down the glass, onto the cart): its state and its handoff of 18 November 2026. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/spill/STATE.md`](../notes/spill/STATE.md) | 7.1 kB | The continuous spill model (stout stays liquid over the rim, down the glass, onto the cart): its state and its handoff of 18 November 2026. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
