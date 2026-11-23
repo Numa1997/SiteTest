@@ -45,6 +45,10 @@ owner switched R2 on on 13 November 2026. What changed and what did not:
 - Cost (checked 14 November 2026, [R2 pricing](https://developers.cloudflare.com/r2/pricing/)): the free tier is 10 GB-month of storage, 1 million writes and 10 million reads a month, and no charge for traffic out.
   Above 10 GB it is $0.015 per GB-month. The measured size is stated in the Fig. 15 doc.
 
+Since 23 November 2026 the same script also answers `/rel/<tag>/<file>.pack`: large simulation data that the Kaggle line stored
+as files of a GitHub release of this repository (`sims-<sim>-<date>`; [kaggle-sims.md](kaggle-sims.md), "Large data"). It fetches the
+file from GitHub, passes a `Range` request through and sends the same headers as for `/r2/`. Anything else under `/rel/` is a 404.
+
 ## Build and deploy
 
 ```bash

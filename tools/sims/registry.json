@@ -30,6 +30,16 @@
    "files": ["geometry.bin", "dist_lo.bin"],
    "files_note": "Generation 2 of Fig. 1: rings at nodes even in k, blended by the page, every table split into a bottom and a top half. The live check lists the two files every wide screen opens with. The page is added to pages once this data is checked live; until then the page plays wave_interference.",
    "pages": []
+  },
+  "double_pendulum_smoke": {
+   "model": "tools/sims/double_pendulum_smoke.py",
+   "gpu": true,
+   "timeout_s": 3600,
+   "store": "release",
+   "release_files": ["*.pack"],
+   "files": ["double_pendulum.json"],
+   "about_files": "Engine test for GPU runs with large data: one pack in the GitHub release sims-double_pendulum_smoke-<date>, the summary with every fingerprint committed. No page plays it.",
+   "pages": []
   }
  }
 }

@@ -38,6 +38,13 @@ def main():
         b = get(f"{site}/data/sims/{a.sim}/{e['date']}/{f}"); h = hashlib.sha256(b).hexdigest()
         if len(b) != e["files"][f]["bytes"] or h != e["files"][f]["sha256"]: sys.exit(f"live {f} differs from generations.json")
         log(f"{f}: {len(b)} bytes, SHA-256 matches"); report.append(f"- `{f}`: {len(b)} bytes, SHA-256 `{h[:12]}…` matches")
+    # 2b. large data: every release file must answer through the site's Worker (/rel/<tag>/<file>), a byte range must come back as
+    #     asked, and the total size must be the one in generations.json
+    for f, meta in (e.get("release_files") or {}).items():
+        req = urllib.request.Request(f"{site}/rel/{e['release']}/{f}", headers={"Range": "bytes=0-1023", "User-Agent": "scenes-verify"})
+        with urllib.request.urlopen(req, timeout=60) as r: part, cr = r.read(), r.headers.get("Content-Range", "")
+        if len(part) != min(1024, meta["bytes"]) or not cr.endswith("/%d" % meta["bytes"]): sys.exit(f"live /rel/{e['release']}/{f}: got {len(part)} bytes, Content-Range '{cr}', expected a total of {meta['bytes']}")
+        log(f"{f}: served from the release through /rel/, {meta['bytes']} bytes"); report.append(f"- `{f}`: served from release `{e['release']}` through `/rel/`, {meta['bytes']} bytes, ranges work")
     # 3. pages
     from playwright.sync_api import sync_playwright
     exe = os.environ.get("CHROMIUM") or None
