@@ -31,6 +31,8 @@ HH = float(os.environ.get("HH", "0.019"))   # m, slab thickness (0.019 = HEAD0; 
 JITZ = float(os.environ.get("JITZ", "0.3"))  # vertical jitter of the seed, in layer spacings (0.3 as seed_particles; 0 in the diagnostic)
 FRAC43 = float(os.environ.get("FRAC43", "1.5"))  # 4.3's load in units of tau_y
 QUAD_ONLY = os.environ.get("QUAD_ONLY") == "1"   # only print the seed's quadrature numbers, run nothing
+EAUD = os.environ.get("EAUDIT") == "1"   # instruction 0004 test (a): energy identity logs; off (default) = the code path unchanged
+EAUD_T = (float(os.environ.get("EAUD_T0", "1.0")), float(os.environ.get("EAUD_T1", "2.0")))   # the window (s), stores at the first steps >= each
 TAG = (("" if DXE == 0.0015 else f"_dx{DXE * 1e3:g}mm") + ("" if T43 == 0.5 else f"_T{T43:g}s") + ("" if HH == 0.019 else f"_h{HH * 1e3:g}mm")
        + ("" if JITZ == 0.3 else f"_jz{JITZ:g}") + ("" if FRAC43 == 1.5 else f"_f{FRAC43:g}"))   # file-name tag for other set-ups
 VOUT = os.path.join(OUT, "step4"); os.makedirs(VOUT, exist_ok=True)
@@ -119,7 +121,7 @@ def mirror_floor(f):
 def step(st, dt, gx):
     X, V, C, be = st["x"], st["v"], st["C"], st["be"]
     tau = SJ.sym_unpack(SJ.evp_tau(be, G))                                           # (N, 3, 3) Kirchhoff stress
-    size = NX * NY * NZ; vel = []; n_floor = jnp.zeros((), jnp.int32)
+    size = NX * NY * NZ; vel = []; n_floor = jnp.zeros((), jnp.int32); ea = {}
     for comp in (0, 1):
         fl, ok, w, gw, dpos = corners(X, comp)
         mom = w * MP * (V[None, :, comp] + jnp.sum(C[None, :, comp, :] * dpos, -1))
@@ -130,6 +132,12 @@ def step(st, dt, gx):
         n_floor = n_floor + jnp.sum(occ & (m < M_FLOOR), dtype=jnp.int32)              # faces where the mass floor acts
         gc = gx if comp == 0 else 0.0
         u = jnp.where(occ, acc[..., 0] / jnp.where(occ, m, 1.0) + dt * gc + dt * acc[..., 3] / jnp.maximum(m, M_FLOOR), 0.0)
+        if EAUD:   # 0004 (a): the grid's kinetic energy across the stress force, before the floor faces are zeroed (float64)
+            u2 = jnp.where(occ, acc[..., 0] / jnp.where(occ, m, 1.0) + dt * gc, 0.0).astype(jnp.float64); u3 = u.astype(jnp.float64); m6 = m.astype(jnp.float64)
+            dW = jnp.where(occ, 0.5 * m6 * (u2 * u2 - u3 * u3), 0.0); kfl = jnp.arange(NZ)[None, None, :] <= 2
+            ea["W_sg"] = ea.get("W_sg", 0.0) + jnp.sum(dW); ea["W_sg_above"] = ea.get("W_sg_above", 0.0) + jnp.sum(jnp.where(kfl, 0.0, dW))
+            ea["E_floor"] = ea.get("E_floor", 0.0) + jnp.sum(jnp.where(occ & kfl, 0.5 * m6 * u3 * u3, 0.0))
+            ea["n_floor_faces_mfloor"] = ea.get("n_floor_faces_mfloor", 0) + jnp.sum(occ & (m < M_FLOOR), dtype=jnp.int32)
         vel.append(mirror_floor(u))
     vs, Cs = [], []
     for comp in (0, 1):
@@ -143,6 +151,12 @@ def step(st, dt, gx):
     st = dict(x=Xn.astype(F32), v=Vn.astype(F32), C=Cn.astype(F32), be=ben, disp=st["disp"] + dt * Vn[:, 0])
     diag = dict(n_yielded=jnp.sum(y), gp_max=jnp.max(gp), s_max=jnp.max(s_new), det_dev=jnp.max(jnp.abs(det - 1.0)), res_max=jnp.max(res),
                 vmax=jnp.max(jnp.abs(Vn)), n_floor=n_floor)
+    if EAUD:   # 0004 (a): plastic work, the return map's free-energy drop, gravity's work, the stores (J, float64)
+        F6 = jnp.float64; trt = SJ.evp_trial_trace(be, Cn, dt).astype(F6); trn = (ben[:, 0] + ben[:, 1] + ben[:, 2]).astype(F6)
+        diag.update(e_plastic=jnp.sum(jnp.where(y, VP * s_new.astype(F6) * gp.astype(F6), 0.0)) * dt,
+                    e_drop=jnp.sum(jnp.where(y, VP * 0.5 * G * (trt - trn), 0.0)), w_grav=jnp.sum(MP * gx * Vn[:, 0].astype(F6)) * dt,
+                    U_el=jnp.sum(VP * 0.5 * G * (trn - 3.0)), KE_p=0.5 * MP * jnp.sum(Vn.astype(F6) ** 2),
+                    w_trial=jnp.sum(VP * 0.5 * G * (trt - (be[:, 0] + be[:, 1] + be[:, 2]).astype(F6))), **ea)
     return st, diag
 
 
@@ -162,6 +176,43 @@ def obs(st):
 obs_j = jax.jit(obs)
 
 
+EA = {}
+
+
+def eaud_row(label, k, t, dt, d):
+    """0004 (a): per-step energy row (cumulative sums from t = 0) to slab_energy_<label>...jsonl; the window's stores and sums."""
+    keys = ("e_plastic", "e_drop", "w_grav", "W_sg", "W_sg_above", "E_floor", "w_trial")
+    if label not in EA:
+        EA[label] = dict(cum={kk: 0.0 for kk in keys}, fh=open(os.path.join(VOUT, f"slab_energy_{label}{TAG}_{SUB}.jsonl"), "w"), at={})
+    e = EA[label]
+    for kk in keys: e["cum"][kk] += d[kk]
+    row = dict(step=k, t=t, dt=dt, U_el=d["U_el"], KE_p=d["KE_p"], n_floor_faces_mfloor=int(d["n_floor_faces_mfloor"]), n_yielded=int(d["n_yielded"]),
+               **{"cum_" + kk: v for kk, v in e["cum"].items()})
+    e["fh"].write(json.dumps(row) + "\n")
+    for i, tt in enumerate(EAUD_T):
+        if t >= tt - 1e-12 and i not in e["at"]: e["at"][i] = row
+
+
+def eaud_close(label):
+    e = EA.get(label)
+    if not e: return
+    e["fh"].close(); out = dict(label=label, window_requested_s=list(EAUD_T))
+    try:
+        a, b = e["at"][0], e["at"][1]; w = lambda kk: b["cum_" + kk] - a["cum_" + kk]
+        out.update(t_a=a["t"], t_b=b["t"], step_a=a["step"], step_b=b["step"], E_plastic=w("e_plastic"), E_drop=w("e_drop"), W_grav=w("w_grav"),
+                   W_stress_grid=w("W_sg"), W_stress_grid_above_floor=w("W_sg_above"), E_floor_wiped=w("E_floor"), W_trial=w("w_trial"),
+                   dKE=b["KE_p"] - a["KE_p"], dU_el=b["U_el"] - a["U_el"], U_el_a=a["U_el"], U_el_b=b["U_el"])
+        r = lambda x, y: x / y if y else float("nan")
+        out["ratios"] = dict(E_plastic_over_W_grav=r(out["E_plastic"], out["W_grav"]), E_plastic_over_E_drop=r(out["E_plastic"], out["E_drop"]),
+                             E_plastic_over_W_stress_grid=r(out["E_plastic"], out["W_stress_grid"]))
+        out["pass_marks"] = dict(E_plastic_over_W_grav_within_3pct=bool(abs(out["ratios"]["E_plastic_over_W_grav"] - 1.0) < 0.03),
+                                 E_plastic_over_E_drop_within_2pct=bool(abs(out["ratios"]["E_plastic_over_E_drop"] - 1.0) < 0.02),
+                                 E_plastic_over_W_stress_grid_within_3pct=bool(abs(out["ratios"]["E_plastic_over_W_stress_grid"] - 1.0) < 0.03))
+    except Exception as ex:
+        out["error"] = repr(ex)
+    json.dump(out, open(os.path.join(VOUT, f"slab_energy_{label}{TAG}_{SUB}_summary.json"), "w"), indent=1); say(f"{label} energy audit: {json.dumps(out)}")
+
+
 def run(label, frac, T, ramp, ramp_kind="linear"):
     tau_b = frac * TAU_Y; alpha = math.asin(tau_b / (RHO_H * GRAV * H)); gx_full = GRAV * math.sin(alpha)
     st = dict(x=jnp.asarray(P0), v=jnp.zeros((NP, 3), F32), C=jnp.zeros((NP, 3, 3), F32),
@@ -179,6 +230,7 @@ def run(label, frac, T, ramp, ramp_kind="linear"):
         else: ramp_f = min(1.0, (t + dt) / ramp)
         st, d = step_j(st, dt, gx_full * ramp_f); t += dt; k += 1
         d = {kk: float(v) for kk, v in d.items()}; o = obs_j(st)
+        if EAUD: eaud_row(label, k, t, dt, d)
         agg["n_yielded_max"] = max(agg["n_yielded_max"], int(d["n_yielded"])); agg["vmax"] = d["vmax"]; agg["n_floor_max"] = max(agg["n_floor_max"], int(d["n_floor"]))
         for kk in ("det_dev", "res_max", "gp_max", "s_max"):
             key = kk if kk.endswith("_max") else kk + "_max"; agg[key] = max(agg[key], d[kk])
@@ -189,6 +241,7 @@ def run(label, frac, T, ramp, ramp_kind="linear"):
             prof.append(dict(t=t, u=np.asarray(o["lay_u"]).tolist(), v=np.asarray(o["lay_v"]).tolist()))
         if k % 500 == 0: say(f"{label}: step {k}  t {t:.4f}  u_top {ut[-1]:.4e} m  v_top {vt[-1]:.4e} m/s  yielded {int(d['n_yielded'])}  det_dev {d['det_dev']:.2e}")
     fh.close()
+    if EAUD: eaud_close(label)
     ts, ut, vt = np.array(ts), np.array(ut), np.array(vt)
     out = dict(label=label, sub=SUB, steps=k, t_end=t, tau_b_pa=tau_b, frac=frac, alpha_deg=math.degrees(alpha), g_x=gx_full, ramp_s=ramp, N=NP,
                layers=NZL, hz_m=HZ, dt_rule="dt = min(2e-3, 0.8 dx / vmax, 0.40 dx / c_s)", dt_el=DT_EL, c_s=CS, G=G, tau_y=TAU_Y, A1=A1, A2=A2,

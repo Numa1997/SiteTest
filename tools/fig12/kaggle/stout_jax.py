@@ -157,6 +157,15 @@ def evp_return_map(be6, C, dt, G=G_HEAD, tau_y=TAU_Y, A1=EVP_A1, A2=EVP_A2, n_gp
     return sym_pack(Bn).astype(F32), y, gp.astype(F32), s_new.astype(F32), det3(Bn), res
 
 
+def evp_trial_trace(be6, C, dt):
+    """Audit only (instruction 0004, 23 Nov 2026; nothing in the default path calls it): tr of the elastic trial state of
+    evp_return_map, the same first lines: f = I + dt C, Bt = f B f^T / det(f B f^T)^(1/3). Used for E_drop = V (G/2) (tr Bt - tr B_new)."""
+    f = jnp.eye(3, dtype=F32)[None] + dt * C
+    B = sym_unpack(be6); Bt = f @ B @ jnp.swapaxes(f, -1, -2)
+    Bt = Bt / jnp.cbrt(jnp.maximum(det3(Bt), 1e-30))[..., None, None]
+    return jnp.trace(Bt, axis1=-2, axis2=-1)
+
+
 # ====================================================================== geometry (built once, before the run)
 class Geometry:
     """The glass on the grid: open fractions of every face, wall area per cell, masks. Cell (i, j, k) has its centre at
@@ -528,6 +537,9 @@ class Stout:
         self.evp = head_mode == "evp"
         self.diag_g2p = False    # Step 3 verify (diagnostic only): the state also carries each particle's position before _g2p_cont's
                                  # collisions (xprop) and whether it touched the glass (g2p_glass); the motion is unchanged
+        self.audit = False       # instruction 0004 (23 Nov 2026), diagnostic only: with head_mode "evp", step() also returns the energy
+                                 # ledger of its sub-steps, U_el, E_drop, the E_plastic split and the shadow cell-strain E_plastic (needs
+                                 # diag_g2p = True and the state key "be_cell"); False (default) = the code path unchanged
         if self.cont: self.floor_w = jnp.asarray(G.thw == 0)
         self.gamma = GAMMA if self.cont else 0.0
         c = jnp.asarray(G.xc, F32); cy = jnp.asarray(G.yc, F32); zc = jnp.asarray(G.zc, F32)
@@ -1372,6 +1384,7 @@ class Stout:
         dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
         if rot is not None: rot = tuple(jnp.asarray(r, F32) for r in rot)
         pr = self.prepare(s) if prep is None else prep
+        aud = self.evp and self.audit; s0 = s
         vel, mass = pr["vel"], pr["mass"]
         # 13 Nov 2026, run 3: gravity's kick of this step (dt g) was added before the viscous and thin-layer stresses, so the glass's
         # Stokes layer and the head braked gravity itself: a pint at rest lost 0.63 mJ of potential energy in 2 s, the books
@@ -1383,12 +1396,16 @@ class Stout:
         w_old = jnp.broadcast_to(s["wh"][:, :, None], vel[2].shape)
         ph, liq, nsel, H = pr["ph"], pr["liq"], pr["nsel"], pr["H"]
         ex = pr.get("ex") if self.evp else None
+        if aud: au = [vel]
         if self.nu > 0: vel = self.viscosity(vel, mass, dt, fh=None if ex is None else ex["fh"])
+        if aud: au.append(vel)
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.evp:   # Step 4: the glass's stress (stout and head), then the head's deviatoric force u += dt F_dev / max(M_f, m_floor)
             vel, ew_s, ew_f = self.friction_evp(vel, mass, dt, ex); ew = ew_s + ew_f
+            if aud: au.append(vel)
             vel = [jnp.where((self.th[c] > 0) & (mass[c] > 1e-6), vel[c] + dt * ex["Fdev"][c] / jnp.maximum(ex["M"][c], self.m_floor), vel[c]).astype(F32)
                    for c in range(3)]
+            if aud: au.append(vel)
         elif self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
         vel = self.body_force(vel, mass, dt, gx, gz, rot)
         if self.cont and wind is not None: vel = self.air_drag(vel, mass, pr["ph"], pr["liq"], dt, wind, beta=None if ex is None else ex["beta"])
@@ -1410,6 +1427,7 @@ class Stout:
         pst = self.tension(ph, s["hf"], dt) if self.cont else None
         vel, known, p, it, res, res_abs, bnorm = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt, pst=pst,
                                                beta=None if ex is None else ex["beta"])
+        if aud: au.append(vel)
         if mu is not None:   # the head's new vertical velocity: that of the face its surface crosses (liquid below, air above)
             sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
             wh = jnp.where(nsf > 0, jnp.sum(jnp.where(sf, vel[2], 0.0), 2) / jnp.maximum(nsf, 1), s["wh"]).astype(F32)
@@ -1424,6 +1442,7 @@ class Stout:
         if self.evp:   # Step 4: the head's return map, after G2P, with the APIC velocity gradient C of the new step
             ben, yl, gp, s_new, det, rres = evp_return_map(s["be"], s["C"], dt)
             hd = s["is_head"] & s["act"]
+            if aud: s, adiag = self._audit_evp(s0, s, au, vel, mass, ex, dt, gz, ben, yl, gp, s_new, hd)
             s = dict(s, be=jnp.where(hd[:, None], ben, s["be"]))
             mpart = s["pmass"].astype(F64)
             okf = [(self.th[c] > 0) & (mass[c] > 1e-6) for c in range(3)]
@@ -1433,6 +1452,7 @@ class Stout:
             evd = dict(e_wall_stout=ew_s, e_wall_foam=ew_f, e_plastic=e_plastic, n_yielded=jnp.sum(hd & yl, dtype=I32), gp_max=jnp.max(jnp.where(hd, gp, 0.0)), s_max=jnp.max(jnp.where(hd, s_new, 0.0)),
                        det_min=jnp.min(jnp.where(hd, det, 1.0)), det_max=jnp.max(jnp.where(hd, det, 1.0)), rm_res=jnp.max(jnp.where(hd, rres, 0.0)),
                        mom_phys=jnp.sum(jnp.where(s["act"][:, None], mpart[:, None] * s["vp"].astype(F64), 0.0), 0), n_floor=n_floor, n_floor_head=n_floor_head)
+            if aud: evd.update(adiag)
         if self.head: s = self.head_spill(s, H, dt, gx, gz, rot)
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
@@ -1440,6 +1460,57 @@ class Stout:
         diag = dict(it=it, res=res, res_abs=res_abs, bnorm=bnorm, conv=(res < self.tol) | (res_abs < self.atol), mom=mom, nact=jnp.sum(s["act"], dtype=I32),
                     nsel=nsel, vmax=vmax, mhead=mhead, **evd)
         return s, diag
+
+    def _audit_evp(self, s0, s, au, velx, mass, ex, dt, gz, ben, yl, gp, s_new, hd):
+        """Instruction 0004 (23 Nov 2026), diagnostic only (self.audit): reads the step, changes no motion. s0 the state at the step's
+        start, s after G2P (be not yet updated), au = the grid velocities after P2G, viscosity, friction_evp, F_dev and the pressure step,
+        velx the extrapolated (cavity-side) field G2P read. Returns s with the shadow be_cell updated, and the diagnostics (J, float64):
+        KE_g = sum over occupied open faces 0.5 M_f u^2; the ledger dE_P2G, dE_visc, dE_wall, dE_dev, dE_grav_proj (with PE of the
+        positions before collisions, xprop), dE_G2P_coll, and dE_mech; U_el = sum_head V (G/2)(tr be - 3) after the return map; E_drop =
+        sum_yielded V (G/2)(tr be_trial - tr be_new); W_trial = sum_head V (G/2)(tr be_trial - tr be_old); E_plastic split: particles
+        whose P2G corners touch an occupied face with M_f < m_floor / else within 1.5 dx of the inner wall / else interior; the shadow
+        be_cell driven by f = I + dt D_cell (D_cell the symmetric cell-centred strain rate of velx, the particle's cell) and its
+        E_plastic_cellD."""
+        F6 = F64; dx = self.dx; gg = -gz.astype(F6)
+        okf = [(self.th[c] > 0) & (mass[c] > 1e-6) for c in range(3)]; M6 = [ex["M"][c].astype(F6) for c in range(3)]
+        KEg = lambda v: sum(jnp.sum(jnp.where(okf[c], 0.5 * M6[c] * v[c].astype(F6) ** 2, 0.0)) for c in range(3))
+        k0, k1, k2, k3, k5 = [KEg(v) for v in au]
+        pm = s0["pmass"].astype(F6); a0 = s0["act"]; a1 = s["act"]
+        KEb = 0.5 * jnp.sum(jnp.where(a0, pm * jnp.sum(s0["vp"].astype(F6) ** 2, 1), 0.0)); PEb = gg * jnp.sum(jnp.where(a0, pm * s0["xp"][:, 2].astype(F6), 0.0))
+        PEp = gg * jnp.sum(jnp.where(a0, pm * s["xprop"][:, 2].astype(F6), 0.0))
+        KEa = 0.5 * jnp.sum(jnp.where(a1, pm * jnp.sum(s["vp"].astype(F6) ** 2, 1), 0.0)); PEa = gg * jnp.sum(jnp.where(a1, pm * s["xp"][:, 2].astype(F6), 0.0))
+        dW = [jnp.where(okf[c], 0.5 * M6[c] * (au[2][c].astype(F6) ** 2 - au[3][c].astype(F6) ** 2), 0.0) for c in range(3)]
+        d = dict(aud_KE_p=KEa, aud_PE=PEa, aud_dE_P2G=k0 - KEb, aud_dE_visc=k1 - k0, aud_dE_wall=k2 - k1, aud_dE_dev=k3 - k2,
+                 aud_dE_grav_proj=k5 - k3 + PEp - PEb, aud_dE_G2P_coll=KEa - k5 + PEa - PEp, aud_dE_mech=KEa + PEa - KEb - PEb,
+                 aud_W_sg_mfloor=sum(jnp.sum(jnp.where(ex["M"][c] < self.m_floor, dW[c], 0.0)) for c in range(3)),
+                 aud_n_gone=jnp.sum(a0 & ~a1, dtype=I32))
+        V = s["pvol"].astype(F6); trf = lambda b: (b[:, 0] + b[:, 1] + b[:, 2]).astype(F6)
+        trn = trf(ben); tro = trf(s["be"]); trt = evp_trial_trace(s["be"], s["C"], dt).astype(F6); Gh = 0.5 * G_HEAD
+        epl = jnp.where(hd & yl, V * s_new.astype(F6) * gp.astype(F6), 0.0) * dt.astype(F6)
+        X0 = s0["xp"]; g = (X0 - self.origin) / dx; mfl = jnp.zeros(self.N, bool)
+        for c in range(3):
+            fl, ok, w, wv, cf, fr = self._corners(g, c, self.fshape[c])
+            flag = (okf[c] & (ex["M"][c] < self.m_floor)).reshape(-1)[fl] & ok
+            mfl = mfl | jnp.any(flag, 0)
+        r0 = jnp.hypot(X0[:, 0], X0[:, 1]); z0 = X0[:, 2]; G = self.G
+        nearw = (z0 < G.zrim) & (self.Rz(jnp.clip(z0, 0.0, G.zrim - 1e-6)) - r0 < 1.5 * dx) & ~mfl
+        inter = ~mfl & ~nearw
+        d.update(aud_U_el=jnp.sum(jnp.where(hd, V * Gh * (trn - 3.0), 0.0)), aud_E_drop=jnp.sum(jnp.where(hd & yl, V * Gh * (trt - trn), 0.0)),
+                 aud_W_trial=jnp.sum(jnp.where(hd, V * Gh * (trt - tro), 0.0)), aud_E_pl_mfloor=jnp.sum(jnp.where(mfl, epl, 0.0)),
+                 aud_E_pl_wall=jnp.sum(jnp.where(nearw, epl, 0.0)), aud_E_pl_interior=jnp.sum(jnp.where(inter, epl, 0.0)),
+                 aud_ny_mfloor=jnp.sum(hd & yl & mfl, dtype=I32), aud_ny_wall=jnp.sum(hd & yl & nearw, dtype=I32), aud_ny_interior=jnp.sum(hd & yl & inter, dtype=I32),
+                 aud_n_head_mfloor=jnp.sum(hd & mfl, dtype=I32), aud_n_head_wall=jnp.sum(hd & nearw, dtype=I32))
+        # the shadow: cell-centred L = grad u of the field G2P read, D = sym(L), the particle's cell at its P2G position
+        Uc = [0.5 * (cut_lo(velx[a], a) + cut_hi(velx[a], a)) for a in range(3)]
+        L = [[(cut_hi(velx[a], a) - cut_lo(velx[a], a)) / dx if a == b else (sh(Uc[a], 1, b, 0.0) - sh(Uc[a], -1, b, 0.0)) / (2.0 * dx)
+              for b in range(3)] for a in range(3)]
+        Dc = jnp.stack([jnp.stack([0.5 * (L[a][b] + L[b][a]) for b in range(3)], -1) for a in range(3)], -2).reshape(-1, 3, 3)
+        flc, okc = self.flat(jnp.floor(g).astype(I32), self.dims)
+        Dp = jnp.where(okc[:, None, None], Dc[flc], 0.0).astype(F32)
+        bc, yc, gpc, sc, _, _ = evp_return_map(s0["be_cell"], Dp, dt)
+        d.update(aud_E_pl_cellD=jnp.sum(jnp.where(hd & yc, V * sc.astype(F6) * gpc.astype(F6), 0.0)) * dt.astype(F6),
+                 aud_ny_cellD=jnp.sum(hd & yc, dtype=I32), aud_s_max_cellD=jnp.max(jnp.where(hd, sc, 0.0)))
+        return dict(s, be_cell=jnp.where(hd[:, None], bc, s0["be_cell"])), d
 
     def resort(self, s):
         """Sort the particles by cell (only the order in memory changes), so that neighbours on the grid are neighbours in
