@@ -467,3 +467,8 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
 - STANDING RULE (coordinator, 23 Nov): every GPU launch uses internet OFF with the code embedded in the notebook. Kaggle queues
   internet-on GPU runs indefinitely on this account; queued runs hold the 2 batch GPU slots. If a run has not started within 5 min, stop
   and report. The coordinator channel is notes/coord/ (rules in to-session/0000-channel-rules.md; reports go to to-coordinator/).
+- 23 Nov 19:18 UTC (instruction 0002, new code session): quota 1 840 s used of 108 000 s. step4-slosh-head-offline is at v2 with
+  source "__SRC__" (coordinator's broken save, 19:06 UTC); status empty (queued). v1's source cannot be read back, so the launcher was
+  rebuilt as tools/spill/build_l45_offline.py (four files at 5acb7181, checked byte-identical).
+- 23 Nov 19:19:31 UTC: SaveKernel for v3 refused: "Maximum batch GPU session count of 2 reached." Not launched, 0 GPU-s.
+  Inference: queued v1 and v2 hold both slots. Report notes/coord/to-coordinator/0002-report.md; the owner must stop them in the browser.
