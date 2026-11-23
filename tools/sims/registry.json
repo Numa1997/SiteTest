@@ -18,6 +18,12 @@
     {"path": "/simulations/Circular%20Wave%20Interference%20Visualization.html", "width": 1600, "height": 1000, "scroll": 0,
      "probe": "(()=>{const s=window.__simData;if(!s)return {error:'no stored-data loader on the page'};if(s.err)return {error:s.err};if(!s.sha_ok||!s.gen)return {waiting:true};const d=Sim.data.ds;return {sha_ok:s.sha_ok,commit:s.gen.commit,date:s.gen.date,files:s.files,lambda:d.get('lambda'),damp:d.get('damp'),builds:d.get('builds'),renders:d.get('renders')};})()"}
    ]
+  },
+  "double_pendulum": {
+   "model": "tools/sims/double_pendulum.py",
+   "files": ["double_pendulum.json", "dp_11_09.bin"],
+   "about_files": "The model writes 108 files dp_<mass><length>_<theta1>.bin and double_pendulum.json; listed here are the two the page loads at its default start (equal masses and rods, 120 and 150 degrees). No page is listed until the page plays the data.",
+   "pages": []
   }
  }
 }
