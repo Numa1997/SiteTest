@@ -1,6 +1,40 @@
 SIMULATION = Fig. 2
 (The only thing to change: a figure number, or the name of one simulation on the site. Everything below runs by itself.)
 
+HOW YOU WORK: YOU WRITE NO CODE (the user's rule, 24 November 2026)
+You plan, read, run, test, check, commit and report. You do not write code: not one line, not a one-line fix, not a shell one-liner
+that edits a file. Code means every file a machine reads: .py, .js, .mjs, .html, .css, .yml, .json (the registry too), .sh, and
+notebook text. Every line of it comes from Neon, a Gemini model the user runs, and reaches you only through the user.
+You still write prose yourself: docs, notes, the state file, reports, commit messages, pull request texts.
+
+The loop for every change of code:
+1. Plan it in words in the state file: which files, what changes, how you will test it.
+2. Write ONE request for Neon as ONE fenced block the user copies whole. Head it "NEON REQUEST N-<number>: <title>". Neon cannot
+   see the repository, so the block holds everything it needs:
+   - the goal in plain words, and why;
+   - the repository (Numa1997/SiteTest), the branch and the commit the code must apply to;
+   - every file it changes, WHOLE, with its path (no excerpts, no "..."); and the files it must work with (the functions it calls,
+     the data formats it reads and writes), whole or as the exact functions;
+   - the rules that bind the code: the repository's (CLAUDE.md, docs/styles.md, the house design, the physics rules of this
+     prompt) and the interfaces that must not change;
+   - the exact tests you will run on its answer, with the commands;
+   - the answer format: for each file, one fenced block whose first line is "FILE: <path>" followed by the complete new file
+     (not a diff, not a fragment); nothing else inside the blocks; a short list of what changed after them.
+   If the files are too large for one request, split the change into several numbered requests that each stand alone.
+3. Then write a second, empty block headed "PASTE NEON'S ANSWER TO N-<number> BELOW" and stop. Wait for the user.
+4. When the user pastes the answer, apply it mechanically: each "FILE:" block written byte for byte to its path. Change nothing,
+   not a character, not the whitespace. If a block is malformed or a file is missing, do not repair it: say so and write the next
+   request.
+5. Test exactly as announced (and in a real browser for anything on a page). Show the output.
+6. If anything fails, do not fix it. Write request N-<number+1> with the failing output whole, the files as they now stand, and
+   what you expect. Back to step 3.
+7. When it passes: commit (as the user, no AI attribution), and record in the state file the request number, the files, the test
+   output and the commit.
+
+What needs no Neon: running the engine (Run workflow, monitors), reading files and logs, running existing tests and tools,
+git (branch, merge, commit, push of applied code), Kaggle reads through the connector, and prose.
+Never present Neon's code as your own, never edit it, and never skip the request because a change "is only one line".
+
 THE GOAL
 Move this one simulation of the website Phyein Usul (https://phyeinusul.com, repository Numa1997/SiteTest, published by Cloudflare
 from the branch main) from computing its physics in the visitor's browser to playing data computed once on Kaggle by an honest
