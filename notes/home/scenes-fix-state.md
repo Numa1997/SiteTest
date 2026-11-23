@@ -28,6 +28,10 @@ controls and parameters to play with** (planned in `notes/sims/PLAN.md` line 24,
 - [x] step 4 home note details.bgs-note, DE + AR
 - [x] step 4b scenes.html, 12 scenes, knob tables K, scenes roots and pairs; English only
 - [x] step 5 tests clean (check.cjs); screenshots shown to the user; WAITING for the yes
-- [ ] step 6 merge (fetch, rebase, inventory), watch "Simulations on Kaggle" for coupled, verify live; delete branch and scratch
-  (PNG folders); barton.py and its data stay until coupled is verified live, then ask the user.
+- [x] step 6 merged 23 November 2026, 23:50 (pull request 198, merge 257429e). The workflow "Simulations on Kaggle" computed
+  coupled.py as notebook version 10, committed the data and its live check passed at 23:57 (coupled.bin 4245 bytes, SHA-256 matches;
+  the live home page played it on 19 beams, no page errors). Branch scenes-fix deleted; local films (PNG) deleted.
+- Kept on purpose: tools/sims/barton.py and its data (old work; the registry lists no page for it). Removing them is the user's call.
+- Open: the user finds YEAR = 120 s too long but asked to publish as it is and look; the pace is the first block of S.forest.
+
 - Known, not ours: `tools/i18n/build.py --check` fails on "{n} shown here" (fold.js), already on main.
