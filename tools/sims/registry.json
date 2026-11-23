@@ -18,6 +18,12 @@
     {"path": "/simulations/Circular%20Wave%20Interference%20Visualization.html", "width": 1600, "height": 1000, "scroll": 0,
      "probe": "(()=>{const s=window.__simData;if(!s)return {error:'no stored-data loader on the page'};if(s.err)return {error:s.err};if(!s.sha_ok||!s.gen)return {waiting:true};const d=Sim.data.ds;return {sha_ok:s.sha_ok,commit:s.gen.commit,date:s.gen.date,files:s.files,lambda:d.get('lambda'),damp:d.get('damp'),builds:d.get('builds'),renders:d.get('renders')};})()"}
    ]
+  },
+  "wave_interference2": {
+   "model": "tools/sims/wave_interference2.py",
+   "files": ["geometry.bin", "dist_lo.bin"],
+   "files_note": "Generation 2 of Fig. 1: rings at nodes even in k, blended by the page, every table split into a bottom and a top half. The live check lists the two files every wide screen opens with. The page is added to pages once this data is checked live; until then the page plays wave_interference.",
+   "pages": []
   }
  }
 }
