@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6897 files, 960.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6898 files, 960.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -42,7 +42,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [GitHub Actions workflows](#github-actions-workflows) | 4 |
 | [GitHub Actions building blocks used by the workflows](#github-actions-building-blocks-used-by-the-workflows) | 1 |
 | [Documentation](#documentation) | 49 |
-| [Tools](#tools) | 368 |
+| [Tools](#tools) | 369 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -6059,9 +6059,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/sims/agents/stage.py`](../tools/sims/agents/stage.py) | 14.6 kB | Kaggelize: runs one Claude Code session on one simulation inside limits (branch, tools, turns, allowed paths), checks its files and commits them. | [kaggelize.md](kaggelize.md) |
 | [`tools/sims/agents/titles.py`](../tools/sims/agents/titles.py) | 1.8 kB | Kaggelize: turns the titles typed into the Run form into the list of simulations and their short names. | [kaggelize.md](kaggelize.md) |
 | [`tools/sims/barton.py`](../tools/sims/barton.py) | 6.8 kB | Reference model of Barton's pendulums (the right margin of the home page), exactly periodic so the stored loop has no seam. | [PLAN.md](../notes/sims/PLAN.md) |
+| [`tools/sims/double_pendulum.py`](../tools/sims/double_pendulum.py) | 17.3 kB | Reference model of one simulation, run once on Kaggle (written by a Kaggelize build session; its report is in notes/sims/reports/). | [kaggelize.md](kaggelize.md) |
 | [`tools/sims/kaggle_sims.py`](../tools/sims/kaggle_sims.py) | 2.0 kB | Text of the Kaggle notebook phyein-usul-simulations: fetches tools/sims at a pinned commit and runs one simulation model. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/pipeline.py`](../tools/sims/pipeline.py) | 6.7 kB | The simulations pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation. | [kaggle-sims.md](kaggle-sims.md) |
-| [`tools/sims/registry.json`](../tools/sims/registry.json) | 2.2 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/registry.json`](../tools/sims/registry.json) | 2.6 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/verify_live.py`](../tools/sims/verify_live.py) | 4.6 kB | Step 10 of the simulations pipeline: wait for the live site, compare the live files by SHA-256, open the live pages and check they play the data. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/wave_interference.py`](../tools/sims/wave_interference.py) | 12.8 kB | Reference model of Fig. 1, Wave interference: the distance, angle and height tables of every ring on a fixed grid, computed once on Kaggle; the page adds the rings of the chosen sources. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`tools/sims/wave_interference2.py`](../tools/sims/wave_interference2.py) | 15.1 kB | Reference model of Fig. 1, generation 2: ring angles at nodes even in k, which the page blends exactly, heights at damping steps of 0.025, every table in a bottom and a top half; computed once on Kaggle. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
