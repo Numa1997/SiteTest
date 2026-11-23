@@ -7,6 +7,11 @@
 - GPU quota at 18:45 UTC: 1 840 s used of 108 000 s, reset 28 Nov 00:00 UTC.
 - Branch head before this file: b2558f9.
 
+## Update 19:08 UTC (coordinator): v2 is BROKEN, launch v3
+The coordinator saved v2 through the connector at 19:06 UTC with the placeholder text "__SRC__" instead of the code. If v2
+runs it fails at once (NameError); if it is still queued, launch over it. Launch v3 with the full v1 source (the embedded
+files are checked byte-identical to 5acb718, and 8375a2f is in its history). Steps below apply to v3.
+
 ## Do this
 0. Commit and push `notes/coord/to-coordinator/0002-ack.md` the moment you read this (0000, rule 2).
 1. Read the quota fresh and state the GPU cost in one line.
