@@ -938,6 +938,7 @@
  "the largest c<sub>p</sub> of the fit, no unit": "das größte c<sub>p</sub> der Anpassung, ohne Einheit",
  "the largest radius, the full height of Fig. 8b; units": "der größte Radius, die volle Höhe von Abb. 8b; Einheiten",
  "the model tools/sims/wave_interference.py, and superpose(): the loops over sources, rows and columns": "das Modell tools/sims/wave_interference.py und superpose(): die Schleifen über Quellen, Zeilen und Spalten",
+ "the model tools/sims/wave_interference2.py, and superpose(): the loops over sources, rows and columns": "das Modell tools/sims/wave_interference2.py und superpose(): die Schleifen über Quellen, Zeilen und Spalten",
  "the pen, imaginary part, in units; drawn at cy − y · scale px": "der Stift, Imaginärteil, in Einheiten; gezeichnet bei cy − y · scale px",
  "the pen, imaginary part; units": "der Stift, Imaginärteil; Einheiten",
  "the pen, real part, in units; drawn at cx + x · scale px": "der Stift, Realteil, in Einheiten; gezeichnet bei cx + x · scale px",

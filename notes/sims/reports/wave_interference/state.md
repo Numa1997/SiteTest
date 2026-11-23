@@ -12,3 +12,4 @@
 - Old work kept until generation 2 is verified live: generation 1 model, registry entry and data.
 
 - 20:55 UTC: page switch complete on the branch (translations, docs, view fix: figure pinned on narrow portrait screens); merging, then the live check.
+- 21:30 UTC: generation 2 verified live (verify_live passed; live sweep 2.8 % of 1 837 frames behind, longest 25 frames, 1 725 distinct λ; three proofs at the centre cell hold). Generation 1 removed (model, registry entry, data, generations entry).

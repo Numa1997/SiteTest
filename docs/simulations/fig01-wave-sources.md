@@ -43,7 +43,7 @@ stays finite at the source (note §3.1).
 | $f$, $\omega = 2\pi f$ | frequency (slider, continuous) and angular frequency | Hz, rad/s |
 | $C, S, A, \psi$ | the two maps, the amplitude and the field, $\lvert\psi\rvert \le 1$ | 1 |
 
-**What the code evaluates.** Each ring was computed once by the model `tools/sims/wave_interference.py` (on Kaggle) and is
+**What the code evaluates.** Each ring was computed once by the model `tools/sims/wave_interference2.py` (on Kaggle) and is
 stored; the page adds the rings of the sources the reader chose (superposition, note eq. 6) with no `cos`, `sin`, `exp` or
 `sqrt` of the field:
 
@@ -88,10 +88,10 @@ All 290 files: 36 474 418 bytes. The model's checks (in the header): against the
 and Line of 16 at all 481 slider wavelengths (at γ = 0.15 and 0.1625) and all 61 slider dampings (at λ = 30 px), C and S differ by
 at most 0.00065 (the worst case is the height blend at γ = 0.01), and the colour row by one step in 0.39 % of 1.02 × 10⁹ cell-instants;
 the two-source limit |cos(k(r₁ − r₂)/2)| holds to 9.8 × 10⁻⁵ at every slider wavelength. Generation 1 (`wave_interference`, 64 files,
-16.2 MB) stays in the repository until generation 2 has been checked live.
+16.2 MB) was removed on 23 November 2026 after generation 2 passed the live check (its model and data remain in the git history).
 
-**`stored(file)`** ([L585–600](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L585-L600)): reads `data/sims/generations.json` once and takes the newest entry of `wave_interference`
-([L588](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L588)); downloads `data/sims/wave_interference/<date>/<file>`, computes its SHA-256 with `crypto.subtle` and refuses it unless it
+**`stored(file)`** ([L585–600](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L585-L600)): reads `data/sims/generations.json` once and takes the newest entry of `wave_interference2`
+([L588](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L588)); downloads `data/sims/wave_interference2/<date>/<file>`, computes its SHA-256 with `crypto.subtle` and refuses it unless it
 equals the entry's ([L593](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L593)); parses the header and hands out typed arrays, checking that the stored grid is the grid the page
 draws ([L595](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L595)). The address is resolved from `scripts/sim.js`, so the German and Arabic pages find the same files ([L583](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L583)).
 `window.__simData` reports the generation, the files in use, `sha_ok` and any error for the live check ([L584](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L584)).
@@ -299,7 +299,7 @@ The plotted curves of Figures 3 and 4 are single SVG paths of 10–23 kB each on
 ## How to change it safely
 
 - **The stored data.** The grid (250 × 250 cells of 3.2 px), the source places (501, 1.6 px apart) and the node lists are fixed by
-  the model `tools/sims/wave_interference.py` and repeated in the page's constants line; `stored()` refuses a geometry file whose grid
+  the model `tools/sims/wave_interference2.py` and repeated in the page's constants line; `stored()` refuses a geometry file whose grid
   differs. Changing any of them means changing the model, which reruns it on Kaggle when merged (docs/kaggle-sims.md), and the page
   together. Line numbers in the dated sections below refer to the page as it was on their date.
 - **Walkthrough excerpts.** `circles.js` quotes 53 lines of the page script, among them the constants line ([L515](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L515)), the

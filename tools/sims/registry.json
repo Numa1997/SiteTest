@@ -10,12 +10,6 @@
      "probe": "(()=>{const h=document.querySelector('[data-bg=rails]');const s=h&&h.__bgScene;if(!s)return {error:'no rails scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,bars:s.Bs.length};})()"}
    ]
   },
-  "wave_interference": {
-   "model": "tools/sims/wave_interference.py",
-   "files": ["geometry.bin", "ring_l030.bin", "damp_g015.bin"],
-   "files_note": "Generation 1 of Fig. 1, kept until generation 2 (wave_interference2) is checked live; no page plays it any more. The model writes 64 files (geometry.bin, ring_l016 ... ring_l064.bin, damp_g000 ... damp_g060.bin, wave_interference.json); pipeline A checks every one by SHA-256. The page downloads only the files of the wavelength and damping on show, so the live check lists the three it opens with.",
-   "pages": []
-  },
   "double_pendulum": {
    "model": "tools/sims/double_pendulum.py",
    "files": ["double_pendulum.json", "dp_11_09.bin"],
