@@ -193,7 +193,9 @@ runs already in the dataset are downloaded and uploaded again beside the new one
 never two at once. The Kaggle tool packs each top-level folder into an archive of its contents, and Kaggle unpacks that at the
 dataset's root, so the tree is wrapped in one more folder. The first filing (Barton's pendulums, 23 November 2026, 22:2x Berlin
 time) lacked that wrapper and landed flat at the root of `numakoudsie/phyein-usul-barton`; the next filing leaves those flat files
-out of the newest version (they stay in version 1).
+out of the newest version (they stay in version 1). The filing waits until the dataset's version number has risen and that version
+is ready, for up to 3 hours: Kaggle's "ready" alone reports the previous version while it still unpacks a new one (the first filing
+of the 7 GB Fig. 2 run, 23 November 2026, 22:37 Berlin time, was reported ready after 30 s and was not there yet).
 Kaggle's limits: 200 GB per dataset, 200 GB of private datasets in all, 50 files at the top level ([Kaggle's dataset
 documentation](https://www.kaggle.com/docs/datasets)). Filing uses its own concurrency group per simulation, so it never waits behind
 a Kaggle run.
