@@ -9,7 +9,8 @@ What it does, for one simulation and one version of the notebook numakoudsie/phy
   2. checks every file's size and SHA-256 against the run's index-<sim>.json; any difference stops it;
   3. lays the files out as phyein-usul-simulations-v<version>/ with a manifest.json (size and SHA-256 of every file), so a dataset
      version always says which notebook version made it;
-  4. creates the private dataset numakoudsie/phyein-usul-<sim> (hyphens for underscores), or adds a new version to it; a dataset
+  4. creates the figure's private dataset (registry "dataset", for example numakoudsie/fig2-double-pendulum; without one,
+     numakoudsie/phyein-usul-<sim>), or adds a new version to it; a dataset
      version holds only what was uploaded with it, so each run is one dataset version and the older runs stay in the older versions;
   5. waits until Kaggle reports the dataset ready, and writes dataset, dataset_path and dataset_note into the run's entry in
      public/data/sims/generations.json (the workflow then saves it with land.py).
@@ -48,8 +49,12 @@ def file_dataset(sim, version, src, K=("kaggle",)):
               open(os.path.join(dst, "manifest.json"), "w"), indent=1)
     total = sum(m["bytes"] for m in manifest.values())
     log(f"{len(manifest)} files, {total} bytes checked against the index; staged as {folder}/")
-    slug = "phyein-usul-" + re.sub(r"[^a-z0-9]+", "-", sim.lower()).strip("-"); ref = f"numakoudsie/{slug}"
-    json.dump(dict(title=f"Phyein Usul simulation data: {sim}"[:50], id=ref, licenses=[dict(name="CC-BY-4.0")],
+    # the figure's own dataset (docs/kaggle-pipeline.md: one private dataset per figure, numakoudsie/fig<N>-<topic>), named in the
+    # registry entry as "dataset" and "dataset_title"; a simulation without a figure gets numakoudsie/phyein-usul-<sim>
+    reg = json.load(open(os.path.join(ROOT, "tools/sims/registry.json")))["sims"].get(sim, {})
+    ref = reg.get("dataset") or "numakoudsie/phyein-usul-" + re.sub(r"[^a-z0-9]+", "-", sim.lower()).strip("-")
+    title = reg.get("dataset_title") or f"Phyein Usul simulation data: {sim}"
+    json.dump(dict(title=title[:50], id=ref, licenses=[dict(name="CC-BY-4.0")],
                    subtitle=f"Every run of the website's {sim} model, as computed on Kaggle"[:80]),
               open(os.path.join(stage, "dataset-metadata.json"), "w"), indent=1)
     exists = "403" not in (st := kaggle(K, ["datasets", "status", ref], check=False)) and "404" not in st and "not found" not in st.lower() and "error" not in st.lower()

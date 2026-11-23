@@ -3,6 +3,8 @@
  "site": "https://phyeinusul.com",
  "sims": {
   "barton": {
+   "dataset": "numakoudsie/phyein-usul-barton",
+   "dataset_title": "Phyein Usul simulation data: barton",
    "model": "tools/sims/barton.py",
    "files": ["barton.bin"],
    "pages": [
@@ -17,6 +19,8 @@
    "pages": []
   },
   "wave_interference2": {
+   "dataset": "numakoudsie/fig1-wave-interference",
+   "dataset_title": "Fig. 1 Wave Interference: simulation data",
    "model": "tools/sims/wave_interference2.py",
    "files": ["geometry.bin", "dist_lo.bin"],
    "files_note": "Generation 2 of Fig. 1: rings at nodes even in k, blended by the page, every table split into a bottom and a top half. The live check lists the two files every wide screen opens with.",
@@ -36,6 +40,8 @@
    "pages": []
   },
   "double_pendulum_gpu": {
+   "dataset": "numakoudsie/fig2-double-pendulum",
+   "dataset_title": "Fig. 2 Double Pendulum: simulation data",
    "model": "tools/sims/double_pendulum_gpu.py",
    "gpu": true,
    "timeout_s": 14400,

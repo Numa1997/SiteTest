@@ -179,7 +179,9 @@ as the output of a notebook version, which the Kaggle site does not list as a da
 [tools/sims/dataset.py](../tools/sims/dataset.py) files it:
 
 - after every run (step 6 of `pipeline.py`): the whole output is checked against `index-<sim>.json` by size and SHA-256 and uploaded as
-  a version of the private dataset `numakoudsie/phyein-usul-<sim>` (underscores become hyphens), in a folder
+  a version of the figure's private dataset, named in the registry entry as `dataset` (`numakoudsie/fig1-wave-interference`,
+  `numakoudsie/fig2-double-pendulum`, the rule of docs/kaggle-pipeline.md: one dataset per figure, `fig<N>-<topic>`); a simulation
+  without a figure (Barton's pendulums) gets `numakoudsie/phyein-usul-<sim>`. In a folder
   `phyein-usul-simulations-v<notebook version>/` with a `manifest.json`; the generation in `generations.json` records `dataset`,
   `dataset_path` and `dataset_note`. If Kaggle refuses, the computed data is still saved and the entry records `dataset_error`;
 - for runs made before: Actions → Simulations on Kaggle → Run workflow, mode `dataset`, the simulation's name and the notebook version
