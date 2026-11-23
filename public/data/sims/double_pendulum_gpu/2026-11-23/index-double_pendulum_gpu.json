@@ -1,0 +1,124 @@
+{
+ "project": "sims",
+ "job": "double_pendulum_gpu",
+ "date": "2026-11-23",
+ "source": {
+  "repo": "Numa1997/SiteTest",
+  "commit": "6ee30d8c3c4ee0d3ff370abee32ae72eecd76dc1",
+  "path": "tools/sims/double_pendulum_gpu.py"
+ },
+ "machine": {
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "cpus": 4,
+  "python": "3.13.16",
+  "numpy": "2.1.3",
+  "scipy": "1.16.3"
+ },
+ "files": {
+  "double_pendulum.json": {
+   "bytes": 802002,
+   "sha256": "fb5c7fa8a7abbcf7ecf0f25c14f55a30b85c51eee820084f78093466a64f50d3"
+  },
+  "dp_00.pack": {
+   "bytes": 224411692,
+   "sha256": "5615c85a6ad08868558fcf00df5489682c764a9381cec78b5336769ee8aae9a7"
+  },
+  "dp_01.pack": {
+   "bytes": 158483791,
+   "sha256": "1ce98552dd210600946762a68564cda3742f62aaff7f919bd044e69cafc9c524"
+  },
+  "dp_02.pack": {
+   "bytes": 119427177,
+   "sha256": "79404c0c0488efb41eec061634e96c07896102b662bbe32f22251ac73601cdba"
+  },
+  "dp_03.pack": {
+   "bytes": 109144223,
+   "sha256": "c8528faf05adc45283bd604b32944403d1b863fd42306d4b63aa8fd7a8dab96c"
+  },
+  "dp_04.pack": {
+   "bytes": 106896241,
+   "sha256": "c4a642cd149fe1515da42dc2f54345c800840d3859c437f1fb2c3d04b1bd529d"
+  },
+  "dp_10.pack": {
+   "bytes": 238407424,
+   "sha256": "6849578a63d6ccf4669803e66ee622b93851872d9f062491a73dfd5f256a2026"
+  },
+  "dp_11.pack": {
+   "bytes": 153733197,
+   "sha256": "e19d37b0439eeb02b542cdd2ae38f6fbd3edfcfa37e97da0d66cd25c26c187dc"
+  },
+  "dp_12.pack": {
+   "bytes": 125043320,
+   "sha256": "926dd7f8121eefae73f92333744b1c501335e6f4af609f90e014ab3314bc9deb"
+  },
+  "dp_13.pack": {
+   "bytes": 118649877,
+   "sha256": "9ad1d7fec35035e393c23b27767022d9caebbef1be069656e1155c4df2f8f49a"
+  },
+  "dp_14.pack": {
+   "bytes": 118819193,
+   "sha256": "0e80b93a96c94cd81cd7679ef2ebf18bd3cd350275af2b480452468e7357fd70"
+  },
+  "dp_20.pack": {
+   "bytes": 270631575,
+   "sha256": "0dbcc3ef5dae49f20081039bb109be5e8e6b0d3056573aa82dbff867509a5288"
+  },
+  "dp_21.pack": {
+   "bytes": 186736170,
+   "sha256": "d1548ad56476ea611afc96a7a21fb1f8eb07f44b2bd4abbf9cb08b1c6f3e6d8a"
+  },
+  "dp_22.pack": {
+   "bytes": 154670916,
+   "sha256": "6e31f8842db13d9a1b17fbc29fccab0ff44fea3818af1f68dc0ec09c38606d9e"
+  },
+  "dp_23.pack": {
+   "bytes": 154672794,
+   "sha256": "263eb603f7e95ac0ddae72fe540ff532881b12f20adbda45f99112b41f5d420c"
+  },
+  "dp_24.pack": {
+   "bytes": 166859603,
+   "sha256": "962c12dc735fbe575703c25127c2bdc31b155874587430a2a7497e7f26bb417c"
+  },
+  "dp_30.pack": {
+   "bytes": 442480171,
+   "sha256": "7a1a836b08b7d8f23b45af3b004ca61e5464fc5b8c37856fb42d62c6aed6c04f"
+  },
+  "dp_31.pack": {
+   "bytes": 293439018,
+   "sha256": "a673c1cbba04d144c6bb3b257cab7198f16a0a340e93279206de8058579e33df"
+  },
+  "dp_32.pack": {
+   "bytes": 259306566,
+   "sha256": "8938a78fca4d2881aea90c26566697cb3b9ac61e25c6fff36091470bcca3ed70"
+  },
+  "dp_33.pack": {
+   "bytes": 268811193,
+   "sha256": "35db566c22dc4816cd31bfced8cb1a7dad2a52f39bcd2c957f94de34585ebde6"
+  },
+  "dp_34.pack": {
+   "bytes": 305967114,
+   "sha256": "1286a22c56793db7307f6817f2ecc59b33f31d46fa6672dc3e65563404aab5ce"
+  },
+  "dp_40.pack": {
+   "bytes": 606613057,
+   "sha256": "f06d94bc5fe92db1fd4957382fdd2af23efbd2dc2e75496c7f3f254336190ebe"
+  },
+  "dp_41.pack": {
+   "bytes": 606621958,
+   "sha256": "d1bee6931eadafa7496c528fbb327d16f4f62fcbc330efd9a7c33e3b82a787a9"
+  },
+  "dp_42.pack": {
+   "bytes": 614402604,
+   "sha256": "c3687998532aa8bf6ebb1b843fc31d03acfb973ec619d9c34daaccf58666e6d1"
+  },
+  "dp_43.pack": {
+   "bytes": 624769190,
+   "sha256": "7b2fdd9b1fa9429e04bb5ca611eb2eab203f3a7dc954b1cdcfa6b72ffe76afa0"
+  },
+  "dp_44.pack": {
+   "bytes": 624767540,
+   "sha256": "55a55ded3a547b0bc9868d2b94234f1a0eb17f3448a8e066f6f38e25ac055b05"
+  }
+ },
+ "wall_s": 961.4798707962036
+}
