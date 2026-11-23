@@ -501,3 +501,29 @@ Inference: E_plastic alone exceeds the mechanical loss: overcount (s, gp convent
 - Left for 0004: step 3 (4.3 slab energy identity, Kaggle CPU), step 4 (instrumented 3 mm CPU slosh: U_el, W_stress_grid, W_constit,
   E_plastic split, shadow cell-strain E_plastic, sub-step ledger, 1000-step rigid-rotation check), step 5 (marks reachable, fixed first).
   All instrumentation behind flags, default path bit for bit unchanged; nothing tuned.
+## 0004 step 5: marks fixed before the runs (23 Nov, written before any step 3 or step 4 run; Neon section 4, unchanged)
+Window: [t_a, t_b] = the first steps with t >= 0.2 s and t >= 1.0 s (test a: >= 1.0 s and >= 2.0 s); stores read at those steps, sinks
+summed over the steps after t_a up to t_b. W_stress_grid = sum over steps and over every occupied face of 0.5 M_f (u_before_Fdev^2 -
+u_after_Fdev^2) (slab: before the floor faces are zeroed; the version without the floor faces is logged as a raw number only).
+- (a) slab 4.3 C1 (h 0.018 m, dx 1.5 mm, tau_b 1.5 tau_y, JITZ 0, 2.0 s), window 1.0-2.0 s:
+  abs(E_plastic / W_grav - 1.0) < 0.03; abs(E_plastic / E_drop - 1.0) < 0.02; abs(E_plastic / W_stress_grid - 1.0) < 0.03.
+  Reachable (Inference): steady plug flow, so dKE and dU_el over the window are near 0; s/G <= 0.049 and 0.5 G gp dt / s about 1 %;
+  m_floor never acts in C1 (n_floor_max 0, diag43/slab_4.3_T2s_h18mm_jz0_full_summary.json); the floor faces' wiped energy is about
+  1e-13 J per step against about 1e-9 J of plastic work per step. (a) proved if E_plastic / W_grav near 2.0 or 1.414.
+- (b) 3 mm slosh: min(U_el) >= -1.0e-12 J and U_el(0.2) > U_el(1.0); (b) alone explains the overshoot iff sinks / (-dE_mech) > 1.25
+  AND r_tot <= 1.02 AND abs(r_tot - 1.0) < 0.25; r_tot > 1.05: partial contributor only, refuted as sole cause.
+  Badly defined (kept): tr(be) >= 3 holds only for det(be) = 1 exactly; float32 leaves det - 1 about 1e-6 (4.5: det_min 0.9999990,
+  slosh_head_fix_summary.json), so U_el can read down to about -V_head G / 2 x 3e-6 = -6e-9 J where the strain is near 0 (at rest).
+- (c) same run: abs(W_constit / max(W_stress_grid, 1.0e-12) - 1.0) < 0.05 (W_constit = U_el(1.0) - U_el(0.2) + E_plastic);
+  rotation check (1000 steps, Omega 30 rad/s, dt 7.67e-4 s, from be = I): max_s_rot < 0.05 tau_y and E_plastic_rot == 0.0;
+  (c) proved if W_constit / W_stress_grid > 1.15. Not reachable by construction (kept as Neon wrote it): with f = I + dt C,
+  f f^T = I + dt^2 Omega Omega^T, so s grows about G (Omega dt)^2 / sqrt(3) = 0.051 Pa per step and passes tau_y = 5.4 Pa after
+  about 106 steps; the mark is set to fail and measures the size. The adjoint mark is reachable only up to the change of the grid
+  velocity between F_dev and G2P (friction, gravity, projection, extrapolation), which is part of what (c) tests.
+- (d) ledger, same run: abs((dE_P2G + dE_visc + dE_wall + dE_dev + dE_grav_proj + dE_G2P_coll) - dE_mech) < 1.0e-7 J;
+  abs((-dE_wall) / (E_wall_foam + E_wall_stout) - 1.0) < 0.02; dE_grav_proj <= 0.02 x (-dE_mech); dE_G2P_coll <= 0.02 x (-dE_mech).
+  Definitions: KE_g = sum over occupied open faces 0.5 M_f u_f^2; dE_P2G = KE_g(after P2G) - KE_particles; dE_visc, dE_wall, dE_dev the
+  change of KE_g across viscosity, friction_evp, F_dev; dE_grav_proj = KE_g(after pressure) - KE_g(after F_dev) + PE(positions before
+  collisions) - PE(start); dE_G2P_coll = KE_particles(end) - KE_g(after pressure) + PE(end) - PE(positions before collisions). The
+  telescoping and wall-logger marks hold by construction (same float32 arrays, float64 sums): they test the bookkeeping only.
+  (Window integrity and PE swelling: done in step 2 above.)
