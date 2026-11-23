@@ -1,0 +1,15 @@
+[21:24:50 UTC | +    0.4 s] start smoke: DX 0.003, blocks ['rot', 'slab', 'ident', 'slosh'], device cpu:0, jax 0.11.1
+[21:24:52 UTC | +    2.3 s] rot: max_s 7.4756 Pa, E_plastic 1.8902e+00 J/m^3, first yield step 108
+[21:24:52 UTC | +    2.3 s] slab: step4_slab.py C1 with EAUDIT=1 (smoke)
+[21:24:56 UTC | +    6.7 s] slab rc 0
+[21:27:34 UTC | +  164.2 s] ident old_5acb718: 3 steps, t 0.002301
+[21:30:10 UTC | +  320.3 s] ident new_audit_off: 3 steps, t 0.002301
+[21:32:42 UTC | +  472.3 s] ident new_audit_on: 3 steps, t 0.002301
+[21:32:42 UTC | +  472.3 s] ident: all identical True
+[21:32:48 UTC | +  478.8 s] slosh: grid 108 x 46 x 90, N 149596 (stout 123188, head 26408), m_stout0 0.429583 kg, m_head0 0.024070 kg, V_head 8.8527e-05 m^3, m_floor 3.6705e-07 kg, dt_el 1.5337e-03 s
+[21:33:11 UTC | +  501.7 s] slosh: step 1  t 0.0015  gx 0.000  it 136  KE 1.1611e-08  U_el 1.1134e-09  yielded 0  (23 s)
+[21:33:14 UTC | +  504.4 s] slosh: step 2  t 0.0031  gx 0.000  it 108  KE 3.6333e-08  U_el 2.9338e-09  yielded 0  (25 s)
+[21:33:22 UTC | +  512.7 s] slosh: 5 steps to t 0.00767 in 34 s
+[21:33:22 UTC | +  512.7 s] slosh window: {"t_a": 0.003067460687359034, "t_b": 0.007668651718397585, "step_a": 2, "step_b": 5, "minus_dKE": -1.0255377480381715e-07, "minus_dPE": 9.368489584105077e-07, "minus_dU_el": -7.357868937839899e-09, "minus_dE_mech": 8.342951836066906e-07, "minus_dE_tot": 8.269373146688507e-07, "PE_drift_tb_minus_0": -1.2706153759145522e-06, "U_el_a": 2.9337881843762104e-09, "U_el_b": 1.029165712221611e-08, "U_el_min": 0.0, "E_plastic": 0.0, "E_drop": 0.0, "W_trial": 7.3658981599143596e-09, "E_wall_foam": 3.264241198472316e-09, "E_wall_stout": 2.6616458811858176e-08, "E_visc_stout": 6.052439007865241e-10, "W_stress_grid": -2.87492270702515e-09, "W_stress_grid_on_mfloor_faces": -1.2812185521578845e-10, "W_constit": 7.357868937839899e-09, "W_constit_over_W_stress_grid": 7357.868937839899, "E_plastic_mfloor": 0.0, "E_plastic_wall": 0.0, "E_plastic_interior": 0.0, "E_plastic_cellD": 0.0, "E_plastic_minus_cellD": 0.0, "E_num": 7.964513707577337e-07, "sinks_logged": 2.988070001033049e-08, "sinks_all": 3.0485943911117016e-08, "sinks_over_minus_dE_mech": 0.03581550103304571, "r_tot": 0.03613417786364653, "closure_all_over_minus_dE_tot": 0.03686608811857184, "ledger": {"dE_P2G": 4.295535290375446e-07, "dE_visc": -6.052439007865241e-10, "dE_wall": -2.988069977193427e-08, "dE_dev": 2.87492270702515e-09, "dE_grav_proj": 4.863067263043383e-07, "dE_G2P_coll": -1.7225444180019672e-06, "sum": -8.3429518362578e-07, "dE_mech_stores": -8.342951836066906e-07, "dE_mech_steps": -8.342951836333193e-07}, "n_floor_max_window": 1558, "n_gone_total": 0, "telescoping_abs_J": 1.9089369774033353e-17, "wall_logger_ratio": 0.9999999920217325}
+[21:33:22 UTC | +  512.7 s] slosh marks: {"b_U_el_min_ge_m1e12": true, "b_U_el_a_gt_b": false, "b_alone_explains": false, "b_partial_only_r_tot_gt_1p05": false, "c_adjoint_within_5pct": false, "c_proved_ratio_gt_1p15": true, "d_telescoping_lt_1e7": true, "d_wall_logger_within_2pct": true, "d_grav_proj_le_2pct": false, "d_G2P_coll_le_2pct": true}
+[21:33:22 UTC | +  512.7 s] all done

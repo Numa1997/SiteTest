@@ -549,3 +549,7 @@ u_after_Fdev^2) (slab: before the floor faces are zeroed; the version without th
   found on the first pass, so the old line never failed and no earlier result can change; at 3 mm some cells need a further pass and it
   raised "shape mismatch (3348,) vs (8,)". Proof wanted: block "ident" of audit_0004.py, now at IDENT_DX = 1.5 mm, compares every state
   array bit for bit after N_IDENT steps of the 4.5 set-up: 5acb718 solver vs the current solver with audit off (and the motion with audit on).
+- 23 Nov 21:24:35-21:33:47 UTC: audit smoke v3 (Kaggle CPU, code 49839c5). IDENTITY PASS: at 1.5 mm, 3 steps of the 4.5 set-up, every state
+  array of the 5acb718 solver equals the fixed solver's bit for bit with audit off (all_identical True), and with audit on the motion (xp,
+  vp, C, be, act, p, wh) is identical too (smoke_v3/default_path_identity.json). 3 mm slosh starts: grid 108 x 46 x 90, N 149 596, about
+  3 s a step on CPU. Outputs notes/spill/step4/audit_0004/smoke_v3/.

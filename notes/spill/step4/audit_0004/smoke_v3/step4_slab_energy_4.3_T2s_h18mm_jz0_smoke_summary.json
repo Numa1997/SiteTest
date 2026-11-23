@@ -1,0 +1,32 @@
+{
+ "label": "4.3",
+ "window_requested_s": [
+  0.005,
+  0.012
+ ],
+ "t_a": 0.00536805620287831,
+ "t_b": 0.012269842749436134,
+ "step_a": 7,
+ "step_b": 16,
+ "E_plastic": 0.0,
+ "E_drop": 0.0,
+ "W_grav": 9.727615784907107e-08,
+ "W_stress_grid": 6.547511888931105e-09,
+ "W_stress_grid_above_floor": 2.5367293866226772e-08,
+ "E_floor_wiped": 1.9033870543275503e-08,
+ "W_trial": 2.5667580657005298e-08,
+ "dKE": 7.02914735042044e-08,
+ "dU_el": 2.5666182782873502e-08,
+ "U_el_a": 2.5713434276729814e-09,
+ "U_el_b": 2.8237526210546482e-08,
+ "ratios": {
+  "E_plastic_over_W_grav": 0.0,
+  "E_plastic_over_E_drop": NaN,
+  "E_plastic_over_W_stress_grid": 0.0
+ },
+ "pass_marks": {
+  "E_plastic_over_W_grav_within_3pct": false,
+  "E_plastic_over_E_drop_within_2pct": false,
+  "E_plastic_over_W_stress_grid_within_3pct": false
+ }
+}
