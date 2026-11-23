@@ -33,7 +33,8 @@ solved so that θ₁'(t*) = θ₂'(t*) = 0. The equations do not change when tim
 motion from t* to 2t* is the motion from 0 to t* played backwards: the loop of length 2t* closes exactly.
 
 Checks (in the header): the energy T + V over the loop (no friction, so it must stay constant), the loop's residual |y(2t*) − y(0)|,
-the time at which the swing has fully crossed against (2), the same loop at 100 times tighter tolerances.
+the time at which the swing has fully crossed against (2), the same loop at 100 times tighter tolerances, and the smallest gap between
+the two bobs over the loop (the model has no collisions, so the bobs must never meet).
 Integration: DOP853 (SciPy), rtol 1e-11, atol 1e-13.
 Output: coupled.bin = b"CPL1", uint32 header length, a JSON header (parameters, derived values, checks), then int16 little-endian
 frames (rows: frames evenly spaced over one loop, dt in the header; columns: θ₁, θ₂ in 1e-4 rad). The page draws these and computes nothing.
@@ -49,8 +50,9 @@ P = dict(
     L=1.5,         # m, pivot to bob (period 2π√(L/g) = 2.46 s: a calm swing)
     m=1.0,         # kg, each bob (a steel ball about 6 cm across)
     a=0.5,         # m, where the spring meets each rod, measured down from the pivot
-    d=0.5,         # m, distance between the pivots = the spring's natural length
-    theta0=0.25,   # rad, the swing pendulum 1 starts with (about 14°); pendulum 2 starts hanging still
+    d=0.8,         # m, distance between the pivots = the spring's natural length; wide enough that the bobs never touch (checked)
+    rb=0.04,       # m, radius of a bob (drawn; the check min_bob_gap_m must stay positive)
+    theta0=0.20,   # rad, the swing pendulum 1 starts with (about 11°); pendulum 2 starts hanging still
     M=11,          # swings of pendulum 1 per beat: ω₂/ω₁ = (M+1)/M, so the beat lasts M periods (about 27 s)
     fps=30,        # stored frames per second (the loop's frame count is rounded, the exact dt is in the header)
     scale=80.0,    # px per m on the page (L = 1.5 m -> 120 px)
@@ -103,6 +105,7 @@ def run(out_dir="."):
         crossed_at_s=t_cross, half_beat_linear_s=float(np.pi / (w2_eff - w1)),
         crossed_share_of_energy=float(1 - Ef.min() / E0),
         tolerance_diff_rad=float(np.max(np.abs(Y2[:2] - Y[:2]))),
+        min_bob_gap_m=float(np.min(np.hypot(P["d"] + L * (np.sin(Y[1]) - np.sin(Y[0])), L * (np.cos(Y[0]) - np.cos(Y[1])))) - 2 * P["rb"]),
         quantisation_rad=0.5e-4, max_angle_rad=[float(np.abs(Y[0]).max()), float(np.abs(Y[1]).max())])
     frames = np.round(1e4 * Y[:2, :nf].T).astype("<i2")
     hdr = dict(model="coupled", version=1, params=P, derived=dict(omega1=float(w1), omega2=float(w2_eff), k_N_per_m=float(k), k_linear=float(k_lin),

@@ -395,9 +395,8 @@
   /* ---- rails: the two side margins of the home page below the hero, fixed to the window but drawn in page coordinates, so
      they scroll with the page. Left: the forest's roots go on growing down the page (space colonisation: each tip grows towards
      the scattered water it can sense; thickness by Murray's law, r^3 of a parent = sum of r^3 of its children; sap climbs back
-     up to the trees). Right: Barton's pendulums: on every bar a heavy driver swings with a slowly changing length, and of the
-     light pendulums hanging beside it only the one whose length matches swings wide (resonance under an outside force); this
-     half is not computed here but played from data computed once on Kaggle (sceneData above). ---- */
+     up to the trees). Right: pairs of pendulums tied by a weak spring hang from beams; the swing drains from one bob into the
+     other and back (beats); this half is not computed here but played from data computed once on Kaggle (sceneData above). ---- */
   S.rails = {
     geo: function () {
       var lay = document.querySelector(host.getAttribute('data-bg-around') || 'main'), fo = document.querySelector('[data-bg=forest]'), end = document.querySelector(host.getAttribute('data-bg-until') || 'footer');
@@ -418,16 +417,13 @@
     extend: function () {
       var g = this.g, L = g.bot - g.top; if (L <= this.yLen + 20) return; var y0 = this.yLen, n = Math.round(this.lw * (L - y0) / 1100);
       for (var i = 0; i < n; i++) { var u = R(); this.At.push({ x: 6 + (this.lw - 12) * (R() < .5 ? u * u : 1 - u * u), y: v(y0 + 8, L - 10), on: 1 }); }
-      var G = 200; for (var y = Math.max(40, Math.ceil((y0 - 40) / G) * G + 40); y < L - 160; y += G) this.bar(y);
+      var G = 250; for (var y = Math.max(40, Math.ceil((y0 - 40) / G) * G + 40); y < L - 170; y += G) this.bar(y);
       this.yLen = L;
     },
-    /* a bar of Barton's pendulums: which of the eight stored pendulums hang on it and in which order, and where in the stored
-       loop this bar starts (a random moment, so no two bars and no two visits look alike) */
+    /* a beam of coupled pendulums: as many pairs as the margin holds side by side (a pair takes the pivot spacing, its swing and 30 px),
+       each starting at its own random moment of the stored loop, so no two pairs and no two visits look alike */
     bar: function (y) {
-      var n = Math.max(2, Math.min(8, Math.floor((this.rw - 24) / 24) - 1)), ids = [0, 1, 2, 3, 4, 5, 6, 7], i, j, t;
-      for (i = 7; i > 0; i--) { j = (R() * (i + 1)) | 0; t = ids[i]; ids[i] = ids[j]; ids[j] = t; }
-      ids = ids.slice(0, n); ids.splice((n / 2) | 0, 0, -1);   /* -1 marks the driver, hung in the middle */
-      this.Bs.push({ y: y, ids: ids, off: R() });
+      var off = []; for (var i = 0; i < 4; i++) off.push(R()); this.Bs.push({ y: y, off: off });   /* how many pairs are hung is decided when the data (spacing d) is known */
     },
     add: function (px, py, par) { var i = this.N.length; this.N.push({ x: px, y: py, p: par, c: 1, k: 0 }); var key = ((px / 32) | 0) + ',' + ((py / 32) | 0); (this.grid[key] = this.grid[key] || []).push(i); return i; },
     near: function (px, py, D) { var best = -1, bd = D * D, cx = (px / 32) | 0, cy = (py / 32) | 0, m = Math.ceil(D / 32); for (var a = -m; a <= m; a++) for (var b = -m; b <= m; b++) { var c = this.grid[(cx + a) + ',' + (cy + b)]; if (!c) continue; for (var k = 0; k < c.length; k++) { var q = this.N[c[k]], dx = q.x - px, dy = q.y - py, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = c[k]; } } } return [best, bd]; },
@@ -456,18 +452,26 @@
         var s = top + o.y; if (s > -5 && s < H + 5) dot(g.l0 + o.x, s, 1.1, .45 * fade(o.y)); return true; });
       if (this.flow.length > 160) this.flow.splice(0, this.flow.length - 160);
       x.restore();
-      /* right: Barton's pendulums, played from the stored run (tools/sims/barton.py, computed on Kaggle). Nothing is computed
-         here: each frame gives the driver's angle and length, the bar's travel and the eight angles; the frame nearest in time is drawn. */
-      var D = this.D; if (!D) { if (!this.asked) { this.asked = 1; sceneData('barton', 'barton.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } return; }
-      var hd = D.hdr, nf = hd.frames, C = D.cols, F = D.frames, sc = hd.params.scale, fps = hd.params.fps;
+      /* right: pairs of pendulums tied by a weak spring, played from the stored run (tools/sims/coupled.py, computed on Kaggle).
+         Nothing is computed here: each stored frame gives the two angles, the frame nearest in time is drawn. The swing drains from
+         one bob into the other through the spring and comes back, a beat of about 27 s (docs/kaggle-sims.md). */
+      var D = this.D; if (!D) { if (!this.asked) { this.asked = 1; sceneData('coupled', 'coupled.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } return; }
+      var hd = D.hdr, nf = hd.frames, F = D.frames, pr = hd.params, sc = pr.scale, Lp = pr.L * sc, ap = pr.a * sc, dp = pr.d * sc;
       x.save(); x.beginPath(); x.rect(g.r0 - 4, 0, this.rw + 8, H); x.clip();
       this.Bs.forEach(function (B) {
-        var by = top + B.y; if (by < -170 || by > H + 10) return; var f = fade(B.y), k = (Math.round(self.t * fps + B.off * nf) % nf) * C;
-        var xb = F[k + 2] * 1e-6 * sc, m = B.ids.length;
-        x.strokeStyle = col(.4 * f); x.lineWidth = 1; ln(g.r0 + 6 + xb, by, g.r1 - 6 + xb, by);
-        B.ids.forEach(function (id, q) { var drv = id < 0, th = F[k + (drv ? 0 : 3 + id)] * 1e-4, L = (drv ? F[k + 1] * 1e-4 : hd.L[id]) * sc;
-          var px0 = g.r0 + 12 + (self.rw - 24) * (q + .5) / m + xb, ex = px0 + L * Math.sin(th), ey = by + L * Math.cos(th);
-          x.strokeStyle = col((drv ? .55 : .3) * f); x.lineWidth = drv ? 1.2 : .8; ln(px0, by, ex, ey); dot(ex, ey, drv ? 4 : 2.2, (drv ? .8 : .4 + .4 * Math.min(1, Math.abs(th) * 3)) * f); });
+        var by = top + B.y; if (by < -Lp - 20 || by > H + 10) return; var f = fade(B.y), m = Math.max(1, Math.min(B.off.length, Math.floor((self.rw - 16) / (dp + 2 * Lp * .2 + 30)))), cw = self.rw / m;
+        x.strokeStyle = col(.45 * f); x.lineWidth = 2.2; ln(g.r0 + 6, by, g.r1 - 6, by);
+        for (var q = 0; q < m; q++) {
+          var k = (Math.round(self.t / hd.dt + B.off[q] * nf) % nf) * 2, t1 = F[k] * 1e-4, t2 = F[k + 1] * 1e-4;
+          var p1 = g.r0 + cw * (q + .5) - dp / 2, p2 = p1 + dp, b1x = p1 + Lp * Math.sin(t1), b1y = by + Lp * Math.cos(t1), b2x = p2 + Lp * Math.sin(t2), b2y = by + Lp * Math.cos(t2);
+          var s1x = p1 + ap * Math.sin(t1), s1y = by + ap * Math.cos(t1), s2x = p2 + ap * Math.sin(t2), s2y = by + ap * Math.cos(t2);
+          /* the spring: a zigzag of 9 turns between the two rods */
+          var sx = s2x - s1x, sy = s2y - s1y, sl = Math.hypot(sx, sy) || 1, nx = -sy / sl, ny = sx / sl; x.strokeStyle = col(.5 * f); x.lineWidth = 1; x.beginPath(); x.moveTo(s1x, s1y);
+          for (var z = 1; z < 19; z++) { var u = z / 19, o = (z % 2 ? 3.2 : -3.2) * (z > 1 && z < 18 ? 1 : .5); x.lineTo(s1x + sx * u + nx * o, s1y + sy * u + ny * o); } x.lineTo(s2x, s2y); x.stroke();
+          x.strokeStyle = col(.6 * f); x.lineWidth = 1.3; ln(p1, by, b1x, b1y); ln(p2, by, b2x, b2y);
+          dot(p1, by, 2, .7 * f); dot(p2, by, 2, .7 * f);
+          dot(b1x, b1y, pr.rb * sc, (.45 + .45 * Math.min(1, Math.abs(t1) * 4)) * f); dot(b2x, b2y, pr.rb * sc, (.45 + .45 * Math.min(1, Math.abs(t2) * 4)) * f);
+        }
       });
       x.restore();
     }
