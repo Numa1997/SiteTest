@@ -249,6 +249,17 @@ L. Every generation into its figure's Kaggle dataset. Since 23 November 2026, 22
    docs/kaggle-pipeline.md, and the Kaggle tool flattened the folder; read the repository's own rules before naming anything on
    Kaggle, and check the result with the connector's list_dataset_tree_files. Keep it, give every other simulation of the engine
    a "dataset" field, and finish the rest of this item for the figures it does not cover.
+   Done by the Fig. 2 session on 23-24 November (read docs/kaggle-sims.md before changing any of it):
+   - dataset.py writes a real subtitle and description (registry fields figure, page_url, dataset_title, dataset_subtitle,
+     dataset_about; a table of every run with size and commit); mode dataset with version "card" rewrites them without upload.
+     The metadata update starts from the dataset's own downloaded metadata (Kaggle refuses "CC-BY-4.0" there) and always sets
+     isPrivate true (a missing value would make the dataset public).
+   - file_figure.py and workflow mode "figure" file every version of a pre-engine figure's notebooks (code, output, log,
+     manifest) from tools/sims/figure_datasets.json. Fig. 15 (20 notebooks) was started on 24 November at 00:18 Berlin time,
+     run 45287689725; check its result before counting Fig. 15 as done.
+   - Still open in this item: Fig. 13, Fig. 16 check, Fig. 12 and Fig. 14 check against live records, the quota check, the live
+     check refusing a generation without dataset fields, and per-folder download (retry on "Not Found") before re-filing a large
+     dataset.
    - After a run's files are checked, the engine files the whole output as a new version of the figure's private dataset
      (numakoudsie/<the figure's dataset>; one per simulation, new versions only, never a second dataset), laid out as
      <notebook>/v<version>/output/ with the run's log, the notebook's code and a manifest.json (size and SHA-256 of every file),
