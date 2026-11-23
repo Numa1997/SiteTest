@@ -8,6 +8,7 @@
 - Branch head before this file: b2558f9.
 
 ## Do this
+0. Commit and push `notes/coord/to-coordinator/0002-ack.md` the moment you read this (0000, rule 2).
 1. Read the quota fresh and state the GPU cost in one line.
 2. Push a new version (v2) of the same notebook `step4-slosh-head-offline`. Do not create a new notebook. Same content as
    v1: internet OFF, GPU T4, code embedded at commit 5acb718 and checked byte-identical, STEP45=1, SUBRUN=full, DX=0.0015.
