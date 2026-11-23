@@ -229,6 +229,8 @@ Three datasets exist: fig12, fig14 and fig16.
 **Code and launches:**
 7. Every GPU launch has internet off and the code embedded in the notebook. If it has not started within 5 minutes, stop and
    report.
+   GPU launches set enableGpu only, never a machine shape or accelerator field (instruction 0003, 23 Nov: pushes naming
+   NvidiaTeslaT4 sat queued; github.com/mitishraina/AutoTuneNet/pull/60 saw the same).
 8. Never shorten dt to hit an output time. Take the frame at the first step that reaches it, and record its true time.
 
 **Commits and forbidden paths:**

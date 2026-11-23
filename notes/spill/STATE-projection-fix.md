@@ -472,3 +472,8 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
   rebuilt as tools/spill/build_l45_offline.py (four files at 5acb7181, checked byte-identical).
 - 23 Nov 19:19:31 UTC: SaveKernel for v3 refused: "Maximum batch GPU session count of 2 reached." Not launched, 0 GPU-s.
   Inference: queued v1 and v2 hold both slots. Report notes/coord/to-coordinator/0002-report.md; the owner must stop them in the browser.
+- 23 Nov 19:25-19:27 UTC: v3 GPU pushes refused twice more (same error); a CPU no-op version (v3, enableGpu false) ran at once
+  (RUNNING 19:27:10, COMPLETE 19:27:25), so only GPU launches were blocked.
+- RULE (instruction 0003, 23 Nov 19:50 UTC): GPU launches set enableGpu only, never a machine shape or accelerator field. Every 4.5
+  GPU launch so far named NvidiaTeslaT4 and sat queued; another project saw the same and a push without the field started in 20 s
+  (github.com/mitishraina/AutoTuneNet/pull/60). The owner cancelled the queued v1 and v2. Rule 7 of the code handoff updated.
