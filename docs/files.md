@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7129 files, 981.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7130 files, 981.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -42,7 +42,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [GitHub Actions workflows](#github-actions-workflows) | 4 |
 | [GitHub Actions building blocks used by the workflows](#github-actions-building-blocks-used-by-the-workflows) | 1 |
 | [Documentation](#documentation) | 49 |
-| [Tools](#tools) | 371 |
+| [Tools](#tools) | 372 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -5882,7 +5882,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/i18n.md`](i18n.md) | 18.5 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
 | [`docs/kaggelize.md`](kaggelize.md) | 10.3 kB | Documentation: Kaggelize: one button that moves a simulation to data computed once on Kaggle. | [kaggelize.md](kaggelize.md) |
 | [`docs/kaggle-pipeline.md`](kaggle-pipeline.md) | 21.0 kB | Documentation: The Kaggle pipeline: computing on Kaggle, playing on the website. | [kaggle-pipeline.md](kaggle-pipeline.md) |
-| [`docs/kaggle-sims.md`](kaggle-sims.md) | 14.2 kB | Documentation: Simulations on Kaggle: computed once, stored in GitHub, served by Cloudflare, played by the page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`docs/kaggle-sims.md`](kaggle-sims.md) | 14.7 kB | Documentation: Simulations on Kaggle: computed once, stored in GitHub, served by Cloudflare, played by the page. | [kaggle-sims.md](kaggle-sims.md) |
 | [`docs/kaggle.md`](kaggle.md) | 4.4 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
 | [`docs/method/model.md`](method/model.md) | 16.1 kB | Documentation: How Phyein Usul is built: the model behind the repository. | [model.md](method/model.md) |
 | [`docs/method/rebuild.md`](method/rebuild.md) | 9.3 kB | Documentation: Can Phyein Usul be rebuilt? What exists, what is missing, what was saved. | [rebuild.md](method/rebuild.md) |
@@ -6079,7 +6079,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 140.0 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 140.3 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -6288,12 +6288,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/sims/agents/titles.py`](../tools/sims/agents/titles.py) | 1.8 kB | Kaggelize: turns the titles typed into the Run form into the list of simulations and their short names. | [kaggelize.md](kaggelize.md) |
 | [`tools/sims/barton.py`](../tools/sims/barton.py) | 6.8 kB | Reference model of Barton's pendulums (the right margin of the home page), exactly periodic so the stored loop has no seam. | [PLAN.md](../notes/sims/PLAN.md) |
 | [`tools/sims/double_pendulum.py`](../tools/sims/double_pendulum.py) | 17.3 kB | Reference model of one simulation, run once on Kaggle (written by a Kaggelize build session; its report is in notes/sims/reports/). | [kaggelize.md](kaggelize.md) |
+| [`tools/sims/double_pendulum_gpu.py`](../tools/sims/double_pendulum_gpu.py) | 801 B | Fig. 2 in full on Kaggle’s GPU: every start of the grid (360 000, each with its twin) by dp_engine.py, stored as 25 packs in a GitHub release. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`tools/sims/double_pendulum_smoke.py`](../tools/sims/double_pendulum_smoke.py) | 576 B | Engine test for GPU runs with large data: a small part of the double pendulum grid through every step (GPU notebook, GitHub release, landing, the Worker’s /rel/ path). | [kaggle-sims.md](kaggle-sims.md) |
-| [`tools/sims/dp_engine.py`](../tools/sims/dp_engine.py) | 18.7 kB | The double pendulum on Kaggle’s GPU (JAX, the page’s own RK4 in 64-bit), every start of the grid with its twin, packed per mass-length cell; used by double_pendulum_smoke.py (and the full run). | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
+| [`tools/sims/dp_engine.py`](../tools/sims/dp_engine.py) | 19.9 kB | The double pendulum on Kaggle’s GPU (JAX, the page’s own RK4 in 64-bit), every start of the grid with its twin, packed per mass-length cell; used by double_pendulum_smoke.py (and the full run). | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`tools/sims/kaggle_sims.py`](../tools/sims/kaggle_sims.py) | 2.0 kB | Text of the Kaggle notebook phyein-usul-simulations: fetches tools/sims at a pinned commit and runs one simulation model. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/land.py`](../tools/sims/land.py) | 3.6 kB | Step 7 of the simulations pipeline: puts the new data on the newest main (generations.json merged entry by entry, docs/files.md generated again), so a merge made during a run cannot stop the save. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/pipeline.py`](../tools/sims/pipeline.py) | 9.2 kB | The simulations pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation. | [kaggle-sims.md](kaggle-sims.md) |
-| [`tools/sims/registry.json`](../tools/sims/registry.json) | 2.5 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/registry.json`](../tools/sims/registry.json) | 3.0 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/verify_live.py`](../tools/sims/verify_live.py) | 5.6 kB | Step 10 of the simulations pipeline: wait for the live site, compare the live files by SHA-256, open the live pages and check they play the data. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/wave_interference2.py`](../tools/sims/wave_interference2.py) | 15.1 kB | Reference model of Fig. 1, generation 2: ring angles at nodes even in k, which the page blends exactly, heights at damping steps of 0.025, every table in a bottom and a top half; computed once on Kaggle. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`tools/spill/drag_check.py`](../tools/spill/drag_check.py) | 2.9 kB | The continuous spill model: its Kaggle CPU checks (pint at rest and a hard shove; the rest diagnostic; air drag against the textbook law). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |

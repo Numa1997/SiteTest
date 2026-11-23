@@ -57,7 +57,7 @@ DTH_MAX = 1.0                         # rad, largest turn of an angle between tw
 INTERP_TOL, TWIN_TOL = 2e-3, 4e-3     # largest distance of the drawn cubic from the recorded path, in units of l1 + l2
 COLS = ["th1", "th2", "w1", "w2", "a1", "a2", "th1_t", "th2_t", "log10d"]
 A_STEP, LD_STEP = 1e-4, 2e-4
-NICE = (1e-3, 2e-3, 5e-3, 1e-2, 2e-2, 5e-2, 0.1, 0.2, 0.5, 1.0)
+NICE = (1e-3, 2e-3, 5e-3, 1e-2, 2e-2, 5e-2, 0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0, 1e3, 1e4, 1e6, 1e9)
 
 def log(out, *a):
     print(time.strftime("%H:%M:%S ") + " ".join(str(x) for x in a), flush=True)   # the Kaggle log; nothing extra in out_dir
@@ -122,6 +122,12 @@ def make_gpu():
 # ---- from recorded states to stored frames ----
 def wrap(a): return (np.asarray(a) + np.pi) % (2 * np.pi) - np.pi
 def nice(mx): return next(s for s in NICE if mx / s <= 32000)
+def clean(o):
+    """Numbers that are not finite (a run the fixed step could not follow) become null, so the JSON stays valid for a browser."""
+    if isinstance(o, float): return o if math.isfinite(o) else None
+    if isinstance(o, dict): return {k: clean(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)): return [clean(v) for v in o]
+    return o
 
 def herm_err(th, om, stride, l2, twin=False):
     """Largest distance (m) of the lower bob drawn from every stride-th recorded state (cubic per frame pair) from the recorded path.
@@ -145,6 +151,10 @@ def herm_err(th, om, stride, l2, twin=False):
 
 def make_file(i, j, k, w, Ym, Yt, m2, l2):
     """Ym, Yt: recorded states (runs, n, 4) of the 120 runs (theta2 x omega2) of this file, main and twin."""
+    # a run in which the page's fixed step breaks down (numbers no longer finite, or beyond any angular velocity a pendulum can have)
+    # is stored as zeros and marked "finite": false in the header; the page says so instead of drawing it
+    fin = np.isfinite(Ym).all(axis=(1, 2)) & np.isfinite(Yt).all(axis=(1, 2)) & (np.abs(np.nan_to_num(Ym[..., 2:])).max(axis=(1, 2)) < 1e6) & (np.abs(np.nan_to_num(Yt[..., 2:])).max(axis=(1, 2)) < 1e6)
+    if not fin.all(): Ym = np.where(fin[:, None, None], Ym, 0.0); Yt = np.where(fin[:, None, None], Yt, 0.0)
     th, om, tht = Ym[..., :2], Ym[..., 2:], Yt[..., :2]
     wmax = float(max(np.abs(om).max(), np.abs(Yt[..., 2:]).max()))
     for fps in FPS_CHOICES:
@@ -163,13 +173,13 @@ def make_file(i, j, k, w, Ym, Yt, m2, l2):
     assert np.abs(C).max() <= 32767
     S = (M1 + m2) * G * L1 + m2 * G * l2
     E = energy(Ym[..., 0], Ym[..., 1], Ym[..., 2], Ym[..., 3], m2, l2); Et = energy(Yt[..., 0], Yt[..., 1], Yt[..., 2], Yt[..., 3], m2, l2)
-    runs = [dict(th2_deg=TH_DEG[r // len(W0)], w2=W0[r % len(W0)], E0=float(E[r, 0]), drift_max=float(np.abs(E[r] - E[r, 0]).max() / S),
+    runs = [dict(th2_deg=TH_DEG[r // len(W0)], w2=W0[r % len(W0)], finite=bool(fin[r]), E0=float(E[r, 0]), drift_max=float(np.abs(E[r] - E[r, 0]).max() / S),
                  twin_drift_max=float(np.abs(Et[r] - Et[r, 0]).max() / S), d_end=float(10 ** ld[r, -1])) for r in range(Ym.shape[0])]
     hdr = dict(model="double_pendulum", version=2, method="RK4, h = 1/600 s, float64 (the page's own)", file="dp_%d%d_%02d_%d.bin" % (i, j, k, w),
                cell=dict(i=i, j=j, ln_m=LN_M[i], ln_l=LN_L[j], m2=m2, l2=l2), m1=M1, l1=L1, g=G, eps=EPS, th1_deg=TH_DEG[k], w1=W0[w],
                th2_deg=list(TH_DEG), w2=list(W0), order="theta2 index, then omega2 index", fps=fps, frames=len(sel), T=T_RUN, S=S,
                columns=COLS, scale=dict(th=A_STEP, w=sw, a=sa, log10d=LD_STEP), interp_max_m=e1, interp_twin_max_m=e2, runs=runs)
-    hb = json.dumps(hdr, separators=(",", ":")).encode()
+    hb = json.dumps(clean(hdr), separators=(",", ":"), allow_nan=False).encode()
     return hdr["file"], b"DPN2" + struct.pack("<I", len(hb)) + hb + C.astype("<i2").tobytes(), hdr
 
 def checks(out):
@@ -222,18 +232,19 @@ def run(out, smoke=False):
                     name, b, h = make_file(i, j, k, w, Ym[q * per:(q + 1) * per], Yt[q * per:(q + 1) * per], m2, l2)
                     fp.write(b); sizes += len(b)
                     files[name] = dict(pack=pack, offset=off, bytes=len(b), sha256=hashlib.sha256(b).hexdigest(), fps=h["fps"], drift_max=max(r_["drift_max"] for r_ in h["runs"]),
+                                       not_finite=sum(1 for r_ in h["runs"] if not r_["finite"]),
                                        interp=h["interp_max_m"] / (L1 + l2), interp_twin=h["interp_twin_max_m"] / (L1 + l2))
                     off += len(b)
             del Ym, Yt
             log(out, f"cell m={i} l={j}: {B} starts + twins, files so far {len(files)}, {sizes/1e9:.3f} GB, gpu {gpu_s:.1f} s, wall {time.time()-t0:.0f} s")
     ck["energy_drift_max_all"] = max(v["drift_max"] for v in files.values())
     ck["interp_max_rel"] = max(v["interp"] for v in files.values()); ck["interp_twin_max_rel"] = max(v["interp_twin"] for v in files.values())
-    ck["frame_rates"] = sorted(set(v["fps"] for v in files.values()))
+    ck["frame_rates"] = sorted(set(v["fps"] for v in files.values())); ck["runs_not_finite"] = sum(v["not_finite"] for v in files.values())
     summary = dict(model="double_pendulum", version=2, smoke=smoke, method="RK4, h = 1/600 s, float64, the page's own formulas and order; JAX on GPU",
                    params=dict(g=G, m1=M1, l1=L1, eps=EPS, h=H, ln_m=LN_M, ln_l=LN_L, th_deg=TH_DEG, w0=W0, T_run=T_RUN, rec_hz=120,
                                fps_choices=FPS_CHOICES, dth_max=DTH_MAX, interp_tol=INTERP_TOL, twin_tol=TWIN_TOL, columns=COLS),
                    device=str(dev), files=files, bytes=sizes, checks=ck, gpu_s=gpu_s, wall_s=time.time() - t0)
-    json.dump(summary, open(os.path.join(out, "double_pendulum.json"), "w"), separators=(",", ":"))
+    json.dump(clean(summary), open(os.path.join(out, "double_pendulum.json"), "w"), separators=(",", ":"), allow_nan=False)
     log(out, "done", len(files), "files", sizes, "bytes", f"wall {time.time()-t0:.0f} s")
     return summary
 
