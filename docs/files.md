@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7131 files, 981.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7132 files, 981.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -48,7 +48,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 903 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 904 |
 
 ## Repository root
 
@@ -6079,7 +6079,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 140.5 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 140.8 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -7666,6 +7666,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/lucretius/poem-146-224.json`](../notes/lucretius/poem-146-224.json) | 15.8 kB | Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-ar-146-224.json`](../notes/lucretius/poem-ar-146-224.json) | 10.8 kB | The Arabic of Lucretius I 146-224 (tenth version, free verse, fully vowelled), translated from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
 | [`notes/sims/ENGINE-PROMPT.md`](../notes/sims/ENGINE-PROMPT.md) | 14.4 kB | The prompt for the session that rebuilds the engine Simulations on Kaggle: fully automated, every simulation's data in Cloudflare R2. | [kaggle-sims.md](kaggle-sims.md) |
+| [`notes/sims/KAGGELIZE-PROMPT.md`](../notes/sims/KAGGELIZE-PROMPT.md) | 12.9 kB | The prompt that moves one simulation (its only variable) to data computed once on Kaggle: learn the page, derive the physics in Wolfram, design the data without cuts, write the model, measure CPU against GPU, compute through the engine, play, compare, publish, clean up. | [PLAN.md](../notes/sims/PLAN.md) |
 | [`notes/sims/PLAN.md`](../notes/sims/PLAN.md) | 8.0 kB | Plan of the simulations moved to Kaggle: specify, generate once on Kaggle, store, play, document; order and state. | [PLAN.md](../notes/sims/PLAN.md) |
 | [`notes/sims/STATE-agents.md`](../notes/sims/STATE-agents.md) | 2.8 kB | State of the Kaggelize work: aim, what is live, the design, the facts checked, what is open. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/wave_interference/state.md`](../notes/sims/reports/wave_interference/state.md) | 1.6 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
