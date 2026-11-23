@@ -1,0 +1,185 @@
+{
+ "1100": {
+  "forest": [
+   {
+    "t": 2,
+    "trees": 2,
+    "grown": 1,
+    "year": 0.06,
+    "vapour": 0
+   },
+   {
+    "t": 10,
+    "trees": 5,
+    "grown": 2,
+    "year": 0.26,
+    "vapour": 0
+   },
+   {
+    "t": 20,
+    "trees": 13,
+    "grown": 8,
+    "year": 0.51,
+    "vapour": 1
+   },
+   {
+    "t": 30,
+    "trees": 13,
+    "grown": 11,
+    "year": 0.76,
+    "vapour": 1
+   },
+   {
+    "t": 40,
+    "trees": 14,
+    "grown": 12,
+    "year": 1.01,
+    "vapour": 9
+   },
+   {
+    "t": 50,
+    "trees": 18,
+    "grown": 18,
+    "year": 1.26,
+    "vapour": 9
+   },
+   {
+    "t": 60,
+    "trees": 18,
+    "grown": 18,
+    "year": 1.51,
+    "vapour": 21
+   }
+  ],
+  "rails": {
+   "ok": false,
+   "bars": 0,
+   "err": null,
+   "data": false
+  },
+  "errors": [],
+  "sideways": 0
+ },
+ "1600": {
+  "forest": [
+   {
+    "t": 2,
+    "trees": 2,
+    "grown": 1,
+    "year": 0.06,
+    "vapour": 0
+   },
+   {
+    "t": 10,
+    "trees": 10,
+    "grown": 3,
+    "year": 0.26,
+    "vapour": 0
+   },
+   {
+    "t": 20,
+    "trees": 32,
+    "grown": 15,
+    "year": 0.51,
+    "vapour": 92
+   },
+   {
+    "t": 30,
+    "trees": 32,
+    "grown": 16,
+    "year": 0.76,
+    "vapour": 47
+   },
+   {
+    "t": 40,
+    "trees": 33,
+    "grown": 22,
+    "year": 1.01,
+    "vapour": 217
+   },
+   {
+    "t": 50,
+    "trees": 38,
+    "grown": 35,
+    "year": 1.26,
+    "vapour": 137
+   },
+   {
+    "t": 60,
+    "trees": 39,
+    "grown": 39,
+    "year": 1.51,
+    "vapour": 201
+   }
+  ],
+  "rails": {
+   "ok": true,
+   "bars": 24,
+   "err": null,
+   "data": true
+  },
+  "errors": [],
+  "sideways": 0
+ },
+ "1920": {
+  "forest": [
+   {
+    "t": 2,
+    "trees": 3,
+    "grown": 1,
+    "year": 0.06,
+    "vapour": 8
+   },
+   {
+    "t": 10,
+    "trees": 6,
+    "grown": 3,
+    "year": 0.26,
+    "vapour": 36
+   },
+   {
+    "t": 20,
+    "trees": 13,
+    "grown": 8,
+    "year": 0.51,
+    "vapour": 124
+   },
+   {
+    "t": 30,
+    "trees": 13,
+    "grown": 10,
+    "year": 0.76,
+    "vapour": 114
+   },
+   {
+    "t": 40,
+    "trees": 13,
+    "grown": 12,
+    "year": 1.01,
+    "vapour": 470
+   },
+   {
+    "t": 50,
+    "trees": 32,
+    "grown": 26,
+    "year": 1.26,
+    "vapour": 190
+   },
+   {
+    "t": 60,
+    "trees": 39,
+    "grown": 37,
+    "year": 1.51,
+    "vapour": 310
+   }
+  ],
+  "rails": {
+   "ok": true,
+   "bars": 24,
+   "err": null,
+   "data": true
+  },
+  "errors": [],
+  "sideways": 0
+ }
+}

@@ -1,0 +1,248 @@
+{
+ "1100": {
+  "forest": [
+   {
+    "t": 2,
+    "trees": 4,
+    "grown": 3,
+    "year": 0.02,
+    "vapour": 28,
+    "clouds": 1,
+    "inCloud": 24,
+    "left": 0
+   },
+   {
+    "t": 10,
+    "trees": 4,
+    "grown": 3,
+    "year": 0.09,
+    "vapour": 14,
+    "clouds": 3,
+    "inCloud": 5,
+    "left": 1
+   },
+   {
+    "t": 20,
+    "trees": 4,
+    "grown": 3,
+    "year": 0.17,
+    "vapour": 28,
+    "clouds": 4,
+    "inCloud": 14,
+    "left": 1
+   },
+   {
+    "t": 30,
+    "trees": 5,
+    "grown": 3,
+    "year": 0.25,
+    "vapour": 34,
+    "clouds": 8,
+    "inCloud": 25,
+    "left": 3
+   },
+   {
+    "t": 40,
+    "trees": 7,
+    "grown": 4,
+    "year": 0.34,
+    "vapour": 38,
+    "clouds": 9,
+    "inCloud": 21,
+    "left": 5
+   },
+   {
+    "t": 50,
+    "trees": 8,
+    "grown": 4,
+    "year": 0.42,
+    "vapour": 74,
+    "clouds": 9,
+    "inCloud": 42,
+    "left": 5
+   },
+   {
+    "t": 60,
+    "trees": 11,
+    "grown": 5,
+    "year": 0.5,
+    "vapour": 66,
+    "clouds": 8,
+    "inCloud": 42,
+    "left": 5
+   }
+  ],
+  "rails": {
+   "ok": false,
+   "bars": 0,
+   "err": null,
+   "data": false
+  },
+  "errors": [],
+  "sideways": 0
+ },
+ "1600": {
+  "forest": [
+   {
+    "t": 2,
+    "trees": 4,
+    "grown": 3,
+    "year": 0.02,
+    "vapour": 74,
+    "clouds": 4,
+    "inCloud": 66,
+    "left": 2
+   },
+   {
+    "t": 10,
+    "trees": 4,
+    "grown": 3,
+    "year": 0.09,
+    "vapour": 53,
+    "clouds": 9,
+    "inCloud": 23,
+    "left": 5
+   },
+   {
+    "t": 20,
+    "trees": 4,
+    "grown": 3,
+    "year": 0.17,
+    "vapour": 75,
+    "clouds": 14,
+    "inCloud": 42,
+    "left": 6
+   },
+   {
+    "t": 30,
+    "trees": 6,
+    "grown": 3,
+    "year": 0.25,
+    "vapour": 97,
+    "clouds": 16,
+    "inCloud": 58,
+    "left": 9
+   },
+   {
+    "t": 40,
+    "trees": 9,
+    "grown": 4,
+    "year": 0.34,
+    "vapour": 96,
+    "clouds": 18,
+    "inCloud": 64,
+    "left": 10
+   },
+   {
+    "t": 50,
+    "trees": 10,
+    "grown": 4,
+    "year": 0.42,
+    "vapour": 111,
+    "clouds": 19,
+    "inCloud": 76,
+    "left": 10
+   },
+   {
+    "t": 60,
+    "trees": 14,
+    "grown": 4,
+    "year": 0.5,
+    "vapour": 83,
+    "clouds": 14,
+    "inCloud": 36,
+    "left": 6
+   }
+  ],
+  "rails": {
+   "ok": true,
+   "bars": 19,
+   "err": null,
+   "data": true
+  },
+  "errors": [],
+  "sideways": 0
+ },
+ "1920": {
+  "forest": [
+   {
+    "t": 2,
+    "trees": 3,
+    "grown": 3,
+    "year": 0.02,
+    "vapour": 179,
+    "clouds": 7,
+    "inCloud": 144,
+    "left": 3
+   },
+   {
+    "t": 10,
+    "trees": 3,
+    "grown": 3,
+    "year": 0.09,
+    "vapour": 174,
+    "clouds": 20,
+    "inCloud": 97,
+    "left": 11
+   },
+   {
+    "t": 20,
+    "trees": 4,
+    "grown": 3,
+    "year": 0.17,
+    "vapour": 233,
+    "clouds": 21,
+    "inCloud": 148,
+    "left": 13
+   },
+   {
+    "t": 30,
+    "trees": 6,
+    "grown": 3,
+    "year": 0.25,
+    "vapour": 274,
+    "clouds": 25,
+    "inCloud": 175,
+    "left": 13
+   },
+   {
+    "t": 40,
+    "trees": 6,
+    "grown": 3,
+    "year": 0.34,
+    "vapour": 293,
+    "clouds": 25,
+    "inCloud": 179,
+    "left": 14
+   },
+   {
+    "t": 50,
+    "trees": 6,
+    "grown": 3,
+    "year": 0.42,
+    "vapour": 330,
+    "clouds": 26,
+    "inCloud": 213,
+    "left": 16
+   },
+   {
+    "t": 60,
+    "trees": 6,
+    "grown": 5,
+    "year": 0.5,
+    "vapour": 266,
+    "clouds": 25,
+    "inCloud": 133,
+    "left": 16
+   }
+  ],
+  "rails": {
+   "ok": true,
+   "bars": 19,
+   "err": null,
+   "data": true
+  },
+  "errors": [],
+  "sideways": 0
+ }
+}

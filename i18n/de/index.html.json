@@ -870,5 +870,33 @@
  "ffe688a50143": {
   "src": "Fonts",
   "tr": "Schriften"
+ },
+ "8d6e6e45c560": {
+  "src": "What moves behind this page",
+  "tr": "Was sich hinter dieser Seite bewegt"
+ },
+ "13d3664229cc": {
+  "src": "<b>The forest</b> under the title spreads from a few trees, a year every two minutes; its leaves breathe vapour that rises into the open sky of the two top corners, gathers into clouds and falls back as rain or snow that feeds the young trees.",
+  "tr": "<b>Der Wald</b> unter dem Titel breitet sich von wenigen Bäumen aus, ein Jahr alle zwei Minuten; seine Blätter atmen Wasserdampf aus, der in den offenen Himmel der beiden oberen Ecken steigt, sich zu Wolken sammelt und als Regen oder Schnee zurückfällt, der die jungen Bäume nährt."
+ },
+ "3c436ec2e2d5": {
+  "src": "<b>The roots</b> in the left margin grow towards the water they sense, branching like river beds, each as thick as the cube root of the tips it feeds (Murray's law).",
+  "tr": "<b>Die Wurzeln</b> am linken Rand wachsen dem Wasser entgegen, das sie spüren, und verzweigen sich wie Flussbetten, jede so dick wie die Kubikwurzel der Spitzen, die sie versorgt (Murraysches Gesetz)."
+ },
+ "b95032d0d5ff": {
+  "src": "<b>The pendulums</b> in the right margin hang in pairs tied by a weak spring: the swing drains through the spring from one bob to the other and back every 27 s, a beat; the motion was computed once on Kaggle and is played here, not computed.",
+  "tr": "<b>Die Pendel</b> am rechten Rand hängen paarweise, durch eine schwache Feder verbunden: Die Schwingung wandert durch die Feder von einem Pendelkörper zum anderen und alle 27 s wieder zurück, eine Schwebung; die Bewegung wurde einmal auf Kaggle berechnet und wird hier abgespielt, nicht berechnet."
+ },
+ "dd54478d85b6": {
+  "src": "<b>The spinners</b> before the simulations turn at their own pace until a wandering rotating field pulls those it passes into step.",
+  "tr": "<b>Die Kreisel</b> vor den Simulationen drehen sich in ihrem eigenen Takt, bis ein wanderndes Drehfeld die, an denen es vorbeizieht, in seinen Gleichschritt zieht."
+ },
+ "b45c38b34b5e": {
+  "src": "<b>The shores of light</b> above the footer: motes rise through a slow tide and brighten as they reach the light, a picture of Lucretius.",
+  "tr": "<b>Die Ufer des Lichts</b> über der Fußzeile: Staubkörner steigen durch eine langsame Flut und leuchten auf, sobald sie das Licht erreichen, ein Bild des Lukrez."
+ },
+ "95c7feeb368f": {
+  "src": "Every scene on its own, with its numbers to change →",
+  "tr": "Jede Szene für sich, mit ihren Zahlen zum Verändern →"
  }
 }

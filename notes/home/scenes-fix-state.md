@@ -19,12 +19,15 @@ controls and parameters to play with** (planned in `notes/sims/PLAN.md` line 24,
   millisecond, so at 30 frames/s the hand-over falls between frames; the beat moves the swing from bob to bob over seconds.
 
 ## Branch and progress
-- Branch `scenes-fix` from main f987b10.
-- [ ] before: screenshots and 60 s films at 1920, 1600, 1100
-- [ ] step 1 forest slower
-- [ ] step 2 coupled pendulums: model tools/sims/coupled.py, registry entry, player; Kaggle run from the branch
-- [ ] step 3 corners
-- [ ] step 4 "what you see" notes, EN then DE/AR
-- [ ] step 4b scenes page with controls
-- [ ] step 5 test, show, wait
-- [ ] step 6 publish, docs, clean up
+- Branch `scenes-fix` from main f987b10, pushed. Kaggle notebook numakoudsie/phyein-usul-simulations versions 7 and 8 = preview runs
+  of coupled.py from the branch (commits f946601, 8c1bc4f); outputs not committed; the official run happens when the model lands on main.
+- [x] before: notes/home/scenes/before (PNG not committed; counts.json committed)
+- [x] step 1 forest slower (YEAR 120, GROW 50, SEED .04, FEED .25, START 3)
+- [x] step 2 coupled pendulums: tools/sims/coupled.py, registry entry (barton keeps its model, no page), rails player
+- [x] step 3 corners: clouds in the open sky (clouds(), band(), join(), puffs())
+- [x] step 4 home note details.bgs-note, DE + AR
+- [x] step 4b scenes.html, 12 scenes, knob tables K, scenes roots and pairs; English only
+- [x] step 5 tests clean (check.cjs); screenshots shown to the user; WAITING for the yes
+- [ ] step 6 merge (fetch, rebase, inventory), watch "Simulations on Kaggle" for coupled, verify live; delete branch and scratch
+  (PNG folders); barton.py and its data stay until coupled is verified live, then ask the user.
+- Known, not ours: `tools/i18n/build.py --check` fails on "{n} shown here" (fold.js), already on main.

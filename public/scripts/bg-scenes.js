@@ -78,9 +78,11 @@
      each mote follows dv = -g v dt + s sqrt(dt) xi (an Ornstein-Uhlenbeck walk): the drag g slows it, the random kicks s
      of the unseen air molecules keep it trembling; a mote is only lit while it is inside the slanting beam */
   S.motes = {
+    DRAG: 2.2, KICK: 46, BEAM: 64,
+    K: [['DRAG', 'drag γ', '1/s', .3, 8, .1], ['KICK', 'kick strength σ (for a 1 px mote)', 'px/s^1.5', 0, 140, 1], ['BEAM', 'width of the sunbeam', 'px', 20, 160, 1, 1]],
     init: function () {
       this.ax = W * .92; this.ay = -30; this.bx = W * .12; this.by = H + 30; var L = Math.hypot(this.bx - this.ax, this.by - this.ay);
-      this.ux = (this.bx - this.ax) / L; this.uy = (this.by - this.ay) / L; this.bw = Math.min(64, W * .16);
+      this.ux = (this.bx - this.ax) / L; this.uy = (this.by - this.ay) / L; this.bw = Math.min(this.BEAM, W * .16);
       this.P = []; var n = Math.round(cl(W * H / 1500, 30, 110));
       for (var i = 0; i < n; i++) this.P.push({ x: v(0, W), y: v(0, H), vx: 0, vy: 0, r: v(.7, 2.1), h: [] });
     },
@@ -92,7 +94,7 @@
       x.moveTo(this.ax - nx * w, this.ay - ny * w); x.lineTo(this.ax + nx * w, this.ay + ny * w); x.lineTo(this.bx + nx * w, this.by + ny * w); x.lineTo(this.bx - nx * w, this.by - ny * w); x.closePath(); x.fill();
       var sd = Math.sqrt(dt);
       this.P.forEach(function (p) {
-        var gm = 2.2, sg = 46 / p.r; p.vx += -gm * p.vx * dt + sg * sd * (R() + R() + R() - 1.5) * 2; p.vy += -gm * p.vy * dt + sg * sd * (R() + R() + R() - 1.5) * 2 + 1.5 * dt;
+        var gm = self.DRAG, sg = self.KICK / p.r; p.vx += -gm * p.vx * dt + sg * sd * (R() + R() + R() - 1.5) * 2; p.vy += -gm * p.vy * dt + sg * sd * (R() + R() + R() - 1.5) * 2 + 1.5 * dt;
         p.x += p.vx * dt; p.y += p.vy * dt; if (p.x < -6) p.x += W + 12; if (p.x > W + 6) p.x -= W + 12; if (p.y < -6) p.y += H + 12; if (p.y > H + 6) p.y -= H + 12;
         p.h.push(p.x, p.y); if (p.h.length > 24) p.h.splice(0, 2);
         var I = self.lit(p.x, p.y); if (I < .03) return;
@@ -103,12 +105,14 @@
   };
   /* ---- seeds: each thing from its own seed, little by little ---- */
   S.seeds = {
+    FALL: 130, EVERY: .7, LIFE: 17,
+    K: [['FALL', 'speed of a falling seed', 'px/s', 30, 300, 1], ['EVERY', 'time between seeds', 's', .2, 4, .1], ['LIFE', 'life of a plant', 's', 6, 60, 1]],
     init: function () { this.S = []; this.Pl = []; this.tm = 0; },
     draw: function (dt) {
       clear(); var G = H - 12, self = this, k = W / 680; this.tm += dt;
-      if (this.tm > .7 / k && this.Pl.length < 26 * k) { this.tm = 0; this.S.push({ x: v(20, W - 20), y: -5, type: R() * 3 | 0 }); }
+      if (this.tm > this.EVERY / k && this.Pl.length < 26 * k) { this.tm = 0; this.S.push({ x: v(20, W - 20), y: -5, type: R() * 3 | 0 }); }
       x.strokeStyle = col(.25); x.lineWidth = 1; ln(0, G, W, G);
-      this.S = this.S.filter(function (s) { s.y += 130 * dt; dot(s.x, s.y, 2, .8); if (s.y >= G) { self.Pl.push({ x: s.x, type: s.type, age: 0, h: v(.22, .62) * H, sw: R() * 6, life: 17 }); return false; } return true; });
+      this.S = this.S.filter(function (s) { s.y += self.FALL * dt; dot(s.x, s.y, 2, .8); if (s.y >= G) { self.Pl.push({ x: s.x, type: s.type, age: 0, h: v(.22, .62) * H, sw: R() * 6, life: self.LIFE }); return false; } return true; });
       this.Pl = this.Pl.filter(function (p) {
         p.age += dt; if (p.age > p.life) return false;
         var g0 = Math.min(1, p.age / 7), g = 1 - (1 - g0) * (1 - g0), ht = p.h * g, a = p.age > p.life - 3 ? (p.life - p.age) / 3 : 1, s, i;
@@ -128,27 +132,31 @@
 
   /* ---- swerve: one atom leaves its straight fall, and a world of collisions follows ---- */
   S.swerve = {
-    init: function () { clear(); this.A = []; var per = Math.ceil(H / 67); for (var c = 0; c * 20 + 10 < W; c++) for (var i = 0; i < per; i++) { var x0 = 10 + c * 20; this.A.push({ x0: x0, x: x0, y: R() * H, vx: 0, vy: 90, hot: 0, cd: 0 }); } this.tm = 1.5; },
+    FALL: 90, EVERY: 2.6,
+    K: [['FALL', 'speed of the falling atoms', 'px/s', 20, 240, 1, 1], ['EVERY', 'time between swerves', 's', .3, 10, .1]],
+    init: function () { clear(); this.A = []; var per = Math.ceil(H / 67); for (var c = 0; c * 20 + 10 < W; c++) for (var i = 0; i < per; i++) { var x0 = 10 + c * 20; this.A.push({ x0: x0, x: x0, y: R() * H, vx: 0, vy: this.FALL, hot: 0, cd: 0 }); } this.tm = 1.5; },
     draw: function (dt) {
-      fade(.13); this.tm += dt; var A = this.A, n = A.length, i, j;
-      if (this.tm > 2.6 / Math.max(1, area() / 2)) { this.tm = 0; var a0 = A[R() * n | 0]; a0.vx = (R() < .5 ? -1 : 1) * v(18, 44); a0.hot = 1; }
+      fade(.13); this.tm += dt; var A = this.A, n = A.length, i, j, self = this;
+      if (this.tm > this.EVERY / Math.max(1, area() / 2)) { this.tm = 0; var a0 = A[R() * n | 0]; a0.vx = (R() < .5 ? -1 : 1) * v(18, 44); a0.hot = 1; }
       for (i = 0; i < n; i++) {
         var a = A[i]; a.cd -= dt; if (!a.hot || a.cd > 0) continue;
-        for (j = 0; j < n; j++) { var b = A[j]; if (j === i || b.cd > 0) continue; var dx = a.x - b.x, dy = a.y - b.y; if (dx * dx + dy * dy < 40) { var s = dx >= 0 ? 1 : -1; a.vx += s * v(15, 45); b.vx -= s * v(15, 45); a.vy = 90 + v(-25, 25); b.vy = 90 + v(-25, 25); b.hot = 1; a.cd = b.cd = .35; break; } }
+        for (j = 0; j < n; j++) { var b = A[j]; if (j === i || b.cd > 0) continue; var dx = a.x - b.x, dy = a.y - b.y; if (dx * dx + dy * dy < 40) { var s = dx >= 0 ? 1 : -1; a.vx += s * v(15, 45); b.vx -= s * v(15, 45); a.vy = self.FALL + v(-25, 25); b.vy = self.FALL + v(-25, 25); b.hot = 1; a.cd = b.cd = .35; break; } }
       }
-      for (i = 0; i < n; i++) { a = A[i]; a.x += a.vx * dt; a.y += a.vy * dt; if (a.x < 0) a.x += W; if (a.x > W) a.x -= W; if (a.y > H + 5) { a.y = -5; a.x = a.x0; a.vx = 0; a.vy = 90; a.hot = 0; } dot(a.x, a.y, a.hot ? 2.3 : 1.2, a.hot ? .9 : .35); }
+      for (i = 0; i < n; i++) { a = A[i]; a.x += a.vx * dt; a.y += a.vy * dt; if (a.x < 0) a.x += W; if (a.x > W) a.x -= W; if (a.y > H + 5) { a.y = -5; a.x = a.x0; a.vx = 0; a.vy = self.FALL; a.hot = 0; } dot(a.x, a.y, a.hot ? 2.3 : 1.2, a.hot ? .9 : .35); }
     }
   };
 
   /* ---- shores of light ---- */
   S.shores = {
-    init: function () { this.M = []; var n = Math.min(520, 120 * area()); for (var i = 0; i < n; i++) this.M.push({ x: R() * W, y: R() * H, v: v(12, 32), ph: R() * 6 }); this.t = 0; },
+    DENS: 120, RISE: 1,
+    K: [['DENS', 'motes per 680 × 400 px', '', 20, 400, 1, 1], ['RISE', 'speed of rising (× 12 to 32 px/s)', '×', 0, 4, .05]],
+    init: function () { this.M = []; var n = Math.min(520, this.DENS * area()); for (var i = 0; i < n; i++) this.M.push({ x: R() * W, y: R() * H, v: v(12, 32), ph: R() * 6 }); this.t = 0; },
     draw: function (dt) {
       clear(); this.t += dt; var t = this.t, y0 = H * .58, q;
       function ys(q) { return y0 + 10 * Math.sin(q * .012 + t * .5) + 6 * Math.sin(q * .031 - t * .8); }
       x.beginPath(); x.moveTo(0, H); for (q = 0; q <= W; q += 8) x.lineTo(q, ys(q)); x.lineTo(W, H); x.closePath(); x.fillStyle = col(.10); x.fill();
       [0, 14, 30, 50].forEach(function (o, i) { x.beginPath(); for (var q = 0; q <= W; q += 8) { var yy = ys(q + o * 3) + o; if (q) x.lineTo(q, yy); else x.moveTo(q, yy); } x.strokeStyle = col(.55 - .13 * i); x.lineWidth = 1; x.stroke(); });
-      this.M.forEach(function (m) { m.y -= m.v * dt; m.x += Math.sin(t + m.ph) * 8 * dt; if (m.y < -5) { m.y = H + 5; m.x = R() * W; } var s = ys(m.x), a = .18, r = 1; if (m.y < s) { var k = Math.min(1, (s - m.y) / 60); a = (.2 + .7 * k) * Math.min(1, m.y / 60); r = 1 + 1.6 * k; } dot(m.x, m.y, r, a); });
+      var rise = this.RISE; this.M.forEach(function (m) { m.y -= m.v * rise * dt; m.x += Math.sin(t + m.ph) * 8 * dt; if (m.y < -5) { m.y = H + 5; m.x = R() * W; } var s = ys(m.x), a = .18, r = 1; if (m.y < s) { var k = Math.min(1, (s - m.y) / 60); a = (.2 + .7 * k) * Math.min(1, m.y / 60); r = 1 + 1.6 * k; } dot(m.x, m.y, r, a); });
     }
   };
 
@@ -192,7 +200,10 @@
          SOIL       1/s    vapour from the bare ground under open sky in spring and summer, per 100 px of it, so the corners
                            cloud over even before tall trees stand under them
          OPEN       px     least height of open sky a 16 px column needs to hold clouds: so the clouds keep to the two top
-                           corners and do not fill the gaps between the lines of the hero text */
+                           corners and do not fill the gaps between the lines of the hero text (at most 30 % of the ground
+                           height, so a low box, as on the scenes page, still has a sky) */
+    K: [['YEAR', 'length of a year', 's', 20, 480, 5], ['GROW', 'light a seedling needs to grow up', 's', 5, 200, 1], ['SEED', 'seeds per grown tree per second of spring and summer', '1/s', 0, .3, .005],
+        ['FEED', 'share of rain and rotted leaves that feeds growth', '', 0, 1, .05], ['COND', 'condensation in the clouds', 'px/s', 0, .05, .001], ['EFF', 'collision efficiency of cloud droplets', '', 0, .02, .0005], ['SOIL', 'vapour from open ground', '1/s per 100 px', 0, 3, .05]],
     YEAR: 120, GROW: 50, SEED: .04, FEED: .25, START: 3, LIFE: [2.5, 4], FALL: .15, COND: .006, EFF: .001, SOIL: .5, OPEN: 240,
     mk: function (px, G) { G.j = []; for (var i = 0; i < 97; i++) G.j.push(R()); G.len *= this.sc; G.need *= .45; return { x: px, G: G, fed: 0, mat: 0, age: 0, Rs: [], Rt: [{ x: px, y: this.GY, a: PI / 2 + v(-.3, .3), s: 0 }] }; },
     /* what lies over the land: rectangles of the page's text and cards that no crown, leaf, cloud or flake may enter */
@@ -234,7 +245,7 @@
       var CL = [], n = Math.ceil(W / 16), self = this, i, k;
       for (i = 0; i < n; i++) { var xl = i * 16, xr = xl + 16, flo = this.GY * .55;
         for (k = 0; k < this.ob.length; k++) { var o = this.ob[k]; if (o.r > xl && o.l < xr) flo = Math.min(flo, o.t); }
-        CL.push(flo - 30 - 30 >= this.OPEN ? { t: 30, b: flo - 30 } : null); }
+        CL.push(flo - 30 - 30 >= Math.min(this.OPEN, this.GY * .3) ? { t: 30, b: flo - 30 } : null); }
       if (this.sky) { var cols = []; CL.forEach(function (c, i) { if (c) cols.push(i); });
         /* clouds already in the sky when the page opens: tufts of droplets, about one per 30 000 px² of open sky */
         var nT = Math.round(cols.reduce(function (s, i) { return s + 16 * (CL[i].b - CL[i].t); }, 0) / 60000);
@@ -355,12 +366,14 @@
 
   /* ---- powder: iron powder over magnets under a sheet, and a wire with a current ---- */
   S.powder = {
-    init: function () { this.t = 0; this.n = Math.min(7000, Math.round(3000 * area())); this.px = new Float32Array(this.n); this.py = new Float32Array(this.n); for (var i = 0; i < this.n; i++) { this.px[i] = R() * W; this.py[i] = R() * H; } this.G = [{ bx: W * .3, by: H * .45, a: .3, w: .1, ph: 0 }, { bx: W * .7, by: H * .56, a: 2.6, w: -.07, ph: 2.5 }]; this.L = cl(Math.min(W, H) * .1, 34, 70); },
+    DENS: 3000, CYCLE: 18, LINES: 22,
+    K: [['DENS', 'grains per 680 × 400 px', '', 300, 7000, 100, 1], ['CYCLE', 'the wire current: one on-and-off cycle', 's', 3, 60, 1], ['LINES', 'how many field lines the grains gather on', '', 6, 40, 1]],
+    init: function () { this.t = 0; this.n = Math.min(7000, Math.round(this.DENS * area())); this.px = new Float32Array(this.n); this.py = new Float32Array(this.n); for (var i = 0; i < this.n; i++) { this.px[i] = R() * W; this.py[i] = R() * H; } this.G = [{ bx: W * .3, by: H * .45, a: .3, w: .1, ph: 0 }, { bx: W * .7, by: H * .56, a: 2.6, w: -.07, ph: 2.5 }]; this.L = cl(Math.min(W, H) * .1, 34, 70); },
     draw: function (dt) {
-      clear(); this.t += dt; var t = this.t, P = [], I = 1.6 * cl(Math.sin(2 * PI * t / 18) * 1.6, 0, 1), wx = W / 2 + W * .09 * Math.sin(t * .09), wy = H / 2 + H * .1 * Math.cos(t * .07), L = this.L, i, k;
+      clear(); this.t += dt; var t = this.t, P = [], I = 1.6 * cl(Math.sin(2 * PI * t / this.CYCLE) * 1.6, 0, 1), wx = W / 2 + W * .09 * Math.sin(t * .09), wy = H / 2 + H * .1 * Math.cos(t * .07), L = this.L, i, k;
       this.G.forEach(function (g) { g.a += g.w * dt; var cx = g.bx + 30 * Math.sin(t * .13 + g.ph), cy = g.by + 22 * Math.cos(t * .11 + g.ph), dx = L * Math.cos(g.a), dy = L * Math.sin(g.a); P.push([cx + dx, cy + dy, 1], [cx - dx, cy - dy, -1]); x.strokeStyle = col(.14); x.lineWidth = 20; x.lineCap = 'butt'; ln(cx + dx, cy + dy, cx - dx, cy - dy); });
       x.lineWidth = 1.5; x.strokeStyle = col(.25 + .5 * I / 1.6); x.beginPath(); x.arc(wx, wy, 8, 0, 7); x.stroke(); dot(wx, wy, 2.5 * I / 1.6 + .5, .9);
-      var tp = t % 3.5, tap = tp < .25 ? 5 * (1 - tp / .25) : 0, N = 22; x.strokeStyle = col(.8); x.lineWidth = 1.3; x.lineCap = 'round'; x.beginPath();
+      var tp = t % 3.5, tap = tp < .25 ? 5 * (1 - tp / .25) : 0, N = this.LINES; x.strokeStyle = col(.8); x.lineWidth = 1.3; x.lineCap = 'round'; x.beginPath();
       for (i = 0; i < this.n; i++) {
         var px = this.px[i], py = this.py[i], bx = 0, by = 0, psi = 0, dx, dy, r2;
         for (k = 0; k < 4; k++) { var p = P[k]; dx = px - p[0]; dy = py - p[1]; r2 = dx * dx + dy * dy + 25; bx += p[2] * dx / r2; by += p[2] * dy / r2; psi += p[2] * Math.atan2(dy, dx); }
@@ -376,7 +389,8 @@
 
   /* ---- harp: a harmonica; every note travels outward at the speed of sound (here 140 px/s) ---- */
   S.harp = {
-    seq: [[3], [4], [5], [3, 4, 5], [6], [], [4], [0, 1, 2], [7], [3, 5], [], [1, 2, 3], [8], [6, 7, 8]], HN: 1024,
+    seq: [[3], [4], [5], [3, 4, 5], [6], [], [4], [0, 1, 2], [7], [3, 5], [], [1, 2, 3], [8], [6, 7, 8]], HN: 1024, C: 140,
+    K: [['C', 'speed of sound (drawn)', 'px/s', 40, 400, 5]],
     init: function () { this.t = 0; this.a = new Float32Array(10); this.hs = []; this.last = []; for (var i = 0; i < 10; i++) { this.hs.push(new Float32Array(this.HN)); this.last.push(-99); } this.li = 0; this.Q = []; var s = Math.max(9, Math.sqrt(W * H / 8000)); for (var y = s / 2; y < H; y += s * .9) for (var q = s / 2; q < W; q += s) this.Q.push([q + v(-.3, .3) * s, y + v(-.3, .3) * s]); this.x0 = W / 2 - 105; this.y0 = H - 30; },
     draw: function (dt) {
       clear(); this.t += dt; var t = this.t, on = this.seq[Math.floor(t / 2.2) % this.seq.length], idx = Math.floor(t * 40), i, k, HN = this.HN, x0 = this.x0, y0 = this.y0, act = [];
@@ -384,11 +398,11 @@
       this.li = idx; x.fillStyle = col(.62); x.beginPath();
       for (var n = 0; n < this.Q.length; n++) {
         var q = this.Q[n], ox = 0, oy = 0;
-        for (k = 0; k < act.length; k++) { i = act[k]; var dx = q[0] - (x0 + i * 23.3), dy = q[1] - y0, r = Math.hypot(dx, dy) + 1, id = Math.floor((t - r / 140) * 40); if (id < 0 || idx - id > HN - 4) continue; var am = this.hs[i][id % HN]; if (am < .03) continue; var kk = 2 * PI / (70 - i * 4.5), d = am * 6 * Math.sin(kk * r - kk * 140 * t) / (1 + r / 260); ox += dx / r * d; oy += dy / r * d; }
+        for (k = 0; k < act.length; k++) { i = act[k]; var dx = q[0] - (x0 + i * 23.3), dy = q[1] - y0, r = Math.hypot(dx, dy) + 1, id = Math.floor((t - r / this.C) * 40); if (id < 0 || idx - id > HN - 4) continue; var am = this.hs[i][id % HN]; if (am < .03) continue; var kk = 2 * PI / (70 - i * 4.5), d = am * 6 * Math.sin(kk * r - kk * this.C * t) / (1 + r / 260); ox += dx / r * d; oy += dy / r * d; }
         if (q[1] + oy < y0 - 20) x.rect(q[0] + ox, q[1] + oy, 1.6, 1.6);
       }
       x.fill(); x.strokeStyle = col(.85); x.lineWidth = 1.5; x.strokeRect(x0 - 19, y0 - 14, 248, 30);
-      for (i = 0; i < 10; i++) { var hx = x0 - 9 + i * 23.3; x.strokeStyle = col(.5); x.lineWidth = 1; x.strokeRect(hx, y0 - 9, 18, 20); var o = this.a[i] * 3.5 * Math.sin(2 * PI / (70 - i * 4.5) * 140 * t); x.strokeStyle = col(.95); x.lineWidth = 1.6; x.beginPath(); x.moveTo(hx + 3, y0 + 8); x.quadraticCurveTo(hx + 9 + o, y0, hx + 15 + o * 1.6, y0 - 6); x.stroke(); }
+      for (i = 0; i < 10; i++) { var hx = x0 - 9 + i * 23.3; x.strokeStyle = col(.5); x.lineWidth = 1; x.strokeRect(hx, y0 - 9, 18, 20); var o = this.a[i] * 3.5 * Math.sin(2 * PI / (70 - i * 4.5) * this.C * t); x.strokeStyle = col(.95); x.lineWidth = 1.6; x.beginPath(); x.moveTo(hx + 3, y0 + 8); x.quadraticCurveTo(hx + 9 + o, y0, hx + 15 + o * 1.6, y0 - 6); x.stroke(); }
     }
   };
 
@@ -476,20 +490,78 @@
       x.restore();
     }
   };
+  /* ---- pairs: the right rail's coupled pendulums on their own, in a box (the scenes page, scenes.html). The same stored run
+     (tools/sims/coupled.py, computed on Kaggle); nothing is computed here. The box shows one large pair and draws, under it, the
+     energy of each pendulum over the loop, read from the stored angles: E_i = m g L (1 − cos θ_i) + ½ m L² θ_i'², with θ_i'
+     taken from the two neighbouring stored frames. That curve is a reading of the stored motion, not a second simulation. ---- */
+  S.pairs = {
+    SPEED: 1,   /* always real time: the stored run is the motion of these pendulums, so it has no knob (the handoff of 23 November 2026) */
+    K: [],
+    init: function () { var self = this; this.t = 0; if (!this.asked) { this.asked = 1; sceneData('coupled', 'coupled.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } },
+    draw: function (dt) {
+      clear(); this.t += dt * this.SPEED; var D = this.D; if (!D) return; var hd = D.hdr, nf = hd.frames, F = D.frames, pr = hd.params;
+      var sc = Math.min((H * .62) / pr.L, (W * .5) / pr.d), Lp = pr.L * sc, ap = pr.a * sc, dp = pr.d * sc, by = 24, cx = W / 2, j = Math.round(this.t / hd.dt) % nf, k = j * 2;
+      var t1 = F[k] * 1e-4, t2 = F[k + 1] * 1e-4, p1 = cx - dp / 2, p2 = cx + dp / 2;
+      x.strokeStyle = col(.6); x.lineWidth = 3; ln(p1 - 40, by, p2 + 40, by);
+      var s1x = p1 + ap * Math.sin(t1), s1y = by + ap * Math.cos(t1), s2x = p2 + ap * Math.sin(t2), s2y = by + ap * Math.cos(t2), sx = s2x - s1x, sy = s2y - s1y, sl = Math.hypot(sx, sy) || 1, nx = -sy / sl, ny = sx / sl;
+      x.strokeStyle = col(.7); x.lineWidth = 1.3; x.beginPath(); x.moveTo(s1x, s1y); for (var z = 1; z < 23; z++) { var o = (z % 2 ? 6 : -6) * (z > 1 && z < 22 ? 1 : .5); x.lineTo(s1x + sx * z / 23 + nx * o, s1y + sy * z / 23 + ny * o); } x.lineTo(s2x, s2y); x.stroke();
+      x.strokeStyle = col(.8); x.lineWidth = 1.8; ln(p1, by, p1 + Lp * Math.sin(t1), by + Lp * Math.cos(t1)); ln(p2, by, p2 + Lp * Math.sin(t2), by + Lp * Math.cos(t2));
+      dot(p1 + Lp * Math.sin(t1), by + Lp * Math.cos(t1), pr.rb * sc, .9); dot(p2 + Lp * Math.sin(t2), by + Lp * Math.cos(t2), pr.rb * sc, .9);
+      /* the energy of each pendulum over one loop, and where we are in it */
+      if (!this.E) { var E = this.E = [new Float32Array(nf), new Float32Array(nf)], g0 = pr.g, mx = 0; for (var f = 0; f < nf; f++) for (var q = 0; q < 2; q++) {
+          var th = F[f * 2 + q] * 1e-4, w = (F[((f + 1) % nf) * 2 + q] - F[((f - 1 + nf) % nf) * 2 + q]) * 1e-4 / (2 * hd.dt); E[q][f] = pr.m * g0 * pr.L * (1 - Math.cos(th)) + .5 * pr.m * pr.L * pr.L * w * w; mx = Math.max(mx, E[q][f]); } this.Emax = mx; }
+      var gx = 20, gw = W - 40, gh = H * .22, gy = H - 14;
+      x.strokeStyle = col(.25); x.lineWidth = 1; ln(gx, gy, gx + gw, gy);
+      for (q = 0; q < 2; q++) { x.strokeStyle = col(q ? .45 : .9); x.setLineDash(q ? [5, 3] : []); x.lineWidth = 1.4; x.beginPath(); for (f = 0; f < nf; f += 2) { var px = gx + gw * f / nf, py = gy - gh * this.E[q][f] / this.Emax; if (f) x.lineTo(px, py); else x.moveTo(px, py); } x.stroke(); }
+      x.setLineDash([]); x.strokeStyle = col(.8); ln(gx + gw * j / nf, gy, gx + gw * j / nf, gy - gh - 6);
+      this.now = { t: j * hd.dt, theta1: t1, theta2: t2, E1: this.E[0][j], E2: this.E[1][j] };
+    }
+  };
+  /* ---- roots: the left rail's roots on their own, in a box (scenes.html). Space colonisation, as in the rail: water is scattered
+     over the box; every water drop within SENSE pulls its nearest root tip towards it; each tip grows STEP px per step in the mean
+     direction of its pulls (plus a slight pull downwards and a little noise); a drop that a root reaches is used up; thickness by
+     Murray's law (r³ of a parent = the sum of r³ of its children); sap dots climb from the tips back to the surface. ---- */
+  S.roots = {
+    WATER: 1100, SENSE: 120, STEP: 6, DOWN: .15,
+    K: [['WATER', 'area per drop of water (fewer drops: sparser roots)', 'px²', 300, 4000, 50, 1], ['SENSE', 'how far a root tip senses water', 'px', 20, 300, 5, 1], ['STEP', 'growth per step', 'px', 2, 16, 1, 1], ['DOWN', 'pull downwards (gravitropism)', '', 0, 1, .05, 1]],
+    init: function () { this.N = []; this.At = []; this.grid = {}; this.gt = 0; this.mt = 0; this.flow = [];
+      var n = Math.round(W * H / this.WATER), i; for (i = 0; i < n; i++) this.At.push({ x: v(6, W - 6), y: v(20, H - 6), on: 1 });
+      for (i = 0; i < 3; i++) this.add(W * (i + .5) / 3 + v(-20, 20), 0, -1); },
+    add: function (px, py, par) { var i = this.N.length; this.N.push({ x: px, y: py, p: par, c: 1, k: 0 }); var key = ((px / 32) | 0) + ',' + ((py / 32) | 0); (this.grid[key] = this.grid[key] || []).push(i); },
+    near: function (px, py, D) { var best = -1, bd = D * D, cx = (px / 32) | 0, cy = (py / 32) | 0, m = Math.ceil(D / 32); for (var a = -m; a <= m; a++) for (var b = -m; b <= m; b++) { var c = this.grid[(cx + a) + ',' + (cy + b)]; if (!c) continue; for (var k = 0; k < c.length; k++) { var q = this.N[c[k]], dx = q.x - px, dy = q.y - py, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = c[k]; } } } return [best, bd]; },
+    step: function () { var N = this.N, acc = {}, i, self = this; for (i = 0; i < this.At.length; i++) { var a = this.At[i]; if (!a.on) continue; var r = this.near(a.x, a.y, this.SENSE); if (r[0] < 0) continue;
+        if (r[1] < 64) { a.on = 0; continue; } var q = N[r[0]], d = Math.sqrt(r[1]), s = acc[r[0]] || (acc[r[0]] = [0, 0]); s[0] += (a.x - q.x) / d; s[1] += (a.y - q.y) / d; }
+      for (var k in acc) { var q2 = N[k], s2 = acc[k], dx = s2[0] + (R() - .5) * .6, dy = s2[1] + this.DOWN, dl = Math.hypot(dx, dy) || 1, nx = q2.x + dx / dl * this.STEP, ny = q2.y + dy / dl * this.STEP;
+        if (this.near(nx, ny, 3)[0] < 0 && ny < H) this.add(cl(nx, 2, W - 2), ny, +k); }
+      this.At = this.At.filter(function (a) { return a.on; }); },
+    draw: function (dt) { clear(); this.gt += dt; this.mt += dt; var N = this.N, i;
+      while (this.gt > .05) { this.gt -= .05; this.step(); }
+      if (this.mt > .5) { this.mt = 0; for (i = 0; i < N.length; i++) N[i].k = 0; for (i = N.length - 1; i >= 0; i--) { var q = N[i]; q.c = Math.max(1, q.k); if (q.p >= 0) N[q.p].k += q.c; } }
+      x.fillStyle = col(.18); this.At.forEach(function (a) { x.fillRect(a.x - .6, a.y - .6, 1.2, 1.2); });
+      x.lineCap = 'round'; for (i = 0; i < N.length; i++) { q = N[i]; if (q.p < 0) continue; var pq = N[q.p]; x.strokeStyle = col(.3 + .08 * Math.min(4, Math.cbrt(q.c))); x.lineWidth = Math.min(3, .6 + .35 * Math.cbrt(q.c)); ln(pq.x, pq.y, q.x, q.y); }
+      if (R() < dt * 6 && N.length > 10) { var tp = N[(R() * N.length) | 0]; if (tp.c === 1 && tp.p >= 0) this.flow.push({ i: tp.p, x: tp.x, y: tp.y }); }
+      this.flow = this.flow.filter(function (o) { var tq = N[o.i]; if (!tq) return false; var dx = tq.x - o.x, dy = tq.y - o.y, d = Math.hypot(dx, dy), st = 34 * dt;
+        if (d <= st) { o.x = tq.x; o.y = tq.y; if (tq.p < 0) return false; o.i = tq.p; } else { o.x += dx / d * st; o.y += dy / d * st; } dot(o.x, o.y, 1.3, .6); return true; });
+      x.lineCap = 'butt'; }
+  };
   /* ---- spin: spinners at random; a wandering rotating field brings those in reach into step ---- */
   S.spin = {
+    FIELD: 16, NEIGH: .9, TURN: 3,
+    K: [['FIELD', 'pull of the rotating field', '1/s', 0, 40, .5], ['NEIGH', 'pull between neighbours', '1/s', 0, 4, .05], ['TURN', 'turning rate of the field', 'rad/s', 0, 8, .1]],
     init: function () { this.t = 0; this.O = []; this.nc = Math.floor(W / 28); this.nr = Math.floor(H / 29.5); var ox = (W - (this.nc - 1) * 28) / 2, oy = (H - (this.nr - 1) * 29.5) / 2; for (var j = 0; j < this.nr; j++) for (var i = 0; i < this.nc; i++) this.O.push({ x: ox + i * 28, y: oy + j * 29.5, th: R() * 2 * PI, w: (R() < .5 ? -1 : 1) * v(1.5, 5) }); this.sg = cl(Math.min(W, H) * .33, 110, 300); },
     draw: function (dt) {
-      clear(); this.t += dt; var t = this.t, phi = 3 * t, sx = W / 2 + W * .37 * Math.sin(t * .21), sy = H / 2 + H * .33 * Math.sin(t * .33 + 1), O = this.O, nc = this.nc, N = O.length, s2 = 2 * this.sg * this.sg, n, k;
+      clear(); this.t += dt; var t = this.t, phi = this.TURN * t, sx = W / 2 + W * .37 * Math.sin(t * .21), sy = H / 2 + H * .33 * Math.sin(t * .33 + 1), O = this.O, nc = this.nc, N = O.length, s2 = 2 * this.sg * this.sg, n, k;
       x.strokeStyle = col(.12); x.lineWidth = 1; x.beginPath(); x.arc(sx, sy, this.sg, 0, 7); x.stroke(); x.lineWidth = 8; x.lineCap = 'round'; ln(sx - 40 * Math.cos(phi), sy - 40 * Math.sin(phi), sx + 40 * Math.cos(phi), sy + 40 * Math.sin(phi)); x.lineCap = 'butt';
-      for (n = 0; n < N; n++) { var o = O[n], dx = o.x - sx, dy = o.y - sy, K = 16 * Math.exp(-(dx * dx + dy * dy) / s2), c = 0, i = n % nc; if (i > 0) c += Math.sin(O[n - 1].th - o.th); if (i < nc - 1) c += Math.sin(O[n + 1].th - o.th); if (n >= nc) c += Math.sin(O[n - nc].th - o.th); if (n < N - nc) c += Math.sin(O[n + nc].th - o.th); o.d = o.w + K * Math.sin(phi - o.th) + .9 * c; o.K = K; }
+      for (n = 0; n < N; n++) { var o = O[n], dx = o.x - sx, dy = o.y - sy, K = this.FIELD * Math.exp(-(dx * dx + dy * dy) / s2), c = 0, i = n % nc; if (i > 0) c += Math.sin(O[n - 1].th - o.th); if (i < nc - 1) c += Math.sin(O[n + 1].th - o.th); if (n >= nc) c += Math.sin(O[n - nc].th - o.th); if (n < N - nc) c += Math.sin(O[n + nc].th - o.th); o.d = o.w + K * Math.sin(phi - o.th) + this.NEIGH * c; o.K = K; }
       for (n = 0; n < N; n++) { o = O[n]; o.th += o.d * dt; var lock = Math.pow(Math.max(0, Math.cos(o.th - phi)), 4) * Math.min(1, o.K / 5), a = .3 + .65 * lock; x.strokeStyle = col(a); x.lineWidth = 1.3; x.beginPath(); for (k = 0; k < 3; k++) { var an = o.th + k * 2.094; x.moveTo(o.x, o.y); x.lineTo(o.x + 10 * Math.cos(an), o.y + 10 * Math.sin(an)); } x.stroke(); dot(o.x + 10 * Math.cos(o.th), o.y + 10 * Math.sin(o.th), 2.4, Math.min(1, a + .2)); }
     }
   };
 
   /* ---- mix: three species in three chambers across the whole window; walls lift; entropy rises, temperatures meet ---- */
   S.mix = {
-    init: function () { this.t = 0; this.P = []; this.n = cl(Math.round(80 * area() / 3) * 3, 150, 540); var per = this.n / 3; for (var i = 0; i < this.n; i++) { var k = i / per | 0, a = R() * 2 * PI, s = [150, 75, 28][k] * v(.7, 1.3); this.P.push({ k: k, x: (k + v(.04, .96)) * W / 3, y: v(8, H - 8), vx: s * Math.cos(a), vy: s * Math.sin(a), r: R() * 6, w: v(-2, 2) }); } this.E = []; this.et = 0; },
+    HOT: 150, MID: 75, COLD: 28,
+    K: [['HOT', 'speed of the triangles', 'px/s', 5, 300, 1, 1], ['MID', 'speed of the rings', 'px/s', 5, 300, 1, 1], ['COLD', 'speed of the squares', 'px/s', 5, 300, 1, 1]],
+    init: function () { this.t = 0; this.P = []; this.n = cl(Math.round(80 * area() / 3) * 3, 150, 540); var per = this.n / 3; for (var i = 0; i < this.n; i++) { var k = i / per | 0, a = R() * 2 * PI, s = [this.HOT, this.MID, this.COLD][k] * v(.7, 1.3); this.P.push({ k: k, x: (k + v(.04, .96)) * W / 3, y: v(8, H - 8), vx: s * Math.cos(a), vy: s * Math.sin(a), r: R() * 6, w: v(-2, 2) }); } this.E = []; this.et = 0; },
     shape: function (p) {
       x.save(); x.translate(p.x, p.y); x.rotate(p.r);
       if (p.k === 0) { x.fillStyle = col(.85); x.beginPath(); x.moveTo(0, -5.5); x.lineTo(4.8, 3.5); x.lineTo(-4.8, 3.5); x.closePath(); x.fill(); }
@@ -522,9 +594,11 @@
   function plen(p) { var l = 0; for (var i = 1; i < p.length; i++) l += Math.abs(p[i][0] - p[i - 1][0]) + Math.abs(p[i][1] - p[i - 1][1]); return l; }
   function part(p, len) { x.beginPath(); x.moveTo(p[0][0], p[0][1]); var hx = p[0][0], hy = p[0][1]; for (var i = 1; i < p.length && len > 0; i++) { var dx = p[i][0] - p[i - 1][0], dy = p[i][1] - p[i - 1][1], l = Math.abs(dx) + Math.abs(dy), f = Math.min(1, len / l); hx = p[i - 1][0] + dx * f; hy = p[i - 1][1] + dy * f; x.lineTo(hx, hy); len -= l; } x.stroke(); return [hx, hy]; }
   S.chip = {
+    ROUTE: 150,
+    K: [['ROUTE', 'speed of routing a wire', 'px/s', 20, 600, 5]],
     init: function () {
       this.B = []; this.RT = []; this.T = 0; this.ph = 0; this.ft = 0; var i, j, k, n;
-      var mg = margin(); if (W >= 1240) { this.s = Math.min(.78, (H - 120) / 400); this.cx = W / 2 + (document.documentElement.dir === 'rtl' ? -1 : 1) * Math.min(320, W * .2); this.cy = 96 + 200 * this.s; } else if (W > 760) { this.s = .55; this.cx = W - 118; this.cy = H * .66; } else { this.s = .45; this.cx = W - 96; this.cy = H - 104; }
+      var mg = margin(); if (/\bscn__stage\b/.test(host.className)) { this.s = Math.min(.9, (H - 40) / 400); this.cx = W / 2; this.cy = H / 2; } else if (W >= 1240) { this.s = Math.min(.78, (H - 120) / 400); this.cx = W / 2 + (document.documentElement.dir === 'rtl' ? -1 : 1) * Math.min(320, W * .2); this.cy = 96 + 200 * this.s; } else if (W > 760) { this.s = .55; this.cx = W - 118; this.cy = H * .66; } else { this.s = .45; this.cx = W - 96; this.cy = H - 104; }
       for (j = 0; j < 6; j++) for (i = 0; i < 6; i++) { if (R() < .12) continue; var w = v(26, 44), h = v(26, 44), cx = X0 + CS * (i + .5), cy = Y0 + CS * (j + .5), c = R() * 4 | 0, q = [[cx - w / 2, cy - h / 2], [cx + w / 2, cy - h / 2], [cx + w / 2, cy + h / 2], [cx - w / 2, cy + h / 2]], p = []; for (k = 0; k < 5; k++) p.push(q[(c + k) % 4]); this.B.push({ i: i, j: j, cx: cx, cy: cy, w: w, h: h, p: p, L: 2 * (w + h), t0: R() * 2.6, inner: R() < .5 }); }
       function o() { return ((R() * 5 | 0) - 2) * 3; }
       for (n = 0; n < 48; n++) { var B = this.B, a = B[R() * B.length | 0], b = B[R() * B.length | 0]; if (a === b) continue; var sx = R() < .5 ? -1 : 1, x1 = X0 + CS * (a.i + (sx > 0 ? 1 : 0)) + o(), up = R() < .5, y1 = Y0 + CS * (b.j + (up ? 0 : 1)) + o(), ya = a.cy + o(), xb = b.cx + o(); p = [[a.cx + sx * a.w / 2, ya], [x1, ya], [x1, y1], [xb, y1], [xb, b.cy + (up ? -1 : 1) * b.h / 2]]; this.RT.push({ p: p, L: plen(p), t0: 3.4 + R() * 7 }); }
@@ -538,7 +612,7 @@
         if (u < 1) { done = 0; dot(hd[0], hd[1], 2.2, 1); }
         else { x.fillStyle = col(.1); x.fillRect(b.cx - b.w / 2, b.cy - b.h / 2, b.w, b.h); if (b.inner) { x.strokeStyle = col(.35); x.lineWidth = 1; x.beginPath(); for (var k = 1; k < 4; k++) { var yy = b.cy - b.h / 2 + b.h * k / 4; x.moveTo(b.cx - b.w / 2 + 4, yy); x.lineTo(b.cx + b.w / 2 - 4, yy); } x.stroke(); } }
       });
-      this.RT.forEach(function (r) { var l = (T - r.t0) * 150; if (l <= 0) { done = 0; return; } x.strokeStyle = col(.5); x.lineWidth = 1; var hd = part(r.p, Math.min(l, r.L)); x.fillStyle = col(.95); x.fillRect(r.p[0][0] - 1.8, r.p[0][1] - 1.8, 3.6, 3.6); if (l < r.L) { done = 0; dot(hd[0], hd[1], 2.2, .95); } else x.fillRect(r.p[4][0] - 1.8, r.p[4][1] - 1.8, 3.6, 3.6); });
+      var RS = this.ROUTE; this.RT.forEach(function (r) { var l = (T - r.t0) * RS; if (l <= 0) { done = 0; return; } x.strokeStyle = col(.5); x.lineWidth = 1; var hd = part(r.p, Math.min(l, r.L)); x.fillStyle = col(.95); x.fillRect(r.p[0][0] - 1.8, r.p[0][1] - 1.8, 3.6, 3.6); if (l < r.L) { done = 0; dot(hd[0], hd[1], 2.2, .95); } else x.fillRect(r.p[4][0] - 1.8, r.p[4][1] - 1.8, 3.6, 3.6); });
       return done;
     },
     draw: function (dt) {
@@ -557,6 +631,7 @@
   };
 
   var cur = S[name]; if (!cur) { host.removeChild(cv); return; } host.__bgScene = cur;
+  host.__bgRestart = function () { if (W) { clear(); cur.init(); } };   /* the scenes page's "start again" (scenes.html) */
   var inst = { on: !('IntersectionObserver' in window),
     size: function () { var w = fixed ? innerWidth : host.clientWidth, h = fixed ? innerHeight : host.clientHeight; if (!w || !h) return; if (Math.abs(w - W) < 30 && Math.abs(h - H) < 100 && W) return; W = w; H = h; cv.width = W; cv.height = H; cur.init(); },
     draw: function (dt) { if (W) cur.draw(dt); } };

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Living scenes · Numa Koudsie</title>
+    <meta name="description" content="The small moving pictures behind the pages of Phyein Usul, each on its own: what it shows, the physics that drives it, and its numbers to change." />
+    <meta name="author" content="Numa Koudsie" />
+    <meta name="theme-color" content="#f5f1ea" />
+    <link rel="stylesheet" href="styles/site.css" />
+    <link rel="stylesheet" href="styles/catalog.css" />
+    <link rel="stylesheet" href="styles/bg-scenes.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
+    />
+    <script>document.documentElement.className = 'js';</script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#scenes">Skip to the scenes</a>
+    <header class="cat-top">
+      <span style="display:inline-flex;align-items:center;gap:14px"><a href="index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="index.html">← Numa Koudsie</a></span>
+      <nav aria-label="Site">
+        <a href="simulations.html">Simulations</a>
+        <a href="portfolios.html">Projects</a>
+        <a href="lucretius.html">Lucretius</a>
+      </nav>
+    </header>
+
+    <main class="cat">
+      <div class="cat__head">
+        <div>
+          <p class="cat__kicker">Behind the pages · twelve small pictures</p>
+          <h1>Living scenes<span class="dot">.</span></h1>
+          <p class="cat__lede">
+            Behind and between the pages of this site, small pictures move: a forest, roots, pendulums, iron powder, a harmonica.
+            Each is a little physics story. Here every one runs on its own, with what it shows, what drives it, and its numbers to change.
+            They are pictures drawn for the eye, not the site's measured simulations; the pendulums are the exception, played from a
+            run computed once on Kaggle.
+          </p>
+        </div>
+      </div>
+      <p class="scn-rm">You asked your system for reduced motion, so the scenes do not move here. The text of each stays below.</p>
+
+      <div class="scn-list" id="scenes">
+
+        <section class="scn" id="forest">
+          <h2><span class="scn__n">S1</span> The forest</h2>
+          <div class="scn__stage scn__stage--tall" data-bg="forest" data-bg-mask="none" data-bg-under="90"></div>
+          <div class="scn__text">
+            <p class="scn__where">Home page, the land under the title.</p>
+            <p><b>What you see.</b> A few trees throw seeds; a seed that finds room grows into a tree in about one spring and summer, and over
+            several years of two minutes each the land fills. Leaves fall in autumn, rot in the soil and are taken up by the roots of the young trees.</p>
+            <p><b>What drives it.</b> The leaves breathe vapour that rises into the open sky and condenses into clouds. Droplets that touch merge,
+            their volume kept (r = (r₁³ + r₂³)^⅓); a droplet falls at a speed growing as r² (Stokes' law), so only merged drops beat the updraft
+            and fall as rain, which feeds the seedlings. In winter the clouds snow. On the home page the sky is open only in the two top corners,
+            beside the title and beside the poem, so that is where the clouds gather.</p>
+          </div>
+          <div class="scn__knobs" data-for="forest"></div>
+        </section>
+
+        <section class="scn" id="roots">
+          <h2><span class="scn__n">S2</span> Roots</h2>
+          <div class="scn__stage" data-bg="roots" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Home page, the left margin, below the forest.</p>
+            <p><b>What you see.</b> Roots grow down from the surface, branching like leaf veins or river beds; dots of sap climb back up.</p>
+            <p><b>What drives it.</b> Space colonisation: water lies scattered in the soil, every drop pulls the nearest root tip within reach
+            towards it, and a reached drop is used up. A root is as thick as the cube root of the number of tips it feeds (Murray's law: the
+            cube of a parent's radius is the sum of its children's cubes), the rule that also sets the widths of blood vessels.</p>
+          </div>
+          <div class="scn__knobs" data-for="roots"></div>
+        </section>
+
+        <section class="scn" id="pairs">
+          <h2><span class="scn__n">S3</span> Two pendulums and a spring</h2>
+          <div class="scn__stage scn__stage--tall" data-bg="pairs" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Home page, the right margin, a pair on every beam.</p>
+            <p><b>What you see.</b> Two pendulums, 1.5 m long, joined by a weak spring. The left one starts swinging; within about 13.5 s its
+            swing has drained completely into the right one, and after 27 s it is back. The curves under them are each pendulum's energy over
+            one loop; the line marks the moment on show.</p>
+            <p><b>What drives it.</b> Swinging together, the spring idles and both keep the pendulum's own frequency ω₁ = √(g/L); swinging
+            against each other, the spring works and they go a little faster, ω₂ = √(ω₁² + 2ka²/(mL²)). Starting one pendulum starts both
+            motions at once, and their beat carries the swing across and back with period 2π/(ω₂ − ω₁).
+            The motion is not computed here: <code>tools/sims/coupled.py</code> integrated the full equations once on Kaggle, with the
+            energy kept to a few parts in 10¹³, and this page plays that stored run.</p>
+            <p class="scn__stored" data-stored="coupled"></p>
+          </div>
+          <div class="scn__knobs" data-for="pairs"></div>
+        </section>
+
+        <section class="scn" id="spin">
+          <h2><span class="scn__n">S4</span> Spinners locking into step</h2>
+          <div class="scn__stage" data-bg="spin" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Home page, the band before the simulations.</p>
+            <p><b>What you see.</b> Little three-armed spinners turn at their own random speeds. A rotating field wanders over them, and those it
+            passes turn in step with it, brighter while they are locked.</p>
+            <p><b>What drives it.</b> Each spinner's angle obeys θ' = ω + K sin(φ − θ) + (pull of its neighbours), the Kuramoto and Adler picture of
+            phase locking: when the field's pull K is stronger than the spinner's own mistuning, the spinner is captured.</p>
+          </div>
+          <div class="scn__knobs" data-for="spin"></div>
+        </section>
+
+        <section class="scn" id="shores">
+          <h2><span class="scn__n">S5</span> The shores of light</h2>
+          <div class="scn__stage" data-bg="shores" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Home page, the band above the footer.</p>
+            <p><b>What you see.</b> Motes rise out of a slow dark tide and brighten as they cross its surface into the light.</p>
+            <p><b>What drives it.</b> A picture of Lucretius (I 170, 179): things come into "the shores of light" from what was unseen.
+            The surface is two waves added; brightness grows with the height above it.</p>
+          </div>
+          <div class="scn__knobs" data-for="shores"></div>
+        </section>
+
+        <section class="scn" id="powder">
+          <h2><span class="scn__n">S6</span> Iron powder</h2>
+          <div class="scn__stage" data-bg="powder" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Simulations page, beside the title.</p>
+            <p><b>What you see.</b> Iron filings on a sheet line up along the field of two slowly turning bar magnets; a wire through the sheet
+            switches its current on and off, and the filings around it curl into rings.</p>
+            <p><b>What drives it.</b> Each grain turns along the local field and drifts sideways towards the nearest field line, as real filings
+            do when the sheet is tapped (the tap is the shiver every 3.5 s).</p>
+          </div>
+          <div class="scn__knobs" data-for="powder"></div>
+        </section>
+
+        <section class="scn" id="harp">
+          <h2><span class="scn__n">S7</span> A harmonica</h2>
+          <div class="scn__stage" data-bg="harp" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Simulations page, the band above the footer.</p>
+            <p><b>What you see.</b> A ten-hole harmonica plays; each note travels out through the air as rings that push the dots of air back
+            and forth, and a dot far away moves only when the ring reaches it.</p>
+            <p><b>What drives it.</b> Each hole's reed sends a wave of its own wavelength; the displacement at distance r is the reed's motion
+            from the time r/c ago, so sound takes time to arrive (drawn here at a speed far below the real 343 m/s).</p>
+          </div>
+          <div class="scn__knobs" data-for="harp"></div>
+        </section>
+
+        <section class="scn" id="chip">
+          <h2><span class="scn__n">S8</span> A chip</h2>
+          <div class="scn__stage" data-bg="chip" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Portfolios page, beside the title.</p>
+            <p><b>What you see.</b> The blocks of a chip are traced, wires are routed between them one by one, and the finished die is
+            stamped again and again across a round wafer.</p>
+            <p><b>What drives it.</b> Not physics but the order of chip making: design, routing, then photolithography repeats one mask over the wafer.</p>
+          </div>
+          <div class="scn__knobs" data-for="chip"></div>
+        </section>
+
+        <section class="scn" id="mix">
+          <h2><span class="scn__n">S9</span> Mixing</h2>
+          <div class="scn__stage" data-bg="mix" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Portfolios page, the band above the footer.</p>
+            <p><b>What you see.</b> Three gases, hot triangles, warm rings and cold squares, wait in three chambers; the walls lift, the gases mix,
+            and the curves show the mixing (solid) rise and the difference of temperature (dashed) fall.</p>
+            <p><b>What drives it.</b> Elastic collisions between equal discs: each collision swaps the velocity components along the line between
+            them, so energy spreads until every species moves alike, the second law in a box.</p>
+          </div>
+          <div class="scn__knobs" data-for="mix"></div>
+        </section>
+
+        <section class="scn" id="motes">
+          <h2><span class="scn__n">S10</span> Dust in a sunbeam</h2>
+          <div class="scn__stage" data-bg="motes" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Lucretius page, beside the title.</p>
+            <p><b>What you see.</b> Dust trembles in a slanting beam of light, lit only inside the beam.</p>
+            <p><b>What drives it.</b> Lucretius' own picture (II 112–141) of Brownian motion: each mote is slowed by drag and kicked at random by
+            molecules nobody sees, dv = −γ v dt + σ dW, small motes trembling more.</p>
+          </div>
+          <div class="scn__knobs" data-for="motes"></div>
+        </section>
+
+        <section class="scn" id="swerve">
+          <h2><span class="scn__n">S11</span> The swerve</h2>
+          <div class="scn__stage" data-bg="swerve" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Lucretius page, the side margins.</p>
+            <p><b>What you see.</b> Atoms fall side by side and never meet, until one tilts a little; it strikes a neighbour, and a cascade of collisions follows.</p>
+            <p><b>What drives it.</b> Lucretius' clinamen (II 216–293): without the swerve the atoms would fall forever in parallel and nothing would form.</p>
+          </div>
+          <div class="scn__knobs" data-for="swerve"></div>
+        </section>
+
+        <section class="scn" id="seeds">
+          <h2><span class="scn__n">S12</span> Seeds</h2>
+          <div class="scn__stage" data-bg="seeds" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">Lucretius page, the band above the footer.</p>
+            <p><b>What you see.</b> Seeds fall and grow into a rose, an ear of wheat or a bunch of grapes, each from its own seed, then wither.</p>
+            <p><b>What drives it.</b> Lucretius I 174–175: every thing comes from its own seed, at its own time.</p>
+          </div>
+          <div class="scn__knobs" data-for="seeds"></div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <span>© 2026 Numa Koudsie</span>
+      <span><a href="index.html">Home</a></span>
+    </footer>
+
+    <script src="scripts/bg-scenes.js" defer></script>
+    <script>
+      /* the controls of every scene, built from the scene's own table K: [property, meaning, unit, min, max, step, restart]
+         (scripts/bg-scenes.js). A slider writes the property of the running scene; one marked restart starts the scene again. */
+      document.addEventListener('DOMContentLoaded', function () {
+        Array.prototype.forEach.call(document.querySelectorAll('.scn__knobs'), function (box) {
+          var host = box.parentNode.querySelector('[data-bg]'), sc = host && host.__bgScene; if (!sc) { box.remove(); return; }
+          var K = sc.K || [], html = '';
+          K.forEach(function (k, i) {
+            var id = host.getAttribute('data-bg') + '-' + k[0];
+            html += '<label class="scn__k" for="' + id + '"><span>' + k[1] + (k[6] ? ' <i>(starts again)</i>' : '') + '</span>' +
+              '<input type="range" id="' + id + '" min="' + k[3] + '" max="' + k[4] + '" step="' + k[5] + '" value="' + sc[k[0]] + '" data-i="' + i + '" />' +
+              '<output>' + sc[k[0]] + (k[2] ? ' ' + k[2] : '') + '</output></label>';
+          });
+          box.innerHTML = '<p class="scn__kh">Numbers to change</p>' + html + '<button type="button" class="scn__again">Start again</button>';
+          box.addEventListener('input', function (e) { var t = e.target, k = K[+t.getAttribute('data-i')]; if (!k) return; sc[k[0]] = +t.value;
+            t.nextSibling.textContent = t.value + (k[2] ? ' ' + k[2] : ''); if (k[6]) host.__bgRestart(); });
+          box.querySelector('.scn__again').addEventListener('click', function () { host.__bgRestart(); });
+        });
+        /* the stored pendulum run: its parameters and checks, read from the header of the file the page plays */
+        var pe = document.querySelector('[data-stored=coupled]'), ph = document.querySelector('[data-bg=pairs]'), tries = 0;
+        (function wait() { var s = ph && ph.__bgScene; if (s && s.D) { var h = s.D.hdr, p = h.params, d = h.derived, c = h.checks;
+            pe.textContent = 'Stored run: L = ' + p.L + ' m, m = ' + p.m + ' kg, spring at a = ' + p.a + ' m, pivots d = ' + p.d + ' m apart, k = ' + d.k_N_per_m.toFixed(3) +
+              ' N/m, start θ₀ = ' + p.theta0 + ' rad; one loop ' + d.loop_s.toFixed(2) + ' s; the swing has crossed at ' + c.crossed_at_s.toFixed(2) +
+              ' s (2π/(ω₂ − ω₁) ÷ 2 = ' + c.half_beat_linear_s.toFixed(2) + ' s for small swings); energy kept to ' + c.energy_rel_drift.toExponential(1) +
+              '; computed ' + s.D.gen.date + ' from commit ' + String(s.D.gen.commit).slice(0, 7) + ', SHA-256 checked.'; }
+          else if (s && s.err) pe.textContent = 'The stored run could not be loaded: ' + s.err; else if (tries++ < 100) setTimeout(wait, 200); })();
+      });
+    </script>
+  </body>
+</html>
