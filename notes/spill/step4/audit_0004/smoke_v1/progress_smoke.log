@@ -1,0 +1,8 @@
+[20:59:46 UTC | +    0.3 s] start smoke: DX 0.003, blocks ['rot', 'slab', 'ident', 'slosh'], device cpu:0, jax 0.11.1
+[20:59:48 UTC | +    1.9 s] rot: max_s 7.4756 Pa, E_plastic 1.8902e+00 J/m^3, first yield step 108
+[20:59:48 UTC | +    1.9 s] slab: step4_slab.py C1 with EAUDIT=1 (smoke)
+[20:59:52 UTC | +    6.3 s] slab rc 0
+[20:59:58 UTC | +   12.3 s] ident FAILED: ValueError('shape mismatch: value array of shape (3348,) could not be broadcast to indexing result of shape (8,)')
+[21:00:04 UTC | +   18.2 s] slosh FAILED at step 0: ValueError('shape mismatch: value array of shape (3348,) could not be broadcast to indexing result of shape (8,)')
+[21:00:04 UTC | +   18.2 s] slosh summary FAILED: IndexError('list index out of range')
+[21:00:04 UTC | +   18.2 s] all done

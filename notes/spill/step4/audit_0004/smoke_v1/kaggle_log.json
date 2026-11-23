@@ -1,0 +1,48 @@
+[{"stream_name":"stdout","time":0.980667907,"data":"tools/fig12/kaggle/stout_jax.py 138699 15891d339537c0127c996911274900c329267ccd1ff005107a0152ad48378849\n"}
+,{"stream_name":"stdout","time":0.981217151,"data":"tools/spill/audit_0004.py 14113 8a9136accefc4c1b01ca28304c4ff62ab78417671a5b6cbb1e8b5592f451d832\n"}
+,{"stream_name":"stdout","time":0.981771649,"data":"tools/spill/step4_slab.py 24098 be970e3b3ebf90bfe7fec514ad999d5d801b4584dc298e762842b5e99a03d10c\n"}
+,{"stream_name":"stdout","time":0.982172979,"data":"public/scripts/guinness-glass.js 3109 cc61fc507c8649cc6c62166078dd14a90aaf9db4b152a5d810229434c3886dfc\n"}
+,{"stream_name":"stdout","time":0.98411872,"data":"tools/fig12/kaggle/stout_jax_5acb718.py 132380 e6b3d00f40ed299b63e5e2eaec872a86c9f23791e79c49b9ae421e193438c376\n"}
+,{"stream_name":"stdout","time":9.359528595,"data":"[20:59:46 UTC | +    0.3 s] start smoke: DX 0.003, blocks ['rot', 'slab', 'ident', 'slosh'], device cpu:0, jax 0.11.1\n"}
+,{"stream_name":"stdout","time":11.033638503,"data":"[20:59:48 UTC | +    1.9 s] rot: max_s 7.4756 Pa, E_plastic 1.8902e+00 J/m^3, first yield step 108\n"}
+,{"stream_name":"stdout","time":11.034085065,"data":"[20:59:48 UTC | +    1.9 s] slab: step4_slab.py C1 with EAUDIT=1 (smoke)\n"}
+,{"stream_name":"stdout","time":15.340199987,"data":"[20:59:52 UTC | +    6.3 s] slab rc 0\n"}
+,{"stream_name":"stdout","time":21.392139705,"data":"[20:59:58 UTC | +   12.3 s] ident FAILED: ValueError('shape mismatch: value array of shape (3348,) could not be broadcast to indexing result of shape (8,)')\n"}
+,{"stream_name":"stdout","time":21.393498433,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":21.394350786,"data":"  File \"/kaggle/working/repo/tools/spill/audit_0004.py\", line 87, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":21.394379878,"data":"    G, S, s, _ = setup(mod, DXA, au_)\n"}
+,{"stream_name":"stdout","time":21.394385711,"data":"                 ~~~~~^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":21.394389718,"data":"  File \"/kaggle/working/repo/tools/spill/audit_0004.py\", line 40, in setup\n"}
+,{"stream_name":"stdout","time":21.394394417,"data":"    S.enable_side_vis(); info = S.enable_ls_extend(); S.wall_guard = True\n"}
+,{"stream_name":"stdout","time":21.394398718,"data":"                                ~~~~~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stdout","time":21.394403046,"data":"  File \"/kaggle/working/repo/tools/fig12/kaggle/stout_jax_5acb718.py\", line 815, in enable_ls_extend\n"}
+,{"stream_name":"stdout","time":21.394407046,"data":"    idx[new, k] = (I[:, 0] * ny + I[:, 1]) * nz + I[:, 2]\n"}
+,{"stream_name":"stdout","time":21.394411218,"data":"    ~~~^^^^^^^^\n"}
+,{"stream_name":"stdout","time":21.39441521,"data":"ValueError: shape mismatch: value array of shape (3348,) could not be broadcast to indexing result of shape (8,)\n"}
+,{"stream_name":"stdout","time":27.255376382,"data":"[21:00:04 UTC | +   18.2 s] slosh FAILED at step 0: ValueError('shape mismatch: value array of shape (3348,) could not be broadcast to indexing result of shape (8,)')\n"}
+,{"stream_name":"stdout","time":27.256871048,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":27.257623935,"data":"  File \"/kaggle/working/repo/tools/spill/audit_0004.py\", line 108, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":27.257650716,"data":"    G, S, s, info = setup(SJ, DXA, True)\n"}
+,{"stream_name":"stdout","time":27.257656147,"data":"                    ~~~~~^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":27.257659672,"data":"  File \"/kaggle/working/repo/tools/spill/audit_0004.py\", line 40, in setup\n"}
+,{"stream_name":"stdout","time":27.257662616,"data":"    S.enable_side_vis(); info = S.enable_ls_extend(); S.wall_guard = True\n"}
+,{"stream_name":"stdout","time":27.257695952,"data":"                                ~~~~~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stdout","time":27.257706707,"data":"  File \"/kaggle/working/repo/tools/fig12/kaggle/stout_jax.py\", line 827, in enable_ls_extend\n"}
+,{"stream_name":"stdout","time":27.257711002,"data":"    idx[new, k] = (I[:, 0] * ny + I[:, 1]) * nz + I[:, 2]\n"}
+,{"stream_name":"stdout","time":27.257714893,"data":"    ~~~^^^^^^^^\n"}
+,{"stream_name":"stdout","time":27.257718708,"data":"ValueError: shape mismatch: value array of shape (3348,) could not be broadcast to indexing result of shape (8,)\n"}
+,{"stream_name":"stdout","time":27.258056327,"data":"[21:00:04 UTC | +   18.2 s] slosh summary FAILED: IndexError('list index out of range')\n"}
+,{"stream_name":"stdout","time":27.258893109,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":27.259221164,"data":"  File \"/kaggle/working/repo/tools/spill/audit_0004.py\", line 138, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":27.259241749,"data":"    ta, tb = (0.2, 1.0) if SUB == \"full\" else (rows[2][\"t\"], rows[-1][\"t\"])\n"}
+,{"stream_name":"stdout","time":27.259247252,"data":"                                               ~~~~^^^\n"}
+,{"stream_name":"stdout","time":27.259251273,"data":"IndexError: list index out of range\n"}
+,{"stream_name":"stdout","time":27.259255232,"data":"[21:00:04 UTC | +   18.2 s] all done\n"}
+,{"stream_name":"stdout","time":27.566660021,"data":"end rc 0\n"}
+,{"stream_name":"stderr","time":30.486616656,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":30.486653531,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":30.825600425,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":30.825629279,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":31.815642518,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":33.284297255,"data":"[NbConvertApp] Writing 418126 bytes to __results__.html\n"}
+]

@@ -527,3 +527,15 @@ u_after_Fdev^2) (slab: before the floor faces are zeroed; the version without th
   collisions) - PE(start); dE_G2P_coll = KE_particles(end) - KE_g(after pressure) + PE(end) - PE(positions before collisions). The
   telescoping and wall-logger marks hold by construction (same float32 arrays, float64 sums): they test the bookkeeping only.
   (Window integrity and PE swelling: done in step 2 above.)
+- 23 Nov ~20:50-21:00 UTC: audit code reviewed line by line and kept: Stout.audit / _audit_evp and evp_trial_trace (stout_jax.py), EAUDIT
+  (step4_slab.py), tools/spill/audit_0004.py, launcher tools/spill/build_audit_0004.py (commits bdf2bbd, d96331d). Every added solver line
+  runs only under `self.evp and self.audit` (audit False by default).
+- 23 Nov 20:59:32-21:00:39 UTC: audit smoke, Kaggle CPU, notebook step4-energy-audit-cpu v1 (code bdf2bbd). Outputs in
+  notes/spill/step4/audit_0004/smoke_v1/. rot: s passes tau_y at step 108 (predicted about 106 from G (Omega dt)^2 / sqrt 3 per step),
+  max s 7.48 Pa, E_plastic 1.89 J/m^3. slab smoke rc 0. ident and slosh FAILED at set-up, in both the 5acb718 and the current solver:
+  enable_ls_extend raises "shape mismatch (3348,) vs (8,)" at dx 3 mm.
+  Cause (Fact, stout_jax.py:826 now, same line in 5acb718): `idx[new, k] = (I[:, 0] * ny + I[:, 1]) * nz + I[:, 2]` writes all rows into the
+  rows not yet found; it only works on the first push pass (new all True). At 1.5 mm every solid cell is found on the first pass, so the
+  line never failed; at 3 mm some cells need a further pass. The fix would be `[...][new]` (as the wts line below it); it is a solver change,
+  which 0004 rule 6 forbids, so it waits for the owner (Needs the owner). The 3 mm slosh (tests b, c, d-ledger) and ident wait with it.
+- 23 Nov 21:21:33 UTC: audit v2, Kaggle CPU (code d96331d), SUBRUN=full, ONLY=rot,slab: test (a) on the 4.3 slab C1 and the rotation check.
