@@ -441,3 +441,9 @@ Settled (reviewer, in code at 045fb72): friction_evp's lam = af / rho_f [...] de
 face holds M_f = alpha_open rho_f dx^3, so only alpha_open A tau is applied; the logged wall energy uses rho_f dx^3 too. The 4.5 damping
 mark [0.32, 0.52] is withdrawn (built on PLANT_ZETA 0.425, a simulation number); new provisional range [0.13, 0.33] (derived, Neon).
 Part A (audit, CPU, before any change): rest_variants.py STEP45_AUDIT=1 -> notes/spill/step4/diag_4p5_energy.json.
+Part B code (23 Nov ~08:43 UTC, committed while the Part A audit runs from aa6d57b): friction_evp lambda = A_f / max(M_f, m_floor)
+[(1 - f_h) rho g_s + f_h tau_w / max(|u|, 1e-4)], A_f = af dx^3; energy 0.5 M_f (u0^2 - u^2), split stout layer / head Cantat by their
+parts of lambda (diag e_wall_stout, e_wall_foam); plastic dissipation diag e_plastic = sum over yielded head particles V_p s_new gp dt.
+The non-evp friction path (Stout.friction, used in Steps 1-3) keeps the old per-full-cell convention: not changed now; open item for
+the handoff. 4.5 harness: KE and PE with each particle's mass; fits over 0.2-1.2, 0.2-0.6, 0.6-1.2 s; energy closure 0.2-1.0 s; Part C
+marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 0.

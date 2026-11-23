@@ -702,18 +702,24 @@ class Stout:
         return vel, mass, cnt, ex
 
     def friction_evp(self, vel, mass, dt, ex):
-        """Step 4, head_mode "evp": the glass's stress on the faces beside it, implicit, u <- u / (1 + dt lambda), lambda = (a_f / rho_f)
-        [(1 - f_h) rho g_s + f_h tau_w(|u|) / max(|u|, 1e-4 m/s)]: the stout's Stokes layer (g_s = sqrt(nu omega / 2)) and the head's
-        Cantat wall stress (head_wall_stress), each on its share f_h of the face. Returns the velocities and the energy taken (J)."""
-        dV = self.dx ** 3; ew = jnp.zeros((), F64); out = []
+        """Step 4, head_mode "evp": the glass's stress on the faces beside it, implicit, u <- u / (1 + dt lambda), with
+        lambda = A_f / max(M_f, m_floor) [(1 - f_h) rho g_s + f_h tau_w(|u|) / max(|u|, 1e-4 m/s)], A_f = af dx^3 the wall area at the face:
+        the stout's Stokes layer (g_s = sqrt(nu omega / 2)) and the head's Cantat wall stress (head_wall_stress), each on its share f_h.
+        The force on the face is the wall area times the wall stress whatever the face's open fraction (23 Nov, instruction "step4-close":
+        v1 divided by rho_f dx^3, a full cell's mass, so a cut face, which holds M_f = alpha_open rho_f dx^3, got only alpha_open of the
+        force). Returns the velocities and the energy taken (J), 0.5 M_f (u0^2 - u^2), split between the stout's layer and the head's
+        stress in proportion to their parts of lambda."""
+        dV = self.dx ** 3; es = jnp.zeros((), F64); ef = jnp.zeros((), F64); out = []
         for comp in range(3):
-            u0 = vel[comp]; ok = (self.th[comp] > 0) & (mass[comp] > 1e-6); fh = ex["fh"][comp]; rf = ex["rho_f"][comp]
-            au = jnp.abs(u0)
-            lam = self.af[comp] / rf * ((1.0 - fh) * self.rho * self.gs + fh * head_wall_stress(au) / jnp.maximum(au, 1e-4))
-            u = jnp.where(ok & (self.af[comp] > 0), u0 / (1.0 + dt * lam), u0)
-            ew = ew + 0.5 * jnp.sum(jnp.where(ok, rf * dV * (u0 * u0 - u * u), 0.0).astype(F64))
+            u0 = vel[comp]; ok = (self.th[comp] > 0) & (mass[comp] > 1e-6); fh = ex["fh"][comp]; M = ex["M"][comp]
+            au = jnp.abs(u0); k = self.af[comp] * dV / jnp.maximum(M, self.m_floor)
+            ls = k * (1.0 - fh) * self.rho * self.gs; lf = k * fh * head_wall_stress(au) / jnp.maximum(au, 1e-4); lam = ls + lf
+            wall = ok & (self.af[comp] > 0)
+            u = jnp.where(wall, u0 / (1.0 + dt * lam), u0)
+            dE = jnp.where(wall, 0.5 * M * (u0 * u0 - u * u), 0.0); fr = ls / jnp.maximum(lam, 1e-30)
+            es = es + jnp.sum((dE * fr).astype(F64)); ef = ef + jnp.sum((dE * (1.0 - fr)).astype(F64))
             out.append(u.astype(F32))
-        return out, ew
+        return out, es, ef
 
     def normalize_force(self, vel, mass, dt, gx, gz):
         out = []
@@ -1380,7 +1386,7 @@ class Stout:
         if self.nu > 0: vel = self.viscosity(vel, mass, dt, fh=None if ex is None else ex["fh"])
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.evp:   # Step 4: the glass's stress (stout and head), then the head's deviatoric force u += dt F_dev / max(M_f, m_floor)
-            vel, ew = self.friction_evp(vel, mass, dt, ex)
+            vel, ew_s, ew_f = self.friction_evp(vel, mass, dt, ex); ew = ew_s + ew_f
             vel = [jnp.where((self.th[c] > 0) & (mass[c] > 1e-6), vel[c] + dt * ex["Fdev"][c] / jnp.maximum(ex["M"][c], self.m_floor), vel[c]).astype(F32)
                    for c in range(3)]
         elif self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
@@ -1423,7 +1429,8 @@ class Stout:
             okf = [(self.th[c] > 0) & (mass[c] > 1e-6) for c in range(3)]
             n_floor = sum(jnp.sum(okf[c] & (ex["M"][c] < self.m_floor), dtype=I32) for c in range(3))           # diagnostic: faces where
             n_floor_head = sum(jnp.sum(okf[c] & (ex["M"][c] < self.m_floor) & (ex["fh"][c] > 0.5), dtype=I32) for c in range(3))  # m_floor acts
-            evd = dict(n_yielded=jnp.sum(hd & yl, dtype=I32), gp_max=jnp.max(jnp.where(hd, gp, 0.0)), s_max=jnp.max(jnp.where(hd, s_new, 0.0)),
+            e_plastic = jnp.sum(jnp.where(hd & yl, s["pvol"].astype(F64) * s_new.astype(F64) * gp.astype(F64), 0.0)) * dt   # sum V_p s gp dt (J)
+            evd = dict(e_wall_stout=ew_s, e_wall_foam=ew_f, e_plastic=e_plastic, n_yielded=jnp.sum(hd & yl, dtype=I32), gp_max=jnp.max(jnp.where(hd, gp, 0.0)), s_max=jnp.max(jnp.where(hd, s_new, 0.0)),
                        det_min=jnp.min(jnp.where(hd, det, 1.0)), det_max=jnp.max(jnp.where(hd, det, 1.0)), rm_res=jnp.max(jnp.where(hd, rres, 0.0)),
                        mom_phys=jnp.sum(jnp.where(s["act"][:, None], mpart[:, None] * s["vp"].astype(F64), 0.0), 0), n_floor=n_floor, n_floor_head=n_floor_head)
         if self.head: s = self.head_spill(s, H, dt, gx, gz, rot)

@@ -769,8 +769,11 @@ def step45_run():
         bh = jnp.abs(jnp.sum(jnp.where(ha | (s["landed"] & hd), pm, 0.0)) - S.m_head0) / S.m_head0
         out_h = jnp.sum(ha & ~side)                                   # head particles on the outside's side (over the rim)
         out_s = jnp.sum(st & ~side)
+        # mechanical energy (23 Nov, step4-close): kinetic and potential, each particle with its own mass, float64
+        v = s["vp"].astype(jnp.float64); KE = 0.5 * jnp.sum(jnp.where(act, pm * jnp.sum(v * v, 1), 0.0))
+        PE = 9.81 * jnp.sum(jnp.where(act, pm * z.astype(jnp.float64), 0.0))
         return (jnp.sum(in_solid), jnp.sum(real), zs, zh, bs, bh, jnp.max(jnp.where(act, ds, 0.0)), jnp.sum(act & (z >= topz - dxd)),
-                out_h, out_s, (X, side))
+                out_h, out_s, KE, PE, (X, side))
     st_j = jax.jit(stats)
     def ring13(s):
         H = obs(s)["H"]; P = pol(H); th = 2 * jnp.pi * jnp.arange(P.shape[1]) / P.shape[1]
@@ -778,7 +781,12 @@ def step45_run():
         return 2.0 / P.shape[1] * jnp.sum(P[13] * jnp.cos(th)), jnp.nanmedian(Hf)
     r13_j = jax.jit(ring13)
     prev = (s["xp"], S.p_side(s["xp"]))
-    _, _, zs0, zh0, _, _, _, _, _, _, prev = st_j(s, prev); q0, H0 = [float(v) for v in r13_j(s)]
+    _, _, zs0, zh0, _, _, _, _, _, _, KE0, PE0, prev = st_j(s, prev); q0, H0 = [float(v) for v in r13_j(s)]
+    PE0 = float(PE0); ecum = dict(wall_stout=0.0, wall_foam=0.0, plastic=0.0)
+    try:   # the area the fixed friction applies, at t = 0 (smoke mark abs(A_applied_new / A_grid - 1) < 0.02)
+        aud0 = wall_audit(S, prep(s)); say(f"{sub}: wall area at t = 0: {json.dumps(aud0)}")
+    except Exception as ex:
+        aud0 = dict(error=repr(ex))
     say(f"{sub}: t = 0  stout mean z {float(zs0) * 1e3:.4f} mm  head mean z {float(zh0) * 1e3:.4f} mm  H_top {H0 * 1e3:.3f} mm  q13 {q0 * 1e3:.4f} mm")
     fh = open(os.path.join(vout, f"{base}.jsonl"), "w"); rows = []; tc = time.time(); t = 0.0; k = 0; vmax = 0.0
     nmax = 5 if sub == "smoke" else 10 ** 9
@@ -787,13 +795,16 @@ def step45_run():
             dt = min(2e-3, dt_el, 0.8 * dxd / max(vmax, 1e-12))     # never cut to land on T
             tm = t + 0.5 * dt; gx = PA * math.sin(math.pi * (tm - P0) / PT) if P0 <= tm < P0 + PT else 0.0
             pr = prep(s); s, d = step(s, pr, dt, gx); t += dt; k += 1
-            isol, real, zs, zh, bs, bh, dsm, ceil, oh, os_, prev = st_j(s, prev); q, Hm = [float(v) for v in r13_j(s)]
+            isol, real, zs, zh, bs, bh, dsm, ceil, oh, os_, KE, PE, prev = st_j(s, prev); q, Hm = [float(v) for v in r13_j(s)]
             vmax = float(d["vmax"])
+            ecum["wall_stout"] += float(d["e_wall_stout"]); ecum["wall_foam"] += float(d["e_wall_foam"]); ecum["plastic"] += float(d["e_plastic"])
             row = dict(step=k, t=t, dt=dt, gx=gx, it=int(d["it"]), res=float(d["res"]), res_abs=float(d["res_abs"]), conv=bool(d["conv"]), q13_mm=q * 1e3,
                        H_top_mm=Hm * 1e3, stout_mean_z_mm=float(zs) * 1e3, head_mean_z_mm=float(zh) * 1e3, book_stout=float(bs), book_head=float(bh),
                        in_solid=int(isol), real_cross=int(real), ceiling=int(ceil), head_outside=int(oh), stout_outside=int(os_), vmax=vmax,
                        ds_max_over_dx=float(dsm) / dxd, n_yielded=int(d["n_yielded"]), gp_max=float(d["gp_max"]), s_max=float(d["s_max"]),
                        det_min=float(d["det_min"]), det_max=float(d["det_max"]), ewall_J=float(s["ewall"]), n_floor=int(d["n_floor"]),
+                       KE_J=float(KE), PE_J=float(PE) - PE0, E_mech_J=float(KE) + float(PE) - PE0, E_wall_stout_cum_J=ecum["wall_stout"],
+                       E_wall_foam_cum_J=ecum["wall_foam"], E_plastic_cum_J=ecum["plastic"],
                        nsel=int(d["nsel"]), nact=int(d["nact"]), wall_s=round(time.time() - tc, 2))
             rows.append(row); fh.write(json.dumps(row) + "\n"); fh.flush()
             if k < 3 or k % 100 == 0 or t >= T - 1e-12 or k == nmax:
@@ -811,32 +822,47 @@ def step45_run():
                     in_solid_max_from_step1=mx("in_solid"), real_cross_total=sum(r["real_cross"] for r in rows), ceiling_max=mx("ceiling"),
                     head_outside_max=mx("head_outside"), stout_outside_max=mx("stout_outside"), vmax_max=mx("vmax"), ds_max_over_dx=mx("ds_max_over_dx"),
                     n_yielded_max=mx("n_yielded"), s_max=mx("s_max"), det_min=min(r["det_min"] for r in rows), det_max=mx("det_max"),
-                    ewall_end_J=rows[-1]["ewall_J"], n_floor_max=mx("n_floor"), q13_peak_mm=max(abs(r["q13_mm"]) for r in rows), H_top0_mm=H0 * 1e3,
+                    ewall_end_J=rows[-1]["ewall_J"], n_floor_max=mx("n_floor"), E_wall_foam_end_J=ecum["wall_foam"], E_wall_stout_end_J=ecum["wall_stout"],
+                    E_plastic_end_J=ecum["plastic"], q13_peak_mm=max(abs(r["q13_mm"]) for r in rows), H_top0_mm=H0 * 1e3,
                     step_s=[round(rows[i]["wall_s"] - (rows[i - 1]["wall_s"] if i else 0.0), 3) for i in range(min(len(rows), 10))],
                     ms_per_step=1e3 * (time.time() - tc) / k, wall_s=time.time() - tc)
         if sub == "full":
             try:
                 ts = np.array([r["t"] for r in rows]); q = np.array([r["q13_mm"] for r in rows]) * 1e-3
-                t1 = P0 + PT; m3 = (ts >= t1) & (ts <= t1 + 0.5)
-                F3 = fit_swing(ts[m3] - ts[m3][0], q[m3]); summ["fit_first_three_half_cycles"] = F3; summ["fit_window_s"] = [t1, t1 + 0.5]
-                mL = (ts >= t1) & (ts <= 1.2); summ["fit_long_0p2_1p2"] = fit_swing(ts[mL] - ts[mL][0], q[mL])
+                t1 = P0 + PT
+                fitw = lambda a, b: fit_swing(ts[(ts >= a) & (ts <= b)] - ts[(ts >= a) & (ts <= b)][0], q[(ts >= a) & (ts <= b)])
+                F = fitw(0.2, 1.2); Fe = fitw(0.2, 0.6); Fl = fitw(0.6, 1.2)
+                summ["fit_0p2_1p2"] = F; summ["fit_0p2_0p6"] = Fe; summ["fit_0p6_1p2"] = Fl; summ["fit_first_three_half_cycles"] = fitw(t1, t1 + 0.5)
                 zc = np.nonzero(np.diff(np.sign(q[ts >= t1])))[0]; summ["zero_crossings_after_push_s"] = [float(ts[ts >= t1][i]) for i in zc[:8]]
-                summ["pass_marks"] = dict(f_d_in_2p75_3p15=bool(F3.get("f") and 2.75 <= F3["f"] <= 3.15), zeta_in_0p32_0p52=bool(F3.get("zeta") and 0.32 <= F3["zeta"] <= 0.52),
+                # energy over 0.2-1.0 s: the mechanical energy lost against the logged sinks (wall: the head's Cantat stress; plastic; the stout's layer)
+                at = lambda key, tt: float(np.interp(tt, ts, np.array([r[key] for r in rows])))
+                dEm = at("E_mech_J", 1.0) - at("E_mech_J", 0.2)
+                Ew = at("E_wall_foam_cum_J", 1.0) - at("E_wall_foam_cum_J", 0.2); Ep = at("E_plastic_cum_J", 1.0) - at("E_plastic_cum_J", 0.2)
+                Es = at("E_wall_stout_cum_J", 1.0) - at("E_wall_stout_cum_J", 0.2); sinks = Ew + Ep + Es
+                summ["energy_0p2_1p0"] = dict(minus_dE_mech_J=-dEm, E_wall_foam_J=Ew, E_plastic_J=Ep, E_wall_stout_J=Es, sinks_J=sinks,
+                                              closure=sinks / max(-dEm, 1e-30) - 1.0)
+                summ["zeta_status"] = "provisional: anchored in a first-principles estimate (Neon), not in an experiment for this glass"
+                summ["pass_marks"] = dict(f_d_in_2p70_3p15=bool(F.get("f") and 2.70 <= F["f"] <= 3.15),
+                                          zeta_0p2_1p2_in_0p13_0p33=bool(F.get("zeta") and 0.13 <= F["zeta"] <= 0.33),
+                                          zeta_late_gt_early=bool(Fl.get("zeta") and Fe.get("zeta") and Fl["zeta"] > Fe["zeta"]),
+                                          energy_closure_within_0p25=abs(sinks / max(-dEm, 1e-30) - 1.0) < 0.25, sinks_le_loss_within_2pct=sinks <= 1.02 * (-dEm),
                                           books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6, real_cross_zero=summ["real_cross_total"] == 0,
-                                          in_solid_zero=summ["in_solid_max_from_step1"] == 0)
+                                          in_solid_zero=summ["in_solid_max_from_step1"] == 0, it_lt_600=summ["it_max"] < 600, converged=summ["all_converged"])
                 summ["pass_marks_all"] = all(summ["pass_marks"].values())
                 summ["setup_peak_wall_amplitude_in_8_12mm"] = bool(8.0 <= summ["q13_peak_mm"] <= 12.0)
             except Exception as ex:
                 summ["fit_error"] = repr(ex)
         else:
-            summ["pass_marks"] = dict(all_finite=bool(np.all(np.isfinite(np.asarray(s["xp"])))), converged=summ["all_converged"],
+            tg = aud0.get("totals_three_components", {}) if isinstance(aud0, dict) else {}
+            ratio = tg.get("A_applied_new", float("nan")) / max(tg.get("A_grid", 0.0), 1e-30)
+            summ["wall_area_t0"] = aud0; summ["A_applied_new_over_grid"] = ratio
+            summ["pass_marks"] = dict(all_finite=bool(np.all(np.isfinite(np.asarray(s["xp"])))), converged=summ["all_converged"], it_lt_600=summ["it_max"] < 600,
+                                      A_applied_new_within_2pct=bool(abs(ratio - 1) < 0.02),
                                       books_lt_1e6=max(summ["book_stout_max"], summ["book_head_max"]) < 1e-6, in_solid_zero=summ["in_solid_max_from_step1"] == 0)
         json.dump(summ, open(os.path.join(vout, f"{base}_summary.json" if not CPU else f"{base}.json"), "w"), indent=1, default=str)
         say(f"{sub}: summary {json.dumps(summ, default=str)}")
     say(f"{sub}: all done")
 
-
-if STEP45: step45_run()
 
 
 # ====================================================================================================================================
@@ -910,3 +936,6 @@ def audit45_run():
 
 
 if AUDIT45: audit45_run()
+
+
+if STEP45: step45_run()   # after wall_audit's definition
