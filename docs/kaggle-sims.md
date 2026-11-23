@@ -181,13 +181,19 @@ as the output of a notebook version, which the Kaggle site does not list as a da
 - after every run (step 6 of `pipeline.py`): the whole output is checked against `index-<sim>.json` by size and SHA-256 and uploaded as
   a version of the figure's private dataset, named in the registry entry as `dataset` (`numakoudsie/fig1-wave-interference`,
   `numakoudsie/fig2-double-pendulum`, the rule of docs/kaggle-pipeline.md: one dataset per figure, `fig<N>-<topic>`); a simulation
-  without a figure (Barton's pendulums) gets `numakoudsie/phyein-usul-<sim>`. In a folder
-  `phyein-usul-simulations-v<notebook version>/` with a `manifest.json`; the generation in `generations.json` records `dataset`,
+  without a figure (Barton's pendulums) gets `numakoudsie/phyein-usul-<sim>`. Laid out as docs/kaggle-pipeline.md says:
+  `phyein-usul-simulations/v<notebook version>/output/` for the files, and beside it the run's log and a `manifest.json` (size and
+  SHA-256 of every file, the code's commit); the generation in `generations.json` records `dataset`,
   `dataset_path` and `dataset_note`. If Kaggle refuses, the computed data is still saved and the entry records `dataset_error`;
 - for runs made before: Actions → Simulations on Kaggle → Run workflow, mode `dataset`, the simulation's name and the notebook version
   (in its `generations.json` entry, field `version`). The output is fetched again from Kaggle, which keeps every version's output.
 
-A dataset version holds only what was uploaded with it, so each run is one dataset version and older runs stay in the older versions.
+A dataset version holds only what was uploaded with it. So that the newest version always holds every run of the figure, the
+runs already in the dataset are downloaded and uploaded again beside the new one; run the filings of one figure one after another,
+never two at once. The Kaggle tool packs each top-level folder into an archive of its contents, and Kaggle unpacks that at the
+dataset's root, so the tree is wrapped in one more folder. The first filing (Barton's pendulums, 23 November 2026, 22:2x Berlin
+time) lacked that wrapper and landed flat at the root of `numakoudsie/phyein-usul-barton`; the next filing leaves those flat files
+out of the newest version (they stay in version 1).
 Kaggle's limits: 200 GB per dataset, 200 GB of private datasets in all, 50 files at the top level ([Kaggle's dataset
 documentation](https://www.kaggle.com/docs/datasets)). Filing uses its own concurrency group per simulation, so it never waits behind
 a Kaggle run.

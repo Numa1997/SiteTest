@@ -242,8 +242,13 @@ J. Move everything that exists. Not only future simulations: every byte of store
 
 L. Every generation into its figure's Kaggle dataset. Since 23 November 2026, 22:20 Berlin time, the engine does this for its own
    simulations (tools/sims/dataset.py, docs/kaggle-sims.md "Every data set also on Kaggle"): after every run, and by Run workflow with
-   mode = dataset for an existing notebook version. Keep it, read the datasets it made (numakoudsie/phyein-usul-<sim>), and finish
-   the rest of this item for the figures it does not cover.
+   mode = dataset for an existing notebook version. It files into the figure's dataset named in the registry entry ("dataset":
+   numakoudsie/fig1-wave-interference, numakoudsie/fig2-double-pendulum; Barton has no figure: numakoudsie/phyein-usul-barton),
+   laid out <notebook>/v<version>/output/ with log and manifest, and re-uploads the runs already there so the newest version holds
+   all of them. Lesson of 23 November: the first version named datasets phyein-usul-<sim>, against the per-figure rule of
+   docs/kaggle-pipeline.md, and the Kaggle tool flattened the folder; read the repository's own rules before naming anything on
+   Kaggle, and check the result with the connector's list_dataset_tree_files. Keep it, give every other simulation of the engine
+   a "dataset" field, and finish the rest of this item for the figures it does not cover.
    - After a run's files are checked, the engine files the whole output as a new version of the figure's private dataset
      (numakoudsie/<the figure's dataset>; one per simulation, new versions only, never a second dataset), laid out as
      <notebook>/v<version>/output/ with the run's log, the notebook's code and a manifest.json (size and SHA-256 of every file),

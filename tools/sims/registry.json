@@ -30,6 +30,8 @@
    ]
   },
   "double_pendulum_smoke": {
+   "dataset": "numakoudsie/fig2-double-pendulum",
+   "dataset_title": "Fig. 2 Double Pendulum: simulation data",
    "model": "tools/sims/double_pendulum_smoke.py",
    "gpu": true,
    "timeout_s": 3600,
