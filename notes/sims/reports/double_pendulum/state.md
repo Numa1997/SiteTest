@@ -68,7 +68,8 @@ the live page. The user has not agreed to it; the user's rule is that every cont
 ## Copies on Kaggle (23 November 2026)
 - Every run is also filed in the figure's private Kaggle dataset `numakoudsie/fig2-double-pendulum` (PR 194, tools/sims/dataset.py),
   laid out `phyein-usul-simulations/v<version>/output/` with log and manifest: smoke v5 (run 45269535877, started 22:25 Berlin),
-  then the full run v6 (7 053 765 604 bytes), filed after smoke so the newest dataset version holds both.
+  then the full run v6 (7 053 765 604 bytes), filed after smoke so the newest dataset version holds both. Done: dataset version 2,
+  present at 22:44 Berlin time, 34 files, checked by the connector (26 packs, 7 056 399 034 bytes = v6 + v5).
 - The first filing scheme (PR 193) named datasets `phyein-usul-<sim>` against the per-figure rule and landed flat; only Barton's
   went through (`numakoudsie/phyein-usul-barton` version 1, flat files). It is kept; the next version has the proper layout.
 

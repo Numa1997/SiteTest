@@ -195,7 +195,13 @@ dataset's root, so the tree is wrapped in one more folder. The first filing (Bar
 time) lacked that wrapper and landed flat at the root of `numakoudsie/phyein-usul-barton`; the next filing leaves those flat files
 out of the newest version (they stay in version 1). The filing waits until the dataset's version number has risen and that version
 is ready, for up to 3 hours: Kaggle's "ready" alone reports the previous version while it still unpacks a new one (the first filing
-of the 7 GB Fig. 2 run, 23 November 2026, 22:37 Berlin time, was reported ready after 30 s and was not there yet).
+of the 7 GB Fig. 2 run, 23 November 2026, 22:37 Berlin time, was reported ready after 30 s and was not there yet). Measured on that
+run: download of the 7.05 GB output from Kaggle 5 s (about 100 MB/s on the GitHub runner), upload of the 6.57 GB archive 80 s, and
+Kaggle's unpacking between 5 and 8 minutes (absent at 22:41, version 2 present at 22:44; it holds 34 files, the 25 packs of v6 and
+the smoke run v5, pack bytes 7 056 399 034 = 7 053 765 604 + 2 633 430). A second filing started at 22:43 failed because
+Kaggle answered "Not Found" to the whole-dataset download while it was still preparing the new version; it changed nothing.
+Before the next filing into a dataset this large, make the download of earlier runs per folder (`kaggle datasets download -f`)
+and retry it while Kaggle answers "Not Found".
 Kaggle's limits: 200 GB per dataset, 200 GB of private datasets in all, 50 files at the top level ([Kaggle's dataset
 documentation](https://www.kaggle.com/docs/datasets)). Filing uses its own concurrency group per simulation, so it never waits behind
 a Kaggle run.
