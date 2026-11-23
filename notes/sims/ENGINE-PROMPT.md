@@ -11,8 +11,10 @@ When you finish, a session puts one model file on main and does nothing else. Th
 - superseded data is removed.
 No person carries anything and no session babysits a run.
 
-This task is the engine only. Do not convert any simulation page, and never touch another session's branch, pull request or any
-scheduled task.
+This task is the engine and the move of all stored simulation data that exists today into R2 (build item J): every figure's data,
+whoever carried it and however, not only the simulations still to come. Do not convert any simulation page from live computing to
+stored data, and on pages that already play stored data change only the address they read from. Never touch another session's
+branch, pull request or any scheduled task.
 
 THE DECISION ALREADY MADE (do not reopen it)
 All simulation data goes to R2: the bucket phyein-usul-runs, bound as RUNS in wrangler.jsonc and served by the site's Worker
@@ -182,15 +184,53 @@ K. A monitor for every run. Write tools/sims/watch.sh <sim or workflow run id>. 
    - ends when the run has ended.
    Sessions start it with the Monitor tool at the moment a run starts and re-arm it when it expires (a monitor lives at most
    30 minutes). Document it in docs/kaggle-sims.md and in the skill text. Use it yourself for every test run of this task.
-J. Move what exists. Move the data of every simulation the engine already holds into R2, through the engine itself (one Run workflow
-   per simulation, a new run each). On 23 November 2026, 22:00 Berlin time, that was: barton and wave_interference2 (Fig. 1), in the repository;
-   double_pendulum_smoke (one pack of 2 633 430 bytes in the release sims-double_pendulum_smoke-2026-11-23) and double_pendulum_gpu
-   (25 packs in a release, if its run 45261988429 ended well). double_pendulum is in the registry but has no data on main (fault 12);
-   its 109 files exist only as the output of version 3 of the notebook numakoudsie/phyein-usul-simulations. Read the registry,
-   generations.json and the releases for the current list; ask the simulation's state file, not your memory, which of them a page
-   will ever read, and move only those. Point each page at it: if it uses the old loader, change only the base address the loader
-   reads from, nothing else on the page. Run its live check. Only then remove the old copies from the repository and the GitHub
-   releases (sims-*), one simulation at a time. Fig. 15's R2 data stays where it is.
+J. Move everything that exists. Not only future simulations: every byte of stored simulation data the site has today goes to R2,
+   whichever session, notebook or hand put it where it is. The repository keeps the small readable files (indexes, summaries,
+   checks, generations lists). Measured on main on 23 November 2026, 22:04 Berlin time (measure again before you start):
+
+   | Where it is now | Bytes | Files | Played by |
+   |---|---|---|---|
+   | public/data/schrodinger-sphere/ (generations 2026-11-12, 2026-11-13) | 618 589 311 | 4328 | Fig. 14, schrodinger-sphere.html |
+   | public/data/resonant-tunnelling/ (2026-11-13, -14, -18) | 191 993 689 | 121 | Fig. 15, resonant-tunnelling.html; its large run files are already in R2 under resonant-tunnelling/<date>/runs/ (2782 files, 4.44 GB, for generation 2026-11-18; docs/simulations/fig15-resonant-tunnelling.md) and stay there |
+   | public/data/sims/wave_interference2/ | 36 474 418 | 290 | Fig. 1 |
+   | public/data/sims/barton/ | 45 999 | 2 | the home page's right margin |
+   | public/data/fig12/ | 12 055 223 | 40 | Fig. 12, guinness-kaggle.html |
+   | public/data/fig16/ | 11 988 965 | 11 | Fig. 16, guinness-cart-control.html (it also reads fig12) |
+   | public/simulations/fig13/dive/dive.bin | 2 333 448 | 1 | Fig. 13, simulations/fig13/dive.html |
+   | GitHub release sims-double_pendulum_smoke-2026-11-23 | 2 633 430 | 1 pack | no page (engine test) |
+   | GitHub release sims-double_pendulum_gpu-<date>, if run 45261988429 ended well | read it | 25 packs | no page yet (Fig. 2) |
+
+   All of public/data/ was 871 230 673 bytes; this session's clone of the repository was 1.42 GiB packed, above the 1 GB GitHub asks
+   for. Removing files from main does not shrink the history; whether and when the history is rewritten is the user's separate
+   decision (notes/history-removal/STATE.md). Do not rewrite history in this task; report the sizes.
+
+   How:
+   - Nothing is computed again. Add a move mode (Run workflow, mode = move, a name): it takes the files where they are stored (the
+     repository or a release), checks each against the SHA-256 its own index records, uploads it to R2, reads it back (size and
+     SHA-256 of what R2 holds), and writes the new index entry with store "r2". A file whose index has no SHA-256 gets one computed
+     at the move, and the index says that it was computed then, not on Kaggle.
+   - Figs. 12, 13, 14, 15 and 16 were carried by hand before the engine existed. Each has its own folder layout, its own
+     generations list and its own loader in its page or script (docs/kaggle-pipeline.md, each figure's doc in docs/simulations/).
+     Read those before touching them. Give each a registry entry that says it is filed, not computed by the engine (it must never be
+     sent to Kaggle), with its page and a probe, so the live check covers it from now on. Keep every provenance record (notebook,
+     version, commit, SHA-256) exactly as it is.
+   - On each page change only where its loader reads from: the base address, or the one function that builds a file's address.
+     Nothing else on the page, and no change to what the page shows. If a loader cannot be pointed at R2 that way, stop on that
+     figure, say why in one sentence, and go on with the next.
+   - Order, one simulation at a time: move the files; verify from R2 (sizes and SHA-256); merge the page's address change; run the
+     live check with the page's probe; open the page in headless Chromium at 1600 and 390 px and compare a screenshot and the
+     page's own numbers with the same page before the change; only then remove the repository copy or the release in a separate
+     pull request. If the live check fails, put the address back first and remove nothing.
+   - Before removing anything, search the repository for every reader of that folder (grep for its path in public/, tools/, docs/
+     and notes/): another page or a tool may read it too (Fig. 16 reads Fig. 12's files).
+   - The engine's own simulations (barton, wave_interference2, the double pendulum's packs) move the same way; a simulation session
+     may be working on one of them at the same time, so read its state file in notes/sims/reports/<name>/ first and never change
+     its page beyond the address.
+   - double_pendulum is in the registry without data (fault 12): its 109 files exist only as the output of version 3 of the notebook
+     numakoudsie/phyein-usul-simulations, and no page will read them. Do not move them; note it in the Fig. 2 state file.
+   - Fig. 15's run files already in R2 stay where they are, with their keys.
+   When this step is done, public/data/ holds no simulation data, only indexes and lists, and every page that plays stored data
+   reads it from /r2/ and passes its live check.
 
 RULES (each was broken once; do not break them again)
 - Every run of a model, test runs included, happens on Kaggle through the real line, never in your own workspace. Test every
@@ -234,14 +274,16 @@ DOCUMENTATION
 Rewrite docs/kaggle-sims.md as the plain-words guide to the new engine:
 - every step, where each file lives and why;
 - the R2 costs, measured on the real bucket;
-- the user's controls (Actions → Simulations on Kaggle: Run workflow with a name or mode = bench, Cancel, Disable; where the secrets
-  are);
+- the user's controls (Actions → Simulations on Kaggle: Run workflow with a name or mode = bench, collect or move, Cancel, Disable;
+  where the secrets are);
+- where every figure's data lived before and lives now, with bytes (the table of build item J, measured again after the move);
 - every scenario of the list above with its test.
 Update docs/usul.md (the Worker), docs/files.md (tools/inventory.py describes R2 data by pattern, one line per generation) and the
 skill phyein-usul-kaggle-pregenerate's text in notes/skills/ for the user to upload.
 
 FINISH
-1. All scenario tests green, and every moved simulation verified live from R2.
+1. All scenario tests green. Every simulation that plays stored data, old or new, verified live from R2, and public/data/ holding
+   only indexes and lists (build item J). Any figure you could not move is named, with the reason, in the report and in its doc.
 2. Clean-up done: test data, branches, scratch files.
 3. Final report in plain sentences:
    - what the engine now does;
