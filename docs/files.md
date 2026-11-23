@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7132 files, 981.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7134 files, 981.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -48,7 +48,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 904 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 906 |
 
 ## Repository root
 
@@ -7665,10 +7665,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/lucretius/make_page.py`](../notes/lucretius/make_page.py) | 19.6 kB | Writes public/lucretius.html: Lucretius I 146-224 in four columns (Latin, Leonard, Diels, Arabic). | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-146-224.json`](../notes/lucretius/poem-146-224.json) | 15.8 kB | Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-ar-146-224.json`](../notes/lucretius/poem-ar-146-224.json) | 10.8 kB | The Arabic of Lucretius I 146-224 (tenth version, free verse, fully vowelled), translated from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
-| [`notes/sims/ENGINE-PROMPT.md`](../notes/sims/ENGINE-PROMPT.md) | 14.4 kB | The prompt for the session that rebuilds the engine Simulations on Kaggle: fully automated, every simulation's data in Cloudflare R2. | [kaggle-sims.md](kaggle-sims.md) |
-| [`notes/sims/KAGGELIZE-PROMPT.md`](../notes/sims/KAGGELIZE-PROMPT.md) | 12.9 kB | The prompt that moves one simulation (its only variable) to data computed once on Kaggle: learn the page, derive the physics in Wolfram, design the data without cuts, write the model, measure CPU against GPU, compute through the engine, play, compare, publish, clean up. | [PLAN.md](../notes/sims/PLAN.md) |
+| [`notes/sims/ENGINE-PROMPT.md`](../notes/sims/ENGINE-PROMPT.md) | 22.1 kB | The prompt for the session that rebuilds the engine Simulations on Kaggle: fully automated, every simulation's data in Cloudflare R2. | [kaggle-sims.md](kaggle-sims.md) |
+| [`notes/sims/KAGGELIZE-PROMPT.md`](../notes/sims/KAGGELIZE-PROMPT.md) | 18.6 kB | The prompt that moves one simulation (its only variable) to data computed once on Kaggle: learn the page, derive the physics in Wolfram, design the data without cuts, write the model, measure CPU against GPU, compute through the engine, play, compare, publish, clean up. | [PLAN.md](../notes/sims/PLAN.md) |
 | [`notes/sims/PLAN.md`](../notes/sims/PLAN.md) | 8.0 kB | Plan of the simulations moved to Kaggle: specify, generate once on Kaggle, store, play, document; order and state. | [PLAN.md](../notes/sims/PLAN.md) |
 | [`notes/sims/STATE-agents.md`](../notes/sims/STATE-agents.md) | 2.8 kB | State of the Kaggelize work: aim, what is live, the design, the facts checked, what is open. | [kaggelize.md](kaggelize.md) |
+| [`notes/sims/reports/double_pendulum/state.md`](../notes/sims/reports/double_pendulum/state.md) | 5.7 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
+| [`notes/sims/reports/double_pendulum/study.md`](../notes/sims/reports/double_pendulum/study.md) | 16.3 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/wave_interference/state.md`](../notes/sims/reports/wave_interference/state.md) | 1.6 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/wave_interference/study.md`](../notes/sims/reports/wave_interference/study.md) | 18.5 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/skills/phyein-usul-data-panel/SKILL.md`](../notes/skills/phyein-usul-data-panel/SKILL.md) | 26.9 kB | The revised skill phyein-usul-data-panel, to be uploaded to Numa's account (the synced copy in a session is read-only). | [README.md](../notes/fig11/panel/README.md) |
