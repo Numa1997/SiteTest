@@ -65,6 +65,13 @@ the live page. The user has not agreed to it; the user's rule is that every cont
 4. Walkthrough, lecture note, doc, German and Arabic, registry page and probe, PLAN.md row, docs/kaggle-sims.md row.
 5. Compare old and new, publish, verify live; only then remove the old computing code, the test data and the first plan.
 
+## Copies on Kaggle (23 November 2026)
+- Every run is also filed in the figure's private Kaggle dataset `numakoudsie/fig2-double-pendulum` (PR 194, tools/sims/dataset.py),
+  laid out `phyein-usul-simulations/v<version>/output/` with log and manifest: smoke v5 (run 45269535877, started 22:25 Berlin),
+  then the full run v6 (7 053 765 604 bytes), filed after smoke so the newest dataset version holds both.
+- The first filing scheme (PR 193) named datasets `phyein-usul-<sim>` against the per-figure rule and landed flat; only Barton's
+  went through (`numakoudsie/phyein-usul-barton` version 1, flat files). It is kept; the next version has the proper layout.
+
 ## What went wrong in the first session (each is now a rule in notes/sims/KAGGELIZE-PROMPT.md)
 - It followed an old prompt's "test locally" and "launch nothing on Kaggle" against the user's rule that every run happens on Kaggle.
 - It cut controls to fit a 20 MB budget and built a page, a note and a walkthrough on that before the data existed.
@@ -75,3 +82,4 @@ the live page. The user has not agreed to it; the user's rule is that every cont
   user demanded a monitor.
 - It removed the model's progress file, so nothing but Kaggle's own log page shows how far a run is.
 - It kept this state on a branch, where a session starting from main could not find it.
+- It named the Kaggle datasets without reading docs/kaggle-pipeline.md, and gave a start time (22:31) that the clock had not reached.
