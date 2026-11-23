@@ -484,3 +484,20 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
 energy closure 0.2-1.0 s +0.514 FAIL (sinks 1.908 mJ vs -dE_mech 1.260 mJ; E_plastic 1.580, E_wall_foam 0.313, E_wall_stout 0.014 mJ);
 sinks <= loss within 2 % FAIL; books 0 / 1.86e-8, real crossings 0, in solid 0, it max 268, all converged PASS. Peak wall 11.32 mm.
 Inference: E_plastic alone exceeds the mechanical loss: overcount (s, gp convention) or missing elastic store. Stopped; nothing tuned.
+# Instruction 0004 (23 Nov ~20:45 UTC): energy-closure audit, Neon's four tests (notes/coord/neon/2026-11-23-energy-closure-answer.md)
+- 20:47 UTC ack (7250ee8).
+- Step 1, Neon's repo numbers (Fact): 4.3 slab h = 0.018 m whole layers and tau_b = 1.5 tau_y found (notes/spill/step4/README-4p3.md,
+  table row C1); s/G = 1.5 x 5.415 / 166.44 = 0.0488 (derived, matches Neon's <= 0.049); +0.49 % plug-speed match found (README-4p3.md C1,
+  diag_4p3.json); 4 266 mass-floor faces found as n_floor_max of the 22 Nov pre-fix run (slosh_head_summary.json:34); the fixed run's
+  maximum is 4 204 (4 190 inside 0.2-1.0 s; 9 at rest).
+- Step 2, log tests on slosh_head_fix.jsonl (marks from Neon section 4 (d), set before these numbers):
+  window integrity: reported E_plastic 1.580482 mJ vs cum(first step >= 1.0 s) - cum(first step >= 0.2 s) 1.580516 mJ, abs diff 3.43e-8 J;
+  mark < 1e-9 J FAIL as written. Inference: a sampling difference (the steps used are t 0.20015 and 1.00076 s), 5e-5 of the 0.65 mJ gap;
+  the push is not in the window (cum E_plastic at 0.2 s is 0.379 mJ and is excluded). Mark kept, raw number reported.
+  PE drift: PE(1.0) - PE(0) = -3.27e-5 J (settling, not swelling); abs / (-dE_mech) = 0.026 < 0.05 PASS. Mean heights: stout 72.6948 ->
+  72.6863 mm, head 134.6182 -> 134.6335 mm.
+  floor_w on vertical wall faces (Fact): yes. 4.5 builds Geometry(..., body=F16) (rest_variants.py STEP45 block at 5acb718), so
+  Stout.cont = True and floor_w = (G.thw == 0) on every closed w face, not only the floor (stout_jax.py:519-531 at 5acb718).
+- Left for 0004: step 3 (4.3 slab energy identity, Kaggle CPU), step 4 (instrumented 3 mm CPU slosh: U_el, W_stress_grid, W_constit,
+  E_plastic split, shadow cell-strain E_plastic, sub-step ledger, 1000-step rigid-rotation check), step 5 (marks reachable, fixed first).
+  All instrumentation behind flags, default path bit for bit unchanged; nothing tuned.
