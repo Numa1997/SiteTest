@@ -12,3 +12,4 @@ for f in $(ls notes/coord/to-session/[0-9][0-9][0-9][0-9]-*.md | sort); do
   echo "DO $n $f"; open=1; break   # one instruction at a time, in number order
 done
 [ $open = 0 ] && echo IDLE
+exit 0
