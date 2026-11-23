@@ -47,6 +47,10 @@
   "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
   "tr": "Numa Koudsie · für Schülerinnen und Schüler sowie Studierende im ersten und zweiten Studienjahr"
  },
+ "158249db0771": {
+  "src": "The stored angles and heights are whole numbers, in steps of \\(2\\pi/65536\\) and \\(1/65535\\). Against the field computed straight from (6), at every wavelength and every damping the sliders can take, \\(C\\) and \\(S\\) differ by at most 0.00065, most of it from the blend of the heights, and the colour drawn differs by one step of the next section’s table at 0.39 % of points and instants. \\(C\\), \\(S\\) and \\(\\psi\\) are kept as 32-bit floating-point numbers, about seven significant figures.",
+  "tr": "Die gespeicherten Winkel und Höhen sind ganze Zahlen, in Schritten von \\(2\\pi/65536\\) und \\(1/65535\\). Gegenüber dem direkt aus (6) berechneten Feld weichen \\(C\\) und \\(S\\) bei jeder Wellenlänge und jeder Dämpfung, die die Regler annehmen können, um höchstens 0.00065 ab, das meiste davon aus der Mischung der Höhen, und die gezeichnete Farbe weicht an 0.39 % der Punkte und Zeitpunkte um eine Stufe der Tabelle des nächsten Abschnitts ab. \\(C\\), \\(S\\) und \\(\\psi\\) werden als 32-Bit-Gleitkommazahlen gehalten, etwa sieben signifikante Stellen."
+ },
  "1672b87a95cc": {
   "src": "Add 5 random",
   "tr": "5 zufällige hinzufügen"
@@ -163,6 +167,10 @@
   "src": "Dividing by \\(N\\) keeps the colours comparable, but it also makes each source fainter as more are added.",
   "tr": "Die Division durch \\(N\\) hält die Farben vergleichbar, aber sie macht jede Quelle schwächer, je mehr Quellen hinzukommen."
  },
+ "3eebb66c2c22": {
+  "src": "For <em>Line of 16</em> on the wide screen one rebuild reads \\(4 \\times 16 \\times 28\\,250 = 1\\,808\\,000\\) stored numbers, two angles and two heights per source and point; it took 8–44 ms in five headless Chromium runs, while a frame took 0.6–0.7 ms. These times depend on the machine.",
+  "tr": "Für <em>Reihe mit 16</em> auf dem breiten Bildschirm liest ein Neuaufbau \\(4 \\times 16 \\times 28\\,250 = 1\\,808\\,000\\) gespeicherte Zahlen, zwei Winkel und zwei Höhen pro Quelle und Punkt; er dauerte in fünf Läufen in Headless Chromium 8–44 ms, ein Bild dagegen 0.6–0.7 ms. Diese Zeiten hängen vom Rechner ab."
+ },
  "40e8cf16161b": {
   "src": "Press <em>Reset</em>: two sources, \\(s = 400\\ \\mathrm{px}\\) apart. Write \\(\\bar r = (r_1 + r_2)/2\\) for the mean distance of a point from them and \\(\\Delta r = r_2 - r_1\\) for the <em>path difference</em>. If the two rings arrive equally strong, \\(a_1 = a_2 = a\\), the identity \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) turns (6) into",
   "tr": "Drücken Sie <em>Zurücksetzen</em>: zwei Quellen im Abstand \\(s = 400\\ \\mathrm{px}\\). Es sei \\(\\bar r = (r_1 + r_2)/2\\) der mittlere Abstand eines Punktes von ihnen und \\(\\Delta r = r_2 - r_1\\) der <em>Gangunterschied</em>. Kommen beide Ringe gleich stark an, \\(a_1 = a_2 = a\\), so verwandelt die Identität \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) die Gleichung (6) in"
@@ -270,6 +278,10 @@
  "704655af1bb8": {
   "src": "<span class=\"psec__n\">09</span>From numbers to colours",
   "tr": "<span class=\"psec__n\">09</span>Von Zahlen zu Farben"
+ },
+ "708ed645f67b": {
+  "src": "A source sits on the nearest of 501 stored places \\(1.6\\ \\mathrm{px}\\) apart, and the grid has 250 columns on every screen.",
+  "tr": "Eine Quelle sitzt auf dem nächsten von 501 gespeicherten Plätzen im Abstand von \\(1.6\\ \\mathrm{px}\\), und das Gitter hat auf jedem Bildschirm 250 Spalten."
  },
  "719ea396ad92": {
   "src": "Clear",
@@ -463,6 +475,10 @@
   "src": "C. A. Balanis, <a href=\"https://www.wiley.com/en-us/antenna-theory-analysis-and-design-4th-edition-p-9781118642061\"><em>Antenna Theory: Analysis and Design</em></a>, 4th edition, Wiley, 2016: chapter 6 (linear arrays, array factor, grating lobes and beam steering).",
   "tr": "C. A. Balanis, <a href=\"https://www.wiley.com/en-us/antenna-theory-analysis-and-design-4th-edition-p-9781118642061\"><em>Antenna Theory: Analysis and Design</em></a>, 4. Auflage, Wiley, 2016: Kapitel 6 (lineare Arrays, Arrayfaktor, Gitterkeulen und Strahlschwenkung)."
  },
+ "c467eff60ac7": {
+  "src": "Three sliders set the waves: <em>Wavelength</em> \\(\\lambda\\) from 16 to \\(64\\ \\mathrm{px}\\) in steps of \\(0.1\\ \\mathrm{px}\\) (default \\(30\\ \\mathrm{px}\\)), <em>Frequency</em> \\(f\\) from 0.2 to \\(2\\ \\mathrm{Hz}\\) (default \\(1.1\\ \\mathrm{Hz}\\)) and <em>Damping</em> \\(\\gamma\\) from 0 to 0.6 in steps of 0.01 (default 0.15). The buttons place the sources: <em>Reset</em> puts two at \\(x = 200\\) and \\(600\\ \\mathrm{px}\\), <em>Line of 16</em> spreads sixteen evenly from 64 to \\(736\\ \\mathrm{px}\\), and a click on the field adds one on the source line, at the nearest of 501 places \\(1.6\\ \\mathrm{px}\\) apart.",
+  "tr": "Drei Schieberegler stellen die Wellen ein: <em>Wellenlänge</em> \\(\\lambda\\) von 16 bis \\(64\\ \\mathrm{px}\\) in Schritten von \\(0.1\\ \\mathrm{px}\\) (Vorgabe \\(30\\ \\mathrm{px}\\)), <em>Frequenz</em> \\(f\\) von 0.2 bis \\(2\\ \\mathrm{Hz}\\) (Vorgabe \\(1.1\\ \\mathrm{Hz}\\)) und <em>Dämpfung</em> \\(\\gamma\\) von 0 bis 0.6 in Schritten von 0.01 (Vorgabe 0.15). Die Schaltflächen setzen die Quellen: <em>Zurücksetzen</em> setzt zwei bei \\(x = 200\\) und \\(600\\ \\mathrm{px}\\), <em>Reihe mit 16</em> verteilt sechzehn gleichmäßig von 64 bis \\(736\\ \\mathrm{px}\\), und ein Klick auf das Feld fügt eine auf der Quellenlinie hinzu, am nächsten von 501 Plätzen im Abstand von \\(1.6\\ \\mathrm{px}\\)."
+ },
  "c4cb588feeda": {
   "src": "Interference field of the wave sources. Click to add a source.",
   "tr": "Interferenzfeld der Wellenquellen. Klicken, um eine Quelle hinzuzufügen."
@@ -482,6 +498,10 @@
  "cad2dda3032c": {
   "src": "heavier mathematics",
   "tr": "anspruchsvollere Mathematik"
+ },
+ "cb6df0772f09": {
+  "src": "The rings were computed once, on Kaggle, by the model <code>tools/sims/wave_interference2.py</code>, and are stored with the site: the angle \\(kr\\) of a ring at 118 wave numbers \\(k\\) evenly spaced from \\(2\\pi/64\\) to \\(2\\pi/16\\ \\mathrm{px^{-1}}\\), and its height \\(a\\) at the dampings \\(\\gamma = 0, 0.025, \\dots, 0.6\\), at every distance from a source to a grid point that can occur, with a table of cosines. The angle \\(kr\\) grows in proportion to \\(k\\), so for any wavelength between two stored ones the page blends the two stored angles in a straight line, which is exact; it blends the two stored heights around \\(\\gamma\\) the same way, which is off by at most 0.0011. When sources are added, cleared or reset, or the <em>Wavelength</em> or <em>Damping</em> slider moves, the page reads those numbers and adds the rings into \\(C\\) and \\(S\\). The <em>Frequency</em> slider does not trigger this, because \\(f\\) enters only through \\(\\omega t\\): it changes how fast the pattern runs, never its shape.",
+  "tr": "Die Ringe wurden einmal auf Kaggle vom Modell <code>tools/sims/wave_interference2.py</code> berechnet und sind mit der Website gespeichert: der Winkel \\(kr\\) eines Rings bei 118 Wellenzahlen \\(k\\), gleichmäßig verteilt von \\(2\\pi/64\\) bis \\(2\\pi/16\\ \\mathrm{px^{-1}}\\), und seine Höhe \\(a\\) bei den Dämpfungen \\(\\gamma = 0, 0.025, \\dots, 0.6\\), bei jedem Abstand zwischen einer Quelle und einem Gitterpunkt, der vorkommen kann, dazu eine Kosinustabelle. Der Winkel \\(kr\\) wächst proportional zu \\(k\\), also mischt die Seite für jede Wellenlänge zwischen zwei gespeicherten die beiden gespeicherten Winkel geradlinig, und das ist exakt; die beiden gespeicherten Höhen um \\(\\gamma\\) mischt sie ebenso, mit einer Abweichung von höchstens 0.0011. Wenn Quellen hinzugefügt, gelöscht oder zurückgesetzt werden oder sich der Regler <em>Wellenlänge</em> oder <em>Dämpfung</em> bewegt, liest die Seite diese Zahlen und addiert die Ringe zu \\(C\\) und \\(S\\). Der Regler <em>Frequenz</em> löst das nicht aus, denn \\(f\\) geht nur über \\(\\omega t\\) ein: Er ändert, wie schnell das Muster läuft, nie seine Form."
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",

@@ -59,7 +59,7 @@ Checked page by page (which scripts each page loads, and whether they compute or
 
 | Order | Simulation | Page |
 |---|---|---|
-| 1 | Fig. 1 Wave interference | `public/simulations/Circular Wave Interference Visualization.html` · **plays data from Kaggle since 23 November 2026**: model `tools/sims/wave_interference.py`, computed on Kaggle (notebook version 2, code 5f98017, data commit 6be1fd7); the page plays its stored tables ([study](reports/wave_interference/study.md)) |
+| 1 | Fig. 1 Wave interference | `public/simulations/Circular Wave Interference Visualization.html` · **plays data from Kaggle since 23 November 2026**: generation 2, model `tools/sims/wave_interference2.py` (notebook version 4, code 708802d, data commit 17db10b); the page blends the stored rings, so every slider keeps its old step; generation 1 (`wave_interference.py`) kept until generation 2 is checked live ([study](reports/wave_interference/study.md)) |
 | 2 | Fig. 2 Double pendulum chaos | `public/simulations/Double Pendulum.html` |
 | 3 | Fig. 3 Double-slit interference | `public/simulations/Interactive Double-Slit Experiment Visualization.html` |
 | 4 | Fig. 4 Transverse and longitudinal waves | `public/simulations/Transverse and longitudinal waves.html` |

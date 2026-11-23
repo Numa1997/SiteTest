@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="../../styles/fold.rtl.css"><link rel="stylesheet" href="../../styles/i18n.css"><script src="../../scripts/flip.js"></script><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/Circular Wave Interference Visualization.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/Circular Wave Interference Visualization.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/Circular Wave Interference Visualization.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/Circular Wave Interference Visualization.html" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
-        #field { cursor: crosshair; }
+        #field { cursor: crosshair; } /* narrow portrait screens: the figure stays pinned at the top while the controls scroll beneath it, so a slider and the waves are in view together */ @media (max-width: 900px) and (orientation: portrait) { .sim__grid > .stage { position: sticky; top: 0; z-index: 3; } .sim__grid > .stage .stage__canvas { max-width: min(100%, 46vh); margin-inline: auto; } }
     </style>
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/Circular Wave Interference Visualization.html, commit f5fc0639+" />
+    <meta name="translated-from" content="English public/simulations/Circular Wave Interference Visualization.html, commit 1c89e163+" />
   </head>
 <body>
     <header class="sim-top">
@@ -74,7 +74,7 @@
                     <p class="panel__label">الموجات</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>طول الموجة λ</span><output id="lambda-out" for="lambda"></output></span>
-                        <input type="range" id="lambda" min="16" max="64" step="1" value="30">
+                        <input type="range" id="lambda" min="16" max="64" step="0.1" value="30">
                     </label>
                     <label class="ctl">
                         <span class="ctl__row"><span>التردد f</span><output id="freq-out" for="freq"></output></span>
@@ -82,7 +82,7 @@
                     </label>
                     <label class="ctl">
                         <span class="ctl__row"><span>التخامد γ</span><output id="damp-out" for="damp"></output></span>
-                        <input type="range" id="damp" min="0" max="0.6" step="0.05" value="0.15">
+                        <input type="range" id="damp" min="0" max="0.6" step="0.01" value="0.15">
                     </label>
                 </div>
 
@@ -204,7 +204,7 @@
                             <li>الحوض مفتوح: تغادر الموجات الصورة دون أن تنعكس عن حوافها.</li>
                             <li>المصادر نقاط لا يؤثّر بعضها في بعض: فالحلقة تعبر المصدر المجاور دون أن تتغيّر.</li>
                         </ul>
-                        <p>ثلاثة منزلقات تضبط الموجات: <em>طول الموجة</em> \(\lambda\) من 16 إلى \(64\ \mathrm{px}\) بخطوات قدرها \(1\ \mathrm{px}\) (الافتراضي \(30\ \mathrm{px}\))، و<em>التردد</em> \(f\) من 0.2 إلى \(2\ \mathrm{Hz}\) (الافتراضي \(1.1\ \mathrm{Hz}\))، و<em>التخامد</em> \(\gamma\) من 0 إلى 0.6 بخطوات قدرها 0.05 (الافتراضي 0.15). الأزرار تضع المصادر: <em>إعادة ضبط</em> تضع مصدرين عند \(x = 200\) و\(600\ \mathrm{px}\)، و<em>صفّ من 16</em> يوزّع ستة عشر مصدرًا بالتساوي من 64 إلى \(736\ \mathrm{px}\)، والنقر على الحقل يضيف مصدرًا على خط المصادر، عند أقرب موضع من 501 موضع تفصل بينها \(1.6\ \mathrm{px}\).</p>
+                        <p>ثلاثة منزلقات تضبط الموجات: <em>طول الموجة</em> \(\lambda\) من 16 إلى \(64\ \mathrm{px}\) بخطوات قدرها \(0.1\ \mathrm{px}\) (الافتراضي \(30\ \mathrm{px}\))، و<em>التردد</em> \(f\) من 0.2 إلى \(2\ \mathrm{Hz}\) (الافتراضي \(1.1\ \mathrm{Hz}\))، و<em>التخامد</em> \(\gamma\) من 0 إلى 0.6 بخطوات قدرها 0.01 (الافتراضي 0.15). الأزرار تضع المصادر: <em>إعادة ضبط</em> تضع مصدرين عند \(x = 200\) و\(600\ \mathrm{px}\)، و<em>صفّ من 16</em> يوزّع ستة عشر مصدرًا بالتساوي من 64 إلى \(736\ \mathrm{px}\)، والنقر على الحقل يضيف مصدرًا على خط المصادر، عند أقرب موضع من 501 موضع تفصل بينها \(1.6\ \mathrm{px}\).</p>
                         <figure class="pfig">
                             <div class="pfig__plate">
                                     <svg viewBox="0 0 720 312" role="img" aria-label="Left: the field, 800 px wide, x to the right and y down from the top-left corner; sources on the line y = y_s near the bottom; a point P at distances r_1 to r_N from the sources. Right: two neighbouring sources a distance s apart; parallel rays towards a distant point at angle theta from the normal; the left ray is longer by s sin theta.">
@@ -458,11 +458,11 @@
                         \[ \begin{aligned} \psi &= C\cos\omega t + S\sin\omega t, \\ C &= \frac1N\sum_i a_i\cos kr_i, \\ S &= \frac1N\sum_i a_i\sin kr_i . \end{aligned} \tag{18} \]
                         <p>هذان هما الجزء الحقيقي والجزء التخيّلي من \(U\) في (7). والخريطتان \(C(x, y)\) و\(S(x, y)\) تعتمدان على مواضع المصادر وعلى \(\lambda\) وعلى \(\gamma\)، لكنهما لا تعتمدان على الزمن. والفصل دقيق وليس تقريبًا، لأن كل المصادر تشترك في \(\omega\) واحد.</p>
                         <ul>
-                            <li>حُسبت الحلقات مرة واحدة على Kaggle بالنموذج <code>tools/sims/wave_interference.py</code>، وهي مخزّنة مع الموقع: لكل طول موجة \(\lambda = 16, 17, \dots, 64\ \mathrm{px}\) زاوية الحلقة \(kr\)، ولكل تخميد \(\gamma = 0, 0.05, \dots, 0.60\) ارتفاعها \(a\)، عند كل مسافة ممكنة بين مصدر ونقطة من الشبكة، ومعها جدول لجيوب التمام. عند إضافة مصادر أو مسحها أو إعادة ضبطها، أو عند تحريك منزلق <em>طول الموجة</em> أو <em>التخامد</em>، تقرأ الصفحة هذه الأعداد وتجمع الحلقات في \(C\) و\(S\): زاوية وارتفاع لكل مصدر عند كل نقطة من الشبكة. والمنزلق الواقع بين قيمتين مخزّنتين يأخذ أقربهما. منزلق <em>التردد</em> لا يستدعي ذلك، لأن \(f\) لا يدخل إلا عبر \(\omega t\): فهو يغيّر سرعة جريان النمط، لا شكله أبدًا.</li>
+                            <li>حُسبت الحلقات مرة واحدة على Kaggle بالنموذج <code>tools/sims/wave_interference2.py</code>، وهي مخزّنة مع الموقع: زاوية الحلقة \(kr\) عند 118 عددًا موجيًّا \(k\) موزّعة بالتساوي من \(2\pi/64\) إلى \(2\pi/16\ \mathrm{px^{-1}}\)، وارتفاعها \(a\) عند التخامدات \(\gamma = 0, 0.025, \dots, 0.6\)، عند كل مسافة ممكنة بين مصدر ونقطة من الشبكة، ومعها جدول لجيوب التمام. تنمو الزاوية \(kr\) بالتناسب مع \(k\)، فتمزج الصفحة لأي طول موجة يقع بين طولين مخزّنين الزاويتين المخزّنتين مزجًا مستقيمًا، وهو مزج دقيق؛ وتمزج الارتفاعين المخزّنين حول \(\gamma\) بالطريقة نفسها، بخطأ لا يزيد على 0.0011. عند إضافة مصادر أو مسحها أو إعادة ضبطها، أو عند تحريك منزلق <em>طول الموجة</em> أو <em>التخامد</em>، تقرأ الصفحة هذه الأعداد وتجمع الحلقات في \(C\) و\(S\). منزلق <em>التردد</em> لا يستدعي ذلك، لأن \(f\) لا يدخل إلا عبر \(\omega t\): فهو يغيّر سرعة جريان النمط، لا شكله أبدًا.</li>
                             <li>في كل إطار يتقدّم الطور المشترك بالزمن الحقيقي \(\Delta t\) منذ الإطار السابق، بحدّ أقصاه \(0.05\ \mathrm{s}\)، حتى تسير الموجات بالتردد المختار على أي شاشة: \(\omega t \leftarrow \omega t + 2\pi f\,\Delta t\). وعندئذٍ تكلّف كل نقطة عمليتي ضرب وعملية جمع واحدة، مهما كان \(N\).</li>
                             <li>الشبكة هي التي حُسبت عليها الجداول، وهي نفسها على كل شاشة: 250 عمودًا عرض كل منها \(3.2\ \mathrm{px}\)، وصفوف ارتفاع كل منها \(3.2\ \mathrm{px}\) تُعدّ صعودًا من الحافة السفلى، 250 على الأكثر؛ وكل قيمة تخص مركز خليتها. يقع المصدر على أقرب موضع من 501 موضع تفصل بينها \(1.6\ \mathrm{px}\)، لذا فكل مسافة بين مصدر ونقطة من الشبكة هي إحدى 125 000 قيمة مخزّنة. قيس في Chromium دون واجهة: 250 × 113 = 28 250 نقطة في نوافذ عرضها ⁦1100–1600 px⁩، و250 × 250 = 62 500 على هاتف عرضه ⁦390 px⁩. وعند أقصر طول موجة، \(16\ \mathrm{px}\)، يعني ذلك 5 نقاط لكل طول موجة، وهو ما يزال أكثر من النقطتين اللازمتين لإظهار موجة أصلًا.</li>
-                            <li>لـ<em>صفّ من 16</em> على الشاشة العريضة، تقرأ إعادة البناء الواحدة \(2 \times 16 \times 28\,250 = 904\,000\) عددًا مخزّنًا؛ واستغرقت ⁦2.8–26 ms⁩ في خمس تشغيلات في Chromium دون واجهة، بينما استغرق الإطار ⁦0.6–0.8 ms⁩. تتوقف هذه الأزمنة على الجهاز.</li>
-                            <li>الزوايا والارتفاعات المخزّنة أعداد صحيحة، بخطوات قدرها \(2\pi/65536\) و\(1/65535\). مقارنةً بالحقل المحسوب مباشرة من (6)، يختلف \(C\) و\(S\) بما لا يزيد على 0.00006، ويختلف اللون المرسوم بدرجة واحدة من جدول القسم التالي عند نحو ⁦0.1 %⁩ من النقاط واللحظات. تُحفظ \(C\) و\(S\) و\(\psi\) أعدادًا عشرية بدقة 32 بت، أي نحو سبعة أرقام معنوية.</li>
+                            <li>لـ<em>صفّ من 16</em> على الشاشة العريضة، تقرأ إعادة البناء الواحدة \(4 \times 16 \times 28\,250 = 1\,808\,000\) عددًا مخزّنًا، زاويتين وارتفاعين لكل مصدر ونقطة؛ واستغرقت ⁦8–44 ms⁩ في خمس تشغيلات في Chromium دون واجهة، بينما استغرق الإطار ⁦0.6–0.7 ms⁩. تتوقف هذه الأزمنة على الجهاز.</li>
+                            <li>الزوايا والارتفاعات المخزّنة أعداد صحيحة، بخطوات قدرها \(2\pi/65536\) و\(1/65535\). مقارنةً بالحقل المحسوب مباشرة من (6)، عند كل طول موجة وكل تخامد يمكن للمنزلقات أن تأخذه، يختلف \(C\) و\(S\) بما لا يزيد على 0.00065، وأكثره من مزج الارتفاعات، ويختلف اللون المرسوم بدرجة واحدة من جدول القسم التالي عند ⁦0.39 %⁩ من النقاط واللحظات. تُحفظ \(C\) و\(S\) و\(\psi\) أعدادًا عشرية بدقة 32 بت، أي نحو سبعة أرقام معنوية.</li>
                         </ul>
                     </section>
 
@@ -485,7 +485,7 @@
                             <li>يُشعّ الصفّ إلى الأسفل بقوة مساوية لقوته إلى الأعلى؛ وهذا النصف يقع تحت الحافة السفلى ولا يُرسم. وتشارك الموجات الأولية لهويغنز هذا العيب: موجة خلفية لا تُرصد أبدًا. وقد أزاله فرينل وكيرشوف بـ<em>عامل الميل</em>؛ وفي صيغة كيرشوف يرجّح كل موجة أولية بالعامل \((1 + \cos\chi)/2\)، حيث \(\chi\) الزاوية مع الاتجاه الأمامي.</li>
                             <li>كل المصادر في تزامن: فتأخيرات (14) التي تُوجّه المصفوفة الطورية لا يمكن ضبطها.</li>
                             <li>تُبقي القسمة على \(N\) الألوان قابلة للمقارنة، لكنها تجعل كل مصدر أخفت كلما أُضيفت مصادر أخرى.</li>
-                            <li>المصادر نقاط لا تتأثّر بموجات بعضها ولا تُشتّتها.</li><li>لا يأخذ طول الموجة والتخامد وموضع المصدر إلا القيم المخزّنة: \(\lambda\) بخطوات قدرها \(1\ \mathrm{px}\)، و\(\gamma\) بخطوات قدرها 0.05، والمصدر على أقرب موضع من 501 موضع تفصل بينها \(1.6\ \mathrm{px}\).</li>
+                            <li>المصادر نقاط لا تتأثّر بموجات بعضها ولا تُشتّتها.</li><li>يقع المصدر على أقرب موضع من 501 موضع مخزّن تفصل بينها \(1.6\ \mathrm{px}\)، وللشبكة 250 عمودًا على كل شاشة.</li>
                         </ul>
                         <h4><span class="psub__n">10.1</span>قراءة إضافية</h4>
                         <ol class="prefs">
@@ -516,7 +516,7 @@
         var T = Sim.theme;
         var WORLD_W = 800, R = 300, MAX_SOURCES = 24, SOURCE_LIFT = 10;
         var DEFAULT = [0.25, 0.75];
-        var CELL = 3.2, NI = 250, NJ = 250, NM = 500, PLACES = 500, PITCH = 1.6, TURN = 2 * Math.PI / 65536;
+        var CELL = 3.2, NI = 250, NJ = 250, NM = 500, HALF = 125, PLACES = 500, PITCH = 1.6, TURN = 2 * Math.PI / 65536;
 
         var stage = document.getElementById('stage');
         var canvas = document.getElementById('field');
@@ -527,17 +527,17 @@
         var omegaT = 0, dirty = true, redraw = true;
         var simT = 0, lastDt = 0, frames = 0, fps = 0, builds = 0, renders = 0;
         var psi, ampl, r1, a1, ph1, idxC = 0;
-        var G = null, RING = null, DAMP = null, wait = document.getElementById('wait');
+        var G = null, RING = null, BLEND = '', DONE = {}, wait = document.getElementById('wait');
 
         /* ---------- the store: every number this page computes is written here, at the place it is computed (scripts/dataset.js) ---------- */
-        var ds = Sim.dataset({ title: 'Wave interference', attrs: { figure: 1, page: 'Circular Wave Interference Visualization.html', WORLD_W: WORLD_W, R: R, MAX_SOURCES: MAX_SOURCES, SOURCE_LIFT: SOURCE_LIFT, length_unit: 'px of the 800 px wide field', model: 'tools/sims/wave_interference.py, computed once on Kaggle', data: 'data/sims/wave_interference/<date>/' } });
-        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'header of the stored ring file in use: the node nearest the lambda slider', digits: 0 });
+        var ds = Sim.dataset({ title: 'Wave interference', attrs: { figure: 1, page: 'Circular Wave Interference Visualization.html', WORLD_W: WORLD_W, R: R, MAX_SOURCES: MAX_SOURCES, SOURCE_LIFT: SOURCE_LIFT, length_unit: 'px of the 800 px wide field', model: 'tools/sims/wave_interference2.py, computed once on Kaggle', data: 'data/sims/wave_interference2/<date>/' } });
+        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'lambda slider; the picture blends the two stored rings on either side of k = 2π/λ', digits: 1 });
         ds.var('f', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'frequency of every source', computed_in: 'freq slider', digits: 2 });
-        ds.var('damp', [], 'float', { symbol: 'γ', long_name: 'damping: e-foldings of amplitude over R = 300 px', computed_in: 'header of the stored damping file in use: the node nearest the damp slider', digits: 2 }); ds.var('N', [], 'int', { symbol: 'N', long_name: 'number of sources, at most 24', computed_in: 'superpose()', digits: 0 });
+        ds.var('damp', [], 'float', { symbol: 'γ', long_name: 'damping: e-foldings of amplitude over R = 300 px', computed_in: 'damp slider; the picture blends the two stored heights on either side of γ', digits: 2 }); ds.var('N', [], 'int', { symbol: 'N', long_name: 'number of sources, at most 24', computed_in: 'superpose()', digits: 0 });
         ds.dim('s', 0);
         ds.coord('u', 's', Float64Array, { symbol: 'u<sub>s</sub>', long_name: 'source positions as fractions of the width', computed_in: 'superpose()', digits: 4, updates: 'when you add, clear or reset sources' });
         ds.var('x_s', ['s'], Float64Array, { symbol: 'x<sub>s</sub>', units: 'px', long_name: 'source positions in the field', computed_in: 'superpose()', formula: 'x<sub>s</sub> = 1.6 px · q<sub>s</sub>, q<sub>s</sub> = round(500 u<sub>s</sub>)', digits: 1, updates: 'when you add, clear or reset sources' }); ds.var('y_s', [], 'float', { symbol: 'y<sub>s</sub>', units: 'px', long_name: 'height of every source: 10 px above the bottom edge', computed_in: 'superpose()', formula: 'y<sub>s</sub> = worldH − 10', digits: 2 });
-        ds.var('k', [], 'float', { symbol: 'k', units: 'rad/px', long_name: 'wave number', computed_in: 'header of the stored ring file (written by the model)', formula: 'k = 2π / λ', digits: 4 }); ds.var('g', [], 'float', { symbol: 'γ/R', units: '1/px', long_name: 'attenuation per pixel', computed_in: 'header of the stored damping file (written by the model)', formula: 'g = γ / R', digits: 5 });
+        ds.var('k', [], 'float', { symbol: 'k', units: 'rad/px', long_name: 'wave number', computed_in: 'superpose()', formula: 'k = 2π / λ', digits: 4 }); ds.var('g', [], 'float', { symbol: 'γ/R', units: '1/px', long_name: 'attenuation per pixel', computed_in: 'superpose()', formula: 'g = γ / R', digits: 5 });
         ds.var('norm', [], 'float', { symbol: '1/N', long_name: 'normalisation that keeps |ψ| ≤ 1', computed_in: 'superpose()', formula: '1 / max(1, N)', digits: 4 }); ds.var('omega', [], 'float', { symbol: 'ω', units: 'rad/s', long_name: 'angular frequency', computed_in: 'readouts()', formula: 'ω = 2π f', digits: 3 });
         ds.var('T', [], 'float', { symbol: 'T', units: 's', long_name: 'period', computed_in: 'readouts()', formula: 'T = 1 / f', digits: 3 }); ds.var('v', [], 'float', { symbol: 'v', units: 'px/s', long_name: 'phase speed', computed_in: 'readouts()', formula: 'v = f λ', digits: 1 }); ds.var('s2', [], 'float', { symbol: 's', units: 'px', long_name: 'spacing of the two sources; defined only when there are exactly two', computed_in: 'superpose()', formula: 's = |x<sub>2</sub> − x<sub>1</sub>|', digits: 1 }); ds.var('n_calm', [], 'int', { symbol: 'n<sub>calm</sub>', long_name: 'calm lines of two sources by equation (10): the whole numbers m with |m + ½| λ < s, counted on both sides', computed_in: 'superpose()', formula: 'n = 2 ⌈s/λ − ½⌉, and 0 when s < λ/2', digits: 0, drawn_note: 'Not drawn as a number: the calm lines are the cream lines of ψ that stay cream.' });
         ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'play time since the page opened', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while playing; there is no formula to recompute.' }); ds.var('omegaT', [], 'float', { symbol: 'ωt', units: 'rad', long_name: 'phase shared by all sources', computed_in: 'Sim.clock callback', formula: 'ωt ← ωt + 2π f Δt', digits: 3, source: 'Accumulated frame by frame, so there is no closed formula to recompute.' });
@@ -561,9 +561,9 @@
         ds.var('rgb_c', [], 'uint8', { symbol: 'colour<sub>c</sub>', long_name: 'the pixel colour drawn at the centre', computed_in: 'render()', formula: 'LUT[n<sub>c</sub>]', size: '3', colour: true }); ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames, capped at 0.05 s', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
         ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', formula: 'fps ← fps + (1/Δt − fps) / 10', digits: 1, source: 'A running average of 1/Δt.' }); ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames played so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
         ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' }); ds.var('builds', [], 'int', { symbol: 'builds', long_name: 'times C and S were rebuilt from the stored tables', computed_in: 'superpose()', digits: 0, source: 'Counted at each rebuild.' });
-        ds.var('build_ms', [], 'float', { symbol: 'build time', units: 'ms', long_name: 'last rebuild of C and S from the stored tables', computed_in: 'superpose()', digits: 2, source: 'Measured with performance.now().' }); ds.var('reads', [], 'int', { symbol: 'stored reads', long_name: 'stored numbers read in one rebuild: an angle and a height per source and cell', computed_in: 'superpose()', formula: '2 · N · P', digits: 0 });
+        ds.var('build_ms', [], 'float', { symbol: 'build time', units: 'ms', long_name: 'last rebuild of C and S from the stored tables', computed_in: 'superpose()', digits: 2, source: 'Measured with performance.now().' }); ds.var('reads', [], 'int', { symbol: 'stored reads', long_name: 'stored numbers read in one rebuild: two angles and two heights per source and cell', computed_in: 'superpose()', formula: '4 · N · P', digits: 0 });
         ds.var('draw_ms', [], 'float', { symbol: 'draw time', units: 'ms', long_name: 'last frame, every pixel', computed_in: 'render()', digits: 2, source: 'Measured with performance.now().' }); ds.var('renders', [], 'int', { symbol: 'renders', long_name: 'frames drawn so far', computed_in: 'render()', digits: 0, source: 'Counted at each render.' });
-        ds.var('gen', [], 'str', { symbol: 'generation', long_name: 'date the stored data was computed on Kaggle, and the commit of its model', computed_in: 'stored(): data/sims/generations.json', source: 'The newest entry of wave_interference in generations.json.' }); ds.var('files', [], 'str', { symbol: 'files in use', long_name: 'the three stored files the picture is built from', computed_in: 'load()', source: 'Named by the slider nodes.' });
+        ds.var('gen', [], 'str', { symbol: 'generation', long_name: 'date the stored data was computed on Kaggle, and the commit of its model', computed_in: 'stored(): data/sims/generations.json', source: 'The newest entry of wave_interference in generations.json.' }); ds.var('files', [], 'str', { symbol: 'files in use', long_name: 'the stored files the picture is built from', computed_in: 'load()', source: 'Named by the stored nodes on either side of the sliders.' }); ds.var('tk', [], 'float', { symbol: 't', long_name: 'blend weight of the upper stored wave number', computed_in: 'load()', formula: 't = (k − k<sub>n</sub>) / (k<sub>n+1</sub> − k<sub>n</sub>)', digits: 4 }); ds.var('ug', [], 'float', { symbol: 'u', long_name: 'blend weight of the upper stored damping', computed_in: 'load()', formula: 'u = (γ − γ<sub>g</sub>) / 0.025', digits: 4 });
         ds.var('sha_ok', [], 'bool', { symbol: 'SHA-256 checked', long_name: 'every file in use matched its SHA-256 in generations.json', computed_in: 'stored(): crypto.subtle.digest', source: 'Computed by the browser from the downloaded bytes.' }); ds.var('bytes', [], 'int', { symbol: 'bytes loaded', long_name: 'stored bytes downloaded so far', computed_in: 'stored()', digits: 0, source: 'Counted at each download.' });
 
         /* colour map: trough (ink) → rest (card) → crest (burgundy) */
@@ -577,39 +577,39 @@
         })();
         ds.touch('LUT');
 
-        var lambda = Sim.slider('lambda', { format: function (v) { return v.toFixed(0) + ' px'; }, onInput: changed });
+        var lambda = Sim.slider('lambda', { format: function (v) { return v.toFixed(1) + ' px'; }, onInput: changed });
         var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
         var damp = Sim.slider('damp', { format: function (v) { return v.toFixed(2); }, onInput: changed });
 
         function changed() { load(); readouts(); } var curve = Sim.curve({ ds: ds, after: document.querySelector('.sim__grid > .panel').querySelectorAll('.panel__group')[1], knobs: [{ id: 'lambda', slider: lambda, name: _t('Wavelength λ'), symbol: 'λ', units: 'px', digits: 1 }, { id: 'freq', slider: freq, name: _t('Frequency f'), symbol: 'f', units: 'Hz', digits: 2 }, { id: 'damp', slider: damp, name: _t('Damping γ'), symbol: 'γ', units: '', digits: 2 }], examples: [{ knob: 'lambda', shape: 'inv', from: 64, to: 16, T: 30, name: _t('Calm lines, one pair at a time'), why: _t('Press Reset first: two sources, s = 400 px apart. By equation (10) the calm lines are those with |m + ½| λ < s, so there are 2⌈s/λ − ½⌉ of them, a number that grows with 1/λ. This curve makes 1/λ grow at a steady rate, so a new pair is born at even intervals: from 12 calm lines at 64 px to 50 at 16 px, one pair about every 1.6 s. In a real ripple tank the same sweep is a steady rise in frequency, because there λ = v/f.') }, { knob: 'lambda', shape: 'exp', from: 64, to: 16, T: 30, name: _t('Exponential sweep: slow, then a rush'), why: _t('The same range swept exponentially: equal time for each halving of λ, 15 s from 64 to 32 px and 15 s from 32 to 16 px. With Reset’s two sources the calm lines go 12 → 24 → 50: six new pairs in the first half, thirteen in the second. Acousticians sweep a loudspeaker this way to measure a room (Farina, 2007).') }, { knob: 'lambda', shape: 'jerk', from: 30, to: 60, T: 6, name: _t('Exercise 5.1, done smoothly'), why: _t('The note’s Exercise 5.1 by itself: λ from 30 to 60 px along a minimum-jerk S-curve, which starts and stops at rest. With Reset’s two sources the calm lines go from 26 to 14. Far out, line m leaves the sources at the angle sin θ = (m + ½) λ / s from the vertical, so as λ grows every calm line swings outward and the outermost ones sink into the line of the sources.') }, { knob: 'damp', shape: 'jerk', from: 0, to: 0.6, T: 8, name: _t('Calm lines fill in'), why: _t('Damping from 0 to 0.6 along a minimum-jerk S-curve. At γ = 0 the two rings reach a calm line equally strong and cancel exactly. As γ rises the nearer source arrives stronger, and a small motion of amplitude |a₁ − a₂|/2 survives (§5): the outer calm lines, where one source is much nearer, begin to flicker, while those near the middle stay almost still.') }, { knob: 'freq', shape: 'exp', from: 0.2, to: 2, T: 20, name: _t('Frequency alone: the calm lines stay'), why: _t('Only the frequency changes, from 0.2 to 2 Hz, swept exponentially. The water flickers faster and the rings run outward faster, v = fλ (equation 8), but the calm lines do not move: in equation (9) their envelope cos(kΔr/2) holds k and no ω. On this page λ is a knob of its own; in a real tank a new f would also give a new λ = v/f.') }], play: function () { clk.set(true); }, playing: function () { return clk.playing; }, extra: function () { var n = ds.get('n_calm'); return n === n ? _t('{n} calm lines', { n: n }) : ''; } });
 
-        /* ---------- the stored data (tools/sims/wave_interference.py, computed once on Kaggle): the newest generation in data/sims/generations.json; each file's SHA-256 is checked before it is used ---------- */
+        /* ---------- the stored data (tools/sims/wave_interference2.py, computed once on Kaggle): the newest generation in data/sims/generations.json; each file's SHA-256 is checked before it is used ---------- */
         var DATA = new URL('../data/sims/', document.querySelector('script[src$="scripts/sim.js"]').src).href, GEN = null, FILES = {}, loaded = 0;
-        window.__simData = { sim: 'wave_interference', files: [], sha_ok: false };
+        window.__simData = { sim: 'wave_interference2', files: [], sha_ok: false };
         function stored(file) {
             if (FILES[file]) return FILES[file];
             GEN = GEN || fetch(DATA + 'generations.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error('generations.json ' + r.status); return r.json(); }).then(function (g) {
-                var e = g.generations.filter(function (q) { return q.sim === 'wave_interference'; }).pop(); if (!e) throw new Error(_t('no stored data for this figure yet')); ds.set('gen', e.date + ', ' + e.commit.slice(0, 7)); window.__simData.gen = e; return e; });
+                var e = g.generations.filter(function (q) { return q.sim === 'wave_interference2'; }).pop(); if (!e) throw new Error(_t('no stored data for this figure yet')); ds.set('gen', e.date + ', ' + e.commit.slice(0, 7)); window.__simData.gen = e; return e; });
             return FILES[file] = GEN.then(function (e) {
-                return fetch(DATA + 'wave_interference/' + e.date + '/' + file).then(function (r) { if (!r.ok) throw new Error(file + ' ' + r.status); return r.arrayBuffer(); }).then(function (buf) {
+                return fetch(DATA + 'wave_interference2/' + e.date + '/' + file).then(function (r) { if (!r.ok) throw new Error(file + ' ' + r.status); return r.arrayBuffer(); }).then(function (buf) {
                     return crypto.subtle.digest('SHA-256', buf).then(function (d) {
                         var hex = Array.prototype.map.call(new Uint8Array(d), function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join('');
                         if (!e.files[file] || hex !== e.files[file].sha256) throw new Error(file + _t(': SHA-256 differs from generations.json'));
                         var hl = new DataView(buf).getUint32(4, true), hdr = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, hl))), body = buf.slice(8 + hl), out = { hdr: hdr, sha: hex };
-                        if (hdr.kind === 'geometry') { var p = hdr.params; if (p.NI !== NI || p.NJ !== NJ || p.NM !== NM || p.DX_px !== CELL) throw new Error(_t('the stored grid is not the grid this page draws')); out.r = new Float32Array(body, 0, NJ * NM); out.cos = new Int16Array(body, NJ * NM * 4, 65536); } else out.a = new Uint16Array(body);
-                        ds.set('bytes', loaded += buf.byteLength); return out;
+                        if (hdr.kind === 'geometry') { var p = hdr.params; if (p.NI !== NI || p.NJ !== NJ || p.NM !== NM || p.HALF !== HALF || p.DX_px !== CELL) throw new Error(_t('the stored grid is not the grid this page draws')); out.cos = new Int16Array(body, 0, 65536); } else out.a = hdr.kind === 'dist' ? new Float32Array(body) : new Uint16Array(body);
+                        ds.set('bytes', loaded += buf.byteLength); return DONE[file] = out;
                     });
                 });
             }, function (err) { delete FILES[file]; throw err; });
         }
-        function node(v, lo, hi, step) { return Math.round(Math.max(lo, Math.min(hi, v)) / step) * step; }
-        function load() {
-            var l = node(lambda.value, 16, 64, 1), g = Math.round(100 * node(damp.value, 0, 0.6, 0.05)), want = ['geometry.bin', 'ring_l' + ('00' + l).slice(-3) + '.bin', 'damp_g' + ('00' + g).slice(-3) + '.bin'];
-            Promise.all(want.map(stored)).then(function (d) {
-                if (node(lambda.value, 16, 64, 1) !== l || Math.round(100 * node(damp.value, 0, 0.6, 0.05)) !== g) return;   /* the reader has moved on; a newer load() is under way */
-                G = d[0]; RING = d[1]; DAMP = d[2]; dirty = true; wait.hidden = true;
-                ds.set('files', want.join(', ')); ds.set('sha_ok', true); window.__simData.files = want; window.__simData.sha_ok = true; window.__simData.err = '';
-            }, function (e) { var m = String(e.message || e); window.__simData.err = m; wait.hidden = false; wait.textContent = _t('The stored data of this figure could not be loaded, so the field stays empty: ') + m; });
+        function pad(v) { return ('00' + v).slice(-3); } function fail(e) { var m = String(e.message || e); window.__simData.err = m; wait.hidden = false; wait.textContent = _t('The stored data of this figure could not be loaded, so the field stays empty: ') + m; }
+        function load() {   /* the stored rings at the two wave numbers k around the slider's, the heights at the two dampings around γ, and the distances; only the bottom halves while the field has at most 125 rows */
+            if (!G) { stored('geometry.bin').then(function (g) { G = g; load(); }, fail); return; }
+            var K = G.hdr.k_nodes, Gn = G.hdr.gamma_nodes, dk = K[1] - K[0], lam = lambda.value, gam = damp.value, k = 2 * Math.PI / lam, n = Math.min(K.length - 2, Math.max(0, Math.floor((k - K[0]) / dk + 1e-9))), g = Math.min(Gn.length - 2, Math.max(0, Math.floor(gam / 0.025 + 1e-9)));
+            var parts = rows > HALF ? ['_lo', '_hi'] : ['_lo'], want = []; ['dist', 'ring_k' + pad(n), 'ring_k' + pad(n + 1), 'damp_g' + pad(Math.round(1000 * Gn[g])), 'damp_g' + pad(Math.round(1000 * Gn[g + 1]))].forEach(function (f) { parts.forEach(function (h) { want.push(f + h + '.bin'); }); }); var key = want.join(', '); BLEND = key;
+            for (var a = -8; a <= 9; a++) if (n + a >= 0 && n + a < K.length) parts.forEach(function (h) { stored('ring_k' + pad(n + a) + h + '.bin').catch(function () {}); });   /* the neighbours a sweep of λ needs next */
+            if (want.every(function (f) { return DONE[f]; })) { var d = want.map(function (f) { return DONE[f].a; }), np = parts.length; RING = { lam: lam, gam: gam, n: n, t: (k - K[n]) / dk, g: g, u: (gam - Gn[g]) / 0.025, np: np, tab: function (f, h) { return d[f * np + h]; } }; dirty = true; wait.hidden = true; ds.set('files', key); ds.set('tk', RING.t); ds.set('ug', RING.u); ds.set('sha_ok', true); window.__simData.files = want; window.__simData.sha_ok = true; window.__simData.err = ''; return; }
+            Promise.all(want.map(stored)).then(function () { if (BLEND === key) load(); }, fail);   /* once all have arrived and passed their SHA-256 check, unless the reader has moved on */
         }
 
         function resize() {
@@ -636,13 +636,13 @@
             ds.set('cols', cols); ds.set('rows', rows); ds.set('P', cols * rows); ds.set('worldH', worldH); ds.set('dx', CELL); ds.set('dy', CELL);
             ds.set('box_w', box.w); ds.set('box_h', box.h); ds.set('dpr', box.dpr);
             ds.set('j_c', Math.floor(rows / 2)); ds.set('i_c', Math.floor(cols / 2));
-            dirty = true;
+            dirty = true; if (G) load();
         }
 
         function superpose() {
-            var n = sources.length, norm = 1 / Math.max(1, n), w = norm / (65535 * 32767);
-            var ang = RING.a, hgt = DAMP.a, cosT = G.cos, rr = G.r, sy = worldH - SOURCE_LIFT;
-            ds.set('k', RING.hdr.k_rad_per_px); ds.set('g', DAMP.hdr.g_per_px); ds.set('lambda', RING.hdr.lambda_px); ds.set('damp', DAMP.hdr.gamma); ds.set('N', n); ds.set('norm', norm); ds.set('y_s', sy);
+            var n = sources.length, norm = 1 / Math.max(1, n), w = norm / (65535 * 32767); if (rows > HALF * RING.np) { load(); return; }
+            var t = RING.t, u = RING.u, cosT = G.cos, sy = worldH - SOURCE_LIFT;
+            ds.set('k', 2 * Math.PI / RING.lam); ds.set('g', RING.gam / R); ds.set('lambda', RING.lam); ds.set('damp', RING.gam); ds.set('N', n); ds.set('norm', norm); ds.set('y_s', sy);
             ds.dim('s', n);
             var us = ds.alloc('u'), xss = ds.alloc('x_s'), t0 = performance.now();
             sumC.fill(0);
@@ -652,10 +652,10 @@
                 us[s] = sources[s];
                 xss[s] = q * PITCH;
                 for (var j = 0; j < rows; j++) {
-                    var row = (rows - 1 - j) * NM;
+                    var jb = rows - 1 - j, h = jb < HALF ? 0 : 1, row = (jb - h * HALF) * NM, rr = RING.tab(0, h), A0 = RING.tab(1, h), A1 = RING.tab(2, h), H0 = RING.tab(3, h), H1 = RING.tab(4, h);
                     for (var i = 0; i < cols; i++, p++) {
                         var e = row + Math.abs(2 * i + 1 - q);
-                        var a = hgt[e], na = ang[e];
+                        var n0 = A0[e], na = (n0 + Math.round(t * (((A1[e] - n0 + 32768) & 65535) - 32768))) & 65535, a = H0[e] + u * (H1[e] - H0[e]);
                         if (s === 0) { r1[p] = rr[e]; a1[p] = a / 65535 * norm; ph1[p] = na * TURN; }
                         sumC[p] += a * cosT[na] * w;
                         sumS[p] += a * cosT[(na - 16384) & 65535] * w;
@@ -665,7 +665,7 @@
             for (p = 0; p < sumC.length; p++) ampl[p] = Math.sqrt(sumC[p] * sumC[p] + sumS[p] * sumS[p]);
             if (n === 0) { r1.fill(0); a1.fill(0); ph1.fill(0); }
             ds.touch('C'); ds.touch('S'); ds.touch('A'); ds.touch('r1'); ds.touch('a1'); ds.touch('ph1'); ds.touch('u'); ds.touch('x_s');
-            ds.set('builds', ++builds); ds.set('build_ms', performance.now() - t0); ds.set('reads', 2 * n * cols * rows); var s2 = n === 2 ? Math.abs(xss[1] - xss[0]) : NaN; ds.set('s2', s2); ds.set('n_calm', n === 2 ? Math.max(0, 2 * Math.ceil(s2 / ds.get('lambda') - 0.5)) : NaN);
+            ds.set('builds', ++builds); ds.set('build_ms', performance.now() - t0); ds.set('reads', 4 * n * cols * rows); var s2 = n === 2 ? Math.abs(xss[1] - xss[0]) : NaN; ds.set('s2', s2); ds.set('n_calm', n === 2 ? Math.max(0, 2 * Math.ceil(s2 / ds.get('lambda') - 0.5)) : NaN);
             dirty = false; readouts();
         }
 
@@ -710,7 +710,7 @@
             var n = sources.length;
             document.getElementById('r-n').textContent = n + (n === MAX_SOURCES ? _t(' (max)') : '');
             document.getElementById('cap-count').textContent = n === 0 ? _t('no sources · click the field') : n === 1 ? _t('{n} source', { n: n }) : _t('{n} sources', { n: n });
-            if (!RING) { ds.set('lambda', node(lambda.value, 16, 64, 1)); ds.set('damp', node(damp.value, 0, 0.6, 0.05)); } ds.set('f', freq.value);
+            if (!RING) { ds.set('lambda', lambda.value); ds.set('damp', damp.value); } ds.set('f', freq.value);
             ds.set('v', freq.value * ds.get('lambda')); ds.set('omega', 2 * Math.PI * freq.value); ds.set('T', 1 / freq.value);
             document.getElementById('r-v').textContent = Math.round(ds.get('v')) + ' px/s';
             redraw = true;
@@ -775,13 +775,13 @@
         function cellIndex(j, i) { return j * cols + i; }
         function cellCentre(j, i) { return { x: (i + 0.5) / cols * box.w, y: box.h - (rows - j - 0.5) * CELL * box.w / WORLD_W }; }
         function lut(v) { var n = Math.round(Math.max(-1, Math.min(1, v)) * 127.5 + 127.5) * 3; return [LUT[n], LUT[n + 1], LUT[n + 2]]; }
-        function sliderCheck(input, label, lo, hi, step) { return { formula: _t('the stored node nearest the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: node(parseFloat(input.value), lo, hi, step) }; }
-        /* self-test: the sum over sources at one cell, written out again from the stored tables (an angle n and a height h per source) */
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) }; }
+        /* self-test: the sum over sources at one cell, written out again from the stored tables (an angle n and a height h per source, each blended between its two stored nodes) */
         function sumAt(p, shift) {
             var j = Math.floor(p / cols), i = p % cols, norm = ds.get('norm'), qs = ds.get('x_s'), total = 0;
             var inputs = [['j', j, '', 0], ['i', i, '', 0], ['1/N', norm, '', 4]];
             for (var q = 0; q < qs.length; q++) {
-                var e = (rows - 1 - j) * NM + Math.abs(2 * i + 1 - Math.round(qs[q] / PITCH)), na = RING.a[e], h = DAMP.a[e];
+                var jb = rows - 1 - j, hh = jb < HALF ? 0 : 1, e = (jb - hh * HALF) * NM + Math.abs(2 * i + 1 - Math.round(qs[q] / PITCH)), n0 = RING.tab(1, hh)[e], na = (n0 + Math.round(RING.t * (((RING.tab(2, hh)[e] - n0 + 32768) & 65535) - 32768))) & 65535, h = RING.tab(3, hh)[e] + RING.u * (RING.tab(4, hh)[e] - RING.tab(3, hh)[e]);
                 total += h / 65535 * (G.cos[(na - shift) & 65535] / 32767) * norm;
                 if (q < 3) inputs.push(['n<sub>' + (q + 1) + '</sub>', na, '', 0], ['h<sub>' + (q + 1) + '</sub>', h, '', 0]);
             }
@@ -807,7 +807,7 @@
                 { title: _t('Time'), note: _t('advances only while it plays'), vars: ['t', 'omegaT', 'cos_wt', 'sin_wt'] },
                 { title: _t('Centre of the field'), note: _t('the cell the walkthrough below reads'), vars: ['j_c', 'i_c', 'psi_c', 'n_c', 'rgb_c'] },
                 { title: _t('Arrays: the whole field'), note: _t('click a row to open it as a table; point at a cell to find it in the figure'), vars: ['C', 'S', 'psi', 'A', 'r1', 'a1', 'ph1', 'x', 'y', 'LUT'] },
-                { title: _t('Stored data'), note: _t('computed once on Kaggle; the page only reads it'), vars: ['gen', 'files', 'sha_ok', 'bytes'] },
+                { title: _t('Stored data'), note: _t('computed once on Kaggle; the page only reads it'), vars: ['gen', 'files', 'tk', 'ug', 'sha_ok', 'bytes'] },
                 { title: _t('Grid and drawing'), note: _t('how the picture is computed and drawn'), vars: ['cols', 'rows', 'P', 'dx', 'dy', 'worldH', 'box_w', 'box_h', 'dpr', 'dt', 'fps', 'frames', 'playing', 'builds', 'build_ms', 'reads', 'renders', 'draw_ms'] }
             ],
             colour: {
@@ -838,9 +838,9 @@
                 return null;
             },
             check: {
-                lambda: function () { return sliderCheck(lambda.el, 'wavelength', 16, 64, 1); }, s2: function () { var xs = ds.get('x_s'); return { formula: 's = |x<sub>2</sub> − x<sub>1</sub>|' + (xs.length === 2 ? '' : _t(', only for two sources')), inputs: xs.length === 2 ? [['x<sub>1</sub>', xs[0], 'px', 1], ['x<sub>2</sub>', xs[1], 'px', 1]] : [['N', xs.length, '', 0]], value: xs.length === 2 ? Math.abs(xs[1] - xs[0]) : NaN }; }, n_calm: function () { var s = ds.get('s2'), l = ds.get('lambda'); return { formula: 'n = 2 ⌈s/λ − ½⌉', inputs: [['s', s, 'px', 1], ['λ', l, 'px', 1]], value: s === s ? Math.max(0, 2 * Math.ceil(s / l - 0.5)) : NaN }; },
-                f: function () { return { formula: _t('read from the ') + _t('frequency') + _t(' slider now'), inputs: [[_t('slider'), freq.el.value, '']], value: parseFloat(freq.el.value) }; },
-                damp: function () { return sliderCheck(damp.el, 'damping', 0, 0.6, 0.05); },
+                lambda: function () { return sliderCheck(lambda.el, 'wavelength'); }, s2: function () { var xs = ds.get('x_s'); return { formula: 's = |x<sub>2</sub> − x<sub>1</sub>|' + (xs.length === 2 ? '' : _t(', only for two sources')), inputs: xs.length === 2 ? [['x<sub>1</sub>', xs[0], 'px', 1], ['x<sub>2</sub>', xs[1], 'px', 1]] : [['N', xs.length, '', 0]], value: xs.length === 2 ? Math.abs(xs[1] - xs[0]) : NaN }; }, n_calm: function () { var s = ds.get('s2'), l = ds.get('lambda'); return { formula: 'n = 2 ⌈s/λ − ½⌉', inputs: [['s', s, 'px', 1], ['λ', l, 'px', 1]], value: s === s ? Math.max(0, 2 * Math.ceil(s / l - 0.5)) : NaN }; },
+                f: function () { return sliderCheck(freq.el, 'frequency'); },
+                damp: function () { return sliderCheck(damp.el, 'damping'); },
                 N: function () { return { formula: 'the length of the source list', inputs: [['sources', sources.length, '', 0]], value: sources.length }; },
                 u: function (q) { return { formula: 'the source list, as clicked or preset, moved to the nearest stored place', inputs: [['sources[' + q + ']', sources[q], '', 4]], value: sources[q] }; },
                 x_s: function (q) { return { formula: 'x<sub>s</sub> = 1.6 px · round(500 u<sub>s</sub>)', inputs: [['u<sub>s</sub>', ds.get('u')[q], '', 4]], value: PITCH * Math.round(ds.get('u')[q] * PLACES) }; },
@@ -880,7 +880,7 @@
                 worldH: function () { return { formula: '800 · box.h / box.w', inputs: [['box.w', box.w, 'css px', 0], ['box.h', box.h, 'css px', 0]], value: WORLD_W * box.h / box.w }; },
                 cols: function () { return { formula: '250, the columns of the stored grid', inputs: [['NI', NI, '', 0]], value: NI }; },
                 rows: function () { return { formula: 'min(250, ⌈worldH / Δy⌉)', inputs: [['worldH', ds.get('worldH'), 'px', 1], ['Δy', CELL, 'px', 1]], value: Math.min(NJ, Math.ceil(ds.get('worldH') / CELL - 1e-9)) }; },
-                reads: function () { return { formula: '2 · N · P', inputs: [['N', ds.get('N'), '', 0], ['P', ds.get('P'), '', 0]], value: 2 * ds.get('N') * ds.get('P') }; },
+                reads: function () { return { formula: '4 · N · P', inputs: [['N', ds.get('N'), '', 0], ['P', ds.get('P'), '', 0]], value: 4 * ds.get('N') * ds.get('P') }; },
                 j_c: function () { return { formula: 'floor(rows / 2)', inputs: [['rows', rows, '', 0]], value: Math.floor(rows / 2) }; },
                 i_c: function () { return { formula: 'floor(cols / 2)', inputs: [['cols', cols, '', 0]], value: Math.floor(cols / 2) }; }
             },
@@ -897,7 +897,7 @@
             round: curve.round({ time: 't', label: function () { return _t('one period of the sources, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
                 columns: ['omegaT', 'cos_wt', 'sin_wt', 'psi_c', 'n_calm'], point: function () { return { j: Math.floor(ds.dims.j / 2), i: Math.floor(ds.dims.i * 0.72) }; } }),
             play: function () { clk.set(true); },
-            about: _t('Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.') + ' ' + _t('The rings are not computed here: their angles and heights were computed once on Kaggle (tools/sims/wave_interference.py) for λ = 16, 17, …, 64 px and γ = 0, 0.05, …, 0.60, and the page adds the rings of the chosen sources. A curve or a hand between two of those values uses the nearest one; a source sits on the nearest of 501 places 1.6 px apart.')
+            about: _t('Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.') + ' ' + _t('The rings are not computed here: their angles and heights were computed once on Kaggle (tools/sims/wave_interference2.py), the angles at 118 wave numbers k evenly spaced between 2π/64 and 2π/16 per px, the heights at γ = 0, 0.025, …, 0.6. The page blends the two stored rings on either side of the slider’s k, which is exact because the angle k r grows in proportion to k, and the two stored heights on either side of γ, in a straight line. A source sits on the nearest of 501 places 1.6 px apart.')
         }; curve.extend(Sim.data);
 
         resize();
