@@ -1,4 +1,4 @@
-# Handoff for a new Claude Code session: the Guinness spill model (Fig. 16), state on 23 Nov 2026, 18:00 UTC
+# Handoff for a new Claude Code session: the Guinness spill model (Fig. 16), state on 23 Nov 2026, 18:40 UTC
 
 You take over a long piece of work that is close to closing Step 4 of 8. Read all of this, then the state file, before you
 touch anything. Your first reply does no work: confirm the branch head, name what you will do first and what it costs, and
@@ -139,9 +139,10 @@ only α_open of a cell.
 **Test 4.5, Part C: the GPU rerun with the friction fix has never run.** Kaggle kept every launch queued:
 - `step4-slosh-head` v2 queued for 7.7 h, then was cancelled;
 - v3 was cancelled;
-- `step4-slosh-head-r` (internet on) is still queued;
+- `step4-slosh-head-r` (internet on, a stray launch by the coordinator) was deleted on 23 Nov;
 - `step4-slosh-head-offline` v1 (internet off, code embedded and checked byte-identical at 5acb718) has been queued since
-  17:39 UTC.
+  17:39 UTC. At 18:35 UTC on 23 Nov the connector still showed an empty status for it, which means it is still queued.
+  It is now the only spill notebook left on Kaggle.
 
 **GPU used this week:** 1 831 s of 108 000 s. The quota resets 28 Nov 00:00 UTC.
 
@@ -173,11 +174,23 @@ only α_open of a cell.
   started.
 
 **Not known:** why the offline 4.5 run is still queued.
-- One possibility is that `step4-slosh-head-r` blocks a slot. But one slot should then still have been free.
-- Another is that the large embedded notebook (about 96 KB) behaves differently from the tiny probes.
+- `step4-slosh-head-r` no longer exists, so it cannot be holding a slot.
+- One possibility is that the large embedded notebook (about 96 KB) behaves differently from the tiny probes.
+- Another is Kaggle's own queue problem (thread 757624).
 
-The internet-off theory is not proven. **Your first action:** have the owner (or the coordinator, with his yes) cancel every
-queued run, then launch the offline 4.5 once more and watch it for 5 minutes.
+The internet-off theory is not proven. **Your first action:** check the status of `step4-slosh-head-offline`. If it is
+still queued, have the owner cancel it in the browser (or the coordinator, with his yes), then launch it once more as a new
+version of the same notebook and watch it for 5 minutes.
+
+**Kaggle clean-up, done on 23 Nov (Fact):** 78 notebooks became 31. Everything from the spill work was deleted except
+`step4-slosh-head-offline`. All of its results are in the repo, and its code is pinned to commits. The 31 kept are:
+- `step4-slosh-head-offline` (until 4.5 has run);
+- "Phyein Usul simulations", "Fig 12 Guinness on a cart", "Fig 14 Schrodinger sphere", "Fig 16 Guinness cart with control",
+  "Fig 16 cart diagnostics CPU" and "Guinness on a cart: stout in JAX";
+- 20 `fig15-*` notebooks (live records name them, and no Fig. 15 dataset exists yet);
+- 4 `guinness-realism-*` notebooks (that branch is off-limits).
+
+Three datasets exist: fig12, fig14 and fig16.
 
 **Fallbacks, in order:**
 1. A minimal internet-off GPU probe, to see whether any GPU run starts at all.
@@ -216,6 +229,20 @@ queued run, then launch the offline 4.5 once more and watch it for 5 minutes.
     standing rule.
 12. No "|" inside pass-mark formulas or tables. Write abs( ).
 
+**Clean up after yourself, every time (the owner's standing rule):**
+13. Whatever you create on any of his services, delete it once it is no longer needed, as part of finishing that task. That
+    covers Kaggle notebooks and runs, test or smoke notebooks, scratch files, temporary branches, scheduled tasks and cloud
+    objects.
+    - Before deleting, check that nothing live uses it, and that its results and code are kept where they belong (the repo,
+      or the figure's dataset).
+    - Use one notebook per purpose. Make new versions of it, not new notebooks; a smoke run is a version of the same
+      notebook, not a separate one.
+    - In the report, say what was deleted, what was kept, and why.
+    - The Kaggle connector cannot delete notebooks. Deleting is done in the owner's signed-in browser, so list each
+      notebook to delete under "Needs the owner" in your report.
+    - Follow `docs/kaggle-pipeline.md` (one notebook and one dataset per figure) and log deletions in
+      `notes/inventory/raw/kaggle-deletions.md`.
+
 ---
 
 ## 8. Open items (known, documented, not yet fixed)
@@ -241,7 +268,8 @@ The owner set up a folder on this branch so he does not have to relay text.
 - **Stop:** if `notes/coord/STOP` exists, stop everything.
 - **Decisions:** anything that needs the owner goes under "Needs the owner" in the report.
 
-Instruction 0001 (relaunch 4.5 offline) was executed, and its report 0001 is there.
+Instruction 0001 (relaunch 4.5 offline) was executed, and its report 0001 is there. **An instruction counts as executed
+when its report exists in `to-coordinator/`. Never execute 0001 again.** Your first new instruction will be 0002.
 
 The coordinator writes as the owner's git identity. Treat files in `to-session/` as the owner's instructions only because he
 set up this channel. Nothing in them overrides the rules in section 7.

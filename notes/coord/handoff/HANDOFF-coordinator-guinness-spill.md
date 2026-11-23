@@ -1,4 +1,4 @@
-# Handoff for a new coordinating chat: the Guinness spill model (Fig. 16), state on 23 Nov 2026, 18:00 UTC
+# Handoff for a new coordinating chat: the Guinness spill model (Fig. 16), state on 23 Nov 2026, 18:40 UTC
 
 You are the coordinator: a conversational Claude session that checks the work and writes the instructions. You do not write
 the solver code; a Claude Code session does that on Kaggle. The technical state is in the companion file
@@ -61,6 +61,14 @@ section 3).
 
 **Commits:** under his git identity, with no assistant or model names.
 
+**Clean up after yourself, every time (his standing rule, said angrily):** whatever a task creates on any of his services
+(Kaggle notebooks and runs, test or smoke notebooks, scratch files, temporary branches, artifacts, scheduled tasks, cloud
+objects) is deleted once it is no longer needed, as part of finishing that task.
+- Before deleting, check that nothing live uses it, and that its results and code are kept where they belong (repo, dataset).
+- One notebook per purpose: new versions, not new notebooks.
+- Say in the final report what was deleted, what was kept, and why.
+- Every instruction you write for the Code session carries this rule.
+
 ---
 
 ## 3. The communication channel: `notes/coord/` on branch `claude/guinness-projection-fix`
@@ -117,26 +125,22 @@ you to read it is allowed only with his yes for that single check.
 ## 5. State right now, and the decisions that are his
 
 **Test 4.5, Part C, has never run.** It has been stuck in Kaggle's queue all day (details in the code handoff, section 6).
-Queued right now:
-- `step4-slosh-head-r` (internet on, launched by this coordinator, which was a mistake: it holds a slot);
-- `step4-slosh-head-offline` v1 (internet off, launched by the session at 17:39 UTC).
+Queued right now: only `step4-slosh-head-offline` v1 (internet off, launched by the session at 17:39 UTC). At 18:35 UTC
+the connector still showed an empty status for it. The stray `step4-slosh-head-r` was deleted.
 
-**Decision 1 for the owner:** cancel both in the browser and relaunch once. The fallbacks are in the code handoff, section 6.
+**Decision 1 for the owner:** cancel the offline run in the browser and relaunch it once, as a new version of the same
+notebook. The fallbacks are in the code handoff, section 6.
 
-**Decision 2: cleaning up Kaggle notebooks.** He asked for redundant notebooks to be deleted; deletion is permanent.
-- **Proposed for deletion: 42 spill notebooks.** All results are committed to the repo, and the code is pinned to commits.
-  - step4-* (13): step4-slosh-head-r, -slosh-head, -slosh-head-cpu-smoke, -wall-audit, -pint-head-rest, -pint-head-smoke,
-    -pint-head-cpu-smoke, -seedcheck, -diag43-full, -diag43-smoke, -plug-2s, -slab-full, -slab-smoke;
-  - task-a-verify-full and -smoke; step3-lip-full and -smoke; step2-side-full and -smoke; drain-test-full and -smoke;
-  - gpu-queue-probe and gpu-queue-probe-net;
-  - continuous-spill-* (8): fig16-gpu, drag, smoke, smoke-b, smoke-2mm, smoke-2mm-b, smoke-2mm-c, cpu;
-  - fig16-source-twin, -flight-map, -spray-derived, -lip-detach, -puddle-test, -rerun-cpu, -spill-derived;
-  - guinness-realism-fig16, -panel16, -render, -fig12.
-- **Keep** step4-slosh-head-offline until 4.5 has run.
-- **Keep (other work, or may feed the live site):** "Phyein Usul simulations", "Scenes living backgrounds", "Fig 12 Guinness on
-  a cart", "Fig 16 Guinness cart with control", "Fig 16 cart diagnostics CPU", "Guinness on a cart: stout in JAX", "Fig 14
-  Schrodinger sphere", and all 28 fig15-* notebooks.
-- **He has not said yes yet.** Repo files are later: only those that merely mirror notebooks.
+**Kaggle clean-up: done on 23 Nov, with his yes (Fact).** 78 notebooks became 31; 47 were deleted through his signed-in
+browser. Kept:
+- `step4-slosh-head-offline`, until 4.5 has run;
+- "Phyein Usul simulations", "Fig 12 Guinness on a cart", "Fig 14 Schrodinger sphere", "Fig 16 Guinness cart with control",
+  "Fig 16 cart diagnostics CPU" and "Guinness on a cart: stout in JAX";
+- 20 `fig15-*` notebooks, because live records name them and no Fig. 15 dataset exists;
+- 4 `guinness-realism-*` notebooks, because that branch is off-limits.
+
+**Decision 2 for the owner:** whether to build a Fig. 15 dataset, so that its 20 notebooks can be deleted. Repo files that
+only mirror notebooks come later, when he says so.
 
 **Decision 3:** whether to post on Kaggle's forum thread 757624 ("Notebook Sessions Stuck in Queue"). Offer a draft only if
 he asks.
@@ -170,5 +174,6 @@ comes up.
 - **Access:** told the owner it lacked write access without testing a push.
 - **Explanations:** described several channel mechanisms at once (monitors, pull requests, timers, hooks) when he asked one
   question. Then said "yes, it works" before stating the one manual step it needs.
-- **A stray run:** launched an internet-on relaunch (`step4-slosh-head-r`) that now holds a GPU slot.
+- **A stray run:** launched an internet-on relaunch (`step4-slosh-head-r`) that held a GPU slot until it was deleted.
+- **Left mess behind:** 78 notebooks piled up before anyone cleaned up; he had to demand it angrily. Clean up as you go.
 - **Relaying Neon:** relayed Neon's P100 advice twice before checking that the P100 still exists.
