@@ -1,3 +1,57 @@
+# 0004 report (final, after 0005): energy-closure audit of 4.5. (a) refuted; (b) partial only; (c) adjoint break PROVED, ratio 3.09, mostly interior foam, not rotation, not the mass floor; (d) books telescope exactly, projection adds energy
+
+23 Nov 2026, 22:25 UTC. Final full run: Kaggle CPU, step4-energy-audit-cpu v4, 21:34:12-22:16:24 UTC, code 49839c5 (enable_ls_extend fix
+of 0005 included). GPU used: 0 s. Outputs notes/spill/step4/audit_0004/full_v4/. Marks as fixed in da8f611, unchanged.
+Default path (Fact, full_v4/default_path_identity.json): at 1.5 mm, 3 steps of the 4.5 set-up, every state array of the 5acb718 solver
+equals the current solver's bit for bit (audit off), and the motion is identical with audit on. The fix and the logging change nothing.
+
+## Step 4, the 3 mm instrumented slosh, window 0.2009-1.0015 s (Fact, full_v4/slosh_audit_full_summary.json; 653 steps, no particle lost)
+Raw table (Neon section 5), mJ:
+| -dKE 0.0370 | -dPE 1.2618 | -dU_el 0.0153 | -dE_mech 1.2988 | -dE_tot 1.3141 | PE(t_b) - PE(0) -0.148 |
+| E_plastic 0.8711 | E_drop 0.9033 | E_wall_foam 0.5103 | E_wall_stout 0.0869 | E_visc_stout 0.0091 |
+| W_stress_grid 0.2771 | W_constit 0.8558 | ratio 3.088 | E_num -0.1632 | closure on E_tot (all sinks) 1.124 |
+E_plastic split: mass-floor particles 0.0960, within 1.5 dx of the wall 0.2345, interior 0.5406. Shadow cell-strain (no rotation)
+E_plastic_cellD 0.9190 (E_plastic - cellD = -0.048). Grid work on mass-floor faces -0.041. U_el(0.2) 0.0186, U_el(1.0) 0.0033.
+Ledger (window sums): dE_P2G +2.5058, dE_visc -0.0091, dE_wall -0.5971, dE_dev -0.2771, dE_grav_proj +0.0878, dE_G2P_coll -3.0091;
+sum -1.29880 = dE_mech -1.29880.
+| mark | number | result |
+| (b) min(U_el) >= -1e-12 J | 0.0 | PASS |
+| (b) U_el(0.2) > U_el(1.0) | 0.0186 > 0.0033 mJ | PASS |
+| (b) alone explains: sinks/(-dE_mech) > 1.25 and r_tot <= 1.02 and abs(r_tot - 1) < 0.25 | 1.130, r_tot 1.117 | FAIL (b not the sole cause) |
+| (b) r_tot > 1.05: partial contributor only | 1.117 | PASS (partial only) |
+| (c) adjoint abs(W_constit / W_stress_grid - 1) < 0.05 | 3.088 | FAIL |
+| (c) proved: W_constit / W_stress_grid > 1.15 | 3.088 | PASS (c proved) |
+| (d) telescoping abs(sum - dE_mech) < 1e-7 J | 2.5e-16 J | PASS |
+| (d) wall logger abs(-dE_wall / (E_wall_foam + E_wall_stout) - 1) < 0.02 | 1.0000000004 | PASS |
+| (d) dE_grav_proj <= 0.02 (-dE_mech) = 0.026 mJ | +0.088 mJ | FAIL |
+| (d) dE_G2P_coll <= 0.02 (-dE_mech) | -3.009 mJ | PASS |
+
+## What the numbers prove or refute
+- (a) factor bug in the e_plastic line: REFUTED (slab: E_plastic / W_grav 1.0019, / E_drop 0.9891).
+- (b) missing elastic store: REAL but small: -dU_el 0.015 mJ at 3 mm; partial contributor only.
+- (c) F_dev / C not adjoint: PROVED. The foam's constitutive work (0.856 mJ) is 3.09 times the work its stress force takes out of the grid
+  (0.277 mJ). Where (Fact): 62 % of E_plastic is interior foam, 27 % near the wall, 11 % at mass-floor particles; the no-rotation shadow
+  gives the same E_plastic within 5.5 % (0.919 vs 0.871), so the rotation term and the mass floor are not the main cause at this grid.
+  Inference (not tested): the strain rate C read by G2P carries velocity differences that the stress force did not create (projection,
+  friction, the P2G/G2P transfer), so the return map dissipates energy that the transfers also remove; the books then count it twice.
+- (d) books: the six sub-steps telescope to round-off and the wall logger is exact. The pressure-plus-gravity step ADDS 0.088 mJ (6.8 % of
+  -dE_mech) over the window: a second, smaller error in the projection (cut cells, Inference). P2G/G2P swing +2.51 / -3.01 mJ, net -0.50.
+- Grid dependence (Fact): the overshoot is +13 % at 3 mm (sinks / -dE_mech 1.130) against +51 % at 1.5 mm (4.5 Part C). Not explained yet.
+
+## Rotation check and slab (as before, unchanged in v4)
+Rotation: max s 7.48 Pa, E_plastic 1.89 J/m^3, both FAIL as set by construction (yield after 108 steps at 30 rad/s). Slab marks: W_grav
+PASS, E_drop PASS, W_stress_grid FAIL (badly defined: floor faces; 0.670 above them).
+
+## Needs the owner
+- The fix is decided after this report (0004). Candidates the numbers point to: make the stress force and the return map work-consistent
+  (C from the same grid velocity the stress force acted on), and look at the projection's +0.088 mJ. No change made.
+
+## Clean up
+- Kept: notebook step4-energy-audit-cpu (the fix will need a rerun), all outputs. Scratch launch files deleted.
+
+---
+Earlier sections (before 0005), kept for the record:
+
 # 0004 report: energy-closure audit. Test (a) refutes a factor bug in E_plastic; rotation check fails as predicted; the 3 mm slosh (b, c, d-ledger) is blocked by an old crash in enable_ls_extend (needs the owner)
 
 23 Nov 2026, ~21:30 UTC. Branch claude/guinness-projection-fix. GPU used: 0 s. Every run on Kaggle CPU, notebook step4-energy-audit-cpu

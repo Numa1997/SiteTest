@@ -1,0 +1,41 @@
+{
+ "audit_on_motion_identical": {
+  "xp": true,
+  "vp": true,
+  "C": true,
+  "be": true,
+  "act": true,
+  "p": true,
+  "wh": true
+ },
+ "steps": 3,
+ "dx": 0.0015,
+ "old_sha256_of_file": "e6b3d00f40ed299b63e5e2eaec872a86c9f23791e79c49b9ae421e193438c376",
+ "keys": {
+  "C": true,
+  "act": true,
+  "be": true,
+  "bptr": true,
+  "bv": true,
+  "bvol": true,
+  "bx": true,
+  "efoam": true,
+  "eskin": true,
+  "ewall": true,
+  "fly": true,
+  "foam0": true,
+  "foam_spill": true,
+  "hf": true,
+  "is_head": true,
+  "landed": true,
+  "p": true,
+  "pmass": true,
+  "pvol": true,
+  "stuck": true,
+  "vp": true,
+  "wh": true,
+  "xp": true
+ },
+ "all_identical": true,
+ "extra_keys_new": []
+}

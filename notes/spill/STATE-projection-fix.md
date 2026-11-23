@@ -553,3 +553,7 @@ u_after_Fdev^2) (slab: before the floor faces are zeroed; the version without th
   array of the 5acb718 solver equals the fixed solver's bit for bit with audit off (all_identical True), and with audit on the motion (xp,
   vp, C, be, act, p, wh) is identical too (smoke_v3/default_path_identity.json). 3 mm slosh starts: grid 108 x 46 x 90, N 149 596, about
   3 s a step on CPU. Outputs notes/spill/step4/audit_0004/smoke_v3/.
+- 23 Nov 21:34:12-22:16:24 UTC: full audit v4 (Kaggle CPU, code 49839c5). Identity at 1.5 mm PASS again. 3 mm slosh, window 0.2009-1.0015 s:
+  -dE_mech 1.299 mJ, -dU_el 0.015, E_plastic 0.871, E_wall_foam 0.510, E_wall_stout 0.087, E_visc 0.009; sinks / -dE_mech 1.130, r_tot 1.117;
+  W_constit 0.856 vs W_stress_grid 0.277 (ratio 3.09, (c) PROVED); E_plastic split mfloor 0.096 / wall 0.234 / interior 0.541; no-rotation
+  shadow 0.919; ledger telescopes to 2.5e-16 J; dE_grav_proj +0.088 mJ (FAIL, > 2 %). Report notes/coord/to-coordinator/0004-report.md.
