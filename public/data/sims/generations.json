@@ -1348,6 +1348,29 @@
    "dataset": "numakoudsie/fig2-double-pendulum",
    "dataset_path": "phyein-usul-simulations/v6/",
    "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 6, 7054567606 bytes, filed as one version of this dataset"
+  },
+  {
+   "sim": "coupled",
+   "date": "2026-11-23",
+   "notebook": "numakoudsie/phyein-usul-simulations",
+   "version": 10,
+   "commit": "257429e4a5e6f3c036c8a5aa9d3be10667230ce4",
+   "index": "coupled/2026-11-23/index-coupled.json",
+   "files": {
+    "coupled.bin": {
+     "bytes": 4245,
+     "sha256": "3e3bccd3213b996d6f237ac34a41fa8390f535fd49dc597a394a79f4783922e5"
+    },
+    "coupled.json": {
+     "bytes": 1171,
+     "sha256": "02261fd640da6e9461d994218d666aad6bee515ade384f76a74983f769ace892"
+    }
+   },
+   "wall_s": 4.9,
+   "collected": "2026-11-23T22:55:13+00:00",
+   "dataset": "numakoudsie/phyein-usul-coupled",
+   "dataset_path": "phyein-usul-simulations/v10/",
+   "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 10, 5416 bytes, filed as one version of this dataset"
   }
  ]
 }

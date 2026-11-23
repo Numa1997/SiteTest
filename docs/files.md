@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7147 files, 982.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7150 files, 982.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -16,7 +16,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 37 |
-| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4799 |
+| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4802 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
@@ -4909,11 +4909,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/data/sims/barton/2026-11-21/barton.bin`](../public/data/sims/barton/2026-11-21/barton.bin) | 44.3 kB | Simulation data computed on Kaggle on 2026-11-21: the frames of barton, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/barton/2026-11-21/barton.json`](../public/data/sims/barton/2026-11-21/barton.json) | 1.7 kB | Simulation data computed on Kaggle on 2026-11-21: parameters and checks of the barton model run. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/barton/2026-11-21/index-barton.json`](../public/data/sims/barton/2026-11-21/index-barton.json) | 637 B | Simulation data computed on Kaggle on 2026-11-21: provenance of the barton run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/coupled/2026-11-23/coupled.bin`](../public/data/sims/coupled/2026-11-23/coupled.bin) | 4.2 kB | Simulation data computed on Kaggle on 2026-11-23: the frames of coupled, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/coupled/2026-11-23/coupled.json`](../public/data/sims/coupled/2026-11-23/coupled.json) | 1.2 kB | Simulation data computed on Kaggle on 2026-11-23: parameters and checks of the coupled model run. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/coupled/2026-11-23/index-coupled.json`](../public/data/sims/coupled/2026-11-23/index-coupled.json) | 640 B | Simulation data computed on Kaggle on 2026-11-23: provenance of the coupled run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_gpu/2026-11-23/double_pendulum.json`](../public/data/sims/double_pendulum_gpu/2026-11-23/double_pendulum.json) | 802.0 kB | Simulation data computed on Kaggle on 2026-11-23: parameters and checks of the double_pendulum_gpu model run. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_gpu/2026-11-23/index-double_pendulum_gpu.json`](../public/data/sims/double_pendulum_gpu/2026-11-23/index-double_pendulum_gpu.json) | 3.7 kB | Simulation data computed on Kaggle on 2026-11-23: provenance of the double_pendulum_gpu run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_smoke/2026-11-23/double_pendulum.json`](../public/data/sims/double_pendulum_smoke/2026-11-23/double_pendulum.json) | 2.3 kB | Simulation data computed on Kaggle on 2026-11-23: parameters and checks of the double_pendulum_smoke model run. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json`](../public/data/sims/double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json) | 678 B | Simulation data computed on Kaggle on 2026-11-23: provenance of the double_pendulum_smoke run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
-| [`public/data/sims/generations.json`](../public/data/sims/generations.json) | 46.6 kB | Simulation data computed on Kaggle: one entry per simulation and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/sims/pipeline.py. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/generations.json`](../public/data/sims/generations.json) | 47.4 kB | Simulation data computed on Kaggle: one entry per simulation and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/sims/pipeline.py. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g000_hi.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g000_hi.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.000, top half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g000_lo.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g000_lo.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.000, bottom half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g025_hi.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g025_hi.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.025, top half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |

@@ -1,0 +1,28 @@
+{
+ "project": "sims",
+ "job": "coupled",
+ "date": "2026-11-23",
+ "source": {
+  "repo": "Numa1997/SiteTest",
+  "commit": "257429e4a5e6f3c036c8a5aa9d3be10667230ce4",
+  "path": "tools/sims/coupled.py"
+ },
+ "machine": {
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "cpus": 4,
+  "python": "3.13.18",
+  "numpy": "2.1.3",
+  "scipy": "1.16.3"
+ },
+ "files": {
+  "coupled.bin": {
+   "bytes": 4245,
+   "sha256": "3e3bccd3213b996d6f237ac34a41fa8390f535fd49dc597a394a79f4783922e5"
+  },
+  "coupled.json": {
+   "bytes": 1171,
+   "sha256": "02261fd640da6e9461d994218d666aad6bee515ade384f76a74983f769ace892"
+  }
+ },
+ "wall_s": 4.881231307983398
+}
