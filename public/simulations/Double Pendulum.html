@@ -6,7 +6,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Double Pendulum Chaos · Numa Koudsie</title>
-    <meta name="description" content="Interactive double pendulum integrated with RK4: adjustable masses, lengths and initial conditions, energy check and a chaos twin that starts 0.001 rad away.">
+    <meta name="description" content="Double pendulum played from runs computed once on Kaggle with DOP853: three mass and three length ratios, starting angles every 30°, energy check and a chaos twin that starts 0.001 rad away.">
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
@@ -43,10 +43,10 @@
         <div class="sim__grid">
             <figure class="stage">
                 <div class="stage__canvas" id="stage" style="--ar: 16 / 10; --ar-m: 1 / 1.05;">
-                    <canvas id="pend" aria-label="Double pendulum animation"></canvas>
+                    <canvas id="pend" aria-label="Double pendulum animation"></canvas><p id="dp-wait" style="position:absolute;left:0;right:0;top:42%;margin:0;padding:0 24px;text-align:center;font-size:14.5px;color:var(--muted)">The stored motion is being loaded and checked; the picture appears when it has arrived.</p>
                 </div>
                 <figcaption class="stage__cap">
-                    <span><b>Fig. 2</b> · double pendulum · RK4, <span class="tx">\(h = 1/600\ \mathrm{s}\)</span></span>
+                    <span><b>Fig. 2</b> · double pendulum · stored runs, DOP853, computed once on Kaggle</span>
                     <span id="cap-t"><i>t</i> = 0.0 s</span>
                 </figcaption>
             </figure>
@@ -70,11 +70,11 @@
                     <p class="panel__label">Coupling</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Mass ratio m<sub>2</sub>/m<sub>1</sub></span><output id="mass-out" for="mass"></output></span>
-                        <input type="range" id="mass" min="-2.3" max="2.3" step="0.05" value="0">
+                        <input type="range" id="mass" min="-2.3" max="2.3" step="2.3" value="0">
                     </label>
                     <label class="ctl">
                         <span class="ctl__row"><span>Length ratio l<sub>2</sub>/l<sub>1</sub></span><output id="length-out" for="length"></output></span>
-                        <input type="range" id="length" min="-1.6" max="1.6" step="0.05" value="0">
+                        <input type="range" id="length" min="-1.6" max="1.6" step="1.6" value="0">
                     </label>
                 </div>
 
@@ -82,20 +82,13 @@
                     <p class="panel__label">Initial conditions</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Angle θ<sub>1</sub></span><output id="th1-out" for="th1"></output></span>
-                        <input type="range" id="th1" min="-180" max="180" step="1" value="120">
+                        <input type="range" id="th1" min="-180" max="180" step="30" value="120">
                     </label>
                     <label class="ctl">
                         <span class="ctl__row"><span>Angle θ<sub>2</sub></span><output id="th2-out" for="th2"></output></span>
-                        <input type="range" id="th2" min="-180" max="180" step="1" value="150">
+                        <input type="range" id="th2" min="-180" max="180" step="30" value="150">
                     </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Angular velocity ω<sub>1</sub></span><output id="w1-out" for="w1"></output></span>
-                        <input type="range" id="w1" min="-5" max="5" step="0.1" value="0">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Angular velocity ω<sub>2</sub></span><output id="w2-out" for="w2"></output></span>
-                        <input type="range" id="w2" min="-5" max="5" step="0.1" value="0">
-                    </label>
+                    <p class="ctl" style="margin:0">Released from rest, ω<sub>1</sub> = ω<sub>2</sub> = 0. The sliders move in the steps of the stored runs: angles every 30°, ratios at the two ends and the middle.</p>
                 </div>
 
                 <dl class="readouts">
@@ -455,124 +448,175 @@
     (function () {
         'use strict';
         var T = Sim.theme;
-        var g = 9.81, m1 = 1, l1 = 1, EPS = 0.001, H = 1 / 600;
+        /* Nothing on this page moves the pendulum. Every run was computed once on Kaggle by tools/sims/double_pendulum.py (DOP853,
+           docs/kaggle-sims.md), stored under data/sims/double_pendulum/<date>/, and is here only downloaded, checked against its
+           SHA-256 and drawn. Between two stored frames the bobs are drawn on a cubic through both frames (see play() below). */
+        var DATA = '../data/sims/', SIM = 'double_pendulum', GEN = null, FILES = {}, SUM = null, P = null, want = '';
+        var g = 9.81, m1 = 1, l1 = 1, C = 9;
 
-        var stage = document.getElementById('stage');
+        var stage = document.getElementById('stage'), wait = document.getElementById('dp-wait');
         var box = Sim.canvas2d(document.getElementById('pend')), ctx = box.ctx;
         var trail = document.createElement('canvas'), tctx = trail.getContext('2d');
         var twinBox = document.getElementById('twin');
-        var m2, l2, state, twin, E0, simT = 0, acc = 0, ox, oy, scale, prevA = null, prevB = null, frames = 0, lastN = 0;
-        var fps = 0;
+        var m2, l2, run = 0, tau = 0, S = 0, ox, oy, scale, prevA = null, prevB = null, frames = 0, fps = 0;
+        var cur = null, drawn = null;   /* the stored frame read now (decoded), and the angles drawn now */
+        var DP = window.DPstate = { ok: false, err: null, sha_ok: false, gen: null, file: '', frames: 0 };   /* what tools/sims/verify_live.py asks */
 
-        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
-        var ds = Sim.dataset({ title: 'Double pendulum', attrs: { figure: 2, page: 'Double Pendulum.html', g: g, m1: m1, l1: l1, EPS: EPS, H: H, integrator: 'fourth-order Runge–Kutta at a fixed step', units: 'SI: kg, m, s, rad' } });
-        ds.var('m2', [], 'float', { symbol: 'm<sub>2</sub>', units: 'kg', long_name: 'lower bob mass', computed_in: 'restart()', formula: 'm<sub>2</sub> = m<sub>1</sub> e<sup>slider</sup>', digits: 4 });
-        ds.var('l2', [], 'float', { symbol: 'l<sub>2</sub>', units: 'm', long_name: 'lower rod length', computed_in: 'restart()', formula: 'l<sub>2</sub> = l<sub>1</sub> e<sup>slider</sup>', digits: 4 });
-        ds.var('th1_0', [], 'float', { symbol: 'θ<sub>1</sub>(0)', units: 'rad', long_name: 'starting angle of the upper rod, from the downward vertical', computed_in: 'restart()', formula: 'slider · π / 180', digits: 4 });
-        ds.var('th2_0', [], 'float', { symbol: 'θ<sub>2</sub>(0)', units: 'rad', long_name: 'starting angle of the lower rod', computed_in: 'restart()', formula: 'slider · π / 180', digits: 4 });
-        ds.var('w1_0', [], 'float', { symbol: 'ω<sub>1</sub>(0)', units: 'rad/s', long_name: 'starting angular velocity, upper', computed_in: 'restart()', formula: 'the slider value', digits: 2 });
-        ds.var('w2_0', [], 'float', { symbol: 'ω<sub>2</sub>(0)', units: 'rad/s', long_name: 'starting angular velocity, lower', computed_in: 'restart()', formula: 'the slider value', digits: 2 });
+        /* ---------- the store: every number the page shows is written here where it is read or worked out (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Double pendulum', attrs: { figure: 2, page: 'Double Pendulum.html', g: g, m1: m1, l1: l1, EPS: 0.001, model: 'tools/sims/double_pendulum.py', integrator: 'DOP853 (SciPy), rtol 1e-10, atol 1e-12, run once on Kaggle', units: 'SI: kg, m, s, rad' } });
+        ds.var('file', [], 'str', { symbol: 'file', long_name: 'the stored file played now', computed_in: 'restart()', source: 'The cell and θ₁ chosen by the sliders.' });
+        ds.var('gdate', [], 'str', { symbol: 'date', long_name: 'date of the Kaggle run that made it', computed_in: 'load()', source: 'generations.json' });
+        ds.var('commit', [], 'str', { symbol: 'commit', long_name: 'commit of the model Kaggle ran', computed_in: 'load()', source: 'generations.json' });
+        ds.var('sha_ok', [], 'bool', { symbol: 'SHA-256', long_name: 'the file’s fingerprint equals the one in generations.json', computed_in: 'load()', source: 'crypto.subtle, compared in load().' });
+        ds.var('m2', [], 'float', { symbol: 'm<sub>2</sub>', units: 'kg', long_name: 'lower bob mass', computed_in: 'the file header', formula: 'm<sub>2</sub> = m<sub>1</sub> e<sup>ln(m₂/m₁)</sup>', digits: 4 });
+        ds.var('l2', [], 'float', { symbol: 'l<sub>2</sub>', units: 'm', long_name: 'lower rod length', computed_in: 'the file header', formula: 'l<sub>2</sub> = l<sub>1</sub> e<sup>ln(l₂/l₁)</sup>', digits: 4 });
+        ds.var('th1_0', [], 'float', { symbol: 'θ<sub>1</sub>(0)', units: 'rad', long_name: 'starting angle of the upper rod, from the downward vertical', computed_in: 'the file header', formula: 'stored start, in degrees · π / 180', digits: 4 });
+        ds.var('th2_0', [], 'float', { symbol: 'θ<sub>2</sub>(0)', units: 'rad', long_name: 'starting angle of the lower rod', computed_in: 'the file header', formula: 'stored start, in degrees · π / 180', digits: 4 });
+        ds.var('w1_0', [], 'float', { symbol: 'ω<sub>1</sub>(0)', units: 'rad/s', long_name: 'starting angular velocity, upper: every stored run is released from rest', computed_in: 'the file header', digits: 2 });
+        ds.var('w2_0', [], 'float', { symbol: 'ω<sub>2</sub>(0)', units: 'rad/s', long_name: 'starting angular velocity, lower', computed_in: 'the file header', digits: 2 });
         ds.var('speed', [], 'float', { symbol: 'time scale', units: '×', long_name: 'simulated seconds per real second', computed_in: 'speed slider', digits: 2 });
+        ds.var('fps_data', [], 'float', { symbol: 'f', units: '1/s', long_name: 'stored frames per second of this file', computed_in: 'the file header', digits: 0 });
+        ds.var('nframes', [], 'int', { symbol: 'N', long_name: 'stored frames of one run, t = 0 to 20 s', computed_in: 'the file header', digits: 0 });
+        ds.var('k', [], 'int', { symbol: 'k', long_name: 'the stored frame read now, the last one at or before t', computed_in: 'play()', formula: 'k = floor(t f)', digits: 0 });
+        ds.var('tk', [], 'float', { symbol: 't<sub>k</sub>', units: 's', long_name: 'time of that stored frame', computed_in: 'play()', formula: 't<sub>k</sub> = k / f', digits: 3 });
         ds.dim('q', 4);
-        ds.var('y', ['q'], Float64Array, { symbol: 'y', long_name: 'the state vector (θ₁, θ₂, ω₁, ω₂) the integrator advances', computed_in: 'rk4(), stored in diagnostics()', digits: 5, updates: 'once per frame in diagnostics()' });
-        ds.var('dydt', ['q'], Float64Array, { symbol: 'dy/dt', long_name: 'its time derivative (ω₁, ω₂, α₁, α₂)', computed_in: 'deriv(), in diagnostics()', formula: 'deriv(y)', digits: 4, updates: 'every frame' });
-        ds.var('y_twin', ['q'], Float64Array, { symbol: 'y′', long_name: 'the chaos twin’s state; zeros while the twin is off', computed_in: 'rk4(), stored in diagnostics()', digits: 5, updates: 'once per frame in diagnostics()' });
-        ds.var('th1', [], 'float', { symbol: 'θ<sub>1</sub>', units: 'rad', long_name: 'upper rod angle', computed_in: 'rk4(), stored once per frame in diagnostics()', formula: 'y[0]', digits: 4 });
-        ds.var('th2', [], 'float', { symbol: 'θ<sub>2</sub>', units: 'rad', long_name: 'lower rod angle', computed_in: 'rk4(), stored once per frame in diagnostics()', formula: 'y[1]', digits: 4 });
-        ds.var('w1', [], 'float', { symbol: 'ω<sub>1</sub>', units: 'rad/s', long_name: 'upper angular velocity', computed_in: 'rk4(), stored once per frame in diagnostics()', formula: 'y[2]', digits: 4 });
-        ds.var('w2', [], 'float', { symbol: 'ω<sub>2</sub>', units: 'rad/s', long_name: 'lower angular velocity', computed_in: 'rk4(), stored once per frame in diagnostics()', formula: 'y[3]', digits: 4 });
-        ds.var('delta', [], 'float', { symbol: 'δ', units: 'rad', long_name: 'angle between the rods', computed_in: 'deriv()', formula: 'δ = θ<sub>1</sub> − θ<sub>2</sub>', digits: 4 });
-        ds.var('den', [], 'float', { symbol: 'D′', units: 'kg', long_name: 'shared denominator of both accelerations', computed_in: 'deriv()', formula: 'D′ = 2m<sub>1</sub> + m<sub>2</sub> − m<sub>2</sub> cos 2δ', digits: 4 });
-        ds.var('alpha1', [], 'float', { symbol: 'α<sub>1</sub>', units: 'rad/s²', long_name: 'upper angular acceleration', computed_in: 'deriv()', formula: '[−g(2m₁+m₂) sin θ₁ − m₂ g sin(θ₁−2θ₂) − 2 sin δ m₂ (ω₂² l₂ + ω₁² l₁ cos δ)] / (l₁ D′)', digits: 4 });
-        ds.var('alpha2', [], 'float', { symbol: 'α<sub>2</sub>', units: 'rad/s²', long_name: 'lower angular acceleration', computed_in: 'deriv()', formula: '2 sin δ [ω₁² l₁ (m₁+m₂) + g (m₁+m₂) cos θ₁ + ω₂² l₂ m₂ cos δ] / (l₂ D′)', digits: 4 });
+        ds.var('y', ['q'], Float64Array, { symbol: 'y', long_name: 'the stored state (θ₁, θ₂, ω₁, ω₂) of frame k', computed_in: 'frame(), from the int16 file', digits: 5, updates: 'every frame' });
+        ds.var('dydt', ['q'], Float64Array, { symbol: 'dy/dt', long_name: 'its stored time derivative (ω₁, ω₂, α₁, α₂)', computed_in: 'frame(), from the int16 file', digits: 4, updates: 'every frame' });
+        ds.dim('p', 2);
+        ds.var('y_twin', ['p'], Float64Array, { symbol: 'y′', long_name: 'the chaos twin’s stored angles (θ′₁, θ′₂) of frame k; zeros while the twin is off', computed_in: 'frame(), from the int16 file', digits: 5, updates: 'every frame' });
+        ds.var('th1', [], 'float', { symbol: 'θ<sub>1</sub>', units: 'rad', long_name: 'upper rod angle, stored frame k', computed_in: 'frame()', formula: 'y[0]', digits: 4 });
+        ds.var('th2', [], 'float', { symbol: 'θ<sub>2</sub>', units: 'rad', long_name: 'lower rod angle, stored frame k', computed_in: 'frame()', formula: 'y[1]', digits: 4 });
+        ds.var('w1', [], 'float', { symbol: 'ω<sub>1</sub>', units: 'rad/s', long_name: 'upper angular velocity, stored frame k', computed_in: 'frame()', formula: 'y[2]', digits: 4 });
+        ds.var('w2', [], 'float', { symbol: 'ω<sub>2</sub>', units: 'rad/s', long_name: 'lower angular velocity, stored frame k', computed_in: 'frame()', formula: 'y[3]', digits: 4 });
+        ds.var('alpha1', [], 'float', { symbol: 'α<sub>1</sub>', units: 'rad/s²', long_name: 'upper angular acceleration, computed by the model and stored', computed_in: 'frame()', formula: '[−g(2m₁+m₂) sin θ₁ − m₂ g sin(θ₁−2θ₂) − 2 sin δ m₂ (ω₂² l₂ + ω₁² l₁ cos δ)] / (l₁ D′)', digits: 4 });
+        ds.var('alpha2', [], 'float', { symbol: 'α<sub>2</sub>', units: 'rad/s²', long_name: 'lower angular acceleration, computed by the model and stored', computed_in: 'frame()', formula: '2 sin δ [ω₁² l₁ (m₁+m₂) + g (m₁+m₂) cos θ₁ + ω₂² l₂ m₂ cos δ] / (l₂ D′)', digits: 4 });
+        ds.var('delta', [], 'float', { symbol: 'δ', units: 'rad', long_name: 'angle between the rods', computed_in: 'bookkeeping()', formula: 'δ = θ<sub>1</sub> − θ<sub>2</sub>', digits: 4 });
+        ds.var('den', [], 'float', { symbol: 'D′', units: 'kg', long_name: 'shared denominator of both accelerations', computed_in: 'bookkeeping()', formula: 'D′ = 2m<sub>1</sub> + m<sub>2</sub> − m<sub>2</sub> cos 2δ', digits: 4 });
         ds.dim('a', 2);
         ds.dim('b', 2);
-        ds.var('M', ['a', 'b'], Float64Array, { symbol: 'M', units: 'kg m²', long_name: 'mass matrix of the Lagrangian: T = ½ ω<sup>T</sup> M ω', computed_in: 'diagnostics()', formula: '[[(m₁+m₂) l₁², m₂ l₁ l₂ cos δ], [m₂ l₁ l₂ cos δ, m₂ l₂²]]', digits: 4, updates: 'every frame, through cos δ', cw: 96 });
-        ds.var('detM', [], 'float', { symbol: 'det M', units: 'kg² m⁴', long_name: 'never zero: m₂ l₁² l₂² (m₁ + m₂ sin² δ)', computed_in: 'diagnostics()', formula: 'M₀₀ M₁₁ − M₀₁²', digits: 4 });
-        ds.var('p1', [], 'float', { symbol: 'p<sub>θ₁</sub>', units: 'kg m²/s', long_name: 'generalised momentum ∂L/∂ω₁', computed_in: 'diagnostics()', formula: 'M₀₀ ω₁ + M₀₁ ω₂', digits: 4 });
-        ds.var('p2', [], 'float', { symbol: 'p<sub>θ₂</sub>', units: 'kg m²/s', long_name: 'generalised momentum ∂L/∂ω₂', computed_in: 'diagnostics()', formula: 'M₁₀ ω₁ + M₁₁ ω₂', digits: 4 });
-        ds.var('T', [], 'float', { symbol: 'T', units: 'J', long_name: 'kinetic energy', computed_in: 'diagnostics()', formula: 'T = E − V', digits: 4 });
-        ds.var('V', [], 'float', { symbol: 'V', units: 'J', long_name: 'potential energy, zero at the pivot', computed_in: 'diagnostics()', formula: 'V = −(m₁+m₂) g l₁ cos θ₁ − m₂ g l₂ cos θ₂', digits: 4 });
-        ds.var('L', [], 'float', { symbol: 'L', units: 'J', long_name: 'Lagrangian', computed_in: 'diagnostics()', formula: 'L = T − V', digits: 4 });
-        ds.var('E', [], 'float', { symbol: 'E', units: 'J', long_name: 'total energy now', computed_in: 'energy(state), in diagnostics()', formula: 'kinetic + potential', digits: 6 });
-        ds.var('E0', [], 'float', { symbol: 'E<sub>0</sub>', units: 'J', long_name: 'total energy at restart', computed_in: 'energy(state), in restart()', digits: 6, source: 'Stored once at restart; the check recomputes E from the current state instead.' }); ds.var('E_sand', [], 'float', { symbol: 'E<sub>sand</sub>', units: 'J', long_name: 'energy the sand has brought in (out, if negative) since restart, while a curve changes m₂', computed_in: 'sand(), the parameter curve', formula: 'Σ [E(state, m₂ after) − E(state, m₂ before)]', digits: 4, source: 'Summed at each change of m₂; the same amount is added to E₀, so the drift stays the integrator’s error.' });
-        ds.var('drift', [], 'float', { symbol: 'ε', long_name: 'relative energy error of the integrator', computed_in: 'diagnostics()', formula: 'ε = (E − E₀) / ((m₁+m₂) g l₁ + m₂ g l₂)', digits: 4 });
-        ds.var('x1', [], 'float', { symbol: 'x<sub>1</sub>', units: 'm', long_name: 'bob 1, right of the pivot', computed_in: 'diagnostics()', formula: 'l₁ sin θ₁', digits: 4 });
-        ds.var('y1', [], 'float', { symbol: 'y<sub>1</sub>', units: 'm', long_name: 'bob 1, above the pivot', computed_in: 'diagnostics()', formula: '−l₁ cos θ₁', digits: 4 });
-        ds.var('x2', [], 'float', { symbol: 'x<sub>2</sub>', units: 'm', long_name: 'bob 2, right of the pivot', computed_in: 'diagnostics()', formula: 'x₁ + l₂ sin θ₂', digits: 4 });
-        ds.var('y2', [], 'float', { symbol: 'y<sub>2</sub>', units: 'm', long_name: 'bob 2, above the pivot', computed_in: 'diagnostics()', formula: 'y₁ − l₂ cos θ₂', digits: 4 });
-        ds.var('v1', [], 'float', { symbol: '|v<sub>1</sub>|', units: 'm/s', long_name: 'speed of bob 1', computed_in: 'diagnostics()', formula: 'l₁ |ω₁|', digits: 4 });
-        ds.var('v2', [], 'float', { symbol: '|v<sub>2</sub>|', units: 'm/s', long_name: 'speed of bob 2', computed_in: 'diagnostics()', formula: '|(l₁ ω₁ cos θ₁ + l₂ ω₂ cos θ₂, l₁ ω₁ sin θ₁ + l₂ ω₂ sin θ₂)|', digits: 4 });
-        ds.var('x1_px', [], 'float', { symbol: 'x<sub>1</sub> px', units: 'css px', long_name: 'bob 1 as drawn, from the left', computed_in: 'pos(state), in diagnostics()', formula: 'ox + l₁ σ sin θ₁', digits: 1 });
-        ds.var('y1_px', [], 'float', { symbol: 'y<sub>1</sub> px', units: 'css px', long_name: 'bob 1 as drawn, from the top', computed_in: 'pos(state), in diagnostics()', formula: 'oy + l₁ σ cos θ₁', digits: 1 });
-        ds.var('x2_px', [], 'float', { symbol: 'x<sub>2</sub> px', units: 'css px', long_name: 'bob 2 as drawn, from the left', computed_in: 'pos(state), in diagnostics()', formula: 'x₁px + l₂ σ sin θ₂', digits: 1 });
-        ds.var('y2_px', [], 'float', { symbol: 'y<sub>2</sub> px', units: 'css px', long_name: 'bob 2 as drawn, from the top', computed_in: 'pos(state), in diagnostics()', formula: 'y₁px + l₂ σ cos θ₂', digits: 1 });
-        ds.var('x1_twin_px', [], 'float', { symbol: 'x′<sub>1</sub> px', units: 'css px', long_name: 'twin bob 1 as drawn, from the left', computed_in: 'pos(twin), in diagnostics()', formula: 'ox + l₁ σ sin θ′₁', digits: 1 });
-        ds.var('y1_twin_px', [], 'float', { symbol: 'y′<sub>1</sub> px', units: 'css px', long_name: 'twin bob 1 as drawn, from the top', computed_in: 'pos(twin), in diagnostics()', formula: 'oy + l₁ σ cos θ′₁', digits: 1 });
-        ds.var('x2_twin_px', [], 'float', { symbol: 'x′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the left', computed_in: 'pos(twin), in diagnostics()', formula: 'x′₁px + l₂ σ sin θ′₂', digits: 1 });
-        ds.var('y2_twin_px', [], 'float', { symbol: 'y′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the top', computed_in: 'pos(twin), in diagnostics()', formula: 'y′₁px + l₂ σ cos θ′₂', digits: 1 });
+        ds.var('M', ['a', 'b'], Float64Array, { symbol: 'M', units: 'kg m²', long_name: 'mass matrix of the Lagrangian: T = ½ ω<sup>T</sup> M ω', computed_in: 'bookkeeping()', formula: '[[(m₁+m₂) l₁², m₂ l₁ l₂ cos δ], [m₂ l₁ l₂ cos δ, m₂ l₂²]]', digits: 4, updates: 'every frame, through cos δ', cw: 96 });
+        ds.var('detM', [], 'float', { symbol: 'det M', units: 'kg² m⁴', long_name: 'never zero: m₂ l₁² l₂² (m₁ + m₂ sin² δ)', computed_in: 'bookkeeping()', formula: 'M₀₀ M₁₁ − M₀₁²', digits: 4 });
+        ds.var('p1', [], 'float', { symbol: 'p<sub>θ₁</sub>', units: 'kg m²/s', long_name: 'generalised momentum ∂L/∂ω₁', computed_in: 'bookkeeping()', formula: 'M₀₀ ω₁ + M₀₁ ω₂', digits: 4 });
+        ds.var('p2', [], 'float', { symbol: 'p<sub>θ₂</sub>', units: 'kg m²/s', long_name: 'generalised momentum ∂L/∂ω₂', computed_in: 'bookkeeping()', formula: 'M₁₀ ω₁ + M₁₁ ω₂', digits: 4 });
+        ds.var('T', [], 'float', { symbol: 'T', units: 'J', long_name: 'kinetic energy of the stored frame', computed_in: 'bookkeeping()', formula: 'T = ½(m₁+m₂) l₁² ω₁² + ½ m₂ l₂² ω₂² + m₂ l₁ l₂ ω₁ ω₂ cos δ', digits: 4 });
+        ds.var('V', [], 'float', { symbol: 'V', units: 'J', long_name: 'potential energy, zero at the pivot', computed_in: 'bookkeeping()', formula: 'V = −(m₁+m₂) g l₁ cos θ₁ − m₂ g l₂ cos θ₂', digits: 4 });
+        ds.var('L', [], 'float', { symbol: 'L', units: 'J', long_name: 'Lagrangian', computed_in: 'bookkeeping()', formula: 'L = T − V', digits: 4 });
+        ds.var('E', [], 'float', { symbol: 'E', units: 'J', long_name: 'total energy of the stored frame, from its rounded numbers', computed_in: 'bookkeeping()', formula: 'E = T + V', digits: 6 });
+        ds.var('E0', [], 'float', { symbol: 'E<sub>0</sub>', units: 'J', long_name: 'total energy at the start, computed by the model', computed_in: 'the file header', digits: 6, source: 'Stored once per run by the model, in double precision.' });
+        ds.var('Escale', [], 'float', { symbol: 'E<sub>s</sub>', units: 'J', long_name: 'energy to lift both bobs from the bottom to the pivot', computed_in: 'the file header', formula: '(m₁+m₂) g l₁ + m₂ g l₂', digits: 4 });
+        ds.var('drift', [], 'float', { symbol: 'ε<sub>max</sub>', long_name: 'largest energy error of the model over this run, relative to E<sub>s</sub>', computed_in: 'the file header', digits: 4, source: 'Measured by the model at every step of DOP853.' });
+        ds.var('eps_store', [], 'float', { symbol: 'ε<sub>2 B</sub>', long_name: 'what storing each number in 2 bytes does to the energy of this frame', computed_in: 'bookkeeping()', formula: '(E − E<sub>0</sub>) / E<sub>s</sub>', digits: 4 });
+        ds.var('x1', [], 'float', { symbol: 'x<sub>1</sub>', units: 'm', long_name: 'bob 1, right of the pivot', computed_in: 'bookkeeping()', formula: 'l₁ sin θ₁', digits: 4 });
+        ds.var('y1', [], 'float', { symbol: 'y<sub>1</sub>', units: 'm', long_name: 'bob 1, above the pivot', computed_in: 'bookkeeping()', formula: '−l₁ cos θ₁', digits: 4 });
+        ds.var('x2', [], 'float', { symbol: 'x<sub>2</sub>', units: 'm', long_name: 'bob 2, right of the pivot', computed_in: 'bookkeeping()', formula: 'x₁ + l₂ sin θ₂', digits: 4 });
+        ds.var('y2', [], 'float', { symbol: 'y<sub>2</sub>', units: 'm', long_name: 'bob 2, above the pivot', computed_in: 'bookkeeping()', formula: 'y₁ − l₂ cos θ₂', digits: 4 });
+        ds.var('v1', [], 'float', { symbol: '|v<sub>1</sub>|', units: 'm/s', long_name: 'speed of bob 1', computed_in: 'bookkeeping()', formula: 'l₁ |ω₁|', digits: 4 });
+        ds.var('v2', [], 'float', { symbol: '|v<sub>2</sub>|', units: 'm/s', long_name: 'speed of bob 2', computed_in: 'bookkeeping()', formula: '|(l₁ ω₁ cos θ₁ + l₂ ω₂ cos θ₂, l₁ ω₁ sin θ₁ + l₂ ω₂ sin θ₂)|', digits: 4 });
+        ds.var('twin_on', [], 'bool', { symbol: 'twin on', long_name: 'a copy started 0.001 rad away is drawn alongside', computed_in: 'the Chaos twin switch', source: 'The state of the switch.' });
+        ds.var('log10sep', [], 'float', { symbol: 'log<sub>10</sub> d', long_name: 'grows roughly linearly in time while the motion is chaotic; computed by the model and stored', computed_in: 'frame()', digits: 3 });
+        ds.var('sep', [], 'float', { symbol: 'd', units: 'm', long_name: 'distance between the two lower bobs, stored frame k', computed_in: 'frame()', formula: '10<sup>log₁₀ d</sup>', digits: 6 });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'time in the stored run, played now', computed_in: 'Sim.clock callback', formula: 't ← t + Δt · time scale; back to 0 after 20 s', digits: 3 });
+        ds.var('u', [], 'float', { symbol: 'u', long_name: 'how far t is from frame k to frame k + 1', computed_in: 'play()', formula: 'u = t f − k', digits: 3 });
+        ds.var('th1_draw', [], 'float', { symbol: 'θ<sub>1</sub> drawn', units: 'rad', long_name: 'upper rod angle as drawn, between frames k and k + 1', computed_in: 'play()', formula: 'cubic through θ₁ and ω₁ of frames k and k + 1', digits: 4 });
+        ds.var('th2_draw', [], 'float', { symbol: 'θ<sub>2</sub> drawn', units: 'rad', long_name: 'lower rod angle as drawn', computed_in: 'play()', formula: 'cubic through θ₂ and ω₂ of frames k and k + 1', digits: 4 });
+        ds.var('x1_px', [], 'float', { symbol: 'x<sub>1</sub> px', units: 'css px', long_name: 'bob 1 as drawn, from the left', computed_in: 'pos(drawn), in play()', formula: 'ox + l₁ σ sin θ₁', digits: 1 });
+        ds.var('y1_px', [], 'float', { symbol: 'y<sub>1</sub> px', units: 'css px', long_name: 'bob 1 as drawn, from the top', computed_in: 'pos(drawn), in play()', formula: 'oy + l₁ σ cos θ₁', digits: 1 });
+        ds.var('x2_px', [], 'float', { symbol: 'x<sub>2</sub> px', units: 'css px', long_name: 'bob 2 as drawn, from the left', computed_in: 'pos(drawn), in play()', formula: 'x₁px + l₂ σ sin θ₂', digits: 1 });
+        ds.var('y2_px', [], 'float', { symbol: 'y<sub>2</sub> px', units: 'css px', long_name: 'bob 2 as drawn, from the top', computed_in: 'pos(drawn), in play()', formula: 'y₁px + l₂ σ cos θ₂', digits: 1 });
+        ds.var('x1_twin_px', [], 'float', { symbol: 'x′<sub>1</sub> px', units: 'css px', long_name: 'twin bob 1 as drawn, from the left', computed_in: 'pos(twin), in play()', formula: 'ox + l₁ σ sin θ′₁', digits: 1 });
+        ds.var('y1_twin_px', [], 'float', { symbol: 'y′<sub>1</sub> px', units: 'css px', long_name: 'twin bob 1 as drawn, from the top', computed_in: 'pos(twin), in play()', formula: 'oy + l₁ σ cos θ′₁', digits: 1 });
+        ds.var('x2_twin_px', [], 'float', { symbol: 'x′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the left', computed_in: 'pos(twin), in play()', formula: 'x′₁px + l₂ σ sin θ′₂', digits: 1 });
+        ds.var('y2_twin_px', [], 'float', { symbol: 'y′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the top', computed_in: 'pos(twin), in play()', formula: 'y′₁px + l₂ σ cos θ′₂', digits: 1 });
         ds.var('scale', [], 'float', { symbol: 'σ', units: 'px/m', long_name: 'pixels per metre on screen', computed_in: 'layout()', formula: '(min(box.w, box.h)/2 − 34) / (l₁ + l₂)', digits: 2 });
         ds.var('ox', [], 'float', { symbol: 'o<sub>x</sub>', units: 'css px', long_name: 'pivot, from the left', computed_in: 'layout()', formula: 'box.w / 2', digits: 1 });
         ds.var('oy', [], 'float', { symbol: 'o<sub>y</sub>', units: 'css px', long_name: 'pivot, from the top', computed_in: 'layout()', formula: 'box.h / 2', digits: 1 });
-        ds.var('twin_on', [], 'bool', { symbol: 'twin on', long_name: 'a copy started 0.001 rad away runs alongside', computed_in: 'the Chaos twin switch', source: 'The state of the switch.' });
-        ds.var('sep', [], 'float', { symbol: 'd', units: 'm', long_name: 'distance between the two lower bobs', computed_in: 'diagnostics()', formula: '|(x₂ − x₂′, y₂ − y₂′)|', digits: 6 });
-        ds.var('log10sep', [], 'float', { symbol: 'log<sub>10</sub> d', long_name: 'grows roughly linearly in time while the motion is chaotic', computed_in: 'diagnostics()', formula: 'log₁₀ d', digits: 3 });
-        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'simulated time since restart', computed_in: 'Sim.clock callback', formula: 't ← t + h per step', digits: 3, source: 'Accumulated step by step.' });
-        ds.var('n', [], 'int', { symbol: 'n', long_name: 'RK4 steps taken in the last frame', computed_in: 'Sim.clock callback', formula: 'min(floor(τ / h), 600); the current clock and speed limits request at most 46 steps', digits: 0 });
-        ds.var('steps', [], 'int', { symbol: 'steps', long_name: 'RK4 steps since restart', computed_in: 'diagnostics()', formula: 'round(t / h)', digits: 0 });
-        ds.var('acc', [], 'float', { symbol: 'τ', units: 's', long_name: 'unspent time carried to the next frame', computed_in: 'Sim.clock callback', digits: 6, source: 'What is left after whole steps are taken.' });
-        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'real time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
-        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
-        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'real time between the last two pictures', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'pictures per second on this screen, smoothed over about ten', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'pictures drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted picture by picture.' });
         ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
 
         function ratio(v) { var r = Math.exp(v); return r < 1 ? '1/' + (1 / r).toFixed(2) : r.toFixed(2); }
         function deg(v) { return Sim.fmt(v, 0) + '°'; }
-        function rads(v) { return Sim.fmt(v, 1) + ' rad/s'; }
-
         var mass = Sim.slider('mass', { format: ratio, onInput: restart });
         var len = Sim.slider('length', { format: ratio, onInput: restart });
         var th1 = Sim.slider('th1', { format: deg, onInput: restart });
         var th2 = Sim.slider('th2', { format: deg, onInput: restart });
-        var w1 = Sim.slider('w1', { format: rads, onInput: restart });
-        var w2 = Sim.slider('w2', { format: rads, onInput: restart });
-        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } }); var Esand = 0; function sand(v) { var before = energy(state); m2 = m1 * Math.exp(v); var dE = energy(state) - before; E0 += dE; Esand += dE; ds.set('m2', m2); ds.set('E0', E0); ds.set('E_sand', Esand); } var curve = Sim.curve({ ds: ds, after: document.querySelector('.sim__grid > .panel').querySelectorAll('.panel__group')[1], knobs: [{ id: 'mass', slider: mass, name: _t('Mass ratio m₂/m₁'), symbol: 'm₂/m₁', units: '', digits: 2, format: ratio, live: sand }, { id: 'speed', slider: speed, name: _t('Time scale'), symbol: _t('time scale'), units: '×', digits: 2 }], examples: [{ knob: 'mass', shape: 'line', from: -2.3, to: 2.3, T: 40, set: { mass: -2.3 }, name: _t('Sand pours into the lower bob'), why: _t('The lower bob fills with sand while it swings, from m₂/m₁ = 0.10 to 9.97 in 40 s, by the same factor every second: the slider is on a log scale, ln(m₂/m₁). The sand arrives moving with the bob, so it pushes nothing (in F + v<sub>rel</sub> dm/dt = m dv/dt the relative velocity is zero), and at every instant the equations of motion are the page’s own with the new m₂. Energy is no longer conserved: the sand brings its own, booked as E<sub>sand</sub>, so the drift still measures the integrator alone. Towards ratio 10 the heavy bob kicks the light upper rod hard, up to about 1300 rad/s² (§7), and the drift grows.') }, { knob: 'mass', shape: 'line', from: 2.3, to: -2.3, T: 40, set: { mass: 2.3 }, name: _t('The lower bob runs empty'), why: _t('The reverse: sand leaves the lower bob with the bob’s own velocity, from m₂/m₁ = 9.97 down to 0.10 in 40 s. It carries energy away, so E<sub>sand</sub> turns negative, and the bob drawn for m₂ shrinks as it empties.') }, { knob: 'speed', shape: 'jerk', from: 1, to: 0.25, T: 3, name: _t('Slow motion, without a jolt'), why: _t('Only the playback slows, from 1× to 0.25× along a minimum-jerk S-curve, so that the change of speed itself does not jolt. The physics and its RK4 steps are untouched: the page simply advances fewer simulated seconds per real second, a quarter at the end.') }], play: function () { clk.set(true); }, playing: function () { return clk.playing; }, extra: function () { return Esand ? _t('sand brought {E} J', { E: Sim.fmt(Esand, 2) }) : ''; } });
+        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
+        var curve = Sim.curve({ ds: ds, after: document.querySelector('.sim__grid > .panel').querySelectorAll('.panel__group')[1], knobs: [{ id: 'speed', slider: speed, name: _t('Time scale'), symbol: _t('time scale'), units: '×', digits: 2 }], examples: [{ knob: 'speed', shape: 'jerk', from: 1, to: 0.25, T: 3, name: _t('Slow motion, without a jolt'), why: _t('Only the playback slows, from 1× to 0.25× along a minimum-jerk S-curve, so that the change of speed itself does not jolt. The stored run is untouched: the page simply plays fewer of its seconds per real second, a quarter at the end.') }], play: function () { clk.set(true); }, playing: function () { return clk.playing; } });
 
-        function deriv(s) {
-            var t1 = s[0], t2 = s[1], o1 = s[2], o2 = s[3], d = t1 - t2;
-            var den = 2 * m1 + m2 - m2 * Math.cos(2 * d);
-            var a1 = (-g * (2 * m1 + m2) * Math.sin(t1) - m2 * g * Math.sin(t1 - 2 * t2)
-                - 2 * Math.sin(d) * m2 * (o2 * o2 * l2 + o1 * o1 * l1 * Math.cos(d))) / (l1 * den);
-            var a2 = (2 * Math.sin(d) * (o1 * o1 * l1 * (m1 + m2) + g * (m1 + m2) * Math.cos(t1)
-                + o2 * o2 * l2 * m2 * Math.cos(d))) / (l2 * den);
-            return [o1, o2, a1, a2];
+        /* ---------- the stored data: generations.json names the newest run of the model; every file is checked by its SHA-256 ---------- */
+        function hex(d) { return Array.prototype.map.call(new Uint8Array(d), function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }
+        function load(name) {
+            if (FILES[name]) return FILES[name];
+            GEN = GEN || fetch(DATA + 'generations.json').then(function (r) { if (!r.ok) throw new Error('generations.json ' + r.status); return r.json(); }).then(function (gj) {
+                var e = gj.generations.filter(function (q) { return q.sim === SIM; }).pop(); if (!e) throw new Error(_t('no stored generation of this simulation yet')); return e; });
+            return FILES[name] = GEN.then(function (e) {
+                if (!e.files[name]) throw new Error(name + ' is not in generations.json');
+                return fetch(DATA + SIM + '/' + e.date + '/' + name).then(function (r) { if (!r.ok) throw new Error(name + ' ' + r.status); return r.arrayBuffer(); }).then(function (buf) {
+                    return crypto.subtle.digest('SHA-256', buf).then(function (d) {
+                        if (hex(d) !== e.files[name].sha256) throw new Error(name + ': SHA-256 differs from generations.json');
+                        if (/\.json$/.test(name)) return { json: JSON.parse(new TextDecoder().decode(buf)), gen: e };
+                        var hl = new DataView(buf).getUint32(4, true), hdr = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, hl)));
+                        return { hdr: hdr, F: new Int16Array(buf.slice(8 + hl)), gen: e, name: name };
+                    });
+                });
+            }).catch(function (err) { delete FILES[name]; throw err; });
         }
-        function rk4(s, h) {
-            var k1 = deriv(s), i, s2 = [], s3 = [], s4 = [], out = [];
-            for (i = 0; i < 4; i++) s2[i] = s[i] + h / 2 * k1[i];
-            var k2 = deriv(s2);
-            for (i = 0; i < 4; i++) s3[i] = s[i] + h / 2 * k2[i];
-            var k3 = deriv(s3);
-            for (i = 0; i < 4; i++) s4[i] = s[i] + h * k3[i];
-            var k4 = deriv(s4);
-            for (i = 0; i < 4; i++) out[i] = s[i] + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+        function say(text) { wait.textContent = text; wait.hidden = !text; }
+
+        /* the sliders choose a cell (mass and length ratio), a file (θ₁) and a run in it (θ₂); all of them sit on the stored grid */
+        function nearestIndex(list, v) { var b = 0; list.forEach(function (x, i) { if (Math.abs(x - v) < Math.abs(list[b] - v)) b = i; }); return b; }
+        function restart() {
+            P = null; cur = drawn = null; tau = 0; say(_t('The stored motion is being loaded and checked; the picture appears when it has arrived.'));
+            load('double_pendulum.json').then(function (s) {
+                SUM = s.json; var p = SUM.params, a1 = th1.value <= -180 ? 180 : th1.value, a2 = th2.value <= -180 ? 180 : th2.value;
+                var name = 'dp_' + nearestIndex(p.ln_m, mass.value) + nearestIndex(p.ln_l, len.value) + '_' + ('0' + nearestIndex(p.th_deg, a1)).slice(-2) + '.bin';
+                want = name; run = nearestIndex(p.th_deg, a2); ds.set('file', name);
+                return load(name).then(function (d) { if (want === name) start(d); });
+            }).catch(function (err) { DP.err = String(err.message || err); say(_t('The stored motion could not be loaded ({e}), so there is nothing to draw.', { e: DP.err })); });
+        }
+        function start(d) {
+            var h = d.hdr, r0 = h.runs[run];
+            P = d; m2 = h.cell.m2; l2 = h.cell.l2; m1 = h.m1; l1 = h.l1; g = h.g; S = r0.S; tau = 0;
+            DP.ok = true; DP.err = null; DP.sha_ok = true; DP.gen = d.gen; DP.file = d.name; DP.frames = h.frames;
+            ds.set('gdate', d.gen.date); ds.set('commit', d.gen.commit); ds.set('sha_ok', true);
+            ds.set('m2', m2); ds.set('l2', l2); ds.set('th1_0', h.th1_deg * Math.PI / 180); ds.set('th2_0', r0.th2_deg * Math.PI / 180);
+            ds.set('w1_0', h.w0[0]); ds.set('w2_0', h.w0[1]); ds.set('E0', r0.E0); ds.set('Escale', S); ds.set('drift', r0.drift_max);
+            ds.set('fps_data', h.fps); ds.set('nframes', h.frames);
+            say(''); layout(); clearTrail(); play(0);
+        }
+        twinBox.addEventListener('change', function () { prevB = null; });
+        document.getElementById('restart').addEventListener('click', function () { tau = 0; clearTrail(); });
+        document.getElementById('clear').addEventListener('click', clearTrail);
+
+        /* one stored frame, decoded: the int16 numbers times their steps (the file header's "scale") */
+        function frame(k) {
+            var h = P.hdr, sc = h.scale, o = (run * h.frames + k) * C, F = P.F;
+            return [F[o] * sc.th, F[o + 1] * sc.th, F[o + 2] * sc.w, F[o + 3] * sc.w, F[o + 4] * sc.a, F[o + 5] * sc.a, F[o + 6] * sc.th, F[o + 7] * sc.th, F[o + 8] * sc.log10d];
+        }
+        function wrapd(x) { return x - 2 * Math.PI * Math.round(x / (2 * Math.PI)); }
+        function herm(p0, p1, m0, m1, u) { return (2 * u * u * u - 3 * u * u + 1) * p0 + (u * u * u - 2 * u * u + u) * m0 + (-2 * u * u * u + 3 * u * u) * p1 + (u * u * u - u * u) * m1; }
+        /* the angles drawn at time t: between frames k and k + 1, a cubic through both stored angles with the stored angular velocities
+           as slopes (Hermite). The twin's angular velocities are not stored; its slopes come from the frames before and after. */
+        function anglesAt(t) {
+            var h = P.hdr, f = Math.max(0, t * h.fps), k = Math.min(Math.floor(f), h.frames - 2), u = f - k, a = frame(k), b = frame(k + 1), dh = 1 / h.fps, out = [0, 0, 0, 0, k, u];
+            for (var i = 0; i < 2; i++) {
+                var p1 = a[i] + wrapd(b[i] - a[i] - (a[i + 2] + b[i + 2]) / 2 * dh) + (a[i + 2] + b[i + 2]) / 2 * dh;
+                out[i] = herm(a[i], p1, a[i + 2] * dh, b[i + 2] * dh, u);
+                var q0 = a[6 + i], q1 = q0 + wrapd(b[6 + i] - q0), qm = k > 0 ? q0 + wrapd(frame(k - 1)[6 + i] - q0) : 2 * q0 - q1, q2 = k + 2 < h.frames ? q1 + wrapd(frame(k + 2)[6 + i] - b[6 + i]) : 2 * q1 - q0;
+                out[2 + i] = herm(q0, q1, (q1 - qm) / 2, (q2 - q0) / 2, u);
+            }
             return out;
         }
-        function energy(s) {
-            var kin = 0.5 * (m1 + m2) * l1 * l1 * s[2] * s[2] + 0.5 * m2 * l2 * l2 * s[3] * s[3]
-                + m2 * l1 * l2 * s[2] * s[3] * Math.cos(s[0] - s[1]);
-            var pot = -(m1 + m2) * g * l1 * Math.cos(s[0]) - m2 * g * l2 * Math.cos(s[1]);
-            return kin + pot;
-        }
-        function pos(s) {
-            var x1 = ox + l1 * scale * Math.sin(s[0]), y1 = oy + l1 * scale * Math.cos(s[0]);
-            return [x1, y1, x1 + l2 * scale * Math.sin(s[1]), y1 + l2 * scale * Math.cos(s[1])];
+        function pos(a, b) {
+            var x1 = ox + l1 * scale * Math.sin(a), y1 = oy + l1 * scale * Math.cos(a);
+            return [x1, y1, x1 + l2 * scale * Math.sin(b), y1 + l2 * scale * Math.cos(b)];
         }
 
         function layout() {
             ox = box.w / 2;
             oy = box.h / 2;
-            scale = (Math.min(box.w, box.h) / 2 - 34) / (l1 + l2);
+            scale = (Math.min(box.w, box.h) / 2 - 34) / (l1 + (l2 || 1));
             ds.set('scale', scale); ds.set('ox', ox); ds.set('oy', oy);
         }
         function clearTrail() {
@@ -589,75 +633,31 @@
             clearTrail();
         }
 
-        function restart() {
-            m2 = m1 * Math.exp(mass.value);
-            l2 = l1 * Math.exp(len.value);
-            state = [th1.value * Math.PI / 180, th2.value * Math.PI / 180, w1.value, w2.value];
-            twin = twinBox.checked ? [state[0] + EPS, state[1], state[2], state[3]] : null;
-            E0 = energy(state);
-            simT = 0;
-            acc = 0;
-            ds.set('m2', m2); ds.set('l2', l2); ds.set('E0', E0); Esand = 0; ds.set('E_sand', 0);
-            ds.set('th1_0', state[0]); ds.set('th2_0', state[1]); ds.set('w1_0', state[2]); ds.set('w2_0', state[3]);
-            layout();
-            clearTrail();
-        }
-        twinBox.addEventListener('change', function () {
-            twin = twinBox.checked ? [state[0] + EPS, state[1], state[2], state[3]] : null;
-            prevB = null;
-        });
-        document.getElementById('restart').addEventListener('click', restart);
-        document.getElementById('clear').addEventListener('click', clearTrail);
-
         function segment(prev, p, colour, width) {
             if (!prev) return;
-            tctx.strokeStyle = colour;
-            tctx.lineWidth = width;
-            tctx.lineCap = 'round';
-            tctx.beginPath();
-            tctx.moveTo(prev[2], prev[3]);
-            tctx.lineTo(p[2], p[3]);
-            tctx.stroke();
+            tctx.strokeStyle = colour; tctx.lineWidth = width; tctx.lineCap = 'round';
+            tctx.beginPath(); tctx.moveTo(prev[2], prev[3]); tctx.lineTo(p[2], p[3]); tctx.stroke();
         }
         function fade(a) {
-            tctx.save();
-            tctx.setTransform(1, 0, 0, 1, 0, 0);
-            tctx.globalCompositeOperation = 'destination-out';
-            tctx.fillStyle = 'rgba(0, 0, 0, ' + a + ')';
-            tctx.fillRect(0, 0, trail.width, trail.height);
-            tctx.restore();
+            tctx.save(); tctx.setTransform(1, 0, 0, 1, 0, 0); tctx.globalCompositeOperation = 'destination-out';
+            tctx.fillStyle = 'rgba(0, 0, 0, ' + a + ')'; tctx.fillRect(0, 0, trail.width, trail.height); tctx.restore();
         }
 
         function drawProtractor() {
             var R = (l1 + l2) * scale;
-            ctx.save();
-            ctx.strokeStyle = 'rgba(90, 80, 75, 0.2)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.arc(ox, oy, R, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.setLineDash([2, 5]);
-            ctx.beginPath();
-            ctx.arc(ox, oy, l1 * scale, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            ctx.font = T.mono;
-            ctx.fillStyle = T.muted;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            for (var a = 0; a < 360; a += 30) {
+            ctx.save(); ctx.strokeStyle = 'rgba(90, 80, 75, 0.2)'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.arc(ox, oy, R, 0, Math.PI * 2); ctx.stroke();
+            ctx.setLineDash([2, 5]); ctx.beginPath(); ctx.arc(ox, oy, l1 * scale, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+            ctx.font = T.mono; ctx.fillStyle = T.muted; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            for (var a = 0; a < 360; a += 30) {   /* the marks every 30°: the stored starting angles */
                 var r = a * Math.PI / 180, sx = Math.sin(r), cy = Math.cos(r);
-                ctx.beginPath();
-                ctx.moveTo(ox + sx * (R - 5), oy + cy * (R - 5));
-                ctx.lineTo(ox + sx * (R + 4), oy + cy * (R + 4));
-                ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(ox + sx * (R - 5), oy + cy * (R - 5)); ctx.lineTo(ox + sx * (R + 4), oy + cy * (R + 4)); ctx.stroke();
                 ctx.fillText(a + '°', ox + sx * (R + 18), oy + cy * (R + 18));
             }
             ctx.restore();
         }
 
-        function drawPendulum(s, ghost) {
-            var p = pos(s);
+        function drawPendulum(p, ghost) {
             var r1 = 8, r2 = Math.max(4, Math.min(17, 8 * Math.cbrt(m2 / m1)));
             ctx.strokeStyle = ghost ? T.rose : T.ink;
             ctx.lineWidth = ghost ? 1.6 : 2.4;
@@ -683,110 +683,104 @@
 
         function draw() {
             ctx.clearRect(0, 0, box.w, box.h);
+            if (!P) return;
             drawProtractor();
             ctx.drawImage(trail, 0, 0, box.w, box.h);
-            if (twin) drawPendulum(twin, true);
-            drawPendulum(state, false);
+            if (twinBox.checked) drawPendulum(pos(drawn[2], drawn[3]), true);
+            drawPendulum(pos(drawn[0], drawn[1]), false);
             ctx.beginPath();
             ctx.arc(ox, oy, 3.5, 0, Math.PI * 2);
             ctx.fillStyle = T.ink3;
             ctx.fill();
         }
 
-        /* the readouts show numbers from the store; diagnostics() below is where they are computed */
+        /* the readouts show numbers from the store */
         function readouts() {
-            var E = ds.get('E'), drift = ds.get('drift'), d = ds.get('sep');
-            document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + simT.toFixed(1) + ' s';
-            document.getElementById('r-e').textContent = Sim.fmt(E, 3) + ' J';
-            document.getElementById('r-drift').textContent = Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(1).replace('-', '−');
-            var sep = document.getElementById('r-sep');
-            if (twin) {
-                sep.textContent = (d < 1e-3 ? d.toExponential(1).replace('-', '−') : d.toFixed(3)) + ' m';
-            } else {
-                sep.textContent = _t('twin off');
-            }
+            document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + tau.toFixed(1) + ' s ' + _t('of the stored {T} s', { T: P ? P.hdr.T : 20 });
+            if (!P) return;
+            document.getElementById('r-e').textContent = Sim.fmt(ds.get('E0'), 3) + ' J';
+            document.getElementById('r-drift').textContent = '≤ ' + ds.get('drift').toExponential(1).replace('-', '−');
+            var d = ds.get('sep'), sep = document.getElementById('r-sep');
+            sep.textContent = twinBox.checked ? (d < 1e-3 ? d.toExponential(1).replace('-', '−') : d.toFixed(3)) + ' m' : _t('twin off');
         }
 
-        /* ---------- diagnostics: the page computes every derived number once per frame and writes it into the store ---------- */
+        /* ---------- play: read the stored frame k at or before t, draw the cubic between frames k and k + 1, write both into the store ---------- */
         var yv = ds.alloc('y'), dydt = ds.alloc('dydt'), yTwin = ds.alloc('y_twin'), Mm = ds.alloc('M');
-        function diagnostics(dt) {
-            var s = state, k = deriv(s), d = s[0] - s[1], c = Math.cos(d), i;
-            for (i = 0; i < 4; i++) { yv[i] = s[i]; dydt[i] = k[i]; yTwin[i] = twin ? twin[i] : 0; }
+        function play(dt) {
+            var A = anglesAt(tau), k = A[4], s = frame(k); drawn = A; cur = s;
+            for (var i = 0; i < 4; i++) { yv[i] = s[i]; dydt[i] = s[i + 2]; }
+            for (i = 0; i < 2; i++) yTwin[i] = twinBox.checked ? s[6 + i] : 0;
             ds.touch('y'); ds.touch('dydt'); ds.touch('y_twin');
-            ds.set('th1', s[0]); ds.set('th2', s[1]); ds.set('w1', s[2]); ds.set('w2', s[3]);
-            ds.set('delta', d); ds.set('den', 2 * m1 + m2 - m2 * Math.cos(2 * d)); ds.set('alpha1', k[2]); ds.set('alpha2', k[3]);
+            ds.set('k', k); ds.set('tk', k / P.hdr.fps); ds.set('u', A[5]); ds.set('t', tau);
+            ds.set('th1', s[0]); ds.set('th2', s[1]); ds.set('w1', s[2]); ds.set('w2', s[3]); ds.set('alpha1', s[4]); ds.set('alpha2', s[5]);
+            ds.set('log10sep', s[8]); ds.set('sep', Math.pow(10, s[8])); ds.set('twin_on', twinBox.checked);
+            ds.set('th1_draw', A[0]); ds.set('th2_draw', A[1]);
+            var p = pos(A[0], A[1]), q = pos(A[2], A[3]);
+            ds.set('x1_px', p[0]); ds.set('y1_px', p[1]); ds.set('x2_px', p[2]); ds.set('y2_px', p[3]);
+            ['x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px'].forEach(function (n, j) { ds.set(n, twinBox.checked ? q[j] : undefined); });
+            bookkeeping(s);
+            ds.set('speed', speed.value);
+            if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
+            ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
+        }
+        /* the bookkeeping of the stored frame: positions, energies, the mass matrix. Closed formulas of the stored state; nothing is advanced in time. */
+        function bookkeeping(s) {
+            var d = s[0] - s[1], c = Math.cos(d);
+            ds.set('delta', d); ds.set('den', 2 * m1 + m2 - m2 * Math.cos(2 * d));
             Mm[0] = (m1 + m2) * l1 * l1; Mm[1] = m2 * l1 * l2 * c; Mm[2] = Mm[1]; Mm[3] = m2 * l2 * l2;
             ds.touch('M');
             ds.set('detM', Mm[0] * Mm[3] - Mm[1] * Mm[2]); ds.set('p1', Mm[0] * s[2] + Mm[1] * s[3]); ds.set('p2', Mm[2] * s[2] + Mm[3] * s[3]);
-            var E = energy(s), V = -(m1 + m2) * g * l1 * Math.cos(s[0]) - m2 * g * l2 * Math.cos(s[1]), T = E - V;
-            var drift = (E - E0) / ((m1 + m2) * g * l1 + m2 * g * l2);
-            ds.set('E', E); ds.set('V', V); ds.set('T', T); ds.set('L', T - V); ds.set('drift', drift);
+            var kin = 0.5 * (m1 + m2) * l1 * l1 * s[2] * s[2] + 0.5 * m2 * l2 * l2 * s[3] * s[3] + m2 * l1 * l2 * s[2] * s[3] * c;
+            var pot = -(m1 + m2) * g * l1 * Math.cos(s[0]) - m2 * g * l2 * Math.cos(s[1]);
+            ds.set('T', kin); ds.set('V', pot); ds.set('L', kin - pot); ds.set('E', kin + pot); ds.set('eps_store', (kin + pot - ds.get('E0')) / S);
             var x1 = l1 * Math.sin(s[0]), y1 = -l1 * Math.cos(s[0]);
             ds.set('x1', x1); ds.set('y1', y1); ds.set('x2', x1 + l2 * Math.sin(s[1])); ds.set('y2', y1 - l2 * Math.cos(s[1]));
             var u1 = l1 * s[2] * Math.cos(s[0]), v1 = l1 * s[2] * Math.sin(s[0]);
             ds.set('v1', Math.hypot(u1, v1)); ds.set('v2', Math.hypot(u1 + l2 * s[3] * Math.cos(s[1]), v1 + l2 * s[3] * Math.sin(s[1])));
-            var p = pos(s);
-            ds.set('x1_px', p[0]); ds.set('y1_px', p[1]); ds.set('x2_px', p[2]); ds.set('y2_px', p[3]);
-            ds.set('twin_on', !!twin);
-            if (twin) {
-                var q = pos(twin), sep = Math.hypot(p[2] - q[2], p[3] - q[3]) / scale;
-                ds.set('x1_twin_px', q[0]); ds.set('y1_twin_px', q[1]); ds.set('x2_twin_px', q[2]); ds.set('y2_twin_px', q[3]);
-                ds.set('sep', sep); ds.set('log10sep', sep > 0 ? Math.log(sep) / Math.LN10 : undefined);
-            } else {
-                ds.set('sep', undefined); ds.set('log10sep', undefined);
-                ds.set('x1_twin_px', undefined); ds.set('y1_twin_px', undefined); ds.set('x2_twin_px', undefined); ds.set('y2_twin_px', undefined);
-            }
-            ds.set('t', simT); ds.set('steps', Math.round(simT / H)); ds.set('n', lastN); ds.set('acc', acc); ds.set('speed', speed.value);
-            if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
-            ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
         }
 
-        /* live values for the walkthrough: read from the store, nothing recomputed */
+        /* live values for the walkthrough: read from the store */
         function f4(v, u) { return Sim.fmt(v, 4) + (u ? ' ' + u : ''); }
         Sim.live = function () {
-            var k = ds.get('dydt'), drift = ds.get('drift');
+            if (!P) return {};
             return {
                 t1: f4(ds.get('th1'), 'rad'), t2: f4(ds.get('th2'), 'rad'), o1: f4(ds.get('w1'), 'rad/s'), o2: f4(ds.get('w2'), 'rad/s'),
                 d: f4(ds.get('delta'), 'rad'), den: f4(ds.get('den'), 'kg'), m2: f4(ds.get('m2'), 'kg'), l2: f4(ds.get('l2'), 'm'),
-                a1: f4(ds.get('alpha1'), 'rad/s²'), a2: f4(ds.get('alpha2'), 'rad/s²'),
-                k1: '(' + [k[0], k[1], k[2], k[3]].map(function (v) { return Sim.fmt(v, 2); }).join(', ') + ')',
-                h: '1/600 = ' + H.toFixed(6) + ' s', n: String(ds.get('n')), acc: ds.get('acc').toExponential(2).replace('-', '−') + ' s', t: ds.get('t').toFixed(3) + ' s',
-                kin: f4(ds.get('T'), 'J'), pot: f4(ds.get('V'), 'J'), E: f4(ds.get('E'), 'J'), E0: f4(ds.get('E0'), 'J'),
-                drift: Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(2).replace('-', '−'),
+                a1: f4(ds.get('alpha1'), 'rad/s²'), a2: f4(ds.get('alpha2'), 'rad/s²'), file: ds.get('file'), fd: Sim.fmt(ds.get('fps_data'), 0) + ' /s',
+                k: String(ds.get('k')), u: Sim.fmt(ds.get('u'), 3), t: ds.get('t').toFixed(3) + ' s', d1: f4(ds.get('th1_draw'), 'rad'), d2: f4(ds.get('th2_draw'), 'rad'),
+                kin: f4(ds.get('T'), 'J'), pot: f4(ds.get('V'), 'J'), E: f4(ds.get('E'), 'J'), E0: f4(ds.get('E0'), 'J'), sep: Sim.fmt(ds.get('sep'), 4) + ' m',
+                drift: ds.get('drift').toExponential(2).replace('-', '−'), gdate: ds.get('gdate'), sha: ds.get('sha_ok') ? _t('matches') : '—',
                 scale: Sim.fmt(ds.get('scale'), 1) + ' px/m', y1: Sim.fmt(ds.get('y1_px'), 1) + ' px'
             };
         };
 
         var clk = Sim.clock(function (dt) {
-            if (dt > 0) {
-                acc += dt * speed.value;
-                var n = Math.min(Math.floor(acc / H), 600);
-                lastN = n;
-                acc = Math.min(acc - n * H, H);
-                for (var i = 0; i < n; i++) {
-                    state = rk4(state, H);
-                    var pa = pos(state);
-                    segment(prevA, pa, 'rgba(122, 31, 43, 0.85)', 1.5);
-                    prevA = pa;
-                    if (twin) {
-                        twin = rk4(twin, H);
-                        var pb = pos(twin);
-                        segment(prevB, pb, 'rgba(226, 162, 170, 0.9)', 1.3);
-                        prevB = pb;
+            if (P && dt > 0) {
+                var t0 = tau, t1 = tau + dt * speed.value, T = (P.hdr.frames - 1) / P.hdr.fps;
+                if (t1 >= T) { tau = 0; clearTrail(); }
+                else {
+                    var n = Math.max(1, Math.ceil((t1 - t0) * 600));   /* the trail: a short segment every 1/600 s of the stored run */
+                    for (var i = 1; i <= n; i++) {
+                        var A = anglesAt(t0 + (t1 - t0) * i / n), pa = pos(A[0], A[1]);
+                        segment(prevA, pa, 'rgba(122, 31, 43, 0.85)', 1.5); prevA = pa;
+                        if (twinBox.checked) { var pb = pos(A[2], A[3]); segment(prevB, pb, 'rgba(226, 162, 170, 0.9)', 1.3); prevB = pb; }
                     }
-                    simT += H;
+                    tau = t1;
                 }
                 fade(1 - Math.pow(1 - 0.008, dt * 60));
             }
-            curve.step(dt); diagnostics(dt);
+            curve.step(dt); if (P) play(dt);
             draw();
             if (frames++ % 6 === 0) readouts();
         });
         Sim.playButton(document.getElementById('play'), clk);
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
-        var QN = ['θ₁', 'θ₂', 'ω₁', 'ω₂'], QU = ['rad', 'rad', 'rad/s', 'rad/s'];
-        function sliderCheck(input, label, scale) { return { formula: _t('read from the ') + _t(label) + _t(' slider now') + (scale ? _t(', times π/180') : ''), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) * (scale || 1) }; }
+        var QN = ['θ₁', 'θ₂', 'ω₁', 'ω₂'], QU = ['rad', 'rad', 'rad/s', 'rad/s'], COLN = ['θ₁', 'θ₂', 'ω₁', 'ω₂', 'α₁', 'α₂', 'θ′₁', 'θ′₂', 'log₁₀ d'];
+        function rawCheck(c, unit) {
+            var h = P.hdr, step = [h.scale.th, h.scale.th, h.scale.w, h.scale.w, h.scale.a, h.scale.a, h.scale.th, h.scale.th, h.scale.log10d][c], n = P.F[(run * h.frames + ds.get('k')) * C + c];
+            return { formula: _t('the stored 2-byte integer times its step, column ') + COLN[c], inputs: [[_t('stored integer'), n, '', 0], [_t('step'), step, unit, 6]], value: n * step };
+        }
         function bobPixel(name, x, y) {
             var px = ctx.getImageData(Math.floor(x * box.dpr), Math.floor(y * box.dpr), 1, 1).data, near = function (r, g, b) { return px[3] > 0 && Math.abs(px[0] - r) < 40 && Math.abs(px[1] - g) < 40 && Math.abs(px[2] - b) < 40; };
             var r2 = Math.max(4, Math.min(17, 8 * Math.cbrt(m2 / m1))), dPivot = Math.hypot(x - ds.get('ox'), y - ds.get('oy'));
@@ -799,10 +793,10 @@
         }
         function twinPositionCheck(which) {
             if (!ds.get('twin_on')) return { formula: 'the twin is off', inputs: [], value: undefined };
-            var s = ds.get('y_twin'), sc = ds.get('scale'), l = ds.get('l2');
-            var x1 = ds.get('ox') + ds.attrs.l1 * sc * Math.sin(s[0]), y1 = ds.get('oy') + ds.attrs.l1 * sc * Math.cos(s[0]);
-            var p = [x1, y1, x1 + l * sc * Math.sin(s[1]), y1 + l * sc * Math.cos(s[1])];
-            return { formula: 'the stored twin state mapped to screen coordinates', inputs: [['θ′₁', s[0], 'rad', 5], ['θ′₂', s[1], 'rad', 5], ['l₁', ds.attrs.l1, 'm', 4], ['l₂', l, 'm', 4], ['σ', sc, 'px/m', 2], ['ox', ds.get('ox'), 'px', 1], ['oy', ds.get('oy'), 'px', 1]], value: p[which] };
+            var A = drawn, sc = ds.get('scale'), l = ds.get('l2');
+            var x1 = ds.get('ox') + ds.attrs.l1 * sc * Math.sin(A[2]), y1 = ds.get('oy') + ds.attrs.l1 * sc * Math.cos(A[2]);
+            var p = [x1, y1, x1 + l * sc * Math.sin(A[3]), y1 + l * sc * Math.cos(A[3])];
+            return { formula: 'the twin’s drawn angles mapped to screen coordinates', inputs: [['θ′₁', A[2], 'rad', 5], ['θ′₂', A[3], 'rad', 5], ['l₁', ds.attrs.l1, 'm', 4], ['l₂', l, 'm', 4], ['σ', sc, 'px/m', 2], ['ox', ds.get('ox'), 'px', 1], ['oy', ds.get('oy'), 'px', 1]], value: p[which] };
         }
         function twinPixel(bob) {
             if (!ds.get('twin_on')) return { what: _t('the twin bob'), drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The chaos twin is switched off.') };
@@ -817,7 +811,11 @@
             var den = 2 * m1 + m - m * Math.cos(2 * d), v;
             if (which === 1) v = (-g * (2 * m1 + m) * Math.sin(t1) - m * g * Math.sin(t1 - 2 * t2) - 2 * Math.sin(d) * m * (o2 * o2 * l + o1 * o1 * l1 * Math.cos(d))) / (l1 * den);
             else v = (2 * Math.sin(d) * (o1 * o1 * l1 * (m1 + m) + g * (m1 + m) * Math.cos(t1) + o2 * o2 * l * m * Math.cos(d))) / (l * den);
-            return { formula: ds.vars[which === 1 ? 'alpha1' : 'alpha2'].attrs.formula, inputs: [['θ₁', t1, 'rad', 5], ['θ₂', t2, 'rad', 5], ['ω₁', o1, 'rad/s', 5], ['ω₂', o2, 'rad/s', 5], ['m₂', m, 'kg', 4], ['l₂', l, 'm', 4], ['D′', den, 'kg', 5]], value: v };
+            return { formula: ds.vars[which === 1 ? 'alpha1' : 'alpha2'].attrs.formula + _t(', from the stored θ and ω'), inputs: [['θ₁', t1, 'rad', 5], ['θ₂', t2, 'rad', 5], ['ω₁', o1, 'rad/s', 5], ['ω₂', o2, 'rad/s', 5], ['m₂', m, 'kg', 4], ['l₂', l, 'm', 4], ['D′', den, 'kg', 5]], value: v };
+        }
+        function drawnCheck(i) {
+            var h = P.hdr, k = ds.get('k'), a = frame(k), b = frame(k + 1), dh = 1 / h.fps, u = ds.get('u'), m = (a[i + 2] + b[i + 2]) / 2 * dh, p1 = a[i] + wrapd(b[i] - a[i] - m) + m;
+            return { formula: _t('cubic through the stored angles and angular velocities of frames k and k + 1'), inputs: [[QN[i] + '(k)', a[i], 'rad', 5], [QN[i] + '(k+1)', p1, 'rad', 5], [QN[i + 2] + '(k)', a[i + 2], 'rad/s', 4], [QN[i + 2] + '(k+1)', b[i + 2], 'rad/s', 4], ['u', u, '', 4], ['1/f', dh, 's', 4]], value: herm(a[i], p1, a[i + 2] * dh, b[i + 2] * dh, u) };
         }
         function stateInputs() { return [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['ω₁', ds.get('w1'), 'rad/s', 5], ['ω₂', ds.get('w2'), 'rad/s', 5], ['m₂', ds.get('m2'), 'kg', 4], ['l₂', ds.get('l2'), 'm', 4]]; }
         function kinetic() { var s = [ds.get('th1'), ds.get('th2'), ds.get('w1'), ds.get('w2')], m = ds.get('m2'), l = ds.get('l2'); return 0.5 * (m1 + m) * l1 * l1 * s[2] * s[2] + 0.5 * m * l * l * s[3] * s[3] + m * l1 * l * s[2] * s[3] * Math.cos(s[0] - s[1]); }
@@ -831,50 +829,53 @@
             ds: ds, kicker: _t('Fig. 2 · data'), file: 'fig2-double-pendulum',
             playing: function () { return clk.playing; },
             groups: [
-                { title: _t('Physical parameters'), note: _t('fixed constants are in the dataset attributes; these you set'), vars: ['m2', 'l2', 'th1_0', 'th2_0', 'w1_0', 'w2_0', 'speed'] },
-                { title: _t('State'), note: _t('the four numbers the integrator advances'), vars: ['y', 'dydt', 'th1', 'th2', 'w1', 'w2'] },
-                { title: _t('Equations of motion'), note: _t('what deriv() computes from the state'), vars: ['delta', 'den', 'alpha1', 'alpha2', 'M', 'detM', 'p1', 'p2'] },
-                { title: _t('Energy'), note: _t('conserved by the physics, so its drift measures the integrator'), vars: ['T', 'V', 'L', 'E', 'E0', 'E_sand', 'drift'] },
-                { title: _t('Bobs'), note: _t('metres with the pivot at the origin and y upwards; then the pixels as drawn'), vars: ['x1', 'y1', 'x2', 'y2', 'v1', 'v2', 'x1_px', 'y1_px', 'x2_px', 'y2_px'] },
-                { title: _t('Chaos twin'), note: _t('a copy started 0.001 rad away; its own stored screen positions locate its state'), vars: ['twin_on', 'y_twin', 'x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px', 'sep', 'log10sep'] },
-                { title: _t('Integrator and drawing'), note: _t('fourth-order Runge–Kutta at h = 1/600 s'), vars: ['t', 'n', 'steps', 'acc', 'scale', 'ox', 'oy', 'dt', 'fps', 'frames', 'playing'] }
+                { title: _t('Stored data'), note: _t('which file of the Kaggle run is played, and its check'), vars: ['file', 'gdate', 'commit', 'sha_ok', 'fps_data', 'nframes'] },
+                { title: _t('Physical parameters'), note: _t('read from the file header; the sliders choose the file and the run'), vars: ['m2', 'l2', 'th1_0', 'th2_0', 'w1_0', 'w2_0', 'speed'] },
+                { title: _t('Stored frame'), note: _t('the numbers of frame k as the model computed them, after rounding to 2 bytes'), vars: ['k', 'tk', 'y', 'dydt', 'th1', 'th2', 'w1', 'w2', 'alpha1', 'alpha2'] },
+                { title: _t('Bookkeeping of the frame'), note: _t('closed formulas of the stored state; nothing is advanced in time'), vars: ['delta', 'den', 'M', 'detM', 'p1', 'p2', 'T', 'V', 'L', 'E', 'E0', 'Escale', 'drift', 'eps_store', 'x1', 'y1', 'x2', 'y2', 'v1', 'v2'] },
+                { title: _t('Chaos twin'), note: _t('a copy started 0.001 rad away, computed by the model beside the pendulum'), vars: ['twin_on', 'y_twin', 'log10sep', 'sep', 'x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px'] },
+                { title: _t('Player and drawing'), note: _t('the time played now and the cubic drawn between two stored frames'), vars: ['t', 'u', 'th1_draw', 'th2_draw', 'x1_px', 'y1_px', 'x2_px', 'y2_px', 'scale', 'ox', 'oy', 'dt', 'fps', 'frames', 'playing'] }
             ],
-            rowLabel: { q: function (j) { return QN[j]; }, a: function (j) { return QN[j]; } },
+            rowLabel: { q: function (j) { return QN[j]; }, a: function (j) { return QN[j]; }, p: function (j) { return ['θ′₁', 'θ′₂'][j]; } },
             colLabel: { M: function (i) { return QN[i]; } },
-            at: { y: function (j) { return QU[j]; }, dydt: function (j) { return ['rad/s', 'rad/s', 'rad/s²', 'rad/s²'][j]; }, y_twin: function (j) { return QU[j]; } },
+            at: { y: function (j) { return QU[j]; }, dydt: function (j) { return ['rad/s', 'rad/s', 'rad/s²', 'rad/s²'][j]; }, y_twin: function () { return 'rad'; } },
             probe: function (x, y) { var n = nearest(x, y); return n ? { what: n } : null; },
             inspect: function (ref) {
                 var w = ref.what, at, rows;
-                if (w === 'bob 2') { at = { x: ds.get('x2_px'), y: ds.get('y2_px') }; rows = [['θ<sub>2</sub>', ds.get('th2'), 'rad', 'th2'], ['ω<sub>2</sub>', ds.get('w2'), 'rad/s', 'w2'], ['α<sub>2</sub>', ds.get('alpha2'), 'rad/s²', 'alpha2'], ['x<sub>2</sub>', ds.get('x2'), 'm', 'x2'], ['y<sub>2</sub>', ds.get('y2'), 'm', 'y2'], ['|v<sub>2</sub>|', ds.get('v2'), 'm/s', 'v2'], ['p<sub>θ₂</sub>', ds.get('p2'), 'kg m²/s', 'p2']]; if (twin) rows.push(['d to twin', ds.get('sep'), 'm', 'sep']); }
+                if (w === 'bob 2') { at = { x: ds.get('x2_px'), y: ds.get('y2_px') }; rows = [['θ<sub>2</sub>', ds.get('th2'), 'rad', 'th2'], ['ω<sub>2</sub>', ds.get('w2'), 'rad/s', 'w2'], ['α<sub>2</sub>', ds.get('alpha2'), 'rad/s²', 'alpha2'], ['x<sub>2</sub>', ds.get('x2'), 'm', 'x2'], ['y<sub>2</sub>', ds.get('y2'), 'm', 'y2'], ['|v<sub>2</sub>|', ds.get('v2'), 'm/s', 'v2'], ['p<sub>θ₂</sub>', ds.get('p2'), 'kg m²/s', 'p2']]; if (twinBox.checked) rows.push(['d to twin', ds.get('sep'), 'm', 'sep']); }
                 else if (w === 'bob 1') { at = { x: ds.get('x1_px'), y: ds.get('y1_px') }; rows = [['θ<sub>1</sub>', ds.get('th1'), 'rad', 'th1'], ['ω<sub>1</sub>', ds.get('w1'), 'rad/s', 'w1'], ['α<sub>1</sub>', ds.get('alpha1'), 'rad/s²', 'alpha1'], ['x<sub>1</sub>', ds.get('x1'), 'm', 'x1'], ['y<sub>1</sub>', ds.get('y1'), 'm', 'y1'], ['|v<sub>1</sub>|', ds.get('v1'), 'm/s', 'v1'], ['p<sub>θ₁</sub>', ds.get('p1'), 'kg m²/s', 'p1']]; }
-                else { at = { x: ox, y: oy }; rows = [['T', ds.get('T'), 'J', 'T'], ['V', ds.get('V'), 'J', 'V'], ['E', ds.get('E'), 'J', 'E'], ['ε', ds.get('drift'), '', 'drift'], ['det M', ds.get('detM'), 'kg² m⁴', 'detM'], ['t', ds.get('t'), 's', 't']]; }
+                else { at = { x: ox, y: oy }; rows = [['T', ds.get('T'), 'J', 'T'], ['V', ds.get('V'), 'J', 'V'], ['E', ds.get('E'), 'J', 'E'], ['E₀', ds.get('E0'), 'J', 'E0'], ['ε<sub>max</sub>', ds.get('drift'), '', 'drift'], ['t', ds.get('t'), 's', 't']]; }
                 return { title: w + (w === 'pivot' ? _t(' · the whole system') : ''), at: at, rows: rows };
             },
             locate: function (name, idx) {
-                if (name === 'y_twin') return ds.get('twin_on') ? (idx % 2 === 0 ? { x: ds.get('x1_twin_px'), y: ds.get('y1_twin_px') } : { x: ds.get('x2_twin_px'), y: ds.get('y2_twin_px') }) : null;
+                if (name === 'y_twin') return ds.get('twin_on') ? (idx === 0 ? { x: ds.get('x1_twin_px'), y: ds.get('y1_twin_px') } : { x: ds.get('x2_twin_px'), y: ds.get('y2_twin_px') }) : null;
                 if (name === 'y' || name === 'dydt') return idx % 2 === 0 ? { x: ds.get('x1_px'), y: ds.get('y1_px') } : { x: ds.get('x2_px'), y: ds.get('y2_px') };
                 if (name === 'M') return { x: ox, y: oy };
                 return null;
             },
             check: {
-                m2: function () { return { formula: 'm₂ = m₁ e<sup>slider</sup>', inputs: [['slider', mass.el.value, ''], ['m₁', m1, 'kg', 2]], value: m1 * Math.exp(parseFloat(mass.el.value)) }; },
-                l2: function () { return { formula: 'l₂ = l₁ e<sup>slider</sup>', inputs: [['slider', len.el.value, ''], ['l₁', l1, 'm', 2]], value: l1 * Math.exp(parseFloat(len.el.value)) }; },
-                th1_0: function () { return sliderCheck(th1.el, 'θ₁', Math.PI / 180); },
-                th2_0: function () { return sliderCheck(th2.el, 'θ₂', Math.PI / 180); },
-                w1_0: function () { return sliderCheck(w1.el, 'ω₁'); },
-                w2_0: function () { return sliderCheck(w2.el, 'ω₂'); },
-                speed: function () { return sliderCheck(speed.el, 'time scale'); },
-                y: function (j) { return { formula: _t('the integrator’s state array, component ') + QN[j], inputs: [['state[' + j + ']', state[j], QU[j], 6]], value: state[j] }; },
-                dydt: function (j) { var r = j < 2 ? { formula: 'dθ/dt = ω, read from the state', inputs: [[QN[j + 2], state[j + 2], 'rad/s', 6]], value: state[j + 2] } : alphaCheck(j - 1); return r; },
-                y_twin: function (j) { return { formula: twin ? _t('the twin’s state array, component ') + QN[j] : _t('the twin is off, so zero'), inputs: twin ? [['twin[' + j + ']', twin[j], QU[j], 6]] : [], value: twin ? twin[j] : 0 }; },
-                th1: function () { return { formula: 'y[0]', inputs: [['y[0]', state[0], 'rad', 6]], value: state[0] }; },
-                th2: function () { return { formula: 'y[1]', inputs: [['y[1]', state[1], 'rad', 6]], value: state[1] }; },
-                w1: function () { return { formula: 'y[2]', inputs: [['y[2]', state[2], 'rad/s', 6]], value: state[2] }; },
-                w2: function () { return { formula: 'y[3]', inputs: [['y[3]', state[3], 'rad/s', 6]], value: state[3] }; },
-                delta: function () { return { formula: 'δ = θ₁ − θ₂', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('th1') - ds.get('th2') }; },
-                den: function () { var d = ds.get('delta'), m = ds.get('m2'); return { formula: 'D′ = 2m₁ + m₂ − m₂ cos 2δ', inputs: [['m₁', m1, 'kg', 2], ['m₂', m, 'kg', 4], ['δ', d, 'rad', 5]], value: 2 * m1 + m - m * Math.cos(2 * d) }; },
+                m2: function () { return { formula: 'm₂ = m₁ e<sup>ln(m₂/m₁)</sup>', inputs: [['ln(m₂/m₁)', P.hdr.cell.ln_m, '', 2], ['m₁', m1, 'kg', 2]], value: m1 * Math.exp(P.hdr.cell.ln_m) }; },
+                l2: function () { return { formula: 'l₂ = l₁ e<sup>ln(l₂/l₁)</sup>', inputs: [['ln(l₂/l₁)', P.hdr.cell.ln_l, '', 2], ['l₁', l1, 'm', 2]], value: l1 * Math.exp(P.hdr.cell.ln_l) }; },
+                th1_0: function () { var v = th1.value <= -180 ? 180 : th1.value; return { formula: _t('read from the ') + _t('θ₁') + _t(' slider now') + _t(', times π/180'), inputs: [[_t('slider'), v, '°', 0]], value: v * Math.PI / 180 }; },
+                th2_0: function () { var v = th2.value <= -180 ? 180 : th2.value; return { formula: _t('read from the ') + _t('θ₂') + _t(' slider now') + _t(', times π/180'), inputs: [[_t('slider'), v, '°', 0]], value: v * Math.PI / 180 }; },
+                w1_0: function () { return { formula: _t('every stored run is released from rest'), inputs: [], value: 0 }; },
+                w2_0: function () { return { formula: _t('every stored run is released from rest'), inputs: [], value: 0 }; },
+                speed: function () { return { formula: _t('read from the ') + _t('time scale') + _t(' slider now'), inputs: [[_t('slider'), speed.el.value, '']], value: parseFloat(speed.el.value) }; },
+                k: function () { return { formula: 'k = min(floor(t f), N − 2)', inputs: [['t', ds.get('t'), 's', 4], ['f', ds.get('fps_data'), '1/s', 0]], value: Math.min(Math.floor(ds.get('t') * ds.get('fps_data')), ds.get('nframes') - 2) }; },
+                tk: function () { return { formula: 't<sub>k</sub> = k / f', inputs: [['k', ds.get('k'), '', 0], ['f', ds.get('fps_data'), '1/s', 0]], value: ds.get('k') / ds.get('fps_data') }; },
+                y: function (j) { return rawCheck(j, QU[j]); },
+                dydt: function (j) { return j < 2 ? rawCheck(j + 2, 'rad/s') : alphaCheck(j - 1); },
+                y_twin: function (j) { return ds.get('twin_on') ? rawCheck(6 + j, 'rad') : { formula: _t('the twin is off, so zero'), inputs: [], value: 0 }; },
+                th1: function () { return rawCheck(0, 'rad'); },
+                th2: function () { return rawCheck(1, 'rad'); },
+                w1: function () { return rawCheck(2, 'rad/s'); },
+                w2: function () { return rawCheck(3, 'rad/s'); },
                 alpha1: function () { return alphaCheck(1); },
                 alpha2: function () { return alphaCheck(2); },
+                log10sep: function () { return rawCheck(8, ''); },
+                sep: function () { return { formula: '10<sup>log₁₀ d</sup>', inputs: [['log₁₀ d', ds.get('log10sep'), '', 4]], value: Math.pow(10, ds.get('log10sep')) }; },
+                delta: function () { return { formula: 'δ = θ₁ − θ₂', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('th1') - ds.get('th2') }; },
+                den: function () { var d = ds.get('delta'), m = ds.get('m2'); return { formula: 'D′ = 2m₁ + m₂ − m₂ cos 2δ', inputs: [['m₁', m1, 'kg', 2], ['m₂', m, 'kg', 4], ['δ', d, 'rad', 5]], value: 2 * m1 + m - m * Math.cos(2 * d) }; },
                 M: function (q) { var c = Math.cos(ds.get('delta')), m = ds.get('m2'), l = ds.get('l2'), vals = [(m1 + m) * l1 * l1, m * l1 * l * c, m * l1 * l * c, m * l * l]; return { formula: ds.vars.M.attrs.formula, inputs: [['m₂', m, 'kg', 4], ['l₂', l, 'm', 4], ['cos δ', c, '', 5]], value: vals[q] }; },
                 detM: function () { var M = ds.get('M'); return { formula: 'M₀₀ M₁₁ − M₀₁²', inputs: [['M₀₀', M[0], 'kg m²', 4], ['M₁₁', M[3], 'kg m²', 4], ['M₀₁', M[1], 'kg m²', 4]], value: M[0] * M[3] - M[1] * M[1] }; },
                 p1: function () { var M = ds.get('M'); return { formula: 'M₀₀ ω₁ + M₀₁ ω₂', inputs: [['M₀₀', M[0], 'kg m²', 4], ['M₀₁', M[1], 'kg m²', 4], ['ω₁', ds.get('w1'), 'rad/s', 5], ['ω₂', ds.get('w2'), 'rad/s', 5]], value: M[0] * ds.get('w1') + M[1] * ds.get('w2') }; },
@@ -883,46 +884,45 @@
                 V: function () { return { formula: 'V = −(m₁+m₂) g l₁ cos θ₁ − m₂ g l₂ cos θ₂', inputs: stateInputs(), value: potential() }; },
                 L: function () { return { formula: 'L = T − V, from the formulas for T and V', inputs: stateInputs(), value: kinetic() - potential() }; },
                 E: function () { return { formula: 'E = T + V, from the formulas for T and V', inputs: stateInputs(), value: kinetic() + potential() }; },
-                drift: function () { var m = ds.get('m2'), l = ds.get('l2'); return { formula: 'ε = (E − E₀) / ((m₁+m₂) g l₁ + m₂ g l₂)', inputs: [['E', ds.get('E'), 'J', 6], ['E₀', ds.get('E0'), 'J', 6], ['m₂', m, 'kg', 4], ['l₂', l, 'm', 4]], value: (ds.get('E') - ds.get('E0')) / ((m1 + m) * g * l1 + m * g * l) }; },
+                Escale: function () { var m = ds.get('m2'), l = ds.get('l2'); return { formula: '(m₁+m₂) g l₁ + m₂ g l₂', inputs: [['m₂', m, 'kg', 4], ['l₂', l, 'm', 4]], value: (m1 + m) * g * l1 + m * g * l }; },
+                eps_store: function () { return { formula: 'ε<sub>2 B</sub> = (E − E₀) / E<sub>s</sub>', inputs: [['E', ds.get('E'), 'J', 6], ['E₀', ds.get('E0'), 'J', 6], ['E<sub>s</sub>', ds.get('Escale'), 'J', 4]], value: (ds.get('E') - ds.get('E0')) / ds.get('Escale') }; },
                 x1: function () { return { formula: 'l₁ sin θ₁', inputs: [['θ₁', ds.get('th1'), 'rad', 5]], value: l1 * Math.sin(ds.get('th1')) }; },
                 y1: function () { return { formula: '−l₁ cos θ₁', inputs: [['θ₁', ds.get('th1'), 'rad', 5]], value: -l1 * Math.cos(ds.get('th1')) }; },
                 x2: function () { return { formula: 'l₁ sin θ₁ + l₂ sin θ₂', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['l₂', ds.get('l2'), 'm', 4]], value: l1 * Math.sin(ds.get('th1')) + ds.get('l2') * Math.sin(ds.get('th2')) }; },
                 y2: function () { return { formula: '−l₁ cos θ₁ − l₂ cos θ₂', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['l₂', ds.get('l2'), 'm', 4]], value: -l1 * Math.cos(ds.get('th1')) - ds.get('l2') * Math.cos(ds.get('th2')) }; },
                 v1: function () { return { formula: 'l₁ |ω₁|', inputs: [['ω₁', ds.get('w1'), 'rad/s', 5]], value: l1 * Math.abs(ds.get('w1')) }; },
                 v2: function () { var t1 = ds.get('th1'), t2 = ds.get('th2'), o1 = ds.get('w1'), o2 = ds.get('w2'), l = ds.get('l2'); return { formula: ds.vars.v2.attrs.formula, inputs: stateInputs(), value: Math.hypot(l1 * o1 * Math.cos(t1) + l * o2 * Math.cos(t2), l1 * o1 * Math.sin(t1) + l * o2 * Math.sin(t2)) }; },
-                x1_px: function () { return { formula: 'o<sub>x</sub> + l₁ σ sin θ₁', inputs: [['o<sub>x</sub>', ox, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁', ds.get('th1'), 'rad', 5]], value: ox + l1 * scale * Math.sin(ds.get('th1')) }; },
-                y1_px: function () { return { formula: 'o<sub>y</sub> + l₁ σ cos θ₁', inputs: [['o<sub>y</sub>', oy, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁', ds.get('th1'), 'rad', 5]], value: oy + l1 * scale * Math.cos(ds.get('th1')) }; },
-                x2_px: function () { return { formula: 'x₁px + l₂ σ sin θ₂', inputs: [['x₁ px', ds.get('x1_px'), 'px', 2], ['l₂', ds.get('l2'), 'm', 4], ['σ', scale, 'px/m', 2], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('x1_px') + ds.get('l2') * scale * Math.sin(ds.get('th2')) }; },
-                y2_px: function () { return { formula: 'y₁px + l₂ σ cos θ₂', inputs: [['y₁ px', ds.get('y1_px'), 'px', 2], ['l₂', ds.get('l2'), 'm', 4], ['σ', scale, 'px/m', 2], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('y1_px') + ds.get('l2') * scale * Math.cos(ds.get('th2')) }; },
+                th1_draw: function () { return drawnCheck(0); },
+                th2_draw: function () { return drawnCheck(1); },
+                u: function () { return { formula: 'u = t f − k', inputs: [['t', ds.get('t'), 's', 4], ['f', ds.get('fps_data'), '1/s', 0], ['k', ds.get('k'), '', 0]], value: ds.get('t') * ds.get('fps_data') - ds.get('k') }; },
+                x1_px: function () { return { formula: 'o<sub>x</sub> + l₁ σ sin θ₁', inputs: [['o<sub>x</sub>', ox, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁ drawn', ds.get('th1_draw'), 'rad', 5]], value: ox + l1 * scale * Math.sin(ds.get('th1_draw')) }; },
+                y1_px: function () { return { formula: 'o<sub>y</sub> + l₁ σ cos θ₁', inputs: [['o<sub>y</sub>', oy, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁ drawn', ds.get('th1_draw'), 'rad', 5]], value: oy + l1 * scale * Math.cos(ds.get('th1_draw')) }; },
+                x2_px: function () { return { formula: 'x₁px + l₂ σ sin θ₂', inputs: [['x₁ px', ds.get('x1_px'), 'px', 2], ['l₂', ds.get('l2'), 'm', 4], ['σ', scale, 'px/m', 2], ['θ₂ drawn', ds.get('th2_draw'), 'rad', 5]], value: ds.get('x1_px') + ds.get('l2') * scale * Math.sin(ds.get('th2_draw')) }; },
+                y2_px: function () { return { formula: 'y₁px + l₂ σ cos θ₂', inputs: [['y₁ px', ds.get('y1_px'), 'px', 2], ['l₂', ds.get('l2'), 'm', 4], ['σ', scale, 'px/m', 2], ['θ₂ drawn', ds.get('th2_draw'), 'rad', 5]], value: ds.get('y1_px') + ds.get('l2') * scale * Math.cos(ds.get('th2_draw')) }; },
                 scale: function () { return { formula: '(min(box.w, box.h)/2 − 34) / (l₁ + l₂)', inputs: [['box.w', box.w, 'px', 0], ['box.h', box.h, 'px', 0], ['l₂', ds.get('l2'), 'm', 4]], value: (Math.min(box.w, box.h) / 2 - 34) / (l1 + ds.get('l2')) }; },
                 ox: function () { return { formula: 'box.w / 2', inputs: [['box.w', box.w, 'px', 0]], value: box.w / 2 }; },
-                oy: function () { return { formula: 'box.h / 2', inputs: [['box.h', box.h, 'px', 0]], value: box.h / 2 }; },
-                sep: function () { if (!twin) return { formula: 'the twin is off', inputs: [], value: undefined }; var yt = ds.get('y_twin'), l = ds.get('l2'); var x2 = l1 * Math.sin(ds.get('th1')) + l * Math.sin(ds.get('th2')), y2 = -l1 * Math.cos(ds.get('th1')) - l * Math.cos(ds.get('th2')); var xt = l1 * Math.sin(yt[0]) + l * Math.sin(yt[1]), ytt = -l1 * Math.cos(yt[0]) - l * Math.cos(yt[1]); return { formula: '|(x₂ − x₂′, y₂ − y₂′)| from the two state vectors', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['θ₁′', yt[0], 'rad', 5], ['θ₂′', yt[1], 'rad', 5]], value: Math.hypot(x2 - xt, y2 - ytt) }; },
-                log10sep: function () { var d = ds.get('sep'); return { formula: 'log₁₀ d', inputs: [['d', d, 'm', 6]], value: d > 0 ? Math.log(d) / Math.LN10 : undefined }; },
-                steps: function () { return { formula: 'round(t / h)', inputs: [['t', ds.get('t'), 's', 4], ['h', H, 's', 6]], value: Math.round(ds.get('t') / H) }; },
-                n: function () { return { formula: 'the step count of the last frame', inputs: [['lastN', lastN, '', 0]], value: lastN }; }
+                oy: function () { return { formula: 'box.h / 2', inputs: [['box.h', box.h, 'px', 0]], value: box.h / 2 }; }
             },
             drawn: {
                 x2_px: function () { return bobPixel('bob 2', ds.get('x2_px'), ds.get('y2_px')); },
                 y2_px: function () { return bobPixel('bob 2', ds.get('x2_px'), ds.get('y2_px')); },
                 x1_px: function () { return bobPixel('bob 1', ds.get('x1_px'), ds.get('y1_px')); },
                 y1_px: function () { return bobPixel('bob 1', ds.get('x1_px'), ds.get('y1_px')); },
-                th2: function () { return bobPixel('bob 2, placed from θ₂', ds.get('x2_px'), ds.get('y2_px')); },
-                th1: function () { return bobPixel('bob 1, placed from θ₁', ds.get('x1_px'), ds.get('y1_px')); }
+                th2_draw: function () { return bobPixel('bob 2, placed from θ₂', ds.get('x2_px'), ds.get('y2_px')); },
+                th1_draw: function () { return bobPixel('bob 1, placed from θ₁', ds.get('x1_px'), ds.get('y1_px')); }
             },
-            round: curve.round({ time: 't', label: function () { return _t('ten seconds of simulated motion'); }, length: function () { return 10; },
-                columns: ['th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'], point: function () { return { what: _t('bob 2') }; } }),
+            round: curve.round({ time: 't', label: function () { return _t('ten seconds of the stored run'); }, length: function () { return 10; },
+                columns: ['th1', 'th2', 'w1', 'w2', 'E', 'sep'], point: function () { return { what: _t('bob 2') }; } }),
             play: function () { clk.set(true); },
-            about: _t('Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.') + ' ' + _t('While a curve changes the mass ratio, m₂ changes between frames and the store books the energy each change brings as E<sub>sand</sub>, adding it to E₀; the mass slider takes the curve’s exact value of ln(m₂/m₁), so m₂ changes a little at every frame.')
+            about: _t('This page computes no motion. Every run was computed once on Kaggle by tools/sims/double_pendulum.py with DOP853, stored in 2-byte integers, and is played here after its SHA-256 is checked. The table shows the stored frame k, the last one at or before the time played; the bobs are drawn on a cubic between frames k and k + 1, so the drawn angles differ from frame k by up to one frame of motion, and the pixel checks test the drawn angles. Energies and positions of the frame are closed formulas of its stored numbers; the energy of the frame differs from E₀ by the rounding to 2 bytes, ε<sub>2 B</sub>, while the model’s own error is ε<sub>max</sub>. The trail is painted segment by segment, a segment every 1/600 s of the run, and fades away; it is not kept as an array; to keep the trajectory, record a round.')
         }; curve.extend(Sim.data);
 
         ['x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px'].forEach(function (name, i) {
             Sim.data.check[name] = function () { return twinPositionCheck(i); };
             Sim.data.drawn[name] = function () { return twinPixel(i < 2 ? 1 : 2); };
         });
-        restart();
         resize();
-        diagnostics(0);
+        restart();
         Sim.onResize(stage, resize);
     })();
     </script>
