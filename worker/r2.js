@@ -14,9 +14,16 @@ async function release(request, path) {
   if (!m) return new Response('not found', { status: 404 });
   const ask = new Headers(), range = request.headers.get('range');
   if (range) ask.set('range', range);
-  const r = await fetch(`https://github.com/Numa1997/SiteTest/releases/download/${m[1]}/${m[2]}`,
-    { headers: ask, redirect: 'follow' });
-  if (r.status !== 200 && r.status !== 206) return new Response('not found', { status: 404 });
+  // GitHub now and then answers a release download with an error although the file is there (seen 23 November 2026: about one request
+  // in twenty came back as 404 here). So: up to three tries, and if all fail the reader gets 502 with GitHub's own status in the
+  // header x-upstream-status, not a 404 that would read as "no such file".
+  let r = null;
+  for (let k = 0; k < 3; k++) {
+    r = await fetch(`https://github.com/Numa1997/SiteTest/releases/download/${m[1]}/${m[2]}`, { headers: ask, redirect: 'follow' });
+    if (r.status === 200 || r.status === 206) break;
+    await new Promise((done) => setTimeout(done, 300 * (k + 1)));
+  }
+  if (r.status !== 200 && r.status !== 206) return new Response('the stored file could not be fetched', { status: 502, headers: { 'x-upstream-status': String(r.status), 'cache-control': 'no-store' } });
   const h = new Headers();
   for (const k of ['content-length', 'content-range', 'accept-ranges', 'etag']) if (r.headers.get(k)) h.set(k, r.headers.get(k));
   h.set('content-type', 'application/octet-stream');
