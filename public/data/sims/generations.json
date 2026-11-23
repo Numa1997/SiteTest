@@ -2,30 +2,6 @@
  "about": "Data of the site's simulations, computed once on Kaggle by the notebook numakoudsie/phyein-usul-simulations and carried here by .github/workflows/sims-kaggle.yml. One entry per simulation and date; a page plays the newest entry of its simulation.",
  "generations": [
   {
-   "sim": "double_pendulum_smoke",
-   "date": "2026-11-23",
-   "notebook": "numakoudsie/phyein-usul-simulations",
-   "version": 5,
-   "commit": "3baa089777a71561c317bf5821e3d5755d6d9e8b",
-   "index": "double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json",
-   "files": {
-    "double_pendulum.json": {
-     "bytes": 2273,
-     "sha256": "c79ff2f03395ab8c267abf64025684ad8f4efa1c3c1c409e91811749c809e866"
-    }
-   },
-   "release": "sims-double_pendulum_smoke-2026-11-23",
-   "release_files": {
-    "dp_22.pack": {
-     "bytes": 2633430,
-     "sha256": "6a3f2963c8d337789089c76e5e200d1e7b4899ab2f086adbe78362b47aab1263"
-    }
-   },
-   "gpu": true,
-   "wall_s": 25.1,
-   "collected": "2026-11-23T20:31:14+00:00"
-  },
-  {
    "sim": "double_pendulum_gpu",
    "date": "2026-11-23",
    "notebook": "numakoudsie/phyein-usul-simulations",
@@ -1342,6 +1318,33 @@
    "dataset": "numakoudsie/fig1-wave-interference",
    "dataset_path": "phyein-usul-simulations/v4/",
    "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 4, 36474418 bytes, filed as one version of this dataset"
+  },
+  {
+   "sim": "double_pendulum_smoke",
+   "date": "2026-11-23",
+   "notebook": "numakoudsie/phyein-usul-simulations",
+   "version": 5,
+   "commit": "3baa089777a71561c317bf5821e3d5755d6d9e8b",
+   "index": "double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json",
+   "files": {
+    "double_pendulum.json": {
+     "bytes": 2273,
+     "sha256": "c79ff2f03395ab8c267abf64025684ad8f4efa1c3c1c409e91811749c809e866"
+    }
+   },
+   "release": "sims-double_pendulum_smoke-2026-11-23",
+   "release_files": {
+    "dp_22.pack": {
+     "bytes": 2633430,
+     "sha256": "6a3f2963c8d337789089c76e5e200d1e7b4899ab2f086adbe78362b47aab1263"
+    }
+   },
+   "gpu": true,
+   "wall_s": 25.1,
+   "collected": "2026-11-23T20:31:14+00:00",
+   "dataset": "numakoudsie/fig2-double-pendulum",
+   "dataset_path": "phyein-usul-simulations/v5/",
+   "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 5, 2635703 bytes, filed as one version of this dataset"
   }
  ]
 }
