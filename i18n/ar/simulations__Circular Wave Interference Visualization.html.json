@@ -47,6 +47,10 @@
   "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
   "tr": "نعمة سائر قدسية · لطلاب المدارس وطلاب السنتين الأولى والثانية في الجامعة"
  },
+ "158249db0771": {
+  "src": "The stored angles and heights are whole numbers, in steps of \\(2\\pi/65536\\) and \\(1/65535\\). Against the field computed straight from (6), at every wavelength and every damping the sliders can take, \\(C\\) and \\(S\\) differ by at most 0.00065, most of it from the blend of the heights, and the colour drawn differs by one step of the next section’s table at 0.39 % of points and instants. \\(C\\), \\(S\\) and \\(\\psi\\) are kept as 32-bit floating-point numbers, about seven significant figures.",
+  "tr": "الزوايا والارتفاعات المخزّنة أعداد صحيحة، بخطوات قدرها \\(2\\pi/65536\\) و\\(1/65535\\). مقارنةً بالحقل المحسوب مباشرة من (6)، عند كل طول موجة وكل تخامد يمكن للمنزلقات أن تأخذه، يختلف \\(C\\) و\\(S\\) بما لا يزيد على 0.00065، وأكثره من مزج الارتفاعات، ويختلف اللون المرسوم بدرجة واحدة من جدول القسم التالي عند 0.39 % من النقاط واللحظات. تُحفظ \\(C\\) و\\(S\\) و\\(\\psi\\) أعدادًا عشرية بدقة 32 بت، أي نحو سبعة أرقام معنوية."
+ },
  "1672b87a95cc": {
   "src": "Add 5 random",
   "tr": "أضِف 5 عشوائيًا"
@@ -163,6 +167,10 @@
   "src": "Dividing by \\(N\\) keeps the colours comparable, but it also makes each source fainter as more are added.",
   "tr": "تُبقي القسمة على \\(N\\) الألوان قابلة للمقارنة، لكنها تجعل كل مصدر أخفت كلما أُضيفت مصادر أخرى."
  },
+ "3eebb66c2c22": {
+  "src": "For <em>Line of 16</em> on the wide screen one rebuild reads \\(4 \\times 16 \\times 28\\,250 = 1\\,808\\,000\\) stored numbers, two angles and two heights per source and point; it took 8–44 ms in five headless Chromium runs, while a frame took 0.6–0.7 ms. These times depend on the machine.",
+  "tr": "لـ<em>صفّ من 16</em> على الشاشة العريضة، تقرأ إعادة البناء الواحدة \\(4 \\times 16 \\times 28\\,250 = 1\\,808\\,000\\) عددًا مخزّنًا، زاويتين وارتفاعين لكل مصدر ونقطة؛ واستغرقت 8–44 ms في خمس تشغيلات في Chromium دون واجهة، بينما استغرق الإطار 0.6–0.7 ms. تتوقف هذه الأزمنة على الجهاز."
+ },
  "40e8cf16161b": {
   "src": "Press <em>Reset</em>: two sources, \\(s = 400\\ \\mathrm{px}\\) apart. Write \\(\\bar r = (r_1 + r_2)/2\\) for the mean distance of a point from them and \\(\\Delta r = r_2 - r_1\\) for the <em>path difference</em>. If the two rings arrive equally strong, \\(a_1 = a_2 = a\\), the identity \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) turns (6) into",
   "tr": "اضغط <em>إعادة ضبط</em>: مصدران المسافة بينهما \\(s = 400\\ \\mathrm{px}\\). ولنرمز بـ\\(\\bar r = (r_1 + r_2)/2\\) إلى متوسط بُعد نقطة عنهما، وبـ\\(\\Delta r = r_2 - r_1\\) إلى <em>فرق المسار</em>. فإذا وصلت الحلقتان بالقوة نفسها، \\(a_1 = a_2 = a\\)، فإن المتطابقة \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) تحوّل (6) إلى"
@@ -270,6 +278,10 @@
  "704655af1bb8": {
   "src": "<span class=\"psec__n\">09</span>From numbers to colours",
   "tr": "<span class=\"psec__n\">09</span>من الأعداد إلى الألوان"
+ },
+ "708ed645f67b": {
+  "src": "A source sits on the nearest of 501 stored places \\(1.6\\ \\mathrm{px}\\) apart, and the grid has 250 columns on every screen.",
+  "tr": "يقع المصدر على أقرب موضع من 501 موضع مخزّن تفصل بينها \\(1.6\\ \\mathrm{px}\\)، وللشبكة 250 عمودًا على كل شاشة."
  },
  "719ea396ad92": {
   "src": "Clear",
@@ -463,6 +475,10 @@
   "src": "C. A. Balanis, <a href=\"https://www.wiley.com/en-us/antenna-theory-analysis-and-design-4th-edition-p-9781118642061\"><em>Antenna Theory: Analysis and Design</em></a>, 4th edition, Wiley, 2016: chapter 6 (linear arrays, array factor, grating lobes and beam steering).",
   "tr": "C. A. Balanis، <a href=\"https://www.wiley.com/en-us/antenna-theory-analysis-and-design-4th-edition-p-9781118642061\"><em>Antenna Theory: Analysis and Design</em></a>، الطبعة 4، Wiley، 2016: الفصل 6 (المصفوفات الخطّية، وعامل المصفوفة، وفصوص الشبكة، وتوجيه الحزمة)."
  },
+ "c467eff60ac7": {
+  "src": "Three sliders set the waves: <em>Wavelength</em> \\(\\lambda\\) from 16 to \\(64\\ \\mathrm{px}\\) in steps of \\(0.1\\ \\mathrm{px}\\) (default \\(30\\ \\mathrm{px}\\)), <em>Frequency</em> \\(f\\) from 0.2 to \\(2\\ \\mathrm{Hz}\\) (default \\(1.1\\ \\mathrm{Hz}\\)) and <em>Damping</em> \\(\\gamma\\) from 0 to 0.6 in steps of 0.01 (default 0.15). The buttons place the sources: <em>Reset</em> puts two at \\(x = 200\\) and \\(600\\ \\mathrm{px}\\), <em>Line of 16</em> spreads sixteen evenly from 64 to \\(736\\ \\mathrm{px}\\), and a click on the field adds one on the source line, at the nearest of 501 places \\(1.6\\ \\mathrm{px}\\) apart.",
+  "tr": "ثلاثة منزلقات تضبط الموجات: <em>طول الموجة</em> \\(\\lambda\\) من 16 إلى \\(64\\ \\mathrm{px}\\) بخطوات قدرها \\(0.1\\ \\mathrm{px}\\) (الافتراضي \\(30\\ \\mathrm{px}\\))، و<em>التردد</em> \\(f\\) من 0.2 إلى \\(2\\ \\mathrm{Hz}\\) (الافتراضي \\(1.1\\ \\mathrm{Hz}\\))، و<em>التخامد</em> \\(\\gamma\\) من 0 إلى 0.6 بخطوات قدرها 0.01 (الافتراضي 0.15). الأزرار تضع المصادر: <em>إعادة ضبط</em> تضع مصدرين عند \\(x = 200\\) و\\(600\\ \\mathrm{px}\\)، و<em>صفّ من 16</em> يوزّع ستة عشر مصدرًا بالتساوي من 64 إلى \\(736\\ \\mathrm{px}\\)، والنقر على الحقل يضيف مصدرًا على خط المصادر، عند أقرب موضع من 501 موضع تفصل بينها \\(1.6\\ \\mathrm{px}\\)."
+ },
  "c4cb588feeda": {
   "src": "Interference field of the wave sources. Click to add a source.",
   "tr": "حقل التداخل لمصادر الموجات. انقر لإضافة مصدر."
@@ -482,6 +498,10 @@
  "cad2dda3032c": {
   "src": "heavier mathematics",
   "tr": "الرياضيات الأثقل"
+ },
+ "cb6df0772f09": {
+  "src": "The rings were computed once, on Kaggle, by the model <code>tools/sims/wave_interference2.py</code>, and are stored with the site: the angle \\(kr\\) of a ring at 118 wave numbers \\(k\\) evenly spaced from \\(2\\pi/64\\) to \\(2\\pi/16\\ \\mathrm{px^{-1}}\\), and its height \\(a\\) at the dampings \\(\\gamma = 0, 0.025, \\dots, 0.6\\), at every distance from a source to a grid point that can occur, with a table of cosines. The angle \\(kr\\) grows in proportion to \\(k\\), so for any wavelength between two stored ones the page blends the two stored angles in a straight line, which is exact; it blends the two stored heights around \\(\\gamma\\) the same way, which is off by at most 0.0011. When sources are added, cleared or reset, or the <em>Wavelength</em> or <em>Damping</em> slider moves, the page reads those numbers and adds the rings into \\(C\\) and \\(S\\). The <em>Frequency</em> slider does not trigger this, because \\(f\\) enters only through \\(\\omega t\\): it changes how fast the pattern runs, never its shape.",
+  "tr": "حُسبت الحلقات مرة واحدة على Kaggle بالنموذج <code>tools/sims/wave_interference2.py</code>، وهي مخزّنة مع الموقع: زاوية الحلقة \\(kr\\) عند 118 عددًا موجيًّا \\(k\\) موزّعة بالتساوي من \\(2\\pi/64\\) إلى \\(2\\pi/16\\ \\mathrm{px^{-1}}\\)، وارتفاعها \\(a\\) عند التخامدات \\(\\gamma = 0, 0.025, \\dots, 0.6\\)، عند كل مسافة ممكنة بين مصدر ونقطة من الشبكة، ومعها جدول لجيوب التمام. تنمو الزاوية \\(kr\\) بالتناسب مع \\(k\\)، فتمزج الصفحة لأي طول موجة يقع بين طولين مخزّنين الزاويتين المخزّنتين مزجًا مستقيمًا، وهو مزج دقيق؛ وتمزج الارتفاعين المخزّنين حول \\(\\gamma\\) بالطريقة نفسها، بخطأ لا يزيد على 0.0011. عند إضافة مصادر أو مسحها أو إعادة ضبطها، أو عند تحريك منزلق <em>طول الموجة</em> أو <em>التخامد</em>، تقرأ الصفحة هذه الأعداد وتجمع الحلقات في \\(C\\) و\\(S\\). منزلق <em>التردد</em> لا يستدعي ذلك، لأن \\(f\\) لا يدخل إلا عبر \\(\\omega t\\): فهو يغيّر سرعة جريان النمط، لا شكله أبدًا."
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
