@@ -171,3 +171,21 @@ was saved and correct: one of the 25 packs answered 404 through `/rel/`, and a m
 on another pack. About one request in twenty to GitHub's release download came back as an error. Since then the Worker tries three
 times and, if all fail, answers 502 with GitHub's status in the header `x-upstream-status`; the live check tries each file three
 times and names the file and the status. This is one more reason the data moves to R2 (notes/sims/ENGINE-PROMPT.md).
+
+## Every data set also on Kaggle, as a dataset (23 November 2026)
+
+The user's rule: whatever its size, every run's data also stays on Kaggle, where it was made. Until this evening the engine kept it only
+as the output of a notebook version, which the Kaggle site does not list as a dataset. Since then
+[tools/sims/dataset.py](../tools/sims/dataset.py) files it:
+
+- after every run (step 6 of `pipeline.py`): the whole output is checked against `index-<sim>.json` by size and SHA-256 and uploaded as
+  a version of the private dataset `numakoudsie/phyein-usul-<sim>` (underscores become hyphens), in a folder
+  `phyein-usul-simulations-v<notebook version>/` with a `manifest.json`; the generation in `generations.json` records `dataset`,
+  `dataset_path` and `dataset_note`. If Kaggle refuses, the computed data is still saved and the entry records `dataset_error`;
+- for runs made before: Actions → Simulations on Kaggle → Run workflow, mode `dataset`, the simulation's name and the notebook version
+  (in its `generations.json` entry, field `version`). The output is fetched again from Kaggle, which keeps every version's output.
+
+A dataset version holds only what was uploaded with it, so each run is one dataset version and older runs stay in the older versions.
+Kaggle's limits: 200 GB per dataset, 200 GB of private datasets in all, 50 files at the top level ([Kaggle's dataset
+documentation](https://www.kaggle.com/docs/datasets)). Filing uses its own concurrency group per simulation, so it never waits behind
+a Kaggle run.

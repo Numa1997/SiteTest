@@ -240,7 +240,10 @@ J. Move everything that exists. Not only future simulations: every byte of store
    When this step is done, public/data/ holds no simulation data, only indexes and lists, and every page that plays stored data
    reads it from /r2/ and passes its live check.
 
-L. Every generation into its figure's Kaggle dataset.
+L. Every generation into its figure's Kaggle dataset. Since 23 November 2026, 22:20 Berlin time, the engine does this for its own
+   simulations (tools/sims/dataset.py, docs/kaggle-sims.md "Every data set also on Kaggle"): after every run, and by Run workflow with
+   mode = dataset for an existing notebook version. Keep it, read the datasets it made (numakoudsie/phyein-usul-<sim>), and finish
+   the rest of this item for the figures it does not cover.
    - After a run's files are checked, the engine files the whole output as a new version of the figure's private dataset
      (numakoudsie/<the figure's dataset>; one per simulation, new versions only, never a second dataset), laid out as
      <notebook>/v<version>/output/ with the run's log, the notebook's code and a manifest.json (size and SHA-256 of every file),
