@@ -210,3 +210,15 @@ Kaggle, 23 November 2026: the model reached `main` alone first (PR 177; the old 
 "Simulations on Kaggle" ran it as notebook version 2 (code 5f98017, 171 s on 4 CPUs, NumPy 2.1.3), checked every file by SHA-256 and
 committed 64 files, 16 150 677 bytes, as 6be1fd7. Every check in its output equals the local run's. The page switch followed in a second
 pull request.
+
+## 10. Generation 2 (23 November 2026)
+
+Measured weakness of generation 1, old page against new on the same grid in headless Chromium: between whole wavelengths the field was
+off by up to 0.65 (λ = 30.5 px, Line of 16: 89 % of points a wrong colour); damping between nodes only 0.016. Live, during the curve
+"Calm lines, one pair at a time" (λ 64 → 16 px in 30 s): 51 % of 1 837 frames showed an older wavelength, the longest wait 276 frames,
+24 of the 49 stored wavelengths shown at all. Generation 2 (`tools/sims/wave_interference2.py`, Kaggle notebook version 4, code 708802d,
+data commit 17db10b, 143 s on 4 CPUs, 290 files, 36 474 418 bytes) stores ring angles at 118 wave numbers evenly spaced in k, which the
+page blends exactly (largest gap between neighbours 0.45 of a turn), heights at γ steps of 0.025 blended in a straight line (bound
+0.0011), every table in halves. Checks on Kaggle: at all 481 slider wavelengths and 61 slider dampings, C and S within 0.00065 of the
+exact field, colour one step off in 0.39 % of cell-instants, two-source limit within 9.8e-5. The sliders are back to λ 0.1 px and
+γ 0.01. The page also pins the figure on narrow portrait screens, so the waves stay in view while the controls are used.

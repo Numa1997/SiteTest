@@ -10,3 +10,5 @@
   registry probe are done. Left: German and Arabic strings for the changed texts, note §8/§10 numbers from the Kaggle checks, the
   page's doc, PLAN row, inventory, then merge and live check (headless Chromium sweep: stale frames, field against the old page).
 - Old work kept until generation 2 is verified live: generation 1 model, registry entry and data.
+
+- 20:55 UTC: page switch complete on the branch (translations, docs, view fix: figure pinned on narrow portrait screens); merging, then the live check.

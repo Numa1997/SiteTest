@@ -61,20 +61,34 @@ The colour of a cell is row $\operatorname{round}(127.5\,\psi + 127.5)$ of a 256
 
 ## How the data is stored and loaded (since 23 November 2026)
 
-Until 23 November 2026 the page computed every ring in the visitor's browser. Now the model
-[`tools/sims/wave_interference.py`](../../tools/sims/wave_interference.py) computes them once on Kaggle (pipeline A of
-[kaggle-sims.md](../kaggle-sims.md)), the workflow stores them under `public/data/sims/wave_interference/<date>/`, and the page
-only reads them. The study and the measured numbers: [notes/sims/reports/wave_interference/study.md](../../notes/sims/reports/wave_interference/study.md).
+Until 23 November 2026 the page computed every ring in the visitor's browser. Now a model computes them once on Kaggle
+(pipeline A of [kaggle-sims.md](../kaggle-sims.md)), the workflow stores them under `public/data/sims/<name>/<date>/`, and the
+page only reads them. The study and the measured numbers: [notes/sims/reports/wave_interference/study.md](../../notes/sims/reports/wave_interference/study.md).
+
+**Generation 2, played since 23 November 2026** ([`tools/sims/wave_interference2.py`](../../tools/sims/wave_interference2.py), Kaggle
+notebook version 4, code 708802d, data commit 17db10b, 143 s on 4 CPUs). The first generation stored a ring for every whole
+wavelength and the page showed the nearest: measured, the field was off by up to 0.65 between whole wavelengths, and during a live
+wavelength sweep 51 % of the frames showed an older wavelength while files downloaded. Generation 2 stores the angle k r of a ring
+at 118 wave numbers k evenly spaced from 2π/64 to 2π/16 per px. Because k r grows in proportion to k, the page blends the two stored
+angles on either side of the slider's k in a straight line, exactly; the nodes are close enough that two neighbours never differ by half
+a turn (largest gap 0.45 of a turn, measured). Heights are stored at γ = 0, 0.025, …, 0.6 and blended in a straight line (off by at
+most 0.0011). So the sliders keep their old steps, λ 0.1 px and γ 0.01. Every table is split into a bottom half (rows 0–124, `_lo`)
+and a top half (`_hi`); a wide screen shows 113 rows and downloads only bottom halves, and the page fetches the rings of the next eight
+wave numbers on either side ahead of the slider.
 
 | File | Content | Bytes |
 |---|---|---|
-| `geometry.bin` | header (every parameter, the node lists, the model's checks); r(j_b, m) float32, 250 × 500; cosine table int16, 65 536 | 632 640 |
-| `ring_l016.bin` … `ring_l064.bin` (49) | angle n of a ring at every stored distance, uint16, 250 × 500, one file per wavelength | 250 244 – 250 260 each |
-| `damp_g000.bin` … `damp_g060.bin` (13) | height h of a ring at every stored distance, uint16, 250 × 500, one file per damping | 250 188 – 250 208 each |
-| `wave_interference.json` | the geometry header again, readable | 3 353 |
+| `geometry.bin` | header (every parameter, the node lists, the model's checks); cosine table int16, 65 536 | about 131 kB |
+| `dist_lo.bin`, `dist_hi.bin` | r(j, m) float32, 125 × 500 each | about 250 kB each |
+| `ring_k000_lo.bin` … `ring_k117_hi.bin` (236) | angle of a ring, uint16, 125 × 500, per wave-number node and half | 125 216 – 125 224 each |
+| `damp_g000_lo.bin` … `damp_g600_hi.bin` (50) | height of a ring, uint16, 125 × 500, per damping node and half | about 125 kB each |
+| `wave_interference2.json` | the geometry header again, readable | small |
 
-All 64 files: 16 150 677 bytes, computed on Kaggle on 23 November 2026 (notebook `numakoudsie/phyein-usul-simulations` version 2, code commit 5f98017, 171 s on 4 CPUs; committed by the workflow as 6be1fd7). Each `.bin` is 4 bytes of label `WIF1`, a uint32 header length, a JSON
-header padded to a multiple of 4 bytes, then the little-endian array.
+All 290 files: 36 474 418 bytes. The model's checks (in the header): against the float64 field straight from eqs. (5)–(6), for Reset
+and Line of 16 at all 481 slider wavelengths (at γ = 0.15 and 0.1625) and all 61 slider dampings (at λ = 30 px), C and S differ by
+at most 0.00065 (the worst case is the height blend at γ = 0.01), and the colour row by one step in 0.39 % of 1.02 × 10⁹ cell-instants;
+the two-source limit |cos(k(r₁ − r₂)/2)| holds to 9.8 × 10⁻⁵ at every slider wavelength. Generation 1 (`wave_interference`, 64 files,
+16.2 MB) stays in the repository until generation 2 has been checked live.
 
 **`stored(file)`** ([L585–600](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L585-L600)): reads `data/sims/generations.json` once and takes the newest entry of `wave_interference`
 ([L588](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L588)); downloads `data/sims/wave_interference/<date>/<file>`, computes its SHA-256 with `crypto.subtle` and refuses it unless it
@@ -89,6 +103,11 @@ field stays empty ([L608](../../public/simulations/Circular%20Wave%20Interferenc
 node costs one more file of about 250 kB, downloaded and checked once per visit.
 
 ## How the code computes it
+
+**View.** On a narrow portrait screen (up to 900 px wide) the figure stays pinned at the top while the controls scroll beneath it
+(a rule in the page's own `<style>`, 23 November 2026); measured in headless Chromium at 390 × 844 and 820 × 1180, the whole figure
+stays visible while each slider, button and the curve's Play is in reach (before: 0–22 % of the figure on a phone). From 901 px the
+panel already scrolls inside itself beside the figure (`sim.css`).
 
 **State.** `sources` is an array of fractions $u_s$ of the width, each moved to the nearest stored place q/500
 (`place()`, [L699](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L699)), newest 24 kept ([L701](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L701)). The fixed grid and lattice are named in one line: `CELL = 3.2`,
@@ -165,10 +184,10 @@ All functions live in the one inline script ([L510–904](../../public/simulatio
 | Reset | `reset` | — | ωt = 0 and two sources at 200 and 600 px, places 125 and 375 ([L729–732](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L729-L732)) |
 | Clear | `clear` | — | no sources ([L733](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L733)) |
 | Click on the field | `field` | — | a source at the nearest stored place to the click ([L715–718](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L715-L718)) |
-| Wavelength λ | `lambda` | 16–64 px, step 1, default 30 ([L73](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L73)) | `changed()`: the ring file of the nearest node is loaded and the maps rebuilt |
+| Wavelength λ | `lambda` | 16–64 px, step 0.1, default 30 ([L73](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L73)) | `changed()`: the stored rings on either side of k are loaded (if not yet here) and blended, and the maps rebuilt |
 | Frequency f | `freq` | 0.2–2 Hz, step 0.05, default 1.1 ([L77](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L77)) | `readouts()` only; enters through ωt; needs no stored data |
-| Damping γ | `damp` | 0–0.6, step 0.05, default 0.15 ([L81](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L81)) | `changed()`: the damping file of the nearest node is loaded and the maps rebuilt |
-| Curve · a knob that moves by itself | built by `curve.js` | five examples, your own curve | moves a slider exactly; λ and γ then use the nearest stored node |
+| Damping γ | `damp` | 0–0.6, step 0.01, default 0.15 ([L81](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L81)) | `changed()`: the stored heights on either side of γ are loaded and blended, and the maps rebuilt |
+| Curve · a knob that moves by itself | built by `curve.js` | five examples, your own curve | moves a slider exactly; the page blends the stored nodes around the value |
 
 Readouts: `r-n` (number of sources), `r-v` (stored `v` rounded, [L711](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L711)), `cap-count` in the caption.
 
