@@ -206,6 +206,14 @@ run: download of the 7.05 GB output from Kaggle 5 s (about 100 MB/s on the GitHu
 Kaggle's unpacking between 5 and 8 minutes (absent at 22:41, version 2 present at 22:44; it holds 34 files, the 25 packs of v6 and
 the smoke run v5, pack bytes 7 056 399 034 = 7 053 765 604 + 2 633 430). A second filing started at 22:43 failed because
 Kaggle answered "Not Found" to the whole-dataset download while it was still preparing the new version; it changed nothing.
+**What the dataset page says** (the user's rule of 24 November 2026). Each filing also writes the dataset's subtitle and description
+from the registry entry (`figure`, `page_url`, `dataset_title`, `dataset_subtitle`, `dataset_about`) and the records: the figure, its
+page, what was computed, a table of every run in the dataset (folder, model, date, files, size, code commit), the layout and the
+licence. No internal names stand alone and the description is never empty. The first filings of 23 November had a subtitle
+built from the model's file name ("Every run of the website's double_pendulum_gpu model ...") and no description; Run workflow
+with mode `dataset`, the simulations' names and version `card` rewrites the card of existing datasets without uploading anything.
+The Kaggle connector cannot do it: it refuses every licence it is given ("The licenses array must specify exactly one license").
+
 Before the next filing into a dataset this large, make the download of earlier runs per folder (`kaggle datasets download -f`)
 and retry it while Kaggle answers "Not Found".
 Kaggle's limits: 200 GB per dataset, 200 GB of private datasets in all, 50 files at the top level ([Kaggle's dataset
