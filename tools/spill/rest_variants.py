@@ -26,8 +26,8 @@ CASES = dict(A=(F12, "wall"), B=(F12, "full"), C=(F16, "wall"), D=(F16, "full"),
              F=(F16, "full", "no tension"))      # F: D with the surface tension switched off (19 Nov 2026: is it what settles the pint?)
 only = os.environ.get("ONLY"); rep = {"dx_mm": dx * 1e3, "rest_s": REST, "device": str(jax.devices()[0])}
 DRAIN = os.environ.get("DRAIN") == "1"; STEP2 = os.environ.get("STEP2") == "1"; STEP3 = os.environ.get("STEP3") == "1"
-STEP3V = os.environ.get("STEP3_VERIFY") == "1"; STEP4 = os.environ.get("STEP4") == "1"; STEP45 = os.environ.get("STEP45") == "1"
-for key, case in (() if (DRAIN or STEP2 or STEP3 or STEP3V or STEP4 or STEP45) else CASES.items()):
+STEP3V = os.environ.get("STEP3_VERIFY") == "1"; STEP4 = os.environ.get("STEP4") == "1"; STEP45 = os.environ.get("STEP45") == "1"; AUDIT45 = os.environ.get("STEP45_AUDIT") == "1"
+for key, case in (() if (DRAIN or STEP2 or STEP3 or STEP3V or STEP4 or STEP45 or AUDIT45) else CASES.items()):
     body, model = case[0], case[1]
     if only and key not in only.split(","): continue
     t0 = time.time()
@@ -44,7 +44,7 @@ for key, case in (() if (DRAIN or STEP2 or STEP3 or STEP3V or STEP4 or STEP45) e
              mean_z_mm=[round(z0 * 1e3, 2), round(float(X[act, 2].mean()) * 1e3, 2)], below_floor=int((act & (X[:, 2] < 0)).sum()),
              outside_cavity=int((act & ~((X[:, 2] > 0) & (rr < Rr))).sum()), wall_s=round(time.time() - t0, 1))
     rep[key] = r; print(key, json.dumps(r), flush=True)
-if not (DRAIN or STEP2 or STEP3 or STEP3V or STEP4 or STEP45): json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
+if not (DRAIN or STEP2 or STEP3 or STEP3V or STEP4 or STEP45 or AUDIT45): json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
 
 
 # ====================================================================================================================================
@@ -837,3 +837,76 @@ def step45_run():
 
 
 if STEP45: step45_run()
+
+
+# ====================================================================================================================================
+# Step 4 close, Part A (23 Nov 2026, instruction "step4-close"): audit of the wall friction's area, CPU, before any change. At the 4.5
+# set-up, at t = 0 (prepare) and after one step: in the foam band 125-143.75 mm, A_geom = integral of 2 pi R(z) ds of the inner wall;
+# per velocity component, A_grid = sum of af dx^3 over wall faces (af > 0) and A_applied = sum of af dx^3 x alpha_open, alpha_open =
+# M_f / (rho_f dx^3), the area friction_evp effectively applies (its lam divides by rho_f dx^3, not by M_f); alpha_open's mean, min,
+# max over wall faces; n_mfloor_wall / n_mfloor_free (occupied faces with M_f < m_floor, af > 0 / af = 0). From the committed
+# slosh_head.jsonl: E_mech at the half-cycle extremes of the swing over 0.2-1.2 s (potential energy above rest from the logged mean
+# heights; the kinetic energy is near zero there), and the logged ewall per half-cycle. Writes OUTDIR/step4/diag_4p5_energy.json.
+def wall_audit(S, pr, z_lo=0.125, z_hi=0.14375):
+    import jax.numpy as jnp
+    G = S.G; dx = S.dx; ex = pr["ex"]; out = {}
+    zf = G.z0 + dx * np.arange(G.nz + 1)
+    fz = [np.broadcast_to(G.zc[None, None, :], S.fshape[0]), np.broadcast_to(G.zc[None, None, :], S.fshape[1]), np.broadcast_to(zf[None, None, :], S.fshape[2])]
+    tot = dict(A_grid=0.0, A_applied=0.0, A_applied_new=0.0)
+    for c, name in enumerate("uvw"):
+        af = np.asarray(S.af[c]); M = np.asarray(ex["M"][c]); rf = np.asarray(ex["rho_f"][c]); ws = np.asarray(pr["mass"][c]); th = np.asarray(S.th[c])
+        occ = (th > 0) & (ws > 1e-6); band = (fz[c] >= z_lo) & (fz[c] <= z_hi); wall = occ & (af > 0) & band
+        alpha = M / (rf * dx ** 3)
+        A_grid = float((af * dx ** 3)[wall].sum()); A_app = float((af * dx ** 3 * alpha)[wall].sum())
+        A_new = float((af * dx ** 3 * np.minimum(1.0, M / np.maximum(M, S.m_floor)))[wall].sum())
+        fl = occ & (M < S.m_floor)
+        out[name] = dict(n_wall_faces=int(wall.sum()), A_grid_m2=A_grid, A_applied_m2=A_app, A_applied_over_grid=A_app / max(A_grid, 1e-30),
+                         A_applied_new_m2=A_new, alpha_open_mean=float(alpha[wall].mean()), alpha_open_min=float(alpha[wall].min()), alpha_open_max=float(alpha[wall].max()),
+                         n_mfloor_wall=int((fl & (af > 0)).sum()), n_mfloor_free=int((fl & (af == 0)).sum()))
+        tot["A_grid"] += A_grid; tot["A_applied"] += A_app; tot["A_applied_new"] += A_new
+    zz = np.linspace(z_lo, z_hi, 20001); Rr = G.Rz(zz); ds = np.sqrt(np.diff(zz) ** 2 + np.diff(Rr) ** 2)
+    out["A_geom_m2"] = float(np.sum(2 * np.pi * 0.5 * (Rr[1:] + Rr[:-1]) * ds)); out["band_m"] = [z_lo, z_hi]; out["totals_three_components"] = tot
+    return out
+
+
+def audit45_run():
+    import datetime
+    import jax.numpy as jnp
+    T0 = time.time()
+    def say(m):
+        print(f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%S')} UTC | +{time.time() - T0:7.1f} s] {m}", flush=True)
+    vout = os.path.join(OUT, "step4"); os.makedirs(vout, exist_ok=True); res = dict(code="as at 045fb72 (before the fix)", device=str(jax.devices()[0]))
+    try:
+        G = SJ.Geometry(R, DZP, FILL, 0.0015, body=F16, top=0.08, lip=0.00125)
+        S = SJ.Stout(G, model="wall", K_frac=1.0, M_drops=4096, head_mode="evp"); S.gamma = 0.0
+        S.enable_side_vis(); S.enable_ls_extend(); S.wall_guard = True; s = S.init_state()
+        prep = jax.jit(S.prepare); step = jax.jit(lambda s, pr, dt: S.step(s, dt, 0.0, -9.81, prep=pr))
+        pr = prep(s); res["t0"] = wall_audit(S, pr); say(f"audit t = 0: {json.dumps(res['t0'])}")
+        s, d = step(s, pr, 7.6687e-4); pr = prep(s); res["after_one_step"] = wall_audit(S, pr); say(f"audit after one step: {json.dumps(res['after_one_step'])}")
+        res["m_stout0"] = S.m_stout0; res["m_head0"] = S.m_head0
+    except Exception as ex:
+        import traceback; res["audit_error"] = repr(ex); traceback.print_exc()
+    json.dump(res, open(os.path.join(vout, "diag_4p5_energy.json"), "w"), indent=1, default=str)
+    try:   # energy at the half-cycle extremes from the committed 4.5 log
+        rows = [json.loads(l) for l in open(os.path.join(ROOT, "notes", "spill", "step4", "slosh_head.jsonl"))]
+        t = np.array([r["t"] for r in rows]); q = np.array([r["q13_mm"] for r in rows]); ew = np.array([r["ewall_J"] for r in rows])
+        zs = np.array([r["stout_mean_z_mm"] for r in rows]) * 1e-3; zh = np.array([r["head_mean_z_mm"] for r in rows]) * 1e-3
+        ms, mh = res.get("m_stout0", 0.4296), res.get("m_head0", 0.02407)
+        zs0, zh0 = zs[t < 0.05].mean(), zh[t < 0.05].mean()
+        PE = 9.81 * (ms * (zs - zs0) + mh * (zh - zh0))
+        m = (t >= 0.2) & (t <= 1.2); idx = np.nonzero(m)[0]; ext = []
+        for i in idx[1:-1]:
+            if abs(q[i]) >= abs(q[i - 1]) and abs(q[i]) > abs(q[i + 1]) and (not ext or np.sign(q[i]) != np.sign(q[ext[-1]])): ext.append(i)
+        res["extremes"] = [dict(t=float(t[i]), q13_mm=float(q[i]), E_mech_J=float(PE[i]), ewall_cum_J=float(ew[i])) for i in ext]
+        res["per_half_cycle"] = [dict(t0=float(t[a]), t1=float(t[b]), dE_mech_J=float(PE[b] - PE[a]), ewall_logged_J=float(ew[b] - ew[a]))
+                                 for a, b in zip(ext[:-1], ext[1:])]
+        res["E_mech_note"] = ("potential energy above rest from the logged mean heights (stout mass-weighted; head arithmetic mean over particles, "
+                              "the ring and top layer carry other masses: approximate); kinetic energy taken as zero at the extremes")
+        say(f"energy: {json.dumps(res['per_half_cycle'])}")
+    except Exception as ex:
+        res["energy_error"] = repr(ex)
+    json.dump(res, open(os.path.join(vout, "diag_4p5_energy.json"), "w"), indent=1, default=str)
+    say("all done")
+
+
+if AUDIT45: audit45_run()

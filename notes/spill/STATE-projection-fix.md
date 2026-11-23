@@ -435,3 +435,9 @@ to 4 266 faces during the motion (9 at rest).
 Inference (not tested): the old model's 2.915 Hz / zeta 0.425 (cart4.py:77-78, "run 8's measured swing with the head (free_full_1.5,
 ring 13)") came from model "full": the 2-D head sheet plus the skin (the surface that cannot stretch, a Stokes-layer stress on every top
 liquid cell). Step 4 switches the skin off with head_mode "evp" (instruction B.3.10). The skin may be most of the old 0.425.
+
+# Instruction "step4-close" (owner, 23 Nov 2026 ~08:40 UTC): fix the wall-friction dilution, rerun 4.5, write the handoff
+Settled (reviewer, in code at 045fb72): friction_evp's lam = af / rho_f [...] decelerates a wall face as if it held a full cell; a cut
+face holds M_f = alpha_open rho_f dx^3, so only alpha_open A tau is applied; the logged wall energy uses rho_f dx^3 too. The 4.5 damping
+mark [0.32, 0.52] is withdrawn (built on PLANT_ZETA 0.425, a simulation number); new provisional range [0.13, 0.33] (derived, Neon).
+Part A (audit, CPU, before any change): rest_variants.py STEP45_AUDIT=1 -> notes/spill/step4/diag_4p5_energy.json.
