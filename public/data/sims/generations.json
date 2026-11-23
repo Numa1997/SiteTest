@@ -2,26 +2,6 @@
  "about": "Data of the site's simulations, computed once on Kaggle by the notebook numakoudsie/phyein-usul-simulations and carried here by .github/workflows/sims-kaggle.yml. One entry per simulation and date; a page plays the newest entry of its simulation.",
  "generations": [
   {
-   "sim": "barton",
-   "date": "2026-11-21",
-   "notebook": "numakoudsie/phyein-usul-simulations",
-   "version": 1,
-   "commit": "2eb38d91c67c6ce52fbc32d962b628e57e2ada77",
-   "index": "barton/2026-11-21/index-barton.json",
-   "files": {
-    "barton.bin": {
-     "bytes": 44279,
-     "sha256": "ccf6b15b3dc71f88e8e35a37803302e02e3737242908b3e3719a2792dd02fd78"
-    },
-    "barton.json": {
-     "bytes": 1720,
-     "sha256": "adfb2dcadca260e932b5f59468fd77447ea525d4bd0e820eaecec903600bd7c1"
-    }
-   },
-   "wall_s": 8.5,
-   "collected": "2026-11-21T20:13:07+00:00"
-  },
-  {
    "sim": "wave_interference2",
    "date": "2026-11-23",
    "notebook": "numakoudsie/phyein-usul-simulations",
@@ -1336,6 +1316,29 @@
    "gpu": true,
    "wall_s": 961.5,
    "collected": "2026-11-23T21:06:37+00:00"
+  },
+  {
+   "sim": "barton",
+   "date": "2026-11-21",
+   "notebook": "numakoudsie/phyein-usul-simulations",
+   "version": 1,
+   "commit": "2eb38d91c67c6ce52fbc32d962b628e57e2ada77",
+   "index": "barton/2026-11-21/index-barton.json",
+   "files": {
+    "barton.bin": {
+     "bytes": 44279,
+     "sha256": "ccf6b15b3dc71f88e8e35a37803302e02e3737242908b3e3719a2792dd02fd78"
+    },
+    "barton.json": {
+     "bytes": 1720,
+     "sha256": "adfb2dcadca260e932b5f59468fd77447ea525d4bd0e820eaecec903600bd7c1"
+    }
+   },
+   "wall_s": 8.5,
+   "collected": "2026-11-21T20:13:07+00:00",
+   "dataset": "numakoudsie/phyein-usul-barton",
+   "dataset_path": "phyein-usul-simulations-v1/",
+   "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 1, 45999 bytes, filed as one version of this dataset"
   }
  ]
 }
