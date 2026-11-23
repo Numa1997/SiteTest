@@ -1,6 +1,6 @@
 # Fig. 2, Double Pendulum: state of the move to Kaggle data
 
-Written 23 November 2026, 22:05 Berlin time, by the session that started the work. Read this before anything else on Fig. 2.
+Written 23 November 2026 at 21:58 Berlin time by the session that started the work; the full run's outcome added at 22:10. Read this before anything else on Fig. 2.
 All times below are Berlin time.
 
 ## The goal
@@ -15,13 +15,28 @@ The old page, unchanged: it still computes in the browser. Nothing of the old wo
 |---|---|
 | `tools/sims/dp_engine.py` | The model: JAX on Kaggle's GPU, the page's own RK4 (h = 1/600 s, 64-bit), all starts of one mass-length cell at once, packed per cell. Checks: energy drift per run, the GPU result against a plain copy of the page's RK4, RK4 against DOP853, small-swing periods, twin growth rate. |
 | `double_pendulum_smoke` (registry, model, data) | The engine test: 240 starts with twins, one pack of 2 633 430 bytes in the release `sims-double_pendulum_smoke-2026-11-23`. Passed (workflow run 45259655945): GPU result within 1.1e-12 m of the page's RK4 in the first 5 s and within 1 mm for all 20 s. Test data; remove it when the full data is verified. |
-| `double_pendulum_gpu` (registry, model) | The full run: 5 mass ratios x 5 length ratios x both angles every 15 degrees x both starting angular velocities at -5, -2.5, 0, 2.5, 5 rad/s = 360 000 starts, each with its chaos twin, 20 s each. Workflow run 45261988429, started 21:41. Outcome: see "The full run" below. |
+| `double_pendulum_gpu` (registry, model, data) | The full run, done: 5 mass ratios x 5 length ratios x both angles every 15 degrees x both starting angular velocities at -5, -2.5, 0, 2.5, 5 rad/s = 360 000 starts, each with its chaos twin, 20 s each. See "The full run" below. |
 | `double_pendulum` (registry, `tools/sims/double_pendulum.py`) | The first, rejected plan (CPU, DOP853, 1296 starts from rest). Kaggle computed it (notebook version 3, 451 s on 4 CPUs, 109 files, 17 665 452 bytes) but the save failed, so main has the entry and no data. Remove the entry and the model once the full data is verified; nothing reads it. |
 
-## The full run
-In flight when this was written. Read `public/data/sims/generations.json` for an entry `double_pendulum_gpu` and
-`public/data/sims/double_pendulum_gpu/<date>/double_pendulum.json` for its checks, sizes and times. If there is none, the run failed:
-read the workflow run's log, and remember that Kaggle keeps the output of the notebook version that computed it.
+## The full run (done)
+Workflow run 45261988429: merged 21:41:34, Kaggle step started 21:43:21, data on main 22:06:57 (commit 5252e1b4), all Berlin time.
+- Kaggle: notebook `numakoudsie/phyein-usul-simulations` version 6, two T4 cards, 961.5 s in all; the model 937.7 s, of which 96.3 s
+  on the GPU (25 passes of 28 800 pendulums each). Code commit 6ee30d8.
+- Data: 3000 runs files in 25 packs, 7 053 765 604 bytes, in the GitHub release `sims-double_pendulum_gpu-2026-11-23`; the packs are
+  106 896 241 to 624 769 190 bytes. On main: `public/data/sims/double_pendulum_gpu/2026-11-23/double_pendulum.json` (802 002 bytes:
+  every runs file's pack, offset, size, SHA-256, frame rate, energy drift) and `index-double_pendulum_gpu.json`.
+- Served: the default start's file (dp_22_19_2.bin, 1 318 432 bytes at offset 121 756 496 of dp_22.pack) was fetched as a byte range
+  from `https://phyeinusul.com/rel/sims-double_pendulum_gpu-2026-11-23/dp_22.pack` at 22:07 and its SHA-256 equals the summary's.
+- Checks: the GPU result and a plain copy of the page's RK4 differ by 1.1e-12 m in the first 5 s and stay within 1 mm for 20 s
+  (default start). No run broke down (`runs_not_finite` 0). Frame rates chosen: 20 to 120 a second; drawn-path error at most 0.16 %
+  of l1 + l2 (twin 0.40 %).
+- What the checks show about the page's own method: RK4 at h = 1/600 s is the live page's method, and the data reproduces it, errors
+  included. Its energy error is small for light and equal lower masses (at most 9.1e-6 of the energy scale for mass ratios 0.1, 0.32
+  and 1), reaches 1.0e-3 at mass ratio 3.2, and reaches 0.15 at mass ratio 10 (cells dp_4x). 577 of the 3000 files have a run above
+  1e-3, 389 above 1e-2, 50 above 0.1. The live page has the same error today at those settings; it shows it in its drift readout.
+  Whether the stored data should keep the page's method or use an accurate one for the heavy lower bob is the user's decision.
+- The estimate given before the run was wrong: 22:50 was predicted, 22:07 was measured. The file-writing step was assumed to run
+  3.6 times slower on Kaggle than in a workspace (measured on Kaggle's CPU notebook); on the GPU machine the whole model took 938 s.
 
 ## Branches (none merged; none may be deleted before the new page is verified live)
 - `kaggelize/double_pendulum-page`: a page that plays the first plan's small files (label DPN1, one file per starting angle), with a
@@ -42,7 +57,7 @@ the live page. The user has not agreed to it; the user's rule is that every cont
 (a finer grid and its size; which controls matter) before building the page, as step 3 of notes/sims/KAGGELIZE-PROMPT.md says.
 
 ## What is left
-1. The full run's outcome, read and written here.
+1. (done) The full run.
 2. The decision above.
 3. The page on the stored packs: one runs file is a byte range of a pack (`pack`, `offset`, `bytes`, `sha256` in
    `double_pendulum.json`), fetched from `/rel/<release>/<pack>` today and from R2 after the engine rebuild
