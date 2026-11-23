@@ -1,0 +1,28 @@
+{
+ "project": "sims",
+ "job": "double_pendulum_smoke",
+ "date": "2026-11-23",
+ "source": {
+  "repo": "Numa1997/SiteTest",
+  "commit": "3baa089777a71561c317bf5821e3d5755d6d9e8b",
+  "path": "tools/sims/double_pendulum_smoke.py"
+ },
+ "machine": {
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "cpus": 4,
+  "python": "3.13.16",
+  "numpy": "2.1.3",
+  "scipy": "1.16.3"
+ },
+ "files": {
+  "double_pendulum.json": {
+   "bytes": 2273,
+   "sha256": "c79ff2f03395ab8c267abf64025684ad8f4efa1c3c1c409e91811749c809e866"
+  },
+  "dp_22.pack": {
+   "bytes": 2633430,
+   "sha256": "6a3f2963c8d337789089c76e5e200d1e7b4899ab2f086adbe78362b47aab1263"
+  }
+ },
+ "wall_s": 25.14281725883484
+}
