@@ -82,19 +82,19 @@ if "ident" in ONLY:
     try:
         p_old = os.path.join(KDIR, "stout_jax_5acb718.py")
         spec = importlib.util.spec_from_file_location("stout_jax_5acb718", p_old); SO = importlib.util.module_from_spec(spec); spec.loader.exec_module(SO)
-        nid = int(os.environ.get("N_IDENT", "3")); hashes = {}
+        IDX = float(os.environ.get("IDENT_DX", str(DXA))); nid = int(os.environ.get("N_IDENT", "3")); hashes = {}
         for tag, mod, au_ in (("old_5acb718", SO, False), ("new_audit_off", SJ, False), ("new_audit_on", SJ, True)):
-            G, S, s, _ = setup(mod, DXA, au_)
+            G, S, s, _ = setup(mod, IDX, au_)
             prep = jax.jit(S.prepare); step = jax.jit(lambda s, pr, dt, gx: S.step(s, dt, gx, -9.81, prep=pr))
-            cs = math.sqrt(mod.G_HEAD / mod.RHO_HEAD); dt_el = 0.40 * DXA / cs; t = 0.0; vmax = 0.0
+            cs = math.sqrt(mod.G_HEAD / mod.RHO_HEAD); dt_el = 0.40 * IDX / cs; t = 0.0; vmax = 0.0
             for k in range(nid):
-                dt = min(2e-3, dt_el, 0.8 * DXA / max(vmax, 1e-12)); s, d = step(s, prep(s), dt, 0.0); t += dt; vmax = float(d["vmax"])
+                dt = min(2e-3, dt_el, 0.8 * IDX / max(vmax, 1e-12)); s, d = step(s, prep(s), dt, 0.0); t += dt; vmax = float(d["vmax"])
             hashes[tag] = {kk: hashlib.sha256(np.ascontiguousarray(np.asarray(v)).tobytes()).hexdigest() for kk, v in sorted(s.items())}
             say(f"ident {tag}: {nid} steps, t {t:.6f}")
         same = {kk: hashes["old_5acb718"][kk] == hashes["new_audit_off"].get(kk) for kk in hashes["old_5acb718"]}
         mot = ("xp", "vp", "C", "be", "act", "p", "wh")
         out_on = {kk: hashes["old_5acb718"][kk] == hashes["new_audit_on"].get(kk) for kk in mot}
-        out = dict(audit_on_motion_identical=out_on, steps=nid, dx=DXA, old_sha256_of_file=hashlib.sha256(open(p_old, "rb").read()).hexdigest(), keys=same, all_identical=all(same.values()),
+        out = dict(audit_on_motion_identical=out_on, steps=nid, dx=IDX, old_sha256_of_file=hashlib.sha256(open(p_old, "rb").read()).hexdigest(), keys=same, all_identical=all(same.values()),
                    extra_keys_new=sorted(set(hashes["new_audit_off"]) - set(hashes["old_5acb718"])))
         dump("default_path_identity.json", out); say(f"ident: all identical {out['all_identical']}")
     except Exception as ex:

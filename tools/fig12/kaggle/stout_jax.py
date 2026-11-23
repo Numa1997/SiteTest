@@ -824,7 +824,7 @@ class Stout:
                         ok = ~gl[I[:, 0], I[:, 1], I[:, 2]] & ~self._solid_np(G, I)
                         if sv: ok = ok & (side[I[:, 0], I[:, 1], I[:, 2]] == side_e)
                         new = ~found
-                        idx[new, k] = (I[:, 0] * ny + I[:, 1]) * nz + I[:, 2]
+                        idx[new, k] = ((I[:, 0] * ny + I[:, 1]) * nz + I[:, 2])[new]
                         wts[new, k] = np.where(ok, w, 0.0)[new]
                         k += 1
             s_ = wts.sum(1); found = found | (s_ > 1e-6)

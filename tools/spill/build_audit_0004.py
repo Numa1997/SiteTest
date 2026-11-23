@@ -16,7 +16,7 @@ ROOT = "/kaggle/working/repo"
 for p, b in FILES.items():
     fp = os.path.join(ROOT, p); os.makedirs(os.path.dirname(fp), exist_ok=True)
     d = zlib.decompress(base64.b64decode(b)); open(fp, "wb").write(d); print(p, len(d), hashlib.sha256(d).hexdigest(), flush=True)
-env = dict(os.environ, SUBRUN="{sub}", ONLY="{only}", DX="0.003", JAX_PLATFORMS="cpu")
+env = dict(os.environ, SUBRUN="{sub}", ONLY="{only}", DX="0.003", IDENT_DX="0.0015", JAX_PLATFORMS="cpu")
 pr = subprocess.Popen([sys.executable, os.path.join(ROOT, "tools/spill/audit_0004.py"), "/kaggle/working"], cwd=ROOT, env=env,
                       stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 for line in pr.stdout: print(line, end="", flush=True)

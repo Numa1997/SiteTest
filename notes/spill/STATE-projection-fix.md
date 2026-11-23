@@ -542,3 +542,10 @@ u_after_Fdev^2) (slab: before the floor faces are zeroed; the version without th
 - 23 Nov 21:21:33-21:22:39 UTC: v2 done. Test (a): E_plastic / W_grav 1.0019 PASS, / E_drop 0.9891 PASS, / W_stress_grid -0.092 FAIL (badly
   defined: floor faces carry 1.79e-5 J; above them the ratio is 0.670). Rotation: s 7.48 Pa, E_plastic 1.89 J/m^3, both FAIL as predicted.
   Report notes/coord/to-coordinator/0004-report.md. The 3 mm slosh waits for the owner (enable_ls_extend fix).
+# Instruction 0005 (23 Nov ~21:35 UTC, coordinator: option 1 approved): the enable_ls_extend line fixed, then the 0004 audit at 3 mm
+- PRE-EXISTING BUG FIX (stout_jax.py:827, enable_ls_extend): `idx[new, k] = (I[:, 0] * ny + I[:, 1]) * nz + I[:, 2]` became
+  `idx[new, k] = ((I[:, 0] * ny + I[:, 1]) * nz + I[:, 2])[new]`, as the wts line below it. The old line wrote all rows into the rows not
+  yet found; on the first push pass every row is unfound (new all True), so both forms are identical there. At 1.5 mm every solid cell is
+  found on the first pass, so the old line never failed and no earlier result can change; at 3 mm some cells need a further pass and it
+  raised "shape mismatch (3348,) vs (8,)". Proof wanted: block "ident" of audit_0004.py, now at IDENT_DX = 1.5 mm, compares every state
+  array bit for bit after N_IDENT steps of the 4.5 set-up: 5acb718 solver vs the current solver with audit off (and the motion with audit on).
