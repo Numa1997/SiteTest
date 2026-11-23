@@ -91,10 +91,13 @@ git add notes/coord && git -c user.name="$AN" -c user.email="$AE" commit -m "Coo
 git -c push.negotiate=true push origin coord:claude/guinness-projection-fix
 ```
 
-**How the session receives it:** its own monitor fetches the branch every 3 minutes. That monitor lives inside the session.
-- If the session was restarted, or its monitor lapsed, it hears nothing.
-- Then the owner pastes one line into it: "Pull the branch and follow `notes/coord/to-session/0000-channel-rules.md`, then
-  every numbered file after it."
+**How the session receives it:** its own monitor runs `notes/coord/session-poll.sh` every 3 minutes. That monitor lives
+inside the session. The code handoff makes starting it the session's first action, before any reply, so a new session is
+listening from its first turn.
+- Check with `notes/coord/check.sh`: each instruction goes pushed, ack, report, verified. No ack 5 minutes after the push
+  means the session is not listening.
+- If the session was restarted or its monitor lapsed, it hears nothing. Then the owner pastes one line into it: "Read
+  `notes/coord/handoff/HANDOFF-code-session-guinness-spill.md` and do its first actions." That line starts the monitor.
 - Nothing you can do from a chat reaches inside a Code session. No message tool exists. The branch has no pull request, so
   pull-request notifications don't apply either.
 

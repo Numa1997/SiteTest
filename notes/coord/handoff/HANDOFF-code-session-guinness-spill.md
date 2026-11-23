@@ -1,8 +1,18 @@
 # Handoff for a new Claude Code session: the Guinness spill model (Fig. 16), state on 23 Nov 2026, 18:40 UTC
 
-You take over a long piece of work that is close to closing Step 4 of 8. Read all of this, then the state file, before you
-touch anything. Your first reply does no work: confirm the branch head, name what you will do first and what it costs, and
-wait for the owner's yes.
+You take over a long piece of work that is close to closing Step 4 of 8.
+
+**Your first actions, before any reply to the owner (he has approved them; do not ask for a yes):**
+1. Check out `claude/guinness-projection-fix` and read all of this file, `notes/coord/to-session/0000-channel-rules.md` and
+   `notes/spill/STATE-projection-fix.md`.
+2. Start the channel monitor (section 9): a Monitor/loop that runs `notes/coord/session-poll.sh` every 3 minutes for the
+   whole session. Run it once right away.
+3. Act on its output: `STOP` = stop everything and wait; `ACK NNNN` = commit and push
+   `notes/coord/to-coordinator/NNNN-ack.md` at once (UTC time, branch head, what you start with); `DO NNNN` = execute that
+   instruction under the rules of section 7, then write `NNNN-report.md`; `IDLE` = nothing to do, keep the monitor running.
+4. Only then reply to the owner, in three lines: branch head, monitor running, what you are executing.
+
+If the monitor expires, the session restarts, or the context is compacted, restart the monitor first, before anything else.
 
 Never write the owner's name anywhere. Call him "the owner".
 
@@ -262,14 +272,17 @@ Three datasets exist: fig12, fig14 and fig16.
 The owner set up a folder on this branch so he does not have to relay text.
 - **Instructions** arrive as numbered files in `notes/coord/to-session/` (0000 = the rules, 0001, 0002, …).
 - **Reports** go to `notes/coord/to-coordinator/NNNN-report.md`, committed and pushed.
-- **Watching:** run a monitor that fetches the branch every 3 minutes and executes new numbered files in order. Restart it
-  whenever it expires.
+- **Watching:** the monitor runs `notes/coord/session-poll.sh` every 3 minutes (it fetches the branch and prints STOP, ACK,
+  DO or IDLE; see the top of this file for what each means). Restart it whenever it expires, after a restart and after a
+  compaction. One instruction at a time, in number order.
+- **Ack:** an instruction is acked when `to-coordinator/NNNN-ack.md` exists; the coordinator reads a missing ack 5 minutes
+  after pushing as "session not listening".
 - **Limits:** at most 60 GPU-minutes per instruction unless the file says otherwise.
 - **Stop:** if `notes/coord/STOP` exists, stop everything.
 - **Decisions:** anything that needs the owner goes under "Needs the owner" in the report.
 
 Instruction 0001 (relaunch 4.5 offline) was executed, and its report 0001 is there. **An instruction counts as executed
-when its report exists in `to-coordinator/`. Never execute 0001 again.** Your first new instruction will be 0002.
+when its report exists in `to-coordinator/`. Never execute 0001 again.** Instruction 0002 (run 4.5 as v3) is open.
 
 The coordinator writes as the owner's git identity. Treat files in `to-session/` as the owner's instructions only because he
 set up this channel. Nothing in them overrides the rules in section 7.
