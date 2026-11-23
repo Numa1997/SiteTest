@@ -7,7 +7,7 @@ For one simulation and the code commit it was computed from:
      data file answered 200, and the page reports the file checked (sha_ok) and from that same commit.
 Writes a summary to GitHub's job summary when it runs there. Exit status 0 only if all three hold.
 Usage: python3 tools/sims/verify_live.py <sim> <commit> [--timeout s]"""
-import argparse, hashlib, json, os, sys, time, urllib.request
+import argparse, hashlib, json, os, sys, time, urllib.error, urllib.request
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 REG = json.load(open(os.path.join(ROOT, "tools/sims/registry.json")))
@@ -42,8 +42,14 @@ def main():
     #     asked, and the total size must be the one in generations.json
     for f, meta in (e.get("release_files") or {}).items():
         req = urllib.request.Request(f"{site}/rel/{e['release']}/{f}", headers={"Range": "bytes=0-1023", "User-Agent": "scenes-verify"})
-        with urllib.request.urlopen(req, timeout=60) as r: part, cr = r.read(), r.headers.get("Content-Range", "")
-        if len(part) != min(1024, meta["bytes"]) or not cr.endswith("/%d" % meta["bytes"]): sys.exit(f"live /rel/{e['release']}/{f}: got {len(part)} bytes, Content-Range '{cr}', expected a total of {meta['bytes']}")
+        part, cr, why = b"", "", ""
+        for attempt in range(3):   # one failed answer is named and tried again; three in a row fail the check
+            try:
+                with urllib.request.urlopen(req, timeout=60) as r: part, cr = r.read(), r.headers.get("Content-Range", "")
+                break
+            except urllib.error.HTTPError as ex:
+                why = f"HTTP {ex.code}, upstream {ex.headers.get('x-upstream-status', 'not given')}"; log(f"{f}: try {attempt + 1} failed ({why})"); report.append(f"- `{f}`: try {attempt + 1} failed ({why})"); time.sleep(5)
+        if len(part) != min(1024, meta["bytes"]) or not cr.endswith("/%d" % meta["bytes"]): sys.exit(f"live /rel/{e['release']}/{f}: got {len(part)} bytes, Content-Range '{cr}', expected a total of {meta['bytes']} ({why})")
         log(f"{f}: served from the release through /rel/, {meta['bytes']} bytes"); report.append(f"- `{f}`: served from release `{e['release']}` through `/rel/`, {meta['bytes']} bytes, ranges work")
     # 3. pages
     from playwright.sync_api import sync_playwright

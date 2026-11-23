@@ -165,3 +165,9 @@ part of the double pendulum's grid (240 starts with their twins, one pack) compu
 the full run of Fig. 2 through the same path: 360 000 starts with their twins, 25 packs in the release
 `sims-double_pendulum_gpu-<date>`. A start the page's fixed step cannot follow (numbers no longer finite) is stored as zeros and
 marked `"finite": false` in its file's header; the summary counts them as `runs_not_finite`. The page does not play this data yet.
+
+**A fault of the `/rel/` path, found on the full run (23 November 2026).** The live check of run 45261988429 failed although the data
+was saved and correct: one of the 25 packs answered 404 through `/rel/`, and a minute later answered normally; a second pass failed
+on another pack. About one request in twenty to GitHub's release download came back as an error. Since then the Worker tries three
+times and, if all fail, answers 502 with GitHub's status in the header `x-upstream-status`; the live check tries each file three
+times and names the file and the status. This is one more reason the data moves to R2 (notes/sims/ENGINE-PROMPT.md).
