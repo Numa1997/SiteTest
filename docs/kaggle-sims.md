@@ -160,3 +160,8 @@ No new key is needed: the workflow's own token may write releases (`permissions:
 `double_pendulum_smoke` ([tools/sims/double_pendulum_smoke.py](../tools/sims/double_pendulum_smoke.py)) is the test of all three: a small
 part of the double pendulum's grid (240 starts with their twins, one pack) computed by the same code as the full run
 ([tools/sims/dp_engine.py](../tools/sims/dp_engine.py): JAX on the GPU, the page's own RK4 at h = 1/600 s in 64-bit numbers).
+
+`double_pendulum_gpu` ([tools/sims/double_pendulum_gpu.py](../tools/sims/double_pendulum_gpu.py), added 23 November 2026 after the test passed) is
+the full run of Fig. 2 through the same path: 360 000 starts with their twins, 25 packs in the release
+`sims-double_pendulum_gpu-<date>`. A start the page's fixed step cannot follow (numbers no longer finite) is stored as zeros and
+marked `"finite": false` in its file's header; the summary counts them as `runs_not_finite`. The page does not play this data yet.

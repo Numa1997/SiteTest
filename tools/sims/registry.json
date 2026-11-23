@@ -34,6 +34,16 @@
    "files": ["double_pendulum.json"],
    "about_files": "Engine test for GPU runs with large data: one pack in the GitHub release sims-double_pendulum_smoke-<date>, the summary with every fingerprint committed. No page plays it.",
    "pages": []
+  },
+  "double_pendulum_gpu": {
+   "model": "tools/sims/double_pendulum_gpu.py",
+   "gpu": true,
+   "timeout_s": 14400,
+   "store": "release",
+   "release_files": ["*.pack"],
+   "files": ["double_pendulum.json"],
+   "about_files": "Fig. 2 in full: 25 packs (one per mass-length cell) in the GitHub release sims-double_pendulum_gpu-<date>; the summary with every runs file's pack, offset, size and SHA-256 is committed. No page is listed until the page plays it.",
+   "pages": []
   }
  }
 }
