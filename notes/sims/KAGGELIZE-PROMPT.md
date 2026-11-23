@@ -153,7 +153,9 @@ STEP 6. COMPUTE THROUGH THE ENGINE
 5. If no data arrives, read the run's logs, and say at once where the computed data still is: Kaggle keeps the output of every
    notebook version, and download_notebook_output with versionNumber fetches it. Fix the cause in a new pull request; use the
    engine's collect mode if it exists, so that nothing is computed twice.
-6. Read the model's checks from the stored index and put the numbers into the study.
+6. Read the model's checks from the stored index and put the numbers into the study. Check that the generation also names its
+   copy on Kaggle (dataset and dataset_path): every data set stays on Kaggle too, whatever its size. If the engine did not file it,
+   say so in your state file and your report; do not remove anything that has no copy there.
 7. Only now, with the data stored and its layout final, start step 7. Nothing of the page, the note, the walkthrough or the
    translations is written before this point.
 
