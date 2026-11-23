@@ -288,6 +288,1178 @@
    },
    "wall_s": 171.1,
    "collected": "2026-11-23T19:39:17+00:00"
+  },
+  {
+   "sim": "wave_interference2",
+   "date": "2026-11-23",
+   "notebook": "numakoudsie/phyein-usul-simulations",
+   "version": 4,
+   "commit": "708802d5bd223e65ddff85cf1a28d98a3008c845",
+   "index": "wave_interference2/2026-11-23/index-wave_interference2.json",
+   "files": {
+    "damp_g000_hi.bin": {
+     "bytes": 125220,
+     "sha256": "e8ea33d07dc67076c0854c543b86fd373a392071b936f9839d8068d2c741b242"
+    },
+    "damp_g000_lo.bin": {
+     "bytes": 125216,
+     "sha256": "04d1fb4759bac134cf13fa45c64136e94099397af1cfddff3991eca45eb177c8"
+    },
+    "damp_g025_hi.bin": {
+     "bytes": 125240,
+     "sha256": "bd6b015c08661faa86789f806fdf11d11233d6e653149e56dffaf9425b454c54"
+    },
+    "damp_g025_lo.bin": {
+     "bytes": 125236,
+     "sha256": "0e3cd72fba4c8033eaca927cd79169908b8b0af8096cb0b94f58c61ff3c63819"
+    },
+    "damp_g050_hi.bin": {
+     "bytes": 125236,
+     "sha256": "92bf29ae03c79a608416c8e7372b12af2c5306507ee209de22e43c7be5f36570"
+    },
+    "damp_g050_lo.bin": {
+     "bytes": 125236,
+     "sha256": "a6c829b655b9643ba7afbc375308be9315aa2e1f60c4e3129b2dae71b758ee0a"
+    },
+    "damp_g075_hi.bin": {
+     "bytes": 125224,
+     "sha256": "a141477c6fedce68ceb3965227b8c9a379e322731bfacb5d40b1a9f6657e7132"
+    },
+    "damp_g075_lo.bin": {
+     "bytes": 125224,
+     "sha256": "6b5e5c62dd78f0ad6ad8f0277079ea6af2b1052838f63fbb34c2fae597fc9335"
+    },
+    "damp_g100_hi.bin": {
+     "bytes": 125236,
+     "sha256": "9bc12d5df81e89852611cec6aeccd9dba8f5c36e7bc60af4b1341ba30f15dab8"
+    },
+    "damp_g100_lo.bin": {
+     "bytes": 125236,
+     "sha256": "c234007c997bfdda2a277cfd3ff8c764f5d0db9358de0eac2b654f60534d4805"
+    },
+    "damp_g125_hi.bin": {
+     "bytes": 125240,
+     "sha256": "645892566cfb2f4a9b09d6ba4d2fe9ca2671983a1df0c34b672209853b8a56a4"
+    },
+    "damp_g125_lo.bin": {
+     "bytes": 125236,
+     "sha256": "2725ade2d5367353054557a85177b289e026275b3eb0f4dbf88a67c05648f4fd"
+    },
+    "damp_g150_hi.bin": {
+     "bytes": 125224,
+     "sha256": "ac348d9ce3576888d88ba622b7d6beeb4a67c813a9903107a74cc41608c9c396"
+    },
+    "damp_g150_lo.bin": {
+     "bytes": 125220,
+     "sha256": "60e2993065cbf74d828e471d6eb3d483c820e7bbf3fcaa508b80fabba07ca2d1"
+    },
+    "damp_g175_hi.bin": {
+     "bytes": 125240,
+     "sha256": "465288c730d72fb5c6a28553adc742a67ce54e8c574ef11e513c9e05c83b1c82"
+    },
+    "damp_g175_lo.bin": {
+     "bytes": 125236,
+     "sha256": "bd508ec4a4a397f45fe9ce9fa7a2d179d9acd968438bf9d124f2724c3fcbe9dc"
+    },
+    "damp_g200_hi.bin": {
+     "bytes": 125236,
+     "sha256": "d6e84b3e0440047029f3571ef41ac3f3b3a50a17a4257ce9000f89684bad9030"
+    },
+    "damp_g200_lo.bin": {
+     "bytes": 125236,
+     "sha256": "b5e21fbf18b4bf94e81b9788c9617b3c13e12ded56bd8e0f630a189ac270423b"
+    },
+    "damp_g225_hi.bin": {
+     "bytes": 125224,
+     "sha256": "a9118849c1af150cff8fcd6cf77d69f1973922d7ecc32618c78561d1fdcfce93"
+    },
+    "damp_g225_lo.bin": {
+     "bytes": 125224,
+     "sha256": "ca1c31cfd16592efc0bd69c44dbbbc3efa1d955aca027b60500b467ff344c379"
+    },
+    "damp_g250_hi.bin": {
+     "bytes": 125236,
+     "sha256": "bac82d5ab1ed8c1e91e109cc5369c63387b8ed1be153fb398e51a46065fc9d07"
+    },
+    "damp_g250_lo.bin": {
+     "bytes": 125236,
+     "sha256": "63233ddd4eaa08ea2db12ad290c4ec5f8bf8b5684c1e22eb66edef890c0dd78f"
+    },
+    "damp_g275_hi.bin": {
+     "bytes": 125240,
+     "sha256": "19aa6a598b2baa17910d1bc3e15cbfca81672685b23fc5e27c59cbb8e2c2e903"
+    },
+    "damp_g275_lo.bin": {
+     "bytes": 125236,
+     "sha256": "60e69e39f27d5abbf64fbe62e39b9e457d55122bd37067e7e6df01f229fd0ef1"
+    },
+    "damp_g300_hi.bin": {
+     "bytes": 125220,
+     "sha256": "f75b983da7760adbc101f7a50833396b94603ce6056fdf1a4cdd4bef5d0162d7"
+    },
+    "damp_g300_lo.bin": {
+     "bytes": 125220,
+     "sha256": "acba534a33e0903378d9029e179d86b9bd5f3c104a7b2f35c676034d00eb78f4"
+    },
+    "damp_g325_hi.bin": {
+     "bytes": 125240,
+     "sha256": "bf4d8976eff73eb2043f1b27b30e8c6cdbc07db6123c9e7717960db237c6dcd1"
+    },
+    "damp_g325_lo.bin": {
+     "bytes": 125236,
+     "sha256": "511616efbacad10c1709b0cda3b575b801371454aa28cc23f8a4aa75fa4d8cc7"
+    },
+    "damp_g350_hi.bin": {
+     "bytes": 125236,
+     "sha256": "5a7cfc05345ad17f742d77062b5de862d17c1a053333b16fa28ea46a14483c79"
+    },
+    "damp_g350_lo.bin": {
+     "bytes": 125236,
+     "sha256": "1e521fcfe50e0f324a5b59379162ba35933756e15409510b684ac7fef01ecae8"
+    },
+    "damp_g375_hi.bin": {
+     "bytes": 125224,
+     "sha256": "c8434a0d0064357cbffd5d9ee1058545803fbb0f39839a6df2cab329bb107fec"
+    },
+    "damp_g375_lo.bin": {
+     "bytes": 125224,
+     "sha256": "0d4235ed640ff344ed8b916c931606509c261a80256f93e3f9e0cca62744ee6b"
+    },
+    "damp_g400_hi.bin": {
+     "bytes": 125236,
+     "sha256": "737c324c3a5bede01309887d9a1fac8cac3e6e5af22be3ade6910320bd49ecd8"
+    },
+    "damp_g400_lo.bin": {
+     "bytes": 125236,
+     "sha256": "e910f0bc8bbe8dec6b1f3d7a26eedcc88c98720cb52db15c581238ca9299ffc9"
+    },
+    "damp_g425_hi.bin": {
+     "bytes": 125240,
+     "sha256": "440a64b28bbfaf7106b891247f885cf7a35117ac3ef83876c5cbb35a9c474acd"
+    },
+    "damp_g425_lo.bin": {
+     "bytes": 125236,
+     "sha256": "5edb5163ce210163f2c7a3862332bd800d2dbf2e1bb29e84f6d7effc15a374ef"
+    },
+    "damp_g450_hi.bin": {
+     "bytes": 125224,
+     "sha256": "12773b3017e6720545da52f5f98f90892b25c0119658a6da1b25d0acb315e6c7"
+    },
+    "damp_g450_lo.bin": {
+     "bytes": 125220,
+     "sha256": "af6f97927306aae2cfaae841d286aaffe4fc0fd0fb8282db7eb305b990632c44"
+    },
+    "damp_g475_hi.bin": {
+     "bytes": 125240,
+     "sha256": "b7fad2bf30290f6962e35fbe7015257f17ff87caf46c09add73b5758ea8239bc"
+    },
+    "damp_g475_lo.bin": {
+     "bytes": 125236,
+     "sha256": "dc6fa3bcdaaa97d658b88da82f5e64b350a4c805806de2af190509bdccc33c65"
+    },
+    "damp_g500_hi.bin": {
+     "bytes": 125236,
+     "sha256": "ce10e5ad49153a86669fc24832e5722f6b4f2bd9daaab4473d7da0cf2bfcf3d7"
+    },
+    "damp_g500_lo.bin": {
+     "bytes": 125236,
+     "sha256": "59905d3b5c528781d5eafc60b125101dc3876637d1f73aef62d31b42528c6db7"
+    },
+    "damp_g525_hi.bin": {
+     "bytes": 125224,
+     "sha256": "5c0958024b1b49f9f9614aafad7409b8b56edcc58f266d8a604d0cabecaefe16"
+    },
+    "damp_g525_lo.bin": {
+     "bytes": 125224,
+     "sha256": "acc5327b757be3e02c713aa449a05bd147a263a1d995a4c436716b294c42736e"
+    },
+    "damp_g550_hi.bin": {
+     "bytes": 125236,
+     "sha256": "601e6997f47bf2a1599ad2da73b437da88f277a4c819c87d91639c4a3a0125c1"
+    },
+    "damp_g550_lo.bin": {
+     "bytes": 125236,
+     "sha256": "b47d6c5b5c92f863a2cd4c6c719d81ada8f368246805918d1cf99742e44aee58"
+    },
+    "damp_g575_hi.bin": {
+     "bytes": 125240,
+     "sha256": "780e72bc93e5022d3675484a6747310d820ba289117520d583c99b1701f5a290"
+    },
+    "damp_g575_lo.bin": {
+     "bytes": 125236,
+     "sha256": "6a6b8358bde65a4cf8884b1be62d16e90ea2a2761e7511174c332b70be980067"
+    },
+    "damp_g600_hi.bin": {
+     "bytes": 125220,
+     "sha256": "c106769db47da615128dbc7c4432c84108f03e201e8dccf1a738085e17d05504"
+    },
+    "damp_g600_lo.bin": {
+     "bytes": 125220,
+     "sha256": "b133b99bcbbac53b6506af28a4f959564b79a7359c4036a030c561cf114906ce"
+    },
+    "dist_hi.bin": {
+     "bytes": 250188,
+     "sha256": "9578c5811f66ad6b0d373b6dcac8200bf7eb09d2939b2eaebb564f1d9c361e90"
+    },
+    "dist_lo.bin": {
+     "bytes": 250188,
+     "sha256": "ac2194b15d5ae29cd45a5aa8653151260bc885195995c341ff91c635d63b1248"
+    },
+    "geometry.bin": {
+     "bytes": 135128,
+     "sha256": "3a1ea9373a263f99a5ecdea85d27fdb052ae4437c88b4fb866b7db9da310e684"
+    },
+    "ring_k000_hi.bin": {
+     "bytes": 125268,
+     "sha256": "cbd8a5890cfa2cd5928c8c488afdda1cfcfba048c2f8e1980b83aa1b5086c0e9"
+    },
+    "ring_k000_lo.bin": {
+     "bytes": 125268,
+     "sha256": "898687e97a16c616ef23c404f64b94d8623924cc027058d72e4202afd4c92765"
+    },
+    "ring_k001_hi.bin": {
+     "bytes": 125268,
+     "sha256": "b8e56feb53759d1735f1868928be95065e224874e855257e5317514ef33ed0e6"
+    },
+    "ring_k001_lo.bin": {
+     "bytes": 125268,
+     "sha256": "5f0f4a609dbe7002edce9f63eed3796277c57fd4a57f034228ba8628a3e63219"
+    },
+    "ring_k002_hi.bin": {
+     "bytes": 125280,
+     "sha256": "c1310e602740b381c41bed8230b44c6ca4e6fb3ab93678e58ddc152f2bd2ac9c"
+    },
+    "ring_k002_lo.bin": {
+     "bytes": 125280,
+     "sha256": "49c0a60be620ed6d1475a382835c500852dea18e903cf56a1876241e0e3c526b"
+    },
+    "ring_k003_hi.bin": {
+     "bytes": 125280,
+     "sha256": "de5c1e72869e46940e7b7420a0bb3f93f6723f4e2a2cd183aacf19e932c5a1e3"
+    },
+    "ring_k003_lo.bin": {
+     "bytes": 125280,
+     "sha256": "677ecbffc3ade678fc13298cbea96f71bd272b8ca6b58db804f64879e6cab639"
+    },
+    "ring_k004_hi.bin": {
+     "bytes": 125280,
+     "sha256": "61a5f81c20fd40b54040c30cb629375a47d59430d4c1bdf4a63e58230b86e248"
+    },
+    "ring_k004_lo.bin": {
+     "bytes": 125280,
+     "sha256": "5c305cbc2403c3aad3d8440e709ee8cb107208b7aa0bc85e3349cd390e6d2b94"
+    },
+    "ring_k005_hi.bin": {
+     "bytes": 125280,
+     "sha256": "13f94ad383306a6f72a2d125540536de871bb285ce5a6554fff7e5a0e4e17e12"
+    },
+    "ring_k005_lo.bin": {
+     "bytes": 125280,
+     "sha256": "c5a7119e943dc272cc5511ac8ce6382b59e7650f340f2bf80acad7ecd84bab4b"
+    },
+    "ring_k006_hi.bin": {
+     "bytes": 125280,
+     "sha256": "14c17825cb1c3124fad0075e549621d6d1580c7518f5e379ece6bd3cb13e582f"
+    },
+    "ring_k006_lo.bin": {
+     "bytes": 125280,
+     "sha256": "e96528c9d01ba0574898ddda3ca5196c37c81950ffd9483fe9eb9346f4509d30"
+    },
+    "ring_k007_hi.bin": {
+     "bytes": 125280,
+     "sha256": "c429d89eb53da08ef62dcaf2d31310e076afa6bdd679563c97eed1e20a4b28cf"
+    },
+    "ring_k007_lo.bin": {
+     "bytes": 125280,
+     "sha256": "badae1b474882a487dc45881dbc345378557b9dc8045533647659cffe1b52ccc"
+    },
+    "ring_k008_hi.bin": {
+     "bytes": 125280,
+     "sha256": "52b13832f119cf096d9e3798cd5a79f0c29525e686655d823074ba85d54c0984"
+    },
+    "ring_k008_lo.bin": {
+     "bytes": 125280,
+     "sha256": "927553b67aa4bc924b4932601025ab70ebcc5e123a97079aabd4dfa1ff4e3ff0"
+    },
+    "ring_k009_hi.bin": {
+     "bytes": 125268,
+     "sha256": "db865446759e33223b43f8b5dea676c09a8fd82c2616285e36b48adb7a6db6d4"
+    },
+    "ring_k009_lo.bin": {
+     "bytes": 125264,
+     "sha256": "25ca27c894b559e643bdfa7dc25c37d79b2a83d43415d6ac083478e004a163b2"
+    },
+    "ring_k010_hi.bin": {
+     "bytes": 125284,
+     "sha256": "109b05b12fe4f088589fbd97e7085a2878540f4b486d1e27392e5e58ad698919"
+    },
+    "ring_k010_lo.bin": {
+     "bytes": 125280,
+     "sha256": "5dde05b7a4f5085ab2c48a0a5716d6f70a66c9509acafaff9266861dbedcb030"
+    },
+    "ring_k011_hi.bin": {
+     "bytes": 125280,
+     "sha256": "550830949c07504d47f895f3f31fa0b2d0009a2e2c134a4b8ac745ebf97dd71c"
+    },
+    "ring_k011_lo.bin": {
+     "bytes": 125280,
+     "sha256": "c82773bcc6c8f283e8b3a34080f955895f9776382a380247eb981ffde25dd212"
+    },
+    "ring_k012_hi.bin": {
+     "bytes": 125284,
+     "sha256": "7fe937daaaf3d16bed74d5b5942ede4cf5f38d5f026483c8ca850e1ea7d3dd5d"
+    },
+    "ring_k012_lo.bin": {
+     "bytes": 125280,
+     "sha256": "a1fbafaccf98a7f7075274a8df96fb5d23091764bd73f88347a0614314e5d08e"
+    },
+    "ring_k013_hi.bin": {
+     "bytes": 125268,
+     "sha256": "8d405875e7c93db2a9285da0f72e08db6692f2b1424416606d2ba942009573a3"
+    },
+    "ring_k013_lo.bin": {
+     "bytes": 125268,
+     "sha256": "fe369011873b605afae939bdb6dc6ef458f56de4499674db48baf7e6880b09c7"
+    },
+    "ring_k014_hi.bin": {
+     "bytes": 125284,
+     "sha256": "8f3a06a90e15489e8bbd503e1ed571e0a0c95a20a70fc2f1f81ef23d2731935b"
+    },
+    "ring_k014_lo.bin": {
+     "bytes": 125280,
+     "sha256": "b2c4217a07f568ca85b341eec2225f9ac88fb53462e7ed71a9ff365d48652b48"
+    },
+    "ring_k015_hi.bin": {
+     "bytes": 125280,
+     "sha256": "b1d47f5b903df4cd7c7090836c48ee12f100328425022d0e02fd39c0584f9b0f"
+    },
+    "ring_k015_lo.bin": {
+     "bytes": 125280,
+     "sha256": "0e6a3ee9ed79e67a335760d0fdf924bb2fa4156d37d59deb81b65e258918d34f"
+    },
+    "ring_k016_hi.bin": {
+     "bytes": 125284,
+     "sha256": "93a5d42f9ae7c3ac854aa61abdc40308539a103685516541341145243a519a47"
+    },
+    "ring_k016_lo.bin": {
+     "bytes": 125280,
+     "sha256": "d9effb472b4806b2b566f881a5edde05e1e5b2460557f4a0d35eea9cedeea312"
+    },
+    "ring_k017_hi.bin": {
+     "bytes": 125284,
+     "sha256": "a0eb6b3dd36007489f7ec81a50096ca00d4613d978f9104afb0402a399f90a0a"
+    },
+    "ring_k017_lo.bin": {
+     "bytes": 125280,
+     "sha256": "c3cd31ca980e669879565337682b9baf7139497841876bac7b498581e82ec457"
+    },
+    "ring_k018_hi.bin": {
+     "bytes": 125284,
+     "sha256": "1f6c738311b536579d7ef605b3146e93e6f60d5f1b850a2c72ceae959d04b4db"
+    },
+    "ring_k018_lo.bin": {
+     "bytes": 125280,
+     "sha256": "1079d310ce8a1d1b3d601e1c55ea13394063786abcd9cc055a57861bb122c48f"
+    },
+    "ring_k019_hi.bin": {
+     "bytes": 125284,
+     "sha256": "5cb26b028ed8e43001e65620d66d2af698096c11b8386a0f0a04bd7fe48b6d3b"
+    },
+    "ring_k019_lo.bin": {
+     "bytes": 125280,
+     "sha256": "69cfbe8397335d6f2b1a1b94abe34765b1282251920d1cfb9cab0834829e0270"
+    },
+    "ring_k020_hi.bin": {
+     "bytes": 125284,
+     "sha256": "647171763a446e46a82f08875c11ac2446f976c61eb17e2c654c5f4f19929f93"
+    },
+    "ring_k020_lo.bin": {
+     "bytes": 125280,
+     "sha256": "8816dacb4d06d7e274903ee4378a9c07a45b044b11fcfb6f1fed535ffb6ccbbd"
+    },
+    "ring_k021_hi.bin": {
+     "bytes": 125268,
+     "sha256": "097a57909ef8a6a2549bf6f78e901cd76c54c515dd09f0568f603db880e582d0"
+    },
+    "ring_k021_lo.bin": {
+     "bytes": 125268,
+     "sha256": "5f09ac10e1bf97f3e7f30e1f327eab5ffbbd56dece2036306047f58610c28a9e"
+    },
+    "ring_k022_hi.bin": {
+     "bytes": 125284,
+     "sha256": "252a9f0306f097c5f3542656ccc5114463c29a518b000c2061eed180e028f06a"
+    },
+    "ring_k022_lo.bin": {
+     "bytes": 125280,
+     "sha256": "abc17a0b31f15837dd81fa27966f03a4a42ff1476b10ee3544f4db718e40bcbe"
+    },
+    "ring_k023_hi.bin": {
+     "bytes": 125284,
+     "sha256": "7e11dc9195e1c3bf473e3a7c45b66def86e681c5dd10692024937563a5540ae0"
+    },
+    "ring_k023_lo.bin": {
+     "bytes": 125280,
+     "sha256": "00ff5bc6eca2cb237e339c53d8043345f34223fd6a52b24495889b2edd4a7bda"
+    },
+    "ring_k024_hi.bin": {
+     "bytes": 125280,
+     "sha256": "2e469e1a2698933411787c1397872653ef3453b145cd26acf54e2d355b874271"
+    },
+    "ring_k024_lo.bin": {
+     "bytes": 125280,
+     "sha256": "5f9e951f3cc88cc8318446c5a6160cf98e871cbcd1c47d21cb529cceb76041fe"
+    },
+    "ring_k025_hi.bin": {
+     "bytes": 125268,
+     "sha256": "7650a0692be35dfd0b04f22aceacd2502adf16ab30bc3c3e845e3f58d7012a3e"
+    },
+    "ring_k025_lo.bin": {
+     "bytes": 125268,
+     "sha256": "c9eeb9a43344442540c3be30c657da037054f5217b79e04c5bab711eef8b9649"
+    },
+    "ring_k026_hi.bin": {
+     "bytes": 125284,
+     "sha256": "8474fdc4633aaf436203c1823af070e569109d949a0f794f568d4d72ccac3a2f"
+    },
+    "ring_k026_lo.bin": {
+     "bytes": 125280,
+     "sha256": "ba1bcdd446f78ec6ef5359b17939665a659059482191aced0c6d92b213bc1cfc"
+    },
+    "ring_k027_hi.bin": {
+     "bytes": 125284,
+     "sha256": "603358e7b12831f15fb873a947654a631d7459a00b2453d2cd3c34906ecc339a"
+    },
+    "ring_k027_lo.bin": {
+     "bytes": 125280,
+     "sha256": "f91a074cf2f8d2400d7eb926e58452935010a851ef344e068e5c75e7967db3a2"
+    },
+    "ring_k028_hi.bin": {
+     "bytes": 125284,
+     "sha256": "4726905976884fab4388af2d58fd3372839bfd8bc3a57a3fd930d57864dcd9fa"
+    },
+    "ring_k028_lo.bin": {
+     "bytes": 125280,
+     "sha256": "033f0e74140e4f64675163d90a0771479bfc11ffe69a00a31d8a474165eacce7"
+    },
+    "ring_k029_hi.bin": {
+     "bytes": 125284,
+     "sha256": "559fd2c14ae3218082459a53b0aafdf2c35ed1657d6b3b64a28feef82e76f604"
+    },
+    "ring_k029_lo.bin": {
+     "bytes": 125280,
+     "sha256": "459a51489db1d8ba7bfa176ab25684b045bdb1f2ce356032fdff4d25921356a4"
+    },
+    "ring_k030_hi.bin": {
+     "bytes": 125284,
+     "sha256": "822975a7b835e545918bf0e0cb16474a645c3a97f652051a3b098240da30af1c"
+    },
+    "ring_k030_lo.bin": {
+     "bytes": 125280,
+     "sha256": "2c032843e7eb37ff70b3abfc39ff452283e04c8346a9668f0765e677d87f5d9a"
+    },
+    "ring_k031_hi.bin": {
+     "bytes": 125284,
+     "sha256": "f1080238c6acb58a59538374cf927cd7979aae0d52fa828ce091a2ab9bb01899"
+    },
+    "ring_k031_lo.bin": {
+     "bytes": 125280,
+     "sha256": "51eaa4efc60658104a17d5e56cd439485211e8a1bfa905dc5c6ba91d0cb9777f"
+    },
+    "ring_k032_hi.bin": {
+     "bytes": 125280,
+     "sha256": "7a33bae8ad71863b734882ae444d1b9a85e4a3469bc80743174110d538cc3c29"
+    },
+    "ring_k032_lo.bin": {
+     "bytes": 125280,
+     "sha256": "e2ff70fb874a6d3062aa8e348a87429ca706b5893b531140253eb49d63445fb6"
+    },
+    "ring_k033_hi.bin": {
+     "bytes": 125284,
+     "sha256": "7b37c2bcee3d94fd9c3ac799eab9e1cc070408ab03ac61bcf09cef0883b9a44b"
+    },
+    "ring_k033_lo.bin": {
+     "bytes": 125280,
+     "sha256": "154def59fdf7d79e412f10f1ab60d627a24c537f0cb309bc2807de73e7b53a6c"
+    },
+    "ring_k034_hi.bin": {
+     "bytes": 125280,
+     "sha256": "28c28c0f0a401e1a1dc0b7a2f9ee04f78b08e82dfc57714dd25713a265b7a850"
+    },
+    "ring_k034_lo.bin": {
+     "bytes": 125280,
+     "sha256": "9928c31131bec45cce0144015fbfc98dda3c000a34341894f95fa85f9c9ab21d"
+    },
+    "ring_k035_hi.bin": {
+     "bytes": 125284,
+     "sha256": "b0ee2d968861cd90d834ae4c7d6ab4f2f1ea1a8b3dea60c15a3b2c9d5730797a"
+    },
+    "ring_k035_lo.bin": {
+     "bytes": 125280,
+     "sha256": "cc408130b6b79e9cc80405b2c199f4047768b042e362deae6fb3767a467c970d"
+    },
+    "ring_k036_hi.bin": {
+     "bytes": 125268,
+     "sha256": "ac3fe0b840f4dcd7af582c176e0b334e4408f8fc78573b29ee0110c879618db3"
+    },
+    "ring_k036_lo.bin": {
+     "bytes": 125268,
+     "sha256": "1c2508a1d6bf80cf675ea493d4484459235e5350508ebbe0094add891527381e"
+    },
+    "ring_k037_hi.bin": {
+     "bytes": 125280,
+     "sha256": "9b485d247f306b934850e44c85b424b77694c4c3ef1fc4c8e156b7375a3ec6e4"
+    },
+    "ring_k037_lo.bin": {
+     "bytes": 125280,
+     "sha256": "eb70777c9514b0d5f61de1d4cfeddbfaafef0cfb112f983ffd00085319df9483"
+    },
+    "ring_k038_hi.bin": {
+     "bytes": 125284,
+     "sha256": "6d0581ca6bd2b4899691362e095d710dc03737363280b41ea6e08c81b8357cc0"
+    },
+    "ring_k038_lo.bin": {
+     "bytes": 125280,
+     "sha256": "ddb4c26d1d51ffacc056317f6a3520052becd87bc2511ee930ac977eaebd60e6"
+    },
+    "ring_k039_hi.bin": {
+     "bytes": 125268,
+     "sha256": "9d75a85bd99a657a1b803929fd4bb0766353a8f201bb3f03da89b5f3cb88f3b6"
+    },
+    "ring_k039_lo.bin": {
+     "bytes": 125268,
+     "sha256": "e6083e4bc1d05877016b15dff326735fc52ed661439e25b6cbe1e8837d089d17"
+    },
+    "ring_k040_hi.bin": {
+     "bytes": 125280,
+     "sha256": "291eb285e5e8e8dd240828bd723a949c8f775a2b33171bba57ece1eaeb0c8f98"
+    },
+    "ring_k040_lo.bin": {
+     "bytes": 125280,
+     "sha256": "b31f79218dcae536110365cb305bc9366ff99572a74f3f2af584306af675cb74"
+    },
+    "ring_k041_hi.bin": {
+     "bytes": 125284,
+     "sha256": "799d10daec41e8fb70ce45431c2d589e246277981ec476a549ca0e1a10403b41"
+    },
+    "ring_k041_lo.bin": {
+     "bytes": 125280,
+     "sha256": "13f958474caee28317bbb477b41ee91802c792f35aafdb68d9b0fe0bc9f0ec36"
+    },
+    "ring_k042_hi.bin": {
+     "bytes": 125284,
+     "sha256": "ee45c8254b5fce0b270f7c80a717fc315571e48afe1212f04c8ec458e4c38844"
+    },
+    "ring_k042_lo.bin": {
+     "bytes": 125280,
+     "sha256": "b877961d3e0b19bf8a44eef515f597a338e184b562c9483704a7bbb4b6f9f693"
+    },
+    "ring_k043_hi.bin": {
+     "bytes": 125280,
+     "sha256": "96845d55268792822b8a0cedd0ae499c29d768a8d8afb81c3132889c2d2a73d2"
+    },
+    "ring_k043_lo.bin": {
+     "bytes": 125280,
+     "sha256": "6546e5efbe81d53dafccc225b6374c72e390f6d06cd989dbc8c4e59beedeb8bd"
+    },
+    "ring_k044_hi.bin": {
+     "bytes": 125284,
+     "sha256": "da71ebaf78ffb073c177c8897082c41b4b137c94cf31afdb2c3d30bbc3483b80"
+    },
+    "ring_k044_lo.bin": {
+     "bytes": 125280,
+     "sha256": "701e0c073bb7082d919dc189e6502cc2bef03c8ebc35575c3f1bb1feb1696397"
+    },
+    "ring_k045_hi.bin": {
+     "bytes": 125284,
+     "sha256": "bef551aa7197d81b773f2418475aaa2120be4757122a88f6687e67839ef98f09"
+    },
+    "ring_k045_lo.bin": {
+     "bytes": 125280,
+     "sha256": "dc4854f8e2c5046696227f63c1650069c357247326c9871265cd1ea3ad79e9c2"
+    },
+    "ring_k046_hi.bin": {
+     "bytes": 125284,
+     "sha256": "cb672259d2ad841b18f4139a17cab1c23e5c2666cd6d17db27e6a3cd0a950186"
+    },
+    "ring_k046_lo.bin": {
+     "bytes": 125280,
+     "sha256": "ac0dfb29f75b23fad75bd99ea8e8c6231fcd45885aa49b992b3f21a74ed2d305"
+    },
+    "ring_k047_hi.bin": {
+     "bytes": 125284,
+     "sha256": "22a2fa5eac0cf19f58483442f4cd4e0906c6e01536867f1d3b009ebdad67add2"
+    },
+    "ring_k047_lo.bin": {
+     "bytes": 125280,
+     "sha256": "d11199c4d6314b73f954bef470c6fbcb981f43f772043da2b7759ac1d6948350"
+    },
+    "ring_k048_hi.bin": {
+     "bytes": 125284,
+     "sha256": "f370c8b4bea2574995912d6b1ea8365e47938c4e11ea7ed69e061552c921059e"
+    },
+    "ring_k048_lo.bin": {
+     "bytes": 125280,
+     "sha256": "6f608de7b4a27a27ce68a3fcee0a630e7f226bac9efe49607fa36361d635e5bf"
+    },
+    "ring_k049_hi.bin": {
+     "bytes": 125284,
+     "sha256": "814a091b93a383d549ab1356c0304f249159eeea59c063d5f0c5fd7ab22cff20"
+    },
+    "ring_k049_lo.bin": {
+     "bytes": 125280,
+     "sha256": "56711bf66896d531219580785c7e2f5d256bd47ffc947f667c253f7d263957fa"
+    },
+    "ring_k050_hi.bin": {
+     "bytes": 125284,
+     "sha256": "cde1ba8563ef0b1ced59f31aea3bb92b383b6a9d983f6f23d508c16bbece3aef"
+    },
+    "ring_k050_lo.bin": {
+     "bytes": 125280,
+     "sha256": "dc6d00af0b65ff48a942328370e80eab58dda627fae389c96901ea9d61b666ef"
+    },
+    "ring_k051_hi.bin": {
+     "bytes": 125284,
+     "sha256": "a5c3c3718adb13fce9add30ab9f0c2d39eef1eceef2e96f99453cfc5619ca39d"
+    },
+    "ring_k051_lo.bin": {
+     "bytes": 125280,
+     "sha256": "103505c89fc6b938545d165184f25ce5ea18344e8e6e2aa28aa4ff0bfb791c41"
+    },
+    "ring_k052_hi.bin": {
+     "bytes": 125284,
+     "sha256": "db5e581ff0057e3493fe6b1c853de320c7109f9135c971c92f007327da2f7b62"
+    },
+    "ring_k052_lo.bin": {
+     "bytes": 125280,
+     "sha256": "25b771cf047ea2cfd1783d579138d049bac595ce3e5fe387171d453ff088bf8a"
+    },
+    "ring_k053_hi.bin": {
+     "bytes": 125284,
+     "sha256": "0124dad4b56dd37e183c72bb1a999f6d843ab766adb8bd3e774a60465d4027df"
+    },
+    "ring_k053_lo.bin": {
+     "bytes": 125280,
+     "sha256": "bae13085a19290ca9441de53649561e05da9aa4554dcc4f595d5c0611e845940"
+    },
+    "ring_k054_hi.bin": {
+     "bytes": 125284,
+     "sha256": "476d8af53de0e5e51d7ef8e4d5ffa20884c05397d3b193ca5be1b132b895bb0f"
+    },
+    "ring_k054_lo.bin": {
+     "bytes": 125280,
+     "sha256": "f15ddfa41db8e420c21da779f53599958fdc9cce1c0315014d3fa94479fa25ea"
+    },
+    "ring_k055_hi.bin": {
+     "bytes": 125284,
+     "sha256": "e3cb7de31c74f929d20fbe8f36ce67dc4eae7cdc2a59b2d104739b6b48e9df02"
+    },
+    "ring_k055_lo.bin": {
+     "bytes": 125280,
+     "sha256": "bc61adcfd7007eff6df9eeba00e7c9cbca9c91c4727d03393a191b5caf2998f9"
+    },
+    "ring_k056_hi.bin": {
+     "bytes": 125284,
+     "sha256": "c589cedeb461be7c644cf8d9aad3ad02ca3b7958e9c81abb9210f75165d1166f"
+    },
+    "ring_k056_lo.bin": {
+     "bytes": 125280,
+     "sha256": "95ff8a2c3ee8d8e3572b9142b2344fc68ef3104fa8dce01ac3dfdae46750cdb5"
+    },
+    "ring_k057_hi.bin": {
+     "bytes": 125268,
+     "sha256": "3ef261ec73ca46eb7eb605f66a6d7d717dd1e50a5d5bed2e28b71728d92fb3f4"
+    },
+    "ring_k057_lo.bin": {
+     "bytes": 125264,
+     "sha256": "7e06e3055efd20b107771a7ddb984593c50bb7d12d787e446400a61c119fe660"
+    },
+    "ring_k058_hi.bin": {
+     "bytes": 125280,
+     "sha256": "9ef58ccfce03599e3666183a6e9008a719075d7af9a9973f9ea9d556d20aa56d"
+    },
+    "ring_k058_lo.bin": {
+     "bytes": 125280,
+     "sha256": "067940edf8771bd4e0cc50077ab95b25dc1133b6de3b357e8e2924772742b4d2"
+    },
+    "ring_k059_hi.bin": {
+     "bytes": 125280,
+     "sha256": "08e72db7a5f0b673f805710d620a0ea545337f4aa58a8bdd585e695dfa4be29d"
+    },
+    "ring_k059_lo.bin": {
+     "bytes": 125280,
+     "sha256": "668706e4f5e6e81d80aaa058586b468d0326f672a01d16d3d806eeb6b4db1745"
+    },
+    "ring_k060_hi.bin": {
+     "bytes": 125284,
+     "sha256": "552147c5dedf9894348d9296fe8b4a90d2f276c059743e35a28e0b5b435296fb"
+    },
+    "ring_k060_lo.bin": {
+     "bytes": 125280,
+     "sha256": "29192045a8910ad548b52555a8b2d2f9186047f713480096ed6984590406a1b9"
+    },
+    "ring_k061_hi.bin": {
+     "bytes": 125284,
+     "sha256": "1fb47b9d88ed509c294811867c8228fabef804da507e91a33bab6d48074663e0"
+    },
+    "ring_k061_lo.bin": {
+     "bytes": 125280,
+     "sha256": "5677ae29911f3cfdb7da2e56d030955846600fc5d5fc6f6d6c3cf664ea3b4f28"
+    },
+    "ring_k062_hi.bin": {
+     "bytes": 125284,
+     "sha256": "ee09f997213f7bb56d9775171438665d677ec73e514d87cbee1b62372229fa1c"
+    },
+    "ring_k062_lo.bin": {
+     "bytes": 125280,
+     "sha256": "7cef50482cce754dadcab588fd1e7e297c5e45f2ee25ff2ae81116a01eb579fa"
+    },
+    "ring_k063_hi.bin": {
+     "bytes": 125284,
+     "sha256": "5b4b2e780042078d19b21e8c6eccecf4f6a8d01c1b8b568f4b06df11aa72c89c"
+    },
+    "ring_k063_lo.bin": {
+     "bytes": 125280,
+     "sha256": "3698a1584829eee763a0c0549cae5fab62b9599b2031e9dd3903c46b0d4cdbcb"
+    },
+    "ring_k064_hi.bin": {
+     "bytes": 125284,
+     "sha256": "444df0c1bbf94e49741be12a67c38a024a6865c6fa98ecce839e2eedbd33c22f"
+    },
+    "ring_k064_lo.bin": {
+     "bytes": 125280,
+     "sha256": "5f0721c2c81c3d0c53021ac35183d90b74a0dea9ffc3757497209be4221d63dc"
+    },
+    "ring_k065_hi.bin": {
+     "bytes": 125268,
+     "sha256": "41762afb156a7ac92edf3ab2a906d246b5c38f9b529e6e8e77af438a68b66d26"
+    },
+    "ring_k065_lo.bin": {
+     "bytes": 125268,
+     "sha256": "29243b3a4a9866955e848949635e323159fb2d261cba386ddd963c710d99d18e"
+    },
+    "ring_k066_hi.bin": {
+     "bytes": 125280,
+     "sha256": "13166f6589b51d3d1315970a70af4ee73dff8f191d2619b2b4172c09cf4e1c52"
+    },
+    "ring_k066_lo.bin": {
+     "bytes": 125280,
+     "sha256": "9461741f34bfd633a9ef9e639e8b2856db605ed27cccf9d4904cf71bc89861c1"
+    },
+    "ring_k067_hi.bin": {
+     "bytes": 125284,
+     "sha256": "b963ddbb45153259fac6a2a447aabafa6e143a2ee06e07c53a55e5d2811d49ef"
+    },
+    "ring_k067_lo.bin": {
+     "bytes": 125280,
+     "sha256": "94cf9b11e9723f2d2f5a4c01eb1e7b7387a254af161c44d6e8381cb0a55dfa12"
+    },
+    "ring_k068_hi.bin": {
+     "bytes": 125284,
+     "sha256": "7c4ac1def08495fcc5c8446eaaa2eb38fc80d403950daa9d01b50feb3bff31b2"
+    },
+    "ring_k068_lo.bin": {
+     "bytes": 125280,
+     "sha256": "2745c552a5cd7e04361a5cc9e868e0f55c5bfec70fb8181a1ebe32e8abb2672e"
+    },
+    "ring_k069_hi.bin": {
+     "bytes": 125280,
+     "sha256": "f6a8c2d026649cff91ad56c502bb7b23ee755e113572d5d77fe56d31ca229163"
+    },
+    "ring_k069_lo.bin": {
+     "bytes": 125280,
+     "sha256": "f086d27ce886c4d603c4b66abf9c3f1482f987371f2b0a34da0fc4dd3dab7ffe"
+    },
+    "ring_k070_hi.bin": {
+     "bytes": 125284,
+     "sha256": "cab7cbd74ae98088eead7ecb6b0e5cf7b4f9073b42376fc59b7c17873c377f10"
+    },
+    "ring_k070_lo.bin": {
+     "bytes": 125280,
+     "sha256": "ad3d27b489f91f8b200e79a3c2cea64fb5707f687ba7d7b7263b9bf5a00f3c56"
+    },
+    "ring_k071_hi.bin": {
+     "bytes": 125284,
+     "sha256": "e008e565a29cf280662a1438622086770076f2c44473bf792473e5d58e548dac"
+    },
+    "ring_k071_lo.bin": {
+     "bytes": 125280,
+     "sha256": "978f87e415639de4e9c7e770930ed6df90c631d52ba16dc76c2aac78680f48a6"
+    },
+    "ring_k072_hi.bin": {
+     "bytes": 125284,
+     "sha256": "a071c6f365062edc0b9d52542f74f40992894fadcaac7bbf14c180d5f7650a11"
+    },
+    "ring_k072_lo.bin": {
+     "bytes": 125280,
+     "sha256": "c969d30443e3c5982a9b3657e7263b6026c381f67ec0237e5640597ca683142f"
+    },
+    "ring_k073_hi.bin": {
+     "bytes": 125284,
+     "sha256": "cf99e256e4cf9065cf0b3ec9bca1b493d29312ad7ea3f52e0dfe4d582c5c6f82"
+    },
+    "ring_k073_lo.bin": {
+     "bytes": 125280,
+     "sha256": "087ab8d683a0020b3f220202b3077a253537c2d32f16d4ae87b699cf4361f59b"
+    },
+    "ring_k074_hi.bin": {
+     "bytes": 125280,
+     "sha256": "781ed2ae604df06a85aa8cdb1a8f3475578925e225a81709ece85fb6a0a9b5af"
+    },
+    "ring_k074_lo.bin": {
+     "bytes": 125280,
+     "sha256": "631d1794bf1b6fce519995fcf67cdb22d72802ef643d3108cd3a01ab2d904545"
+    },
+    "ring_k075_hi.bin": {
+     "bytes": 125284,
+     "sha256": "a364f498ad0fcaff57875855aa06eaf15593b8bfd5a995a82be4efc387ff4257"
+    },
+    "ring_k075_lo.bin": {
+     "bytes": 125280,
+     "sha256": "d84993f10dfb6902b464cd711b79747a13f6141719ee3487591752c0d1b32938"
+    },
+    "ring_k076_hi.bin": {
+     "bytes": 125280,
+     "sha256": "41b0a2d302a5d7b3d8a0418f8395098e6ecae99878f5e370fac060003da00ac6"
+    },
+    "ring_k076_lo.bin": {
+     "bytes": 125280,
+     "sha256": "57726adda33689bcbe172ad8aefd9cf8637b742ec27ea9b0dc066ff4f64cae68"
+    },
+    "ring_k077_hi.bin": {
+     "bytes": 125284,
+     "sha256": "7b5c507b8f25223c5b174d988999e3c329c4a91edc864e1974683b1ca629cc5c"
+    },
+    "ring_k077_lo.bin": {
+     "bytes": 125280,
+     "sha256": "531634bc59934325ff56f7c4919b7d3de48c20aa8ac51a03d925669fe30a91ff"
+    },
+    "ring_k078_hi.bin": {
+     "bytes": 125284,
+     "sha256": "98ac24238dc007885f62fa7e91d99925958d0d01e0ef8f1274472654ea8bf4e7"
+    },
+    "ring_k078_lo.bin": {
+     "bytes": 125280,
+     "sha256": "91f8427a6097eab3e13672c4fef269bb3bad6c25dfc52db970e222ed7f6828e9"
+    },
+    "ring_k079_hi.bin": {
+     "bytes": 125284,
+     "sha256": "16d5c2f461bfd6cae7660b52da7d96cc297d52667bf21092a169e6458c1886c7"
+    },
+    "ring_k079_lo.bin": {
+     "bytes": 125280,
+     "sha256": "a92137501435f1a7ed0f7c26194877af2b10b8f2407c72e85a167e6454a70707"
+    },
+    "ring_k080_hi.bin": {
+     "bytes": 125284,
+     "sha256": "eb6544c6ff6549238b4146c66d6e05bc1ec4d9c1f1cd42be4fa67f67bab7cf4a"
+    },
+    "ring_k080_lo.bin": {
+     "bytes": 125280,
+     "sha256": "c0c140ba6e2457b4064ffed6e209dd8f298ace41ec2555d97672270f5d865973"
+    },
+    "ring_k081_hi.bin": {
+     "bytes": 125268,
+     "sha256": "da7acf8e09776534c9d58221fbc3a9a7cc0c49a1ccd8eeb98334ec9cd929a247"
+    },
+    "ring_k081_lo.bin": {
+     "bytes": 125268,
+     "sha256": "079a1d986e3871684fd9e1af1d506203df37b7cf2cf0eec1dd4a7ff7ee821ff0"
+    },
+    "ring_k082_hi.bin": {
+     "bytes": 125284,
+     "sha256": "16f7313b99c19be6849eef35303d6ab89b8cf28b82810127bb4d100df944aecc"
+    },
+    "ring_k082_lo.bin": {
+     "bytes": 125280,
+     "sha256": "3dcaf1b857d637bd27f73dab57bfae0e3953803624c02709cdea6b507ef35050"
+    },
+    "ring_k083_hi.bin": {
+     "bytes": 125284,
+     "sha256": "068fc4f86900626be20e8971d3d3ab2c14fb9b2a34089abb12b5785ba41a51b6"
+    },
+    "ring_k083_lo.bin": {
+     "bytes": 125280,
+     "sha256": "5aea6a41438d4b81db32607ebae21feda1e854b685836ef9963f27914367f3b3"
+    },
+    "ring_k084_hi.bin": {
+     "bytes": 125280,
+     "sha256": "177c9d3157365e055db1f9d8431c106ac944c1dc7448e6a3a4fe821626985298"
+    },
+    "ring_k084_lo.bin": {
+     "bytes": 125280,
+     "sha256": "a05e3f8283063dd6d3d5c2b6c19f7cb8589a84091596232e23eff21a70b7010b"
+    },
+    "ring_k085_hi.bin": {
+     "bytes": 125284,
+     "sha256": "11a3e37d874dea8e5cfc53b17012f3266e2177bf5909a505e4960e3ab94f7a9f"
+    },
+    "ring_k085_lo.bin": {
+     "bytes": 125280,
+     "sha256": "7b52b6757f4932e765baadf16705470d35faed1d834214e6316c870236bea771"
+    },
+    "ring_k086_hi.bin": {
+     "bytes": 125272,
+     "sha256": "8106fbca79f0f39a18ab0f52bb9fb452269b06144c607e0d9ff97d0bcb009c54"
+    },
+    "ring_k086_lo.bin": {
+     "bytes": 125268,
+     "sha256": "901c520801f920a1a90466f9af25614486eeec592c11a4092f261ce99d6533c5"
+    },
+    "ring_k087_hi.bin": {
+     "bytes": 125280,
+     "sha256": "89f5e96c146d79ed74c1120fb4f354b20071a511142c1309fb4a1fea2adbf8b3"
+    },
+    "ring_k087_lo.bin": {
+     "bytes": 125280,
+     "sha256": "12712bd1c9680ae5c105a1dd8f63e6ca3eeb8196ef6d5d71d131a4db905cf8ac"
+    },
+    "ring_k088_hi.bin": {
+     "bytes": 125284,
+     "sha256": "e5e72c3d7fdbb6c40b0ccbb247f503e2206c72a9cd12954962939f14f957586b"
+    },
+    "ring_k088_lo.bin": {
+     "bytes": 125280,
+     "sha256": "fcaeeef403e7a001ea2623a3f7c1dd3df385466b02d118ec06f7b3f730776138"
+    },
+    "ring_k089_hi.bin": {
+     "bytes": 125268,
+     "sha256": "7862847c0c8e7f0514d43e25492ee3752a6ee02b07e79098bdb2e25e07e20d8a"
+    },
+    "ring_k089_lo.bin": {
+     "bytes": 125268,
+     "sha256": "ae43b32cfff8a2cec11805ce6f4dec436f906c8cac5d15e3f995ba8e6470794b"
+    },
+    "ring_k090_hi.bin": {
+     "bytes": 125284,
+     "sha256": "567a97f5055773494613b61d811dc4c3331a11ad071cf68c3777c52ba700fe5d"
+    },
+    "ring_k090_lo.bin": {
+     "bytes": 125280,
+     "sha256": "efb6e5d9ffaa035de6793b7aba832cbffa8bfdd4cc679c80d41604ee72bdefcd"
+    },
+    "ring_k091_hi.bin": {
+     "bytes": 125284,
+     "sha256": "cb065709584a0f692bc7438119d358b1d255d3cbf95e9dc05a21585fb98ab2e5"
+    },
+    "ring_k091_lo.bin": {
+     "bytes": 125280,
+     "sha256": "a8d2c5a20615e8d69fa562b58dd52563ee05f32fc96a8824cf41cdf4ebb1728b"
+    },
+    "ring_k092_hi.bin": {
+     "bytes": 125280,
+     "sha256": "8785f674b254a10df35f378c5287147ffcefc63b7292cb3f5e19a2b70d86d443"
+    },
+    "ring_k092_lo.bin": {
+     "bytes": 125280,
+     "sha256": "8b32a4ffeb60b5bd96a9ca9bd611de63b924ba1b29febb2ddd0d5fa6bd5398c4"
+    },
+    "ring_k093_hi.bin": {
+     "bytes": 125280,
+     "sha256": "b81afc5d03813f04e400235b494e82f32f3f37dcd9624aa8e513a463f04cf524"
+    },
+    "ring_k093_lo.bin": {
+     "bytes": 125280,
+     "sha256": "875c4e56bb418e33987a05c5b9603bb679333999e6082800a8d96694653ff5a2"
+    },
+    "ring_k094_hi.bin": {
+     "bytes": 125284,
+     "sha256": "fbca0b61e9db9345b951eaa74523055e5bb622a26527b11f854509f8b40751fe"
+    },
+    "ring_k094_lo.bin": {
+     "bytes": 125280,
+     "sha256": "0e5e2b199577ddb0b8f3361f82363bdb97feadf252f4bd5ae9027eac032ef6d4"
+    },
+    "ring_k095_hi.bin": {
+     "bytes": 125280,
+     "sha256": "30790995272e7006f9a32062849d733b82693d9ca34d7a915b5f81d44d858ba9"
+    },
+    "ring_k095_lo.bin": {
+     "bytes": 125280,
+     "sha256": "a75baf8257ce69637167c618f2762ae31be28d10bc5be5dbc5b518055b3e336f"
+    },
+    "ring_k096_hi.bin": {
+     "bytes": 125284,
+     "sha256": "45bcf768fddc569b19fd9b70acf4dadc57f1b05f01023ba4989775a8280dc3a1"
+    },
+    "ring_k096_lo.bin": {
+     "bytes": 125280,
+     "sha256": "131e9b89520b351e7700b4e6dd36ce3a6354f0b3567b2bc636b681e5a3758c78"
+    },
+    "ring_k097_hi.bin": {
+     "bytes": 125284,
+     "sha256": "69318b3c0f6be43bdb140f1d2174c7c8ba12ff1ff91bee9a5c600ec47e1eb76e"
+    },
+    "ring_k097_lo.bin": {
+     "bytes": 125280,
+     "sha256": "95b84692d7694b6f263c4c24e1a7118852881b970a94fedc496f99bd6ee3ed5e"
+    },
+    "ring_k098_hi.bin": {
+     "bytes": 125284,
+     "sha256": "373680a22313dc93fdc96de608ae1bc9b1748d2d91671771b8839c1567618dbd"
+    },
+    "ring_k098_lo.bin": {
+     "bytes": 125280,
+     "sha256": "e5ddc1d6c4865f57f071b728aae23bc345584b7c2a4e13d8646cd73b81b25678"
+    },
+    "ring_k099_hi.bin": {
+     "bytes": 125284,
+     "sha256": "c90e6dbad0937cc1e37f0c2cb383ce01c4557bc6bb9d0429aa987f1e28a85528"
+    },
+    "ring_k099_lo.bin": {
+     "bytes": 125280,
+     "sha256": "e420c7d88679aa08b3627421b83a1258b44936735b40ea2008772163ddec94c5"
+    },
+    "ring_k100_hi.bin": {
+     "bytes": 125284,
+     "sha256": "ba848df1d13f89e0ba905047acf7b184b1fbe13e8405e085cf42a274b28cfcf1"
+    },
+    "ring_k100_lo.bin": {
+     "bytes": 125280,
+     "sha256": "18cb2fee8fc541677248647d4078e28ff3251fb57fb8e4cd91b54db76d788a7a"
+    },
+    "ring_k101_hi.bin": {
+     "bytes": 125284,
+     "sha256": "7ef1269317715d3d17774d571944fbb0d5d3b34cd87fbc666ae2aa6bce122642"
+    },
+    "ring_k101_lo.bin": {
+     "bytes": 125280,
+     "sha256": "59dd4f5173eae84c35e5726b7e8d2d3dc5c35f79efe8a94305ae722d11b9ef84"
+    },
+    "ring_k102_hi.bin": {
+     "bytes": 125284,
+     "sha256": "5d9c14f8421d2393ff6beb230eea235b130bf16d1e2258e06570a768c6e6a8aa"
+    },
+    "ring_k102_lo.bin": {
+     "bytes": 125280,
+     "sha256": "33fda6243b41ff705e5a7a300a026455c453c53d497a86c110ed845569b3c416"
+    },
+    "ring_k103_hi.bin": {
+     "bytes": 125284,
+     "sha256": "0aecb84c9536b3327ff230bb28aeee57dcf0d6ac97b90a1483ea931d6c16243d"
+    },
+    "ring_k103_lo.bin": {
+     "bytes": 125280,
+     "sha256": "9a753ad279f6189b81db3b0efe37f4079850d9a4df7ec14f4bbd959323f93f7a"
+    },
+    "ring_k104_hi.bin": {
+     "bytes": 125284,
+     "sha256": "f82e801c24f095c41e3696f5d2f870b590dcaf33131920186f3b9bc34a376ed7"
+    },
+    "ring_k104_lo.bin": {
+     "bytes": 125284,
+     "sha256": "ccd939ef0abb0ac50615fa1e34efdd7efd523626254adf0001f1f5bade1af8ee"
+    },
+    "ring_k105_hi.bin": {
+     "bytes": 125284,
+     "sha256": "adecde9fec7b7271853358d56554ece2c426b740bce69298f7b24d6eff207d2b"
+    },
+    "ring_k105_lo.bin": {
+     "bytes": 125280,
+     "sha256": "00f1cd19cbaa5554b93b67d22def2f172bc8ddb20f4b8f487408ea1b141abf78"
+    },
+    "ring_k106_hi.bin": {
+     "bytes": 125284,
+     "sha256": "787a7de6005ea699cfadabace3bf71ae0e44133d39266b2a0b071803caf759cc"
+    },
+    "ring_k106_lo.bin": {
+     "bytes": 125280,
+     "sha256": "b6346b10999452247292cc5b1f3db95d6f1127cff25d783109a757f3ff8c4121"
+    },
+    "ring_k107_hi.bin": {
+     "bytes": 125284,
+     "sha256": "26c8fc63cb48f7c29fc9a8ca05d006f1b1589c8d318dae4f29aecc615eda2d8c"
+    },
+    "ring_k107_lo.bin": {
+     "bytes": 125280,
+     "sha256": "d30107bb944ded5b7495d88760b74ded3578e41a2c4815a79d6a719b3658aa6b"
+    },
+    "ring_k108_hi.bin": {
+     "bytes": 125284,
+     "sha256": "ae57b5b7b3f2d92d7e3e61912e533b876bf7b944afcec5cbc292dc72b691e6e9"
+    },
+    "ring_k108_lo.bin": {
+     "bytes": 125284,
+     "sha256": "79d8608136d9faab2a19eda17d50e4b9dc877ebd9c1674f49c694ec56f229f5f"
+    },
+    "ring_k109_hi.bin": {
+     "bytes": 125284,
+     "sha256": "c788e150446a26d4a44884b599b00e449d96eb5208cff80f765ba151f9d048a7"
+    },
+    "ring_k109_lo.bin": {
+     "bytes": 125280,
+     "sha256": "b30a5efd37cdc6c301870d491e374b05163c374418b8bdbb7c590a24d4d746fc"
+    },
+    "ring_k110_hi.bin": {
+     "bytes": 125284,
+     "sha256": "7d8ae53ff93ca13014ece0df96caa82a243cc65a411b56e0103744a5732dd840"
+    },
+    "ring_k110_lo.bin": {
+     "bytes": 125284,
+     "sha256": "b1378b3a0e058adae9eba830f4a22d6b44ee1992034a7df391cc6c127b28d85f"
+    },
+    "ring_k111_hi.bin": {
+     "bytes": 125272,
+     "sha256": "60a83119a9d5ae958585555e82de620c183855a929c6ca35dcff5d03cba0be42"
+    },
+    "ring_k111_lo.bin": {
+     "bytes": 125268,
+     "sha256": "ccde3ada3ee8a0391fe240bd099ef8bb44f4ad5bb38dc9495259fe42bf74eddf"
+    },
+    "ring_k112_hi.bin": {
+     "bytes": 125284,
+     "sha256": "8c5990de2be1a9c901bdd0bc95677da2d192e27c0f836aee1f589b41ef0e8b59"
+    },
+    "ring_k112_lo.bin": {
+     "bytes": 125280,
+     "sha256": "b9447d091ea6318f08d041e5c08d3ce94a2791be3138ceac0240acc547168818"
+    },
+    "ring_k113_hi.bin": {
+     "bytes": 125284,
+     "sha256": "89e92393dc447e590a9ab3d9c4a39309ee8548ad529a54d3c957ad5fb87965f1"
+    },
+    "ring_k113_lo.bin": {
+     "bytes": 125280,
+     "sha256": "864a4ee31bc6036a649d901c73787afc775625ff7ca6a39528c73de2596d3d78"
+    },
+    "ring_k114_hi.bin": {
+     "bytes": 125284,
+     "sha256": "25749ea0646f73932ba15c61a6f32d62b6d8119985622559ea92b783c767854b"
+    },
+    "ring_k114_lo.bin": {
+     "bytes": 125280,
+     "sha256": "8b5e2cf6acab5e9b521793f0c97c2ebb7219051d00d18ae6a4e8f26f79442ad8"
+    },
+    "ring_k115_hi.bin": {
+     "bytes": 125280,
+     "sha256": "2ff51ae8680ef1cf311b72e6a6bcab1384d5428fe622f3cd3067ba131e51274b"
+    },
+    "ring_k115_lo.bin": {
+     "bytes": 125280,
+     "sha256": "02087c7dd4774ecb4c28c1e5466857092c7ef7fd06d03d6d7c7e92d6812e3b02"
+    },
+    "ring_k116_hi.bin": {
+     "bytes": 125284,
+     "sha256": "40de5d1c3b000e8ca0ce124102e30a5affb1fb344279b2e6407a767a4ed9c2a2"
+    },
+    "ring_k116_lo.bin": {
+     "bytes": 125280,
+     "sha256": "5756193cce1d0550263bcac2ca8ba0c0d41a7f4f17e5a6242a47f493c1280545"
+    },
+    "ring_k117_hi.bin": {
+     "bytes": 125272,
+     "sha256": "5d460c5a44d0e05bce70671ec30189e31b8c16bc0e8f6b7821160935f243a07b"
+    },
+    "ring_k117_lo.bin": {
+     "bytes": 125268,
+     "sha256": "8ea05a321c9e78e3ae4ae1f4b8a14b9f89403e2ff087400040bc06fc3e40a410"
+    },
+    "wave_interference2.json": {
+     "bytes": 11294,
+     "sha256": "af35673887ce949d95d677f919d58f563e966184ab6bda03ee72431500991721"
+    }
+   },
+   "wall_s": 142.9,
+   "collected": "2026-11-23T20:12:10+00:00"
   }
  ]
 }
