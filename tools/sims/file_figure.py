@@ -106,7 +106,8 @@ def main():
         if '"ready"' in state and '"current_version_number"' in state: break
     else:
         sys.exit(f"the dataset was not ready within 3 hours (last state: {state})")
-    kaggle(K, ["datasets", "metadata", ref, "--update", "-p", stage])
+    sys.path.insert(0, os.path.dirname(__file__)); import dataset
+    dataset.update_card(K, ref, stage)   # the create already took the card; set it again so the page shows the final numbers
     log(f"dataset {ref} ready after {round(time.time() - t0)} s: {len(table)} notebook versions, {nfiles} files, {total} bytes")
     # the record, for the figure's generations.json (dataset, dataset_path): copied into the repository by the session that filed it
     print("RECORD " + json.dumps(dict(dataset=ref, versions=[dict(folder=f, files=n, bytes=b, site_identical=m) for f, n, b, m in table],
