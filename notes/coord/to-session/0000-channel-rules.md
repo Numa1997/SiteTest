@@ -11,3 +11,7 @@ The owner no longer relays text. Standing order to the working session:
 4. Limits: at most 60 GPU-minutes per instruction unless the file says otherwise. Never main, Workers, R2, public/de/,
    public/ar/, scripts/i18n/, *.rtl.css, figure numbers. If a file `notes/coord/STOP` exists, stop everything and wait.
 5. Anything that needs the owner's decision: write it in the report under "Needs the owner", and stop that part only.
+
+
+## Since 24 Nov 2026 (0006): Neon writes all code
+You write no code and run no scripts. Code comes from Neon via the owner; you write Neon's requests, paste Neon's blocks into the repo verbatim, commit and push. Details in 0006.
