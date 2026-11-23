@@ -477,3 +477,10 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
 - RULE (instruction 0003, 23 Nov 19:50 UTC): GPU launches set enableGpu only, never a machine shape or accelerator field. Every 4.5
   GPU launch so far named NvidiaTeslaT4 and sat queued; another project saw the same and a push without the field started in 20 s
   (github.com/mitishraina/AutoTuneNet/pull/60). The owner cancelled the queued v1 and v2. Rule 7 of the code handoff updated.
+- 23 Nov 19:51:55 UTC (instruction 0003): 4.5 Part C pushed as v4 with enableGpu only (no machine shape): accepted at once, RUNNING
+  19:52:26, COMPLETE 20:05:35 UTC (code 5acb7181, cuda:0 on Kaggle's T4 shape). GPU 753.8 s (quota 2 593.9 s used).
+## Test 4.5 Part C results (Fact; notes/spill/step4/slosh_head_fix_summary.json, slosh_head_fix.jsonl, slosh_head_fix.log)
+1 957 steps to 1.5008 s. f_d 2.815 Hz PASS; zeta 0.2-1.2 s 0.143 PASS (in [0.13, 0.33]); zeta 0.6-1.2 s 0.183 > 0.2-0.6 s 0.132 PASS;
+energy closure 0.2-1.0 s +0.514 FAIL (sinks 1.908 mJ vs -dE_mech 1.260 mJ; E_plastic 1.580, E_wall_foam 0.313, E_wall_stout 0.014 mJ);
+sinks <= loss within 2 % FAIL; books 0 / 1.86e-8, real crossings 0, in solid 0, it max 268, all converged PASS. Peak wall 11.32 mm.
+Inference: E_plastic alone exceeds the mechanical loss: overcount (s, gp convention) or missing elastic store. Stopped; nothing tuned.
