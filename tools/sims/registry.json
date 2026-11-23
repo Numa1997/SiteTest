@@ -24,6 +24,16 @@
     {"path": "/simulations/Circular%20Wave%20Interference%20Visualization.html", "width": 1600, "height": 1000, "scroll": 0,
      "probe": "(()=>{const s=window.__simData;if(!s)return {error:'no stored-data loader on the page'};if(s.err)return {error:s.err};if(!s.sha_ok||!s.gen)return {waiting:true};const d=Sim.data.ds;return {sha_ok:s.sha_ok,commit:s.gen.commit,date:s.gen.date,files:s.files,lambda:d.get('lambda'),damp:d.get('damp'),builds:d.get('builds'),renders:d.get('renders')};})()"}
    ]
+  },
+  "double_pendulum_smoke": {
+   "model": "tools/sims/double_pendulum_smoke.py",
+   "gpu": true,
+   "timeout_s": 3600,
+   "store": "release",
+   "release_files": ["*.pack"],
+   "files": ["double_pendulum.json"],
+   "about_files": "Engine test for GPU runs with large data: one pack in the GitHub release sims-double_pendulum_smoke-<date>, the summary with every fingerprint committed. No page plays it.",
+   "pages": []
   }
  }
 }

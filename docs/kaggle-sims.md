@@ -127,3 +127,36 @@ The owner asked for one line for every simulation, not only the background scene
 **`numakoudsie/phyein-usul-simulations`** (a new notebook; the old one stays on Kaggle until the owner deletes it), data
 `public/data/scenes/<date>/` → **`public/data/sims/<sim>/<date>/`**, guide `docs/scenes-pipeline.md` → this file. The old data was
 removed and Barton's pendulums were computed again through the renamed line.
+
+## Large data, the GPU, and saving without clashes (23 November 2026)
+
+Three things the line could not do were added after the double pendulum's first run (run 45254099718): Kaggle computed and
+checked its 108 files, and the save then failed.
+
+**Saving without clashes.** The save used to be "commit the data, `git pull --rebase`, push". While Kaggle computed (ten minutes),
+another session merged into `main`; both changes had rewritten `docs/files.md`, the generated list of every file, git could not
+combine them and the run stopped with nothing saved. [tools/sims/land.py](../tools/sims/land.py) now does the save: it keeps the new
+generation's folder and its entry aside, takes the newest `main` exactly as it is, puts the folder back, adds the entry to
+`main`'s own `generations.json` (every other entry stays), generates `docs/files.md` again instead of merging it, commits and
+pushes; if `main` moved again meanwhile it starts over (five tries). Tested by replaying the clash in a test repository: the old
+way stopped at "CONFLICT (content): Merge conflict in docs/files.md", the new way landed on the first try with the other
+session's files kept.
+
+**The GPU.** A registry entry may say `"gpu": true` (the notebook is then pushed with Kaggle's GPU switched on; this spends the
+account's 30 weekly GPU hours) and `"timeout_s"` (how long the line waits for Kaggle; default 1800). The workflow job itself may
+run for up to six hours.
+
+**Large data.** GitHub keeps a repository small: files of some MB are fine, gigabytes are not. A registry entry may say
+`"store": "release"` and name, in `"release_files"`, the file patterns that are large (for example `"*.pack"`). After the SHA-256
+check, `pipeline.py` attaches those files to a GitHub release named `sims-<sim>-<date>` (a release holds up to 1000 files of
+under 2 GiB each, with no limit on total size or traffic, GitHub's documentation "About releases"), compares each file's size in
+the release with the index, and commits only the small files: `index-<sim>.json` (every file's size and SHA-256) and the model's
+summary. The generation in `generations.json` records `release`, `release_files` and `gpu`. The site's Worker
+([worker/r2.js](../worker/r2.js)) serves a release file under `/rel/<tag>/<file>` and passes a `Range` request through, so a page
+downloads only the bytes it needs and checks them against the fingerprint it has from the repository. The live check
+(`verify_live.py`, step 2b) asks every release file for its first 1024 bytes through `/rel/` and requires the right total size.
+No new key is needed: the workflow's own token may write releases (`permissions: contents: write`).
+
+`double_pendulum_smoke` ([tools/sims/double_pendulum_smoke.py](../tools/sims/double_pendulum_smoke.py)) is the test of all three: a small
+part of the double pendulum's grid (240 starts with their twins, one pack) computed by the same code as the full run
+([tools/sims/dp_engine.py](../tools/sims/dp_engine.py): JAX on the GPU, the page's own RK4 at h = 1/600 s in 64-bit numbers).
