@@ -464,7 +464,7 @@ The two ledgers, as designed on paper before the code:
 | New stored values | `as`, `E0`, `ma_now`, `bal_now`, `fres_now` | `Eas`, `Ea_now`, `Eg_now`, `K_now`, `K0`, `ebal_now` |
 | New checks (ledger file) | the 16 numbers copied from the run (x = x<sub>n</sub> at n = n<sub>now</sub>, or "from the drag" while held), `as`, `ma_now`, `E0`, `bal_now`, `fres_now`, `stable`, `fp_kind` | the 8 numbers copied from the run, `K_now`, `K0`, `ebal_now` |
 
-The ten blocks: [Fig. 1 L799](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L799),
+The ten blocks: [Fig. 1 L797](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L797),
 [Fig. 2 L830](../../public/simulations/Double%20Pendulum.html#L830),
 [Fig. 3 L850](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L850),
 [Fig. 4 L997](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L997),

@@ -75,6 +75,10 @@
   "src": "Three sliders set the waves: <em>Wavelength</em> \\(\\lambda\\) from 16 to \\(64\\ \\mathrm{px}\\) (default \\(30\\ \\mathrm{px}\\)), <em>Frequency</em> \\(f\\) from 0.2 to \\(2\\ \\mathrm{Hz}\\) (default \\(1.1\\ \\mathrm{Hz}\\)) and <em>Damping</em> \\(\\gamma\\) from 0 to 0.6 (default 0.15). The buttons place the sources: <em>Reset</em> puts two at \\(x = 200\\) and \\(600\\ \\mathrm{px}\\), <em>Line of 16</em> spreads sixteen evenly from 64 to \\(736\\ \\mathrm{px}\\), and a click on the field adds one on the source line, at the horizontal position of the click.",
   "tr": "ثلاثة مُنزلقات تضبط الموجات: <em>طول الموجة</em> \\(\\lambda\\) من 16 إلى \\(64\\ \\mathrm{px}\\) (القيمة الافتراضية \\(30\\ \\mathrm{px}\\))، و<em>التردد</em> \\(f\\) من 0.2 إلى \\(2\\ \\mathrm{Hz}\\) (القيمة الافتراضية \\(1.1\\ \\mathrm{Hz}\\))، و<em>التخامد</em> \\(\\gamma\\) من 0 إلى 0.6 (القيمة الافتراضية 0.15). وتضع الأزرار المصادر: <em>إعادة ضبط</em> تضع اثنين عند \\(x = 200\\) و\\(600\\ \\mathrm{px}\\)، و<em>صفّ من 16</em> يوزّع ستة عشر مصدرًا بالتساوي من 64 إلى \\(736\\ \\mathrm{px}\\)، والنقر على الحقل يضيف مصدرًا على خطّ المصادر عند الموضع الأفقي للنقرة."
  },
+ "1eccfad18177": {
+  "src": "Equation (6) asks for one cosine per source, per point, per frame. The page takes none of them itself. Expanding \\(\\cos(kr_i - \\omega t) = \\cos kr_i\\cos\\omega t + \\sin kr_i\\sin\\omega t\\) separates space from time:",
+  "tr": "تطلب المعادلة (6) جيب تمام واحدًا لكل مصدر ولكل نقطة ولكل إطار. ولا تحسب الصفحة بنفسها أيًّا منها. فكّ \\(\\cos(kr_i - \\omega t) = \\cos kr_i\\cos\\omega t + \\sin kr_i\\sin\\omega t\\) يفصل المكان عن الزمن:"
+ },
  "1f778cd8fc45": {
   "src": "Real water waves are dispersive: the frequency fixes the wavelength, and longer waves run faster (Fig. 5 of this site). Here \\(f\\) and \\(\\lambda\\) are set separately, and every wave moves at \\(v = f\\lambda\\).",
   "tr": "الأمواج المائية الحقيقية تشتّتية: فالتردد يحدّد طول الموجة، والموجات الأطول تسير أسرع (الشكل 5 في هذا الموقع). وهنا يُضبط \\(f\\) و\\(\\lambda\\) كلٌّ على حدة، وتسير كل موجة بالسرعة \\(v = f\\lambda\\)."
@@ -147,6 +151,10 @@
   "src": "<span class=\"psub__n\">7.1</span>Which sources build the front<span class=\"star\" title=\"heavier mathematics\">★</span>",
   "tr": "<span class=\"psub__n\">7.1</span>أيّ المصادر تبني الجبهة<span class=\"star\" title=\"heavier mathematics\">★</span>"
  },
+ "386a2f6edc0d": {
+  "src": "The stored data of this figure has not arrived yet; the field stays empty until it has.",
+  "tr": "لم تصل البيانات المخزّنة لهذا الشكل بعد؛ يبقى الحقل فارغًا حتى تصل."
+ },
  "38af3f4ef234": {
   "src": "Speed v = fλ",
   "tr": "السرعة v = fλ"
@@ -163,6 +171,10 @@
   "src": "<span>5</span>Two sources: calm hyperbolae",
   "tr": "<span>5</span>مصدران: قطوع زائدة هادئة"
  },
+ "42af152f5d2b": {
+  "src": "<b>Abstract.</b> Drop a row of pebbles into a pond and, a little way off, their rings merge into one straight ripple. This note explains that everyday sight with a single idea: waves add. It starts from the ring sent out by one source, adds two rings to find the calm lines between them, adds a whole row to find a beam and its unwanted side beams, and then shows when the ripples of a row really merge into the straight front that Huygens drew in 1690. It ends with how the field is computed once, stored, and coloured on every frame. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>الملخص.</b> ألقِ صفًّا من الحصى في بركة، وعلى مسافة قصيرة تندمج حلقاتها في موجة واحدة مستقيمة. تشرح هذه المذكرة هذا المشهد اليومي بفكرة واحدة: الموجات تتجمّع. تبدأ بالحلقة التي يرسلها مصدر واحد، ثم تجمع حلقتين لتجد الخطوط الهادئة بينهما، ثم تجمع صفًّا كاملًا لتجد حزمة وحزمها الجانبية غير المرغوبة، ثم تبيّن متى تندمج تموجات الصف حقًّا في الجبهة المستقيمة التي رسمها هويغنز عام 1690. وتنتهي بكيف يُحسب الحقل مرة واحدة ويُخزَّن ويُلوَّن في كل إطار. الأقسام المعلّمة بـ ★ تحمل الرياضيات الأثقل ويمكن تخطّيها في القراءة الأولى دون فقدان الخيط."
+ },
  "42f234519e3c": {
   "src": "<span class=\"psec__n\">04</span>Adding the rings",
   "tr": "<span class=\"psec__n\">04</span>جمع الحلقات"
@@ -178,6 +190,10 @@
  "4b8b263a87f8": {
   "src": "Figure 4 follows the amplitude \\(A\\) of (7) along a line parallel to the row: the centre row of the field on a wide screen, \\(169.1\\ \\mathrm{px}\\) above the sources. It spreads \\(N = 2\\), 4 and 16 sources over the same \\(672\\ \\mathrm{px}\\), as <em>Line of 16</em> does, at \\(\\lambda = 64\\ \\mathrm{px}\\), and compares them with a continuous row. With two sources the line crosses calm and loud bands in turn, and between \\(x = 200\\) and \\(600\\ \\mathrm{px}\\) the amplitude swings from 0.009 to 0.829. Four sources still leave deep fringes, from 0.036 to 0.765. Sixteen sources, now \\(44.8\\ \\mathrm{px}\\) apart and so closer than one wavelength, keep the amplitude between 0.119 and 0.168, never more than 0.050 from the continuous row: the ripples have merged into one front, as in Figure 1. The slow ripple that remains, in the continuous row as well, comes from its ends, where the front bends round.",
   "tr": "يتتبّع الشكل 4 السعة \\(A\\) من (7) على خطّ موازٍ للصفّ: الخطّ الأوسط للحقل في شاشة عريضة، على بُعد \\(169.1\\ \\mathrm{px}\\) فوق المصادر. ويوزّع \\(N = 2\\) و4 و16 مصدرًا على المسافة نفسها \\(672\\ \\mathrm{px}\\)، كما يفعل <em>صفّ من 16</em>، عند \\(\\lambda = 64\\ \\mathrm{px}\\)، ويقارنها بصفّ متصل. مع مصدرين يعبر الخطّ أهدابًا هادئة وصاخبة بالتناوب، وبين \\(x = 200\\) و\\(600\\ \\mathrm{px}\\) تتأرجح السعة بين 0.009 و0.829. ولا تزال أربعة مصادر تترك أهدابًا واضحة، بين 0.036 و0.765. أمّا ستة عشر مصدرًا، وقد أصبحت على بُعد \\(44.8\\ \\mathrm{px}\\) من بعضها، أي أقرب من طول موجة واحدة، فتُبقي السعة بين 0.119 و0.168، ولا تبتعد عن الصفّ المتصل أكثر من 0.050: فقد اندمجت الموجات في جبهة واحدة، كما في الشكل 1. أمّا التموّج البطيء الباقي، وهو موجود في الصفّ المتصل أيضًا، فمصدره طرفا الصفّ، حيث تنحني الجبهة."
+ },
+ "4e35d2d7947f": {
+  "src": "Wavelength, damping and the place of a source take only the stored values: \\(\\lambda\\) in steps of \\(1\\ \\mathrm{px}\\), \\(\\gamma\\) in steps of 0.05, a source on the nearest of 501 places \\(1.6\\ \\mathrm{px}\\) apart.",
+  "tr": "لا يأخذ طول الموجة والتخامد وموضع المصدر إلا القيم المخزّنة: \\(\\lambda\\) بخطوات قدرها \\(1\\ \\mathrm{px}\\)، و\\(\\gamma\\) بخطوات قدرها 0.05، والمصدر على أقرب موضع من 501 موضع تفصل بينها \\(1.6\\ \\mathrm{px}\\)."
  },
  "5286e5b2b3a5": {
   "src": "E. Hecht, <a href=\"https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793\"><em>Optics</em></a>, 5th edition, Pearson, 2017: chapters 4 (Huygens’ principle), 7 (the superposition of waves), 9 (interference) and 10 (diffraction).",
@@ -242,6 +258,10 @@
  "6ca700f429e8": {
   "src": "All sources are in step: the delays of (14) that steer a phased array cannot be set.",
   "tr": "كل المصادر في تزامن: فتأخيرات (14) التي تُوجّه المصفوفة الطورية لا يمكن ضبطها."
+ },
+ "6d0f21178844": {
+  "src": "For <em>Line of 16</em> on the wide screen one rebuild reads \\(2 \\times 16 \\times 28\\,250 = 904\\,000\\) stored numbers; it took 2.8–26 ms in five headless Chromium runs, while a frame took 0.6–0.8 ms. These times depend on the machine.",
+  "tr": "لـ<em>صفّ من 16</em> على الشاشة العريضة، تقرأ إعادة البناء الواحدة \\(2 \\times 16 \\times 28\\,250 = 904\\,000\\) عددًا مخزّنًا؛ واستغرقت 2.8–26 ms في خمس تشغيلات في Chromium دون واجهة، بينما استغرق الإطار 0.6–0.8 ms. تتوقف هذه الأزمنة على الجهاز."
  },
  "702b201c4b40": {
   "src": "Phyein Usul",
@@ -331,6 +351,10 @@
   "src": "Home page",
   "tr": "الصفحة الرئيسية"
  },
+ "963e1b52cc62": {
+  "src": "Three sliders set the waves: <em>Wavelength</em> \\(\\lambda\\) from 16 to \\(64\\ \\mathrm{px}\\) in steps of \\(1\\ \\mathrm{px}\\) (default \\(30\\ \\mathrm{px}\\)), <em>Frequency</em> \\(f\\) from 0.2 to \\(2\\ \\mathrm{Hz}\\) (default \\(1.1\\ \\mathrm{Hz}\\)) and <em>Damping</em> \\(\\gamma\\) from 0 to 0.6 in steps of 0.05 (default 0.15). The buttons place the sources: <em>Reset</em> puts two at \\(x = 200\\) and \\(600\\ \\mathrm{px}\\), <em>Line of 16</em> spreads sixteen evenly from 64 to \\(736\\ \\mathrm{px}\\), and a click on the field adds one on the source line, at the nearest of 501 places \\(1.6\\ \\mathrm{px}\\) apart.",
+  "tr": "ثلاثة منزلقات تضبط الموجات: <em>طول الموجة</em> \\(\\lambda\\) من 16 إلى \\(64\\ \\mathrm{px}\\) بخطوات قدرها \\(1\\ \\mathrm{px}\\) (الافتراضي \\(30\\ \\mathrm{px}\\))، و<em>التردد</em> \\(f\\) من 0.2 إلى \\(2\\ \\mathrm{Hz}\\) (الافتراضي \\(1.1\\ \\mathrm{Hz}\\))، و<em>التخامد</em> \\(\\gamma\\) من 0 إلى 0.6 بخطوات قدرها 0.05 (الافتراضي 0.15). الأزرار تضع المصادر: <em>إعادة ضبط</em> تضع مصدرين عند \\(x = 200\\) و\\(600\\ \\mathrm{px}\\)، و<em>صفّ من 16</em> يوزّع ستة عشر مصدرًا بالتساوي من 64 إلى \\(736\\ \\mathrm{px}\\)، والنقر على الحقل يضيف مصدرًا على خط المصادر، عند أقرب موضع من 501 موضع تفصل بينها \\(1.6\\ \\mathrm{px}\\)."
+ },
  "993dd84d70b4": {
   "src": "<span class=\"psec__n\">08</span>Two maps and a turning phase",
   "tr": "<span class=\"psec__n\">08</span>خريطتان وطور دوّار"
@@ -342,6 +366,10 @@
  "9a8e3e617433": {
   "src": "Each ring runs outward as if it were alone: a crest of ring \\(i\\) keeps \\(kr_i - \\omega t\\) fixed and travels at",
   "tr": "كل حلقة تسير إلى الخارج كما لو كانت وحدها. فقمّة الحلقة \\(i\\) تحافظ على \\(kr_i - \\omega t\\) ثابتًا، وتسير بسرعة"
+ },
+ "9ab613428997": {
+  "src": "The grid is the one the tables were computed on, the same on every screen: 250 columns of \\(3.2\\ \\mathrm{px}\\), and rows of \\(3.2\\ \\mathrm{px}\\) counted up from the bottom edge, at most 250; each value belongs to the centre of its cell. A source sits on the nearest of 501 places \\(1.6\\ \\mathrm{px}\\) apart, so every distance from a source to a grid point is one of 125 000 stored values. Measured in headless Chromium: 250 × 113 = 28 250 points in windows 1100–1600 px wide, and 250 × 250 = 62 500 on a phone 390 px wide. At the shortest wavelength, \\(16\\ \\mathrm{px}\\), that is 5 points per wavelength, still more than the two needed to show a wave at all.",
+  "tr": "الشبكة هي التي حُسبت عليها الجداول، وهي نفسها على كل شاشة: 250 عمودًا عرض كل منها \\(3.2\\ \\mathrm{px}\\)، وصفوف ارتفاع كل منها \\(3.2\\ \\mathrm{px}\\) تُعدّ صعودًا من الحافة السفلى، 250 على الأكثر؛ وكل قيمة تخص مركز خليتها. يقع المصدر على أقرب موضع من 501 موضع تفصل بينها \\(1.6\\ \\mathrm{px}\\)، لذا فكل مسافة بين مصدر ونقطة من الشبكة هي إحدى 125 000 قيمة مخزّنة. قيس في Chromium دون واجهة: 250 × 113 = 28 250 نقطة في نوافذ عرضها 1100–1600 px، و250 × 250 = 62 500 على هاتف عرضه 390 px. وعند أقصر طول موجة، \\(16\\ \\mathrm{px}\\)، يعني ذلك 5 نقاط لكل طول موجة، وهو ما يزال أكثر من النقطتين اللازمتين لإظهار موجة أصلًا."
  },
  "9bedb58097fa": {
   "src": "<span class=\"psub__n\">3.1</span>The page’s version of one ring",
@@ -535,9 +563,17 @@
   "src": "<span class=\"pfig__n\">Figure 3</span>Far-field amplitude \\(|F|\\) of <em>Line of 16</em> (\\(N = 16\\), \\(s = 44.8\\ \\mathrm{px}\\)), computed from equation (12) every \\(0.1^\\circ\\) from \\(-90^\\circ\\) to \\(90^\\circ\\). At the default \\(\\lambda = 30\\ \\mathrm{px}\\) (burgundy) the main beam, \\(2.40^\\circ\\) from its centre to its first zero, is joined by two side beams of full strength at \\(\\pm 42.04^\\circ\\). At \\(\\lambda = 64\\ \\mathrm{px}\\), longer than the spacing, the side beams are gone and the main beam is wider, \\(5.12^\\circ\\) to its first zero.",
   "tr": "<span class=\"pfig__n\">الشكل 3</span>سعة الحقل البعيد \\(|F|\\) لـ<em>صفّ من 16</em> (\\(N = 16\\)، \\(s = 44.8\\ \\mathrm{px}\\))، محسوبة من المعادلة (12) كل \\(0.1^\\circ\\) من \\(-90^\\circ\\) إلى \\(90^\\circ\\). وعند القيمة الافتراضية \\(\\lambda = 30\\ \\mathrm{px}\\) (عنّابي) تصاحب الحزمةَ الرئيسية، التي تبلغ \\(2.40^\\circ\\) من مركزها إلى أول صفر لها، حزمتان جانبيتان بكامل القوة عند \\(\\pm 42.04^\\circ\\). وعند \\(\\lambda = 64\\ \\mathrm{px}\\)، وهو أطول من التباعد، تختفي الحزم الجانبية وتصبح الحزمة الرئيسية أعرض، \\(5.12^\\circ\\) حتى أول صفر لها."
  },
+ "f72d8cd39f19": {
+  "src": "The rings were computed once, on Kaggle, by the model <code>tools/sims/wave_interference.py</code>, and are stored with the site: for each wavelength \\(\\lambda = 16, 17, \\dots, 64\\ \\mathrm{px}\\) the angle \\(kr\\) of a ring, and for each damping \\(\\gamma = 0, 0.05, \\dots, 0.60\\) its height \\(a\\), at every distance from a source to a grid point that can occur, with a table of cosines. When sources are added, cleared or reset, or the <em>Wavelength</em> or <em>Damping</em> slider moves, the page reads those numbers and adds the rings into \\(C\\) and \\(S\\): an angle and a height per source at each grid point. A slider between two stored values uses the nearest. The <em>Frequency</em> slider does not trigger this, because \\(f\\) enters only through \\(\\omega t\\): it changes how fast the pattern runs, never its shape.",
+  "tr": "حُسبت الحلقات مرة واحدة على Kaggle بالنموذج <code>tools/sims/wave_interference.py</code>، وهي مخزّنة مع الموقع: لكل طول موجة \\(\\lambda = 16, 17, \\dots, 64\\ \\mathrm{px}\\) زاوية الحلقة \\(kr\\)، ولكل تخميد \\(\\gamma = 0, 0.05, \\dots, 0.60\\) ارتفاعها \\(a\\)، عند كل مسافة ممكنة بين مصدر ونقطة من الشبكة، ومعها جدول لجيوب التمام. عند إضافة مصادر أو مسحها أو إعادة ضبطها، أو عند تحريك منزلق <em>طول الموجة</em> أو <em>التخامد</em>، تقرأ الصفحة هذه الأعداد وتجمع الحلقات في \\(C\\) و\\(S\\): زاوية وارتفاع لكل مصدر عند كل نقطة من الشبكة. والمنزلق الواقع بين قيمتين مخزّنتين يأخذ أقربهما. منزلق <em>التردد</em> لا يستدعي ذلك، لأن \\(f\\) لا يدخل إلا عبر \\(\\omega t\\): فهو يغيّر سرعة جريان النمط، لا شكله أبدًا."
+ },
  "f72f0eda6052": {
   "src": "Simulations",
   "tr": "المحاكاة"
+ },
+ "f8350ac7257a": {
+  "src": "The stored angles and heights are whole numbers, in steps of \\(2\\pi/65536\\) and \\(1/65535\\). Against the field computed straight from (6), \\(C\\) and \\(S\\) differ by at most 0.00006, and the colour drawn differs by one step of the next section’s table at about 0.1 % of points and instants. \\(C\\), \\(S\\) and \\(\\psi\\) are kept as 32-bit floating-point numbers, about seven significant figures.",
+  "tr": "الزوايا والارتفاعات المخزّنة أعداد صحيحة، بخطوات قدرها \\(2\\pi/65536\\) و\\(1/65535\\). مقارنةً بالحقل المحسوب مباشرة من (6)، يختلف \\(C\\) و\\(S\\) بما لا يزيد على 0.00006، ويختلف اللون المرسوم بدرجة واحدة من جدول القسم التالي عند نحو 0.1 % من النقاط واللحظات. تُحفظ \\(C\\) و\\(S\\) و\\(\\psi\\) أعدادًا عشرية بدقة 32 بت، أي نحو سبعة أرقام معنوية."
  },
  "f89bb8cef3bf": {
   "src": "The medium is <em>non-dispersive</em>: every wave travels at the same speed \\(v = f\\lambda\\), with \\(\\lambda\\) the wavelength.",

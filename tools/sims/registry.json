@@ -13,8 +13,11 @@
   "wave_interference": {
    "model": "tools/sims/wave_interference.py",
    "files": ["geometry.bin", "ring_l030.bin", "damp_g015.bin"],
-   "files_note": "The model writes 64 files; pipeline A checks every one by SHA-256. The page that plays them (Fig. 1) is added to pages once this first generation is checked live, so the old page keeps working until then.",
-   "pages": []
+   "files_note": "The model writes 64 files (geometry.bin, ring_l016 ... ring_l064.bin, damp_g000 ... damp_g060.bin, wave_interference.json); pipeline A checks every one by SHA-256. The page downloads only the files of the wavelength and damping on show, so the live check lists the three it opens with.",
+   "pages": [
+    {"path": "/simulations/Circular%20Wave%20Interference%20Visualization.html", "width": 1600, "height": 1000, "scroll": 0,
+     "probe": "(()=>{const s=window.__simData;if(!s)return {error:'no stored-data loader on the page'};if(s.err)return {error:s.err};if(!s.sha_ok||!s.gen)return {waiting:true};const d=Sim.data.ds;return {sha_ok:s.sha_ok,commit:s.gen.commit,date:s.gen.date,files:s.files,lambda:d.get('lambda'),damp:d.get('damp'),builds:d.get('builds'),renders:d.get('renders')};})()"}
+   ]
   }
  }
 }
