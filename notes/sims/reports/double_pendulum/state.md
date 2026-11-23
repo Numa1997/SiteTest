@@ -12,3 +12,9 @@ Kept current at every step that changes what is live or what is left (CLAUDE.md)
   in Cloudflare R2 and leaving Fig. 2 live. main and the live site are untouched; nothing deleted.
 - Left (if the user says go): step 2 build (registry, page player, walkthrough, note, doc, German and Arabic pages, docs, inventory); step 3 show and wait;
   step 4 publish after the yes; step 5 final doc.
+- 23 Nov, evening: the user rejected every cut ("everything we have now on the site computed on Kaggle", "known for using the
+  GPUs"). New route: `tools/kaggle/double-pendulum/dp_gpu.py` (JAX, GPU, the page's own RK4 h = 1/600 s in float64; grid: 5 mass
+  x 5 length ratios, angles every 15 deg, omega1, omega2 in -5..5 rad/s in 5 steps: 360 000 starts with twins, 3000 files) and
+  the notebook runner `notebook.py` (notebook `phyein-usul-double-pendulum-gpu`, private). Launch of the smoke test was blocked
+  by the app's safety check; waiting for the user's yes for that exact run. No more local runs (memory rule: every run on Kaggle).
+- Open: the full data (about 6 GB, estimate) needs R2; this session has no Cloudflare token (API answers "Missing Authorization").
