@@ -24,6 +24,12 @@
    "files": ["double_pendulum.json", "dp_11_09.bin"],
    "about_files": "The model writes 108 files dp_<mass><length>_<theta1>.bin and double_pendulum.json; listed here are the two the page loads at its default start (equal masses and rods, 120 and 150 degrees). No page is listed until the page plays the data.",
    "pages": []
+  },
+  "wave_interference2": {
+   "model": "tools/sims/wave_interference2.py",
+   "files": ["geometry.bin", "dist_lo.bin"],
+   "files_note": "Generation 2 of Fig. 1: rings at nodes even in k, blended by the page, every table split into a bottom and a top half. The live check lists the two files every wide screen opens with. The page is added to pages once this data is checked live; until then the page plays wave_interference.",
+   "pages": []
   }
  }
 }
