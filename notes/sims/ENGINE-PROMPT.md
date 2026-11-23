@@ -37,15 +37,36 @@ START
    keep it current after every step. After a compaction, reread it first.
 4. Tell the user in one short message what you will change, in five lines, then work. Do not wait for an answer.
 
+THE USER'S STANDING YES (so you do not stop to ask)
+This prompt is the user's yes for every Kaggle run this task needs through the engine, GPU runs included, and for the engine's own
+test runs. Do not ask again and do not send a "run card" and wait: the skill kaggle-gpu-run asks for a yes per run, and for this task
+this paragraph is that yes. Two limits: read the remaining weekly GPU hours before any GPU run (Kaggle connector,
+get_accelerator_quota), and if a run would use more than half of what remains, stop and ask in one sentence with the numbers.
+On 23 November 2026 a session asked for a yes four times after the user had given it; do not repeat that.
+If the app's safety check refuses a direct launch through the Kaggle connector (it did, when the session's prompt forbade launches),
+do not retry and do not work around it: runs go through the engine, by a merge or by Run workflow.
+
 WHAT EXISTS AND WORKS (keep it)
 - SHA-256 from Kaggle to the visitor's browser.
 - land.py: saves onto the newest main without clashing with other merges.
 - The registry fields gpu and timeout_s, and the 6-hour job.
 - The live check with page probes.
 - Only names listed in the registry are ever computed.
+- Since 23 November 2026 (pull request 183): a registry entry may say "store": "release" with "release_files" patterns. Those files
+  go into the GitHub release sims-<sim>-<date>, only the index and the summary are committed, and the Worker serves them under
+  /rel/<tag>/<file> with byte ranges (no cache in front of GitHub). The live check's step 2b asks each release file for its first
+  1024 bytes. This is the stop-gap that R2 replaces: keep it working until every simulation that uses it is verified from R2.
+- tools/sims/dp_engine.py (the double pendulum on the GPU, JAX, packs per mass-length cell), double_pendulum_smoke (its small test)
+  and double_pendulum_gpu (the full run, 360 000 starts) are a simulation's files, not engine files. Measured with them on
+  23 November 2026, Berlin time:
+  - test (workflow run 45259655945): merged 21:28:02, data on main 21:31:16, live check passed 21:34; Kaggle used two T4 cards, the
+    model took 22 s; the step that frees disk on the runner took 89 s;
+  - full run (workflow run 45261988429): started 21:41; read its outcome in public/data/sims/generations.json and in
+    notes/sims/reports/double_pendulum/state.md before you plan anything around it.
 
 THE FAULTS TO FIX (each seen in real runs on 23 November 2026)
-1. One notebook and one concurrency group put every run in one queue: Fig. 1 waited about 20 minutes behind the double pendulum.
+1. One notebook and one concurrency group put every run in one queue: Fig. 1's run (45255022407) was created at 21:01 Berlin time
+   and could start only when the double pendulum's (45254099718) ended at 21:08; it finished at 21:14.
    GitHub also keeps only one pending run per concurrency group, so a third merge silently cancels the second one's pending run, and
    that model is never computed.
 2. A rerun on the same day overwrites the same folder, entry and release tag. A changed file layout then breaks the live page, which
@@ -58,6 +79,20 @@ THE FAULTS TO FIX (each seen in real runs on 23 November 2026)
 6. Clean-up is manual: old generations, release assets and merged kaggelize/* branches stay. Sessions cannot delete branches; the
    git proxy answers HTTP 403.
 7. A Kaggle API hiccup while polling can be read as a failed run.
+8. A save lost a whole computed run (45254099718): another session merged while Kaggle computed, both changes had rewritten
+   docs/files.md, "git pull --rebase" stopped at the clash and nothing was saved. Fixed by land.py; keep that property in everything
+   you build: no step may assume main stood still while a run was going.
+9. After that failed save the data had to be computed again, although it was still on Kaggle: Kaggle keeps the output of every
+   notebook version. download_notebook_output with versionNumber fetched version 3's index (109 files, 17 665 452 bytes) an hour
+   later; list_notebook_session_output with versionLabel "3" answered "not found". The engine has no way to collect an old version.
+10. Nobody can see how far a run is. While a session runs, Kaggle's API returns an empty log (list_notebook_session_output, 21:55),
+    and GitHub's job-log API answers 404 until the job has ended. The only live progress is the notebook's page on kaggle.com, tab
+    Logs. Do not promise progress the engine cannot read.
+11. Nobody knew how long a run would take. A session told the user "2 to 3 minutes" for a run that took 7.5 minutes on Kaggle, then
+    "about an hour" from nothing. Kaggle's CPU notebook measured 3.6 times slower per core than a Claude cloud workspace on the same
+    model (1804 core-seconds on 4 cores against 506 on 2), so a time measured in a workspace is not Kaggle's time.
+12. A registry entry can sit on main without data (double_pendulum, whose save failed). Nothing reports it.
+13. Sessions watched runs by hand, with sleep loops the user had to interrupt, and reported times in UTC.
 
 BUILD THIS
 A. R2 as the store.
@@ -105,6 +140,10 @@ E. Robust runs.
    - Runs longer than the 6-hour job are split into a start workflow and a collect workflow that polls every 10 minutes.
    - Outputs larger than Kaggle's working folder (about 20 GB; check the current limit) are sharded ("shards": n in the registry).
    - A model writes checks_passed into its index, and data whose checks failed is refused.
+   - Collect mode: Run workflow with mode = collect, a simulation name and a Kaggle version number fetches that version's stored
+     output and carries it through the same checks and the same store, without computing again. A failed save or upload is repaired
+     this way (fault 9).
+   - The step that frees the runner's disk runs only for simulations whose data needs the room (it took 89 s on a test of 2.6 MB).
 F. One loader for every page: public/scripts/simdata.js, documented in docs/scripts/simdata.md. It
    - finds the newest live generation of a simulation and format;
    - gives each file's address (repository or /r2/);
@@ -122,15 +161,34 @@ H. Status for sessions. After every step, public/data/sims/status/<sim>.json rec
    - the state: queued, running, saved, live_ok or failed;
    - the notebook and version, the card, run and queue times;
    - the code and data commits, the bytes stored;
-   - the failure in one sentence.
-   A simulation session waits with git fetch in a sleep loop and reads this file. It never needs a browser or a scheduled task.
+   - the failure in one sentence;
+   - expected_s and expected_done: how long the run should take and when it should end, computed from the simulation's benchmark
+     file (seconds per unit of work on the chosen machine, times the units of the full run, plus the measured carrying time of the
+     last run of similar size), written when the run starts; and the measured times next to them when it ends. Times are written in
+     UTC in the file and shown to the user in Berlin time.
+   The engine cannot read progress inside a run (fault 10): the status says so, and gives the address of the notebook's log page.
+   A simulation session watches a run with the monitor of item K, which reads this file. It never needs a browser or a scheduled
+   task.
 I. Clean-up, automatic and only after a live check passes. Remove superseded generations of the same simulation and format (R2
    objects, repository index folders, generations.json entries), keeping the newest of every format a page still reads. Delete
    merged kaggelize/* branches (the workflow has contents: write). List notebooks of simulations that left the registry for deletion.
    Write what was deleted and kept, with the reason, into the run summary.
+K. A monitor for every run. Write tools/sims/watch.sh <sim or workflow run id>. It
+   - reads the run's jobs from the public GitHub API (https://api.github.com/repos/Numa1997/SiteTest/actions/runs/<id>/jobs answers
+     without a key from a cloud session's shell; without a key GitHub allows 60 requests an hour, so ask at most every 2 minutes)
+     and the status file by git fetch every 60 s;
+   - prints one line, with the Berlin time, for every step change, for the data commit, and for every end state (success, failure,
+     cancelled, timed out), and one "still running" line every 10 minutes;
+   - ends when the run has ended.
+   Sessions start it with the Monitor tool at the moment a run starts and re-arm it when it expires (a monitor lives at most
+   30 minutes). Document it in docs/kaggle-sims.md and in the skill text. Use it yourself for every test run of this task.
 J. Move what exists. Move the data of every simulation the engine already holds into R2, through the engine itself (one Run workflow
-   per simulation, a new run each). Today that is barton, wave_interference2 (Fig. 1), double_pendulum and double_pendulum_smoke;
-   read the registry for the current list. Point each page at it: if it uses the old loader, change only the base address the loader
+   per simulation, a new run each). On 23 November 2026, 22:00 Berlin time, that was: barton and wave_interference2 (Fig. 1), in the repository;
+   double_pendulum_smoke (one pack of 2 633 430 bytes in the release sims-double_pendulum_smoke-2026-11-23) and double_pendulum_gpu
+   (25 packs in a release, if its run 45261988429 ended well). double_pendulum is in the registry but has no data on main (fault 12);
+   its 109 files exist only as the output of version 3 of the notebook numakoudsie/phyein-usul-simulations. Read the registry,
+   generations.json and the releases for the current list; ask the simulation's state file, not your memory, which of them a page
+   will ever read, and move only those. Point each page at it: if it uses the old loader, change only the base address the loader
    reads from, nothing else on the page. Run its live check. Only then remove the old copies from the repository and the GitHub
    releases (sims-*), one simulation at a time. Fig. 15's R2 data stays where it is.
 
@@ -155,7 +213,18 @@ RULES (each was broken once; do not break them again)
 - Merge and publish finished, tested work without asking, then verify it live.
 - Commits carry only git -c user.name="Numa Koudsie" -c user.email="numakoudsie@gmail.com": no co-author line, no session link, no
   Claude attribution in commits or pull requests. In prose, write "the user", never a name.
-- Wait for runs with a shell sleep loop, never with a scheduled task.
+- Watch every run with a monitor (build item K; until watch.sh exists, the Monitor tool with a poll of the public GitHub API), started
+  when the run starts. Never a scheduled task, and never a blocking sleep loop that leaves the user without news.
+- Every clock time you tell the user is Berlin time, read from a clock or a log at that moment (TZ=Europe/Berlin date), never UTC
+  and never from memory. A session reported a merge at 21:35 that the log shows at 21:28.
+- Every duration you tell the user is calculated from measured runs, with the calculation in the message: which run, its seconds,
+  the scaling. If a part was never measured, say which part and that it is unknown. Never a round guess.
+- Never drop, shrink or swap a plan the user chose. If something blocks it, say in one sentence what blocks it, look for another road
+  to the same plan (CLAUDE.md, "Persist"), and keep going. A session dropped the user's plan twice on 23 November 2026.
+- When a step fails, say at once where the computed data still is and how it gets to the site, before anything else.
+- Main moves while you work: other sessions merge every few minutes. Merge main into your branch immediately before creating a pull
+  request; if the merge call answers 405 (conflict), merge main again, regenerate docs/files.md, push, and merge with the new SHA.
+- Your state file must be on main, not only on your branch, at every stop: a session that starts from main reads nothing else.
 - Measure, never estimate: bytes from real files, seconds from real runs. Verify every limit or price you write against the primary
   documentation and link it.
 - Talk plainly. Before each step, one short line saying what comes next; after it, one line with what came out. Never use other

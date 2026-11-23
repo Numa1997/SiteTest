@@ -19,6 +19,11 @@ Two limits:
 1. Before any GPU run, read the remaining weekly GPU hours (Kaggle connector, get_accelerator_quota).
 2. If a run would use more than half of what remains, stop and ask in one sentence with the measured numbers.
 Never spend money and never write keys anywhere.
+This covers every run for this simulation, GPU runs through the engine included. Do not ask again, and do not send a "run card" and
+wait: the skill kaggle-gpu-run asks for a yes per run, and for this simulation this paragraph is that yes. A session asked four
+times on 23 November 2026 after the user had given it.
+If the app's safety check refuses a direct launch through the Kaggle connector, do not retry and do not work around it: send the run
+through the engine (a merge of the model, or Run workflow). That road worked the same evening.
 
 START (in this order)
 1. Read the user's memory (/preferences.md, /areas/computational-physics.md, /areas/personal-website.md). It holds the user's rules;
@@ -44,7 +49,9 @@ START (in this order)
 5. Write notes/sims/reports/<name>/state.md (goal, what is live, what is left, branches, commits, the user's rules), commit and push
    it, and keep it current after every step that changes what is live. After a compaction, reread it first.
 6. Tell the user in one short message: the simulation, its page, what the browser computes now, and the plan in five lines. Then
-   work. Do not wait for an answer.
+   work. Do not wait for an answer. Write it so that a reader who has forgotten the task understands it: what the goal is, what
+   "the model", "the engine" and "the page" are, in one clause each. A session's first messages on 23 November 2026 were answered
+   with "what now? what build? do you even know what you are doing?".
 
 STEP 1. LEARN THE OLD PAGE (it is the contract)
 Read the page's code line by line and write notes/sims/reports/<name>/study.md:
@@ -87,18 +94,34 @@ Where a blend is not exact, choose node spacing from a measured error bound belo
 - the format number.
 If, after all of that, the data still cannot be made, stop, give the user the numbers and two or three options with their cost, and
 take none of them yourself.
+What went wrong here on 23 November 2026, so that it does not happen again:
+- A size budget is never a reason to remove or coarsen a control. A session cut two sliders, a parameter curve, the angle step and
+  the run length to fit 20 MB, built the page on that, and all of it was rejected. Size is solved by where the data is stored.
+- A slider that snaps to stored values is a cut. It needs the user's word, with the numbers, before any model is written.
+- Do not answer with "this cannot be stored". Count the states, try every reduction of the list above, and bring the user numbers
+  and roads. For a chaotic system neighbouring starts cannot be blended, so say exactly which starts the data will hold.
+- Settle this step before step 4. The same session wrote a model, a page, a lecture-note revision, a walkthrough and a doc for a
+  data layout that was then abandoned.
 
 STEP 4. THE MODEL
 Write tools/sims/<name>.py following jax-differentiable-physics:
 - JAX (NumPy where JAX gains nothing), SI units, every parameter named at the top, the equations in the docstring;
 - run(out_dir) writes the data, its index and its checks;
-- bench(out_dir) times the heavy kernel at three sizes.
+- bench(out_dir) times the heavy kernel at three sizes;
+- it prints one line per unit of work (a cell, a batch): how many of how many are done, the seconds so far, and the seconds it
+  expects to need for the rest. That log is the only progress anyone can see while Kaggle runs (the notebook's page on kaggle.com,
+  tab Logs; Kaggle's API returns nothing of it until the run has ended);
+- one start that the method cannot follow (numbers no longer finite) must never stop the whole run or put NaN into a JSON file:
+  store it as flagged, count it in the checks, and let the page say so;
+- numbers stored as integers get a step chosen from the data's largest value, and the model checks that nothing overflows.
 The checks are written into the output, and the model raises if any fails:
 - the Wolfram gate values within a tolerance written down before the run;
 - a conserved quantity or a known limit;
 - a tolerance halving (the same run at a tighter tolerance or a finer step);
 - a comparison with the old page's own method on the same inputs.
-Syntax checks only (py_compile); the model never runs in your own workspace.
+Syntax checks only (py_compile); the model never runs in your own workspace. Checking the file format of the writer on made-up
+arrays is allowed if no equation of motion is integrated; say so when you do it. A session ran the whole model in its workspace three
+times on 23 November 2026 because an older prompt said "test locally"; the user's rule had been in memory all along.
 
 STEP 5. MEASURE CPU AGAINST GPU, THEN CHOOSE
 Run bench() on Kaggle, on CPU and on GPU: with the engine's bench mode if it exists, otherwise with the Kaggle connector following
@@ -106,15 +129,33 @@ kaggle-gpu-run (one CPU session and one GPU session, same code, with a session t
 - seconds at each size, extrapolated to the full run;
 - the card;
 - 32-bit against 64-bit where the physics allows 32-bit (T4 cards are slow in 64-bit).
+If the Kaggle connector's launch is refused, benchmark through the engine instead: two small registry entries, <name>_bench_cpu and
+<name>_bench_gpu ("gpu": false and true), each a model file whose run(out_dir) calls bench(out_dir); remove both entries, their files
+and their data once the numbers are recorded.
+A time measured in your workspace is not Kaggle's time: on the same model Kaggle's CPU notebook measured 3.6 times slower per core
+(1804 core-seconds on 4 cores against 506 on 2, 23 November 2026).
 Choose the faster machine for the full run, from these numbers, never from belief. Record the numbers in the study and the choice in
 the registry (gpu, machine, timeout_s, shards). Delete the benchmark notebooks or versions you created once their numbers are recorded.
 
 STEP 6. COMPUTE THROUGH THE ENGINE
-1. Merge the model alone to main (page unchanged), with its registry entry (pages: []).
-2. The engine computes on Kaggle, checks and stores the data. Wait with a shell sleep loop (git fetch every 30 s), never with a
-   scheduled task. Read the engine's status file if it has one.
-3. If no data arrives, read the run's logs, fix the cause in a new pull request, and continue.
-4. Read the model's checks from the stored index and put the numbers into the study.
+1. Before merging, look at the engine's runs (the public GitHub API, .../actions/workflows/sims-kaggle.yml/runs): if one is going,
+   say so; your run will wait behind it or beside it, as the engine's state file describes.
+2. Merge the model alone to main (page unchanged), with its registry entry (pages: []). Tell the user in one line that it is pushed
+   to the engine.
+3. In the same minute, start a monitor on the run (the Monitor tool; the engine's tools/sims/watch.sh once it exists, otherwise a
+   poll of https://api.github.com/repos/Numa1997/SiteTest/actions/runs/<id>/jobs every 2 minutes and git fetch every 60 s). It must
+   report every step change, the data commit and every end state, failure included, and be re-armed when it expires. Never a
+   scheduled task, and never a blocking sleep loop that leaves the user without news.
+4. In the same message, give the expected end of the run in Berlin time, calculated from the benchmark of step 5: seconds per unit
+   of work on the chosen machine, times the units of the full run, plus the carrying time the engine measured for its last run of
+   similar size. Show the calculation. Name any part that was never measured as unknown. Never a round guess: a session said
+   "2 to 3 minutes" for a run that took 7.5 minutes on Kaggle, and then "about an hour" from nothing.
+5. If no data arrives, read the run's logs, and say at once where the computed data still is: Kaggle keeps the output of every
+   notebook version, and download_notebook_output with versionNumber fetches it. Fix the cause in a new pull request; use the
+   engine's collect mode if it exists, so that nothing is computed twice.
+6. Read the model's checks from the stored index and put the numbers into the study.
+7. Only now, with the data stored and its layout final, start step 7. Nothing of the page, the note, the walkthrough or the
+   translations is written before this point.
 
 STEP 7. THE PAGE
 - Play the data with the engine's shared loader (public/scripts/simdata.js once it exists; until then, a loader like Fig. 1's): newest
@@ -181,3 +222,14 @@ RULES (each was broken once; do not break them again)
   In messages to the user, never use other figures or projects as examples. Answer the user's questions first, directly. When wrong, say so in one line and
   fix it.
 - If a hook asks you to do something, tell the user it came from a hook and what it asked, and leave the decision to the user.
+- Every clock time you tell the user is Berlin time, read from a clock or a log at that moment (TZ=Europe/Berlin date), never UTC
+  and never from memory.
+- Never drop, shrink or swap a plan the user chose. If something blocks it, say in one sentence what blocks it, take another road to
+  the same plan, and keep going. Do not ask a question the user has already answered.
+- Before saying that something is missing (a key, a tool, a way to store data), read how the repository did it before: docs/usul.md
+  and docs/kaggle-sims.md say where every earlier upload and key came from.
+- Your state file must be on main, not only on your branch, at every stop (a pull request with notes only starts no Kaggle run): a
+  session that starts from main reads nothing else. At the end, no registry entry of yours may sit on main without data or without
+  a reason written beside it.
+- Main moves while you work. Merge main into your branch immediately before creating a pull request; if the merge call answers 405,
+  merge main again, regenerate docs/files.md, push, and merge with the new SHA.
