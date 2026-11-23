@@ -206,6 +206,15 @@ run: download of the 7.05 GB output from Kaggle 5 s (about 100 MB/s on the GitHu
 Kaggle's unpacking between 5 and 8 minutes (absent at 22:41, version 2 present at 22:44; it holds 34 files, the 25 packs of v6 and
 the smoke run v5, pack bytes 7 056 399 034 = 7 053 765 604 + 2 633 430). A second filing started at 22:43 failed because
 Kaggle answered "Not Found" to the whole-dataset download while it was still preparing the new version; it changed nothing.
+**Figures made before the engine** (Fig. 15 first, 24 November 2026). Their runs live only as outputs of their own notebooks on
+Kaggle. [tools/sims/file_figure.py](../tools/sims/file_figure.py), started by Run workflow with mode `figure` and the figure's key
+(`fig15`) as the simulation, files them into the figure's dataset: for each notebook named in
+[tools/sims/figure_datasets.json](../tools/sims/figure_datasets.json) and each of its versions (version 1, 2, ... until Kaggle has no
+more), the code as it ran (`code/`), the whole output (`output/`), the log and a `manifest.json` with every file's size and SHA-256,
+and how many of them are byte-identical to the files the site's index names. Each notebook is its own top-level folder of the
+upload, so the runner needs room for the figure's data plus one notebook's archive. It only creates a dataset; it refuses one
+that exists. The dataset's record line (`RECORD {...}` in the log) is copied into the figure's `generations.json` by the session.
+
 **What the dataset page says** (the user's rule of 24 November 2026). Each filing also writes the dataset's subtitle and description
 from the registry entry (`figure`, `page_url`, `dataset_title`, `dataset_subtitle`, `dataset_about`) and the records: the figure, its
 page, what was computed, a table of every run in the dataset (folder, model, date, files, size, code commit), the layout and the
