@@ -9,6 +9,15 @@
     {"path": "/", "width": 1600, "height": 1000, "scroll": 650,
      "probe": "(()=>{const h=document.querySelector('[data-bg=rails]');const s=h&&h.__bgScene;if(!s)return {error:'no rails scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,bars:s.Bs.length};})()"}
    ]
+  },
+  "double_pendulum": {
+   "model": "tools/sims/double_pendulum.py",
+   "files": ["double_pendulum.json", "dp_11_09.bin"],
+   "about_files": "The model writes 108 files dp_<mass><length>_<theta1>.bin and double_pendulum.json; listed here are the two the page loads at its default start (equal masses and rods, 120 and 150 degrees), which the live check requires to answer 200.",
+   "pages": [
+    {"path": "/simulations/Double%20Pendulum.html", "width": 1600, "height": 1000, "scroll": 0,
+     "probe": "(()=>{const s=window.DPstate;if(!s)return {error:'no double pendulum player on the page'};if(s.err)return {error:s.err};if(!s.ok)return {waiting:true};return {sha_ok:s.sha_ok,commit:s.gen.commit,date:s.gen.date,file:s.file,frames:s.frames};})()"}
+   ]
   }
  }
 }
