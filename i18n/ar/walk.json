@@ -938,6 +938,7 @@
  "the largest c<sub>p</sub> of the fit, no unit": "أكبر c<sub>p</sub> للملاءمة، بلا وحدة",
  "the largest radius, the full height of Fig. 8b; units": "أكبر نصف قطر، وهو الارتفاع الكامل للشكل 8b؛ الوحدات",
  "the model tools/sims/wave_interference.py, and superpose(): the loops over sources, rows and columns": "النموذج tools/sims/wave_interference.py، و superpose(): الحلقات على المصادر والصفوف والأعمدة",
+ "the model tools/sims/wave_interference2.py, and superpose(): the loops over sources, rows and columns": "النموذج tools/sims/wave_interference2.py، و superpose(): الحلقات على المصادر والصفوف والأعمدة",
  "the pen, imaginary part, in units; drawn at cy − y · scale px": "القلم، الجزء التخيّلي، بالوحدات؛ يُرسم عند cy − y · scale px",
  "the pen, imaginary part; units": "القلم، الجزء التخيّلي؛ الوحدات",
  "the pen, real part, in units; drawn at cx + x · scale px": "القلم، الجزء الحقيقي، بالوحدات؛ يُرسم عند cx + x · scale px",
