@@ -461,3 +461,9 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
   cancelled; that is the owner's call (the API cannot cancel).
 - 23 Nov 16:38 UTC: the Part C run (v2) was cancelled from outside this session after 7.7 h queued, never started (status
   CANCEL_REQUESTED 16:38:11, CANCEL_ACKNOWLEDGED 16:38:14; no outputs, no GPU time). Not relaunched; waiting for the owner.
+- 23 Nov 17:39:31 UTC (coordinator instruction 0001, notes/coord/to-session/): 4.5 relaunched as a NEW notebook
+  numakoudsie/step4-slosh-head-offline v1, internet OFF, T4, with stout_jax.py, rest_variants.py, run_b.py and guinness-glass.js
+  embedded in the notebook text at commit 5acb7181 (checked byte-identical before launch). No downloads, no pip.
+- STANDING RULE (coordinator, 23 Nov): every GPU launch uses internet OFF with the code embedded in the notebook. Kaggle queues
+  internet-on GPU runs indefinitely on this account; queued runs hold the 2 batch GPU slots. If a run has not started within 5 min, stop
+  and report. The coordinator channel is notes/coord/ (rules in to-session/0000-channel-rules.md; reports go to to-coordinator/).
