@@ -455,3 +455,5 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
   0.068 / 0.033 mJ.
 - 23 Nov 08:46:55-08:54:02 UTC: Part B CPU smoke of 4.5 (code 5acb7181): all marks PASS: finite; it <= 268, res <= 9.73e-6; A_applied_new /
   A_grid = 1.000; books 0 / 1.9e-8; in solid 0. Energy logs live (E_wall_foam 1.3e-11 J, E_wall_stout 8.5e-14 J at rest; E_plastic 0).
+- 23 Nov 08:55:42 UTC: Part C launched: Kaggle numakoudsie/step4-slosh-head version 2 (T4, code 5acb7181, launcher l45g.py in the
+  session scratchpad). Quota before: 1 824 s used of 108 000 s. Queued (empty status) at least until 09:25 UTC.
