@@ -447,3 +447,9 @@ parts of lambda (diag e_wall_stout, e_wall_foam); plastic dissipation diag e_pla
 The non-evp friction path (Stout.friction, used in Steps 1-3) keeps the old per-full-cell convention: not changed now; open item for
 the handoff. 4.5 harness: KE and PE with each particle's mass; fits over 0.2-1.2, 0.2-0.6, 0.6-1.2 s; energy closure 0.2-1.0 s; Part C
 marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 0.
+- 23 Nov 08:42:38-08:46:23 UTC: Part A audit (code aa6d57b, CPU step4-wall-audit). Fact (diag_4p5_energy.json), band 125-143.75 mm, t = 0:
+  A_geom 4.550e-3 m^2; u faces 1 790, A_grid 2.77e-3, A_applied 1.90e-3 (0.685), alpha_open mean 0.763 (0.128-1.141); v the same (0.684);
+  w faces 1 848, A_grid 4.08e-3, A_applied 2.01e-3 (0.494), alpha_open mean 0.529 (0.075-1.085); m_floor on wall faces 4 / 4 / 1, on free
+  faces 0. After one step the same. A_applied_new (fixed formula) = A_grid. Energy from the old slosh_head.jsonl at the swing's extremes
+  (approximate PE from mean heights): per half-cycle dE_mech -0.326 / -0.153 / -0.080 / -0.035 mJ against logged ewall 0.222 / 0.128 /
+  0.068 / 0.033 mJ.

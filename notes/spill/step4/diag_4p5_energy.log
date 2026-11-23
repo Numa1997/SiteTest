@@ -1,0 +1,28 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 42.8 s
+
+[08:44:53 UTC | +   75.1 s] audit t = 0: {"u": {"n_wall_faces": 1790, "A_grid_m2": 0.0027682369109243155, "A_applied_m2": 0.0018957322463393211, "A_applied_over_grid": 0.6848157536149373, "A_applied_new_m2": 0.0027682369109243155, "alpha_open_mean": 0.7632445096969604, "alpha_open_min": 0.12802958488464355, "alpha_open_max": 1.1408249139785767, "n_mfloor_wall": 4, "n_mfloor_free": 0}, "v": {"n_wall_faces": 1790, "A_grid_m2": 0.002768237143754959, "A_applied_m2": 0.0018927454948425293, "A_applied_over_grid": 0.683736759732631, "A_applied_new_m2": 0.002768237143754959, "alpha_open_mean": 0.7622272372245789, "alpha_open_min": 0.11973372846841812, "alpha_open_max": 1.12168288230896, "n_mfloor_wall": 4, "n_mfloor_free": 0}, "w": {"n_wall_faces": 1848, "A_grid_m2": 0.004076644312590361, "A_applied_m2": 0.002012034645304084, "A_applied_over_grid": 0.49355167903417285, "A_applied_new_m2": 0.004076644312590361, "alpha_open_mean": 0.528953492641449, "alpha_open_min": 0.07495514303445816, "alpha_open_max": 1.084781527519226, "n_mfloor_wall": 1, "n_mfloor_free": 0}, "A_geom_m2": 0.004550231203439595, "band_m": [0.125, 0.14375], "totals_three_components": {"A_grid": 0.009613118367269635, "A_applied": 0.005800512386485934, "A_applied_new": 0.009613118367269635}}
+
+[08:45:46 UTC | +  128.1 s] audit after one step: {"u": {"n_wall_faces": 1790, "A_grid_m2": 0.0027682369109243155, "A_applied_m2": 0.0018961721798405051, "A_applied_over_grid": 0.6849746755263705, "A_applied_new_m2": 0.0027682369109243155, "alpha_open_mean": 0.7635160088539124, "alpha_open_min": 0.12802539765834808, "alpha_open_max": 1.140824794769287, "n_mfloor_wall": 4, "n_mfloor_free": 0}, "v": {"n_wall_faces": 1790, "A_grid_m2": 0.002768237143754959, "A_applied_m2": 0.0018931449158117175, "A_applied_over_grid": 0.6838810468541623, "A_applied_new_m2": 0.002768237143754959, "alpha_open_mean": 0.7624800801277161, "alpha_open_min": 0.11973527818918228, "alpha_open_max": 1.1216875314712524, "n_mfloor_wall": 4, "n_mfloor_free": 0}, "w": {"n_wall_faces": 1848, "A_grid_m2": 0.004076644312590361, "A_applied_m2": 0.0020114495418965816, "A_applied_over_grid": 0.493408153290292, "A_applied_new_m2": 0.004076644312590361, "alpha_open_mean": 0.5289270877838135, "alpha_open_min": 0.07495514303445816, "alpha_open_max": 1.084781527519226, "n_mfloor_wall": 1, "n_mfloor_free": 0}, "A_geom_m2": 0.004550231203439595, "band_m": [0.125, 0.14375], "totals_three_components": {"A_grid": 0.009613118367269635, "A_applied": 0.005800766637548804, "A_applied_new": 0.009613118367269635}}
+
+[08:45:46 UTC | +  128.1 s] energy: [{"t0": 0.3834325859198829, "t1": 0.5621121709585493, "dE_mech_J": -0.0003263680503003618, "ewall_logged_J": 0.00022228992672983846}, {"t0": 0.5621121709585493, "t1": 0.7415586211690555, "dE_mech_J": -0.00015336113978102326, "ewall_logged_J": 0.0001281635193233902}, {"t0": 0.7415586211690555, "t1": 0.9225388017232412, "dE_mech_J": -8.041608174229953e-05, "ewall_logged_J": 6.839607401252492e-05}, {"t0": 0.9225388017232412, "t1": 1.106586442964786, "dE_mech_J": -3.542356901925809e-05, "ewall_logged_J": 3.332715732398445e-05}]
+
+[08:45:46 UTC | +  128.1 s] all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 276623 bytes to __results__.html
+
