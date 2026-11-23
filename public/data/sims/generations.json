@@ -1337,7 +1337,7 @@
    "wall_s": 8.5,
    "collected": "2026-11-21T20:13:07+00:00",
    "dataset": "numakoudsie/phyein-usul-barton",
-   "dataset_path": "phyein-usul-simulations-v1/",
+   "dataset_path": "phyein-usul-simulations/v1/",
    "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 1, 45999 bytes, filed as one version of this dataset"
   }
  ]
