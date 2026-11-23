@@ -111,6 +111,14 @@ def main():
                                  wall_s=round(index.get("wall_s", 0), 1), collected=datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")))
     json.dump(g, open(gp, "w"), indent=1, ensure_ascii=False); open(gp, "a").write("\n")
     log(f"stored under public/data/sims/{a.sim}/{day}/, generations.json updated")
+    # 6. every data set also stays on Kaggle: the whole output as a version of the simulation's private dataset (tools/sims/dataset.py).
+    #    A failure here does not throw the computed data away: the entry records it, and Run workflow with mode = dataset repeats it.
+    try:
+        import dataset as DS
+        DS.record(a.sim, version, *DS.file_dataset(a.sim, version, dl, K))
+    except SystemExit as ex:
+        g = json.load(open(gp)); [q.update(dataset_error=str(ex)) for q in g["generations"] if q["sim"] == a.sim and q["date"] == day]
+        json.dump(g, open(gp, "w"), indent=1, ensure_ascii=False); open(gp, "a").write("\n"); log("dataset not filed:", ex)
     if os.environ.get("GITHUB_OUTPUT"):
         open(os.environ["GITHUB_OUTPUT"], "a").write(f"version={version}\nday={day}\n")
 
