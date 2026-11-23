@@ -7,10 +7,12 @@ dataset, 200 GB of private datasets in all and 50 files at the top level (https:
 What it does, for one simulation and one version of the notebook numakoudsie/phyein-usul-simulations:
   1. takes that version's output (already downloaded by pipeline.py, or downloads it: `kaggle kernels output <notebook>/<version>`);
   2. checks every file's size and SHA-256 against the run's index-<sim>.json; any difference stops it;
-  3. lays the files out as phyein-usul-simulations-v<version>/ with a manifest.json (size and SHA-256 of every file), so a dataset
-     version always says which notebook version made it;
-  4. creates the private dataset numakoudsie/phyein-usul-<sim> (hyphens for underscores), or adds a new version to it; a dataset
-     version holds only what was uploaded with it, so each run is one dataset version and the older runs stay in the older versions;
+  3. lays the files out as phyein-usul-simulations/v<version>/output/, with the run's log and a manifest.json (size and SHA-256 of
+     every file, the code's commit) in phyein-usul-simulations/v<version>/, as docs/kaggle-pipeline.md prescribes;
+  4. creates the figure's private dataset (registry "dataset", for example numakoudsie/fig2-double-pendulum; without one,
+     numakoudsie/phyein-usul-<sim>), or adds a new version to it; a dataset
+     version holds only what was uploaded with it, so the runs already in the dataset are downloaded and uploaded again beside the
+     new one: the newest dataset version always holds every run;
   5. waits until Kaggle reports the dataset ready, and writes dataset, dataset_path and dataset_note into the run's entry in
      public/data/sims/generations.json (the workflow then saves it with land.py).
 Usage: python3 tools/sims/dataset.py <sim> <notebook version> [--from <folder holding the output>] [--kaggle <command>]"""
@@ -33,27 +35,52 @@ def file_dataset(sim, version, src, K=("kaggle",)):
     idx = [os.path.join(d, f) for d, _, fs in os.walk(src) for f in fs if f == f"index-{sim}.json"]
     if len(idx) != 1: sys.exit(f"expected one index-{sim}.json under {src}, found {len(idx)}")
     index = json.load(open(idx[0])); here = os.path.dirname(idx[0])
-    folder = f"phyein-usul-simulations-v{version}"
-    stage = tempfile.mkdtemp(prefix="ds-"); dst = os.path.join(stage, folder); os.makedirs(dst)
+    # the figure's own dataset (docs/kaggle-pipeline.md: one private dataset per figure, numakoudsie/fig<N>-<topic>), named in the
+    # registry entry as "dataset" and "dataset_title"; a simulation without a figure gets numakoudsie/phyein-usul-<sim>
+    reg = json.load(open(os.path.join(ROOT, "tools/sims/registry.json")))["sims"].get(sim, {})
+    ref = reg.get("dataset") or "numakoudsie/phyein-usul-" + re.sub(r"[^a-z0-9]+", "-", sim.lower()).strip("-")
+    title = reg.get("dataset_title") or f"Phyein Usul simulation data: {sim}"
+    # Layout of docs/kaggle-pipeline.md: <notebook>/v<version>/output/ plus manifest.json. The Kaggle tool packs each top-level folder
+    # of the upload into one archive of that folder's contents and Kaggle unpacks it at the dataset's root, so the tree is wrapped
+    # in one more folder ("upload") to arrive as phyein-usul-simulations/v<version>/... (seen 23 November 2026: an unwrapped folder
+    # arrived flat at the root).
+    stage = tempfile.mkdtemp(prefix="ds-"); wrap = os.path.join(stage, "upload")
+    folder = f"{NOTEBOOK.split('/')[1]}/v{version}"; dst = os.path.join(wrap, folder, "output"); os.makedirs(dst)
+    def put(p, q):
+        os.makedirs(os.path.dirname(q), exist_ok=True)
+        os.link(p, q) if os.stat(p).st_dev == os.stat(stage).st_dev else shutil.copy2(p, q)
     manifest = {}
     for f, meta in sorted(index["files"].items()):
         p = os.path.join(here, f); h = hashlib.sha256()
         with open(p, "rb") as fh:
             for chunk in iter(lambda: fh.read(1 << 24), b""): h.update(chunk)
         if os.path.getsize(p) != meta["bytes"] or h.hexdigest() != meta["sha256"]: sys.exit(f"{f}: size or SHA-256 differs from the index")
-        os.link(p, os.path.join(dst, f)) if os.stat(p).st_dev == os.stat(stage).st_dev else shutil.copy2(p, os.path.join(dst, f))
-        manifest[f] = meta
+        put(p, os.path.join(dst, f)); manifest[f] = meta
     shutil.copy2(idx[0], os.path.join(dst, f"index-{sim}.json"))
-    json.dump(dict(notebook=NOTEBOOK, version=version, sim=sim, date=index.get("date"), commit=index["source"]["commit"], files=manifest),
-              open(os.path.join(dst, "manifest.json"), "w"), indent=1)
+    for f in os.listdir(src):   # the run's log, as Kaggle hands it out with the output
+        if f.endswith(".log"): shutil.copy2(os.path.join(src, f), os.path.join(wrap, folder, f))
+    json.dump(dict(notebook=NOTEBOOK, version=version, sim=sim, date=index.get("date"), commit=index["source"]["commit"],
+                   code=f"https://github.com/Numa1997/SiteTest/tree/{index['source']['commit']}/tools/sims", files=manifest),
+              open(os.path.join(wrap, folder, "manifest.json"), "w"), indent=1)
     total = sum(m["bytes"] for m in manifest.values())
-    log(f"{len(manifest)} files, {total} bytes checked against the index; staged as {folder}/")
-    slug = "phyein-usul-" + re.sub(r"[^a-z0-9]+", "-", sim.lower()).strip("-"); ref = f"numakoudsie/{slug}"
-    json.dump(dict(title=f"Phyein Usul simulation data: {sim}"[:50], id=ref, licenses=[dict(name="CC-BY-4.0")],
-                   subtitle=f"Every run of the website's {sim} model, as computed on Kaggle"[:80]),
+    log(f"{len(manifest)} files, {total} bytes checked against the index; staged as {folder}/output/")
+    json.dump(dict(title=title[:50], id=ref, licenses=[dict(name="CC-BY-4.0")],
+                  subtitle=f"Every run of the website's {sim} model, as computed on Kaggle"[:80]),
               open(os.path.join(stage, "dataset-metadata.json"), "w"), indent=1)
     exists = "403" not in (st := kaggle(K, ["datasets", "status", ref], check=False)) and "404" not in st and "not found" not in st.lower() and "error" not in st.lower()
     if exists:
+        # A Kaggle dataset version holds only what is uploaded with it. The rule is that the dataset holds every run of the figure,
+        # so the runs already in it are downloaded and uploaded again beside the new one. Files outside <notebook>/ (the flat layout
+        # of the first filing, 23 November 2026) are left out; they stay in the older dataset versions.
+        old = tempfile.mkdtemp(prefix="old-"); kaggle(K, ["datasets", "download", ref, "-p", old, "--unzip"])
+        base = os.path.join(old, NOTEBOOK.split("/")[1]); kept = 0
+        if os.path.isdir(base):
+            for d, _, fs in os.walk(base):
+                for f in fs:
+                    rel = os.path.relpath(os.path.join(d, f), old)
+                    if rel.startswith(folder + "/"): continue   # the same version filed again: the new copy wins
+                    put(os.path.join(d, f), os.path.join(wrap, rel)); kept += 1
+        log(f"{kept} files of earlier runs kept beside the new one")
         out = kaggle(K, ["datasets", "version", "-p", stage, "-r", "tar", "-m", f"{NOTEBOOK} version {version}, code {index['source']['commit'][:7]}"])
         if "being created" not in out: sys.exit("Kaggle did not accept the dataset version (its answer is above)")
     else:
