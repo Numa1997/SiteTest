@@ -222,6 +222,9 @@ licence. No internal names stand alone and the description is never empty. The f
 built from the model's file name ("Every run of the website's double_pendulum_gpu model ...") and no description; Run workflow
 with mode `dataset`, the simulations' names and version `card` rewrites the card of existing datasets without uploading anything.
 The Kaggle connector cannot do it: it refuses every licence it is given ("The licenses array must specify exactly one license").
+The Kaggle tool's update refuses the licence name the upload takes (`CC-BY-4.0`: "You've specified an invalid license"), so the
+card is set on the dataset's own downloaded metadata, whose licence entry is kept as Kaggle wrote it, and `isPrivate` is set
+to true every time: the update reads a missing `isPrivate` as false and would make the dataset public.
 
 Before the next filing into a dataset this large, make the download of earlier runs per folder (`kaggle datasets download -f`)
 and retry it while Kaggle answers "Not Found".

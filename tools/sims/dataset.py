@@ -135,10 +135,25 @@ def file_dataset(sim, version, src, K=("kaggle",)):
     else:
         sys.exit(f"the new dataset version was not there within 3 hours (last state: {state})")
     # "datasets version" does not change the subtitle and description; set them from the same file
-    kaggle(K, ["datasets", "metadata", ref, "--update", "-p", stage])
+    update_card(K, ref, stage)
     shutil.rmtree(stage)
     log(f"dataset {ref} version {v} ready with {folder}/ ({total} bytes) after {round(time.time() - t0)} s")
     return ref, folder, total
+
+def update_card(K, ref, stage):
+    """Set the subtitle and description from stage/dataset-metadata.json on an existing dataset. The update refuses the licence
+    name the upload takes ("CC-BY-4.0": "You've specified an invalid license", 24 November 2026), so the dataset's own metadata is
+    downloaded first and its licence entry kept as Kaggle wrote it."""
+    want = json.load(open(os.path.join(stage, "dataset-metadata.json")))
+    cur = tempfile.mkdtemp(prefix="meta-"); kaggle(K, ["datasets", "metadata", ref, "-p", cur])
+    have = json.load(open(os.path.join(cur, "dataset-metadata.json")))
+    info = have.get("info", have)   # the download is {"info": {...}}, and the update reads "info" when it is there
+    # isPrivate must be set: the update treats a missing isPrivate as False and would make the dataset public
+    info.update(title=want["title"], subtitle=want["subtitle"], description=want["description"], isPrivate=True)
+    if not info.get("licenses"): sys.exit(f"{ref}: the downloaded metadata has no licence entry; not updating")
+    json.dump(have, open(os.path.join(cur, "dataset-metadata.json"), "w"), indent=1, ensure_ascii=False)
+    out = kaggle(K, ["datasets", "metadata", ref, "--update", "-p", cur])
+    if "invalid" in out.lower() or "rror" in out: sys.exit("Kaggle did not take the new card (its answer is above)")
 
 def write_meta(stage, reg, sim, ref, title, folders):
     sub, desc = card(reg, sim, folders)
@@ -166,8 +181,7 @@ def set_card(sim, K):
                 sim=e["sim"], date=e["date"], commit=e["commit"], files=idx["files"])
     if not folders: sys.exit(f"no generation of {sim} is filed in {ref}")
     stage = tempfile.mkdtemp(prefix="card-"); write_meta(stage, reg, sim, ref, reg.get("dataset_title") or ref, folders)
-    out = kaggle(K, ["datasets", "metadata", ref, "--update", "-p", stage])
-    if "rror" in out: sys.exit("Kaggle did not take the new card (its answer is above)")
+    update_card(K, ref, stage)
     log(f"{ref}: subtitle and description set ({len(folders)} runs)")
 
 def main():
