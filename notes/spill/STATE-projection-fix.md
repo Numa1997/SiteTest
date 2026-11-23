@@ -459,3 +459,5 @@ marks; smoke mark abs(A_applied_new / A_grid - 1) < 0.02 from wall_audit at t = 
   session scratchpad). Quota before: 1 824 s used of 108 000 s. Queued (empty status) at least until 09:25 UTC.
 - 23 Nov 13:56 UTC: the Part C run is still queued after 5 h (status empty, no session output, no GPU time used). Not relaunched or
   cancelled; that is the owner's call (the API cannot cancel).
+- 23 Nov 16:38 UTC: the Part C run (v2) was cancelled from outside this session after 7.7 h queued, never started (status
+  CANCEL_REQUESTED 16:38:11, CANCEL_ACKNOWLEDGED 16:38:14; no outputs, no GPU time). Not relaunched; waiting for the owner.
