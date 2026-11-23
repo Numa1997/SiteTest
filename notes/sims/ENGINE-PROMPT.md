@@ -27,6 +27,14 @@ summaries and checks. GitHub releases are no longer used for data. The reasons, 
 - Cloudflare serves at most 25 MiB per static file;
 - the /rel/ path fetched every visitor's request from GitHub.
 
+EVERY DATA SET ALSO STAYS ON KAGGLE (the user's rule, whatever the size)
+R2 is where the site reads from. Kaggle is where the data was made and where a complete copy of it stays: every output file of every
+run, byte for byte, in a private Kaggle dataset of its figure, as docs/kaggle-pipeline.md already rules since 14 November 2026
+("Layout on Kaggle: one notebook and one dataset per figure"). Kaggle allows 200 GB per dataset and 200 GB of private datasets in
+all, and at most 50 files at the top level, so files go in folders
+(https://www.kaggle.com/docs/datasets, read 23 November 2026). The engine "Simulations on Kaggle" has not followed that rule so
+far: its runs survive only as the output of a notebook version. Build item L closes that.
+
 START
 1. Read the user's memory (/preferences.md, /areas/computational-physics.md, /areas/personal-website.md) and the skills
    phyein-usul-kaggle-pregenerate and kaggle-gpu-run. They are the user's rules; where anything below contradicts them, they win.
@@ -232,6 +240,27 @@ J. Move everything that exists. Not only future simulations: every byte of store
    When this step is done, public/data/ holds no simulation data, only indexes and lists, and every page that plays stored data
    reads it from /r2/ and passes its live check.
 
+L. Every generation into its figure's Kaggle dataset.
+   - After a run's files are checked, the engine files the whole output as a new version of the figure's private dataset
+     (numakoudsie/<the figure's dataset>; one per simulation, new versions only, never a second dataset), laid out as
+     <notebook>/v<version>/output/ with the run's log, the notebook's code and a manifest.json (size and SHA-256 of every file),
+     exactly as docs/kaggle-pipeline.md describes. It uses the KAGGLE_API_TOKEN the workflow already has (the official tool's
+     "kaggle datasets version"; the notebook's own output can be attached as the source so that nothing is uploaded twice: check
+     which the tool supports, and measure).
+   - generations.json and the run's index carry dataset and dataset_path, and the live check refuses a generation without them.
+   - Before a dataset version is made, read the account's private quota in use; if the new version would not fit in the 200 GB,
+     stop, say the numbers, and remove nothing.
+   - Clean-up (item I) never removes a dataset or a dataset version that a live record names. A superseded generation leaves R2 and
+     the repository, but its copy on Kaggle stays, unless the user says otherwise.
+   - For what exists today (item J's table): for each figure, find its dataset and check that every file a live record names is
+     in it, by size and SHA-256 (the file lists are in notes/inventory/datasets/: fig12-guinness-on-a-cart,
+     fig14-schrodinger-sphere, fig16-guinness-cart-control). What is missing is added as a dataset version before its copy leaves
+     the repository: Fig. 15 and Fig. 13 (find their datasets or make them), Fig. 1 (wave_interference2), barton, and the double
+     pendulum (version 6 of the notebook numakoudsie/phyein-usul-simulations, 7 053 765 604 bytes in 25 packs; version 3 holds the
+     first plan's 109 files). The Kaggle connector has no call that creates a dataset; Fig. 16's was made through api.kaggle.com
+     (docs/kaggle-pipeline.md says how).
+   - The docs get one table: per figure, its notebook, its dataset and version, its bytes on Kaggle, in R2 and in the repository.
+
 RULES (each was broken once; do not break them again)
 - Every run of a model, test runs included, happens on Kaggle through the real line, never in your own workspace. Test every
   scenario with a tiny permanent model, sims_smoke, that runs only on Run workflow and removes its data after a passing run:
@@ -283,7 +312,8 @@ skill phyein-usul-kaggle-pregenerate's text in notes/skills/ for the user to upl
 
 FINISH
 1. All scenario tests green. Every simulation that plays stored data, old or new, verified live from R2, and public/data/ holding
-   only indexes and lists (build item J). Any figure you could not move is named, with the reason, in the report and in its doc.
+   only indexes and lists (build item J). Every generation a live record names also lies in its figure's Kaggle dataset, checked
+   by size and SHA-256 (build item L). Any figure you could not move is named, with the reason, in the report and in its doc.
 2. Clean-up done: test data, branches, scratch files.
 3. Final report in plain sentences:
    - what the engine now does;
