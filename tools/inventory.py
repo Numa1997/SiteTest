@@ -184,6 +184,7 @@ RULES = [
     (r'tools/sims/(?!barton\.py|wave_interference2\.py|land\.py|dp_engine\.py)[a-z][a-z0-9_]*\.py', 'Reference model of one simulation, run once on Kaggle (written by a Kaggelize build session; its report is in notes/sims/reports/).', 'docs/kaggelize.md'),
     (r'docs/kaggle-sims\.md', 'Plain-words guide to Simulations on Kaggle: every step, key, cost and failure.', 'docs/kaggle-sims.md'),
     (r'notes/sims/PLAN\.md', 'Plan of the simulations moved to Kaggle: specify, generate once on Kaggle, store, play, document; order and state.', 'notes/sims/PLAN.md'),
+    (r'notes/sims/ENGINE-PROMPT\.md', 'The prompt for the session that rebuilds the engine Simulations on Kaggle: fully automated, every simulation\'s data in Cloudflare R2.', 'docs/kaggle-sims.md'),
     (r'public/scripts/kaggle-flow\.js', 'The page side of the Kaggle pipeline: sliders that show the computed range and grow heavy near its edge, eased speed, the notice for a stop outside the stored grid.', 'docs/kaggle-pipeline.md'),
     (r'public/styles/kaggle-flow\.css', 'Styles of kaggle-flow.js: the computed band, soft zones and dots of the sliders, the notice.', 'docs/kaggle-pipeline.md'),
     (r'public/scripts/schrodinger-live-worker\.js', 'Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet.', 'docs/simulations/fig14-schrodinger-sphere.md'),
