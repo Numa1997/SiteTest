@@ -113,3 +113,6 @@ fix indexes the right side by [new], as the wts line below it already does. It i
 ## Clean up
 - Kept: notebook step4-energy-audit-cpu (the slosh run still needs it), all outputs committed. Scratch launch files in the session scratchpad
   deleted. The worker session (stopped on the owner's order) left only the committed marks and code, reviewed line by line before keeping.
+
+Where we are: the audit is done: (a) refuted, (b) small, (c) the stress-force / return-map mismatch proved (ratio 3.09), projection adds 0.088 mJ; no fix applied.
+Next, if you say yes: make the foam's strain rate and its stress force work-consistent, test it on the 4.3 slab and the 3 mm slosh on Kaggle CPU, then rerun 4.5 on GPU.

@@ -33,3 +33,6 @@
 ## Clean up
 - Deleted: the scratch files save.json and l45check.py in the session scratchpad.
 - Kept: the notebook (4.5 has no result yet); tools/spill/build_l45_offline.py in the repo (it is how the launch is reproduced).
+
+Where we are: v3 was refused by Kaggle (GPU session limit); superseded by 0003, where the run started.
+Next, if you say yes: nothing further under 0002; see 0003.

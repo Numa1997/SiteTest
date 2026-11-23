@@ -48,3 +48,6 @@ Against 22 Nov (before the friction fix): zeta 0.118 -> 0.143 over 0.2-1.2 s; f_
 - Deleted: scratch save/cpu/out JSON files in the session scratchpad.
 - Kept: notebook step4-slosh-head-offline (latest version is this run; needed until the closure question is settled); the 22 Nov
   slosh_head* files (old result, kept until the new one is accepted).
+
+Where we are: 4.5 Part C ran; f_d and zeta pass, energy closure fails; superseded by the 0004 audit.
+Next, if you say yes: nothing further under 0003; see 0004.

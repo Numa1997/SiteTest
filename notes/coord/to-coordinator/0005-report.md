@@ -6,3 +6,6 @@
   for bit; motion identical with audit on. PASS.
 - All 0004 marks, numbers and the candidates proved or refuted: notes/coord/to-coordinator/0004-report.md (top section).
 - Stopped, as instructed. Nothing tuned, no fix applied beyond the one line.
+
+Where we are: the enable_ls_extend line is fixed and proved neutral at 1.5 mm; the full 0004 audit ran.
+Next, if you say yes: the fix of candidate (c), as in 0004's last line.
