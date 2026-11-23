@@ -1,6 +1,6 @@
 # Fig. 1, Wave interference: study for moving it to data computed once on Kaggle
 
-Written 23 November 2026 on branch `kaggelize/wave_interference` (scheduled task "Kaggelize simulations"). Simulation name in the
+Written 23 November 2026 on branch `kaggelize/wave_interference` (scheduled task "Kaggelize simulations"); kept true through Step 2 (build). Simulation name in the
 pipeline: `wave_interference`. This file is the plan as studied; it is kept true while the work is built and rewritten at the end
 into what was built and measured.
 
@@ -36,7 +36,9 @@ A still pond seen from above. A row of small floats sits on one straight line; a
 Each float sends out a ring of ripples. Where rings meet, their heights add. The page shows the height of the water at every point
 as a colour: burgundy for a crest, dark ink for a trough, cream for still water.
 
-Symbols (the page fixes no length in metres: every length is in px of a field that is always 800 px wide; time in seconds):
+Symbols (the page counts every length in px of a field that is always 800 px wide; time in seconds). The model states its
+parameters in SI by choosing the field 0.40 m wide, so 1 px = 0.5 mm, λ = 8 … 32 mm, R = 0.15 m; nothing in the picture depends on
+that choice, only on k r and γ r/R:
 
 | Symbol | Meaning | Unit |
 |---|---|---|
@@ -102,14 +104,14 @@ quotes: 16, 30, 32, 40, 60, 64); γ = 0, 0.05, …, 0.60 (13 nodes, includes the
 
 | File | Content | Type | Bytes (measured) |
 |---|---|---|---|
-| `geometry.bin` | r(m, j); table cos(2πn/65536), n = 0 … 65535 | float32; int16 (1/32767) | 631 334 |
-| `ring_lNNN.bin` × 49 | angle k r reduced to one turn | uint16 (2π/65536 rad) | 250 262 to 250 264 each |
-| `damp_gNNN.bin` × 13 | height a(r) = e^(−γr/R) | uint16 (1/65535) | 250 232 to 250 251 each |
-| `wave_interference.json` | parameters, node lists, checks | JSON | small |
+| `geometry.bin` | r(j, m); table cos(2πn/65536), n = 0 … 65535 | float32; int16 (1/32767) | 632 640 |
+| `ring_lNNN.bin` × 49 | angle k r reduced to one turn | uint16 (2π/65536 rad) | 250 244 to 250 260 each |
+| `damp_gNNN.bin` × 13 | height a(r) = e^(−γr/R) | uint16 (1/65535) | 250 188 to 250 208 each |
+| `wave_interference.json` | parameters, node lists, checks | JSON | 3 352 |
 
-Total measured in a local run: 16 147 432 bytes in 63 `.bin` files, inside the 20 MB budget. The page downloads only what it
-shows: at opening `geometry.bin` + `ring_l030.bin` + `damp_g015.bin` = 1 131 834 bytes; each new λ or γ node another 250 kB, checked by
-SHA-256 like the rest. Run time measured here (one CPU): 81.1 s, almost all of it the checks (637 node pairs × 2 presets × 64
+Total measured in the local run of the built model (23 November 2026): 16 150 676 bytes in 64 files, inside the 20 MB budget. The page downloads only what it
+shows: at opening `geometry.bin` + `ring_l030.bin` + `damp_g015.bin` = 1 133 076 bytes; each new λ or γ node another 250 kB, checked by
+SHA-256 like the rest. Run time measured here (2 CPUs): 79.6 s, almost all of it the checks (637 node pairs × 2 presets × 32
 instants). Random starts and seeds: none are needed. The system is not chaotic and has no random state; "Add 5 random" keeps
 choosing places at random in the page, now among the 501 stored places.
 
@@ -144,15 +146,27 @@ Risk of B: every new generation adds 16 MB to the repository's history (the line
 Measured in the local run above, all in `wave_interference.json`:
 - **Comparison with today's browser result.** The page's own sum from the stored tables, against the float64 sum straight from
   eq. 5–6 (what the browser computed live), for Reset and Line of 16 at all 637 node pairs: largest difference 5.9e-5 in C,
-  6.0e-5 in S, 6.3e-5 in ψ; at 64 instants of one period the colour row (one row = 2/255 = 0.0078 of ψ) differs in 3 590 952 of
-  5 096 000 000 cell-instants (0.07 %), always by one row, where ψ lies at a row boundary. This is the rounding of the stored angle
-  (half a count, 4.8e-5 rad) and of the cosine table (1.5e-5), named as such. A second comparison in headless Chromium, in Step 2:
-  today's page at a canvas 275 css px wide has exactly the new grid (250 × 250 cells of 3.2 px), so its live maps can be compared
-  cell by cell with the stored ones.
+  6.0e-5 in S, 6.3e-5 in ψ; at 32 instants of one period the colour row (one row = 2/255 = 0.0078 of ψ) differs in 1 794 573 of
+  2 548 000 000 cell-instants (0.070 %), always by one row, where ψ lies at a row boundary. This is the rounding of the stored angle
+  (half a count, 4.8e-5 rad) and of the cosine table (1.5e-5), named as such. A second comparison in headless Chromium, done in Step 2:
+  the page as it was on `main` (live computing), in a window 309 px wide, has a canvas of 275 css px and exactly the new grid
+  (250 × 250 cells of 3.2 px, same cell centres, same source positions). Its live maps against the new page's, cell by cell:
+
+  | Case | max \|ΔC\| | max \|ΔS\| | colour rows differing (32 instants × 62 500 cells) |
+  |---|---|---|---|
+  | Reset, λ = 30, γ = 0.15 | 5.1e-5 | 4.7e-5 | 2 392 of 2 000 000, by one row |
+  | Reset, λ = 45, γ = 0.5 | 3.7e-5 | 3.6e-5 | 1 568, by one row |
+  | Line of 16, λ = 30, γ = 0.15 | 2.0e-5 | 1.9e-5 | 890, by one row |
+  | Line of 16, λ = 16, γ = 0 | 2.2e-5 | 2.0e-5 | 1 180, by one row |
+  | Line of 16, λ = 64, γ = 0.6 | 1.3e-5 | 1.3e-5 | 528, by one row |
+
+  And the new page's C and S in the browser equal, bit for bit in all 28 250 cells (1600 px window, Reset, λ = 30, γ = 0.15), the
+  page's sum as the model emulates it (`page_sum`).
 - **A known limit.** Two sources at γ = 0: the amplitude must be |cos(k(r₁ − r₂)/2)| exactly (calm lines where the path difference is
   a half-odd number of wavelengths). Largest deviation over all 49 λ: 6.3e-5.
 - **A conserved quantity.** A stored ring keeps the length of its arrow: cos² + sin² − 1 of the stored cosine table, largest 4.2e-5.
-- **Damping at r = R:** the stored height against e^(−γ), largest error 7.5e-6.
+- **Rounding of every stored number:** the stored height against e^(−γr/R), largest error 7.6e-6 (half a step, 7.6e-6); the stored
+  angle against 2πr/λ mod 2π, largest 4.8e-5 rad (half a step); the cosine table, 1.5e-5.
 
 ## 8. Words used
 
@@ -175,3 +189,21 @@ Measured in the local run above, all in `wave_interference.json`:
 - **Headless Chromium**: a web browser run by a program, without a screen, to test pages.
 - **Quantisation / rounding gap**: the small difference a stored whole-number count leaves against the exact value.
 - **Budget**: the most data allowed for this simulation, 20 MB.
+
+## 9. Built (Step 2, 23 November 2026)
+
+What was built follows section 5 without change of plan. Files: the model `tools/sims/wave_interference.py` (SI parameters at the
+top, equations in the docstring, `run(out_dir)` writes the 64 files and their headers, checks of section 7 in the output); the entry
+`wave_interference` in `tools/sims/registry.json` (the live check opens the page and expects the three opening files checked and the
+commit of the generation); the page, whose script now loads the newest generation from `data/sims/generations.json`, checks each
+file's SHA-256 and adds the stored rings (`stored()`, `load()`, `superpose()`); until the data has arrived one sentence stands in the
+figure; the old computing code (`precompute()`: the square root, exponential, cosine and sine per source and cell) is removed. English
+page: 908 lines, as before. The walkthrough, the note §8 and §10, the German and Arabic pages and the page's doc
+(`docs/simulations/fig01-wave-sources.md`) describe the new code.
+
+Tested here in headless Chromium against the local run's data: at 1600, 1100 and 390 px no console error, the data ready in 0.8–1.3 s,
+and every control changes the picture (Pause stops it, Play moves it, Line of 16, Add 5 random, Reset, Clear, a click on the field,
+λ, γ; f changes the phase speed: 3.14 rad/s at 0.5 Hz, 12.57 rad/s at 2 Hz). The data panel's checks at the centre cell and the
+comparisons are in the page's doc ("Proof") and in section 7.
+
+Not done yet: the first generation on Kaggle (it starts when the model reaches `main`), and the live check.
