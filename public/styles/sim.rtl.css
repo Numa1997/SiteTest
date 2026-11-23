@@ -259,3 +259,14 @@ html:not(.tex-ready) .stage__cap .tx { visibility: hidden; }
 html, a, button, input, select, textarea, label, summary, [role="button"], [tabindex] { -webkit-tap-highlight-color: transparent; }
 a:active, button:active { opacity: .72; transition: opacity 0s; }
 input[type="range"]:active { opacity: 1; }
+
+/* ================= the pint of Guinness: which of its two figures this is (guinness-kaggle, guinness-cart-control) ================= */
+.gfam { margin: 18px 0 0; }
+.gfam__k { margin: 0 0 8px; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.gfam__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.gfam__list a { display: block; height: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 10px; color: var(--ink-2); font-size: 14px; line-height: 1.45; }
+.gfam__list a:hover { border-color: var(--accent); }
+.gfam__list b { display: block; font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: .04em; color: var(--accent); margin-bottom: 4px; }
+.gfam__list span { display: block; }
+.gfam__list [aria-current="page"] a { border-color: var(--accent); background: var(--card); color: var(--ink); }
+@media (max-width: 760px) { .gfam__list { grid-template-columns: minmax(0, 1fr); } }

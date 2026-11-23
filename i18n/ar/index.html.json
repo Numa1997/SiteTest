@@ -870,5 +870,33 @@
  "ffe688a50143": {
   "src": "Fonts",
   "tr": "الخطوط"
+ },
+ "8d6e6e45c560": {
+  "src": "What moves behind this page",
+  "tr": "ما يتحرّك خلف هذه الصفحة"
+ },
+ "13d3664229cc": {
+  "src": "<b>The forest</b> under the title spreads from a few trees, a year every two minutes; its leaves breathe vapour that rises into the open sky of the two top corners, gathers into clouds and falls back as rain or snow that feeds the young trees.",
+  "tr": "<b>الغابة</b> تحت العنوان تنتشر من أشجار قليلة، وعامُها دقيقتان؛ تتنفّس أوراقها بخارًا يصعد إلى السماء المكشوفة في الركنين العلويّين، فيلتئم غيومًا، ثم يعود مطرًا أو ثلجًا يُطعم الأشجار الفتيّة."
+ },
+ "3c436ec2e2d5": {
+  "src": "<b>The roots</b> in the left margin grow towards the water they sense, branching like river beds, each as thick as the cube root of the tips it feeds (Murray's law).",
+  "tr": "<b>الجذور</b> في الهامش الأيسر تمضي نحو الماء الذي تستشعره، وتتشعّب كما تتشعّب مجاري الأنهار، وغِلَظ كلّ جذرٍ على قدر الجذر التكعيبي لعدد الأطراف التي يغذّيها (قانون موراي)."
+ },
+ "b95032d0d5ff": {
+  "src": "<b>The pendulums</b> in the right margin hang in pairs tied by a weak spring: the swing drains through the spring from one bob to the other and back every 27 s, a beat; the motion was computed once on Kaggle and is played here, not computed.",
+  "tr": "<b>النوّاسات</b> في الهامش الأيمن معلّقة أزواجًا يصل بينها نابض ليّن: تنساب الأرجحة عبر النابض من ثقلٍ إلى صنوه، ثم تعود إليه كلّ ٢٧ ثانية، وتلك هي الضربات؛ حُسبت الحركة مرّةً واحدة على Kaggle، وهي هنا تُعرض ولا تُحسب."
+ },
+ "dd54478d85b6": {
+  "src": "<b>The spinners</b> before the simulations turn at their own pace until a wandering rotating field pulls those it passes into step.",
+  "tr": "<b>الدوّارات</b> قبل المحاكاة تدور كلٌّ على إيقاعه، حتى يمرّ بها حقلٌ دوّار جوّال فيأخذ ما يعبره إلى خطوه."
+ },
+ "b45c38b34b5e": {
+  "src": "<b>The shores of light</b> above the footer: motes rise through a slow tide and brighten as they reach the light, a picture of Lucretius.",
+  "tr": "<b>شطآن النور</b> فوق ذيل الصفحة: ذرّات غبار تصعد في مدٍّ وئيد، وتتوهّج حين تبلغ الضوء، صورةٌ من لوكريتيوس."
+ },
+ "95c7feeb368f": {
+  "src": "Every scene on its own, with its numbers to change →",
+  "tr": "كلّ مشهد وحده، بأرقامه التي تستطيع تغييرها ←"
  }
 }

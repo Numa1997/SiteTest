@@ -6,15 +6,18 @@
    "dataset": "numakoudsie/phyein-usul-barton",
    "dataset_title": "Phyein Usul simulation data: barton",
    "model": "tools/sims/barton.py",
-   "files": ["barton.bin"],
-   "pages": [
-    {"path": "/", "width": 1600, "height": 1000, "scroll": 650,
-     "probe": "(()=>{const h=document.querySelector('[data-bg=rails]');const s=h&&h.__bgScene;if(!s)return {error:'no rails scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,bars:s.Bs.length};})()"}
-   ]
+   "files": [
+    "barton.bin"
+   ],
+   "pages": [],
+   "note": "Replaced on the home page by coupled (23 November 2026); kept until the coupled pendulums are verified live."
   },
   "double_pendulum": {
    "model": "tools/sims/double_pendulum.py",
-   "files": ["double_pendulum.json", "dp_11_09.bin"],
+   "files": [
+    "double_pendulum.json",
+    "dp_11_09.bin"
+   ],
    "about_files": "The model writes 108 files dp_<mass><length>_<theta1>.bin and double_pendulum.json; listed here are the two the page loads at its default start (equal masses and rods, 120 and 150 degrees). No page is listed until the page plays the data.",
    "pages": []
   },
@@ -22,11 +25,19 @@
    "dataset": "numakoudsie/fig1-wave-interference",
    "dataset_title": "Fig. 1 Wave Interference: simulation data",
    "model": "tools/sims/wave_interference2.py",
-   "files": ["geometry.bin", "dist_lo.bin"],
+   "files": [
+    "geometry.bin",
+    "dist_lo.bin"
+   ],
    "files_note": "Generation 2 of Fig. 1: rings at nodes even in k, blended by the page, every table split into a bottom and a top half. The live check lists the two files every wide screen opens with.",
    "pages": [
-    {"path": "/simulations/Circular%20Wave%20Interference%20Visualization.html", "width": 1600, "height": 1000, "scroll": 0,
-     "probe": "(()=>{const s=window.__simData;if(!s)return {error:'no stored-data loader on the page'};if(s.err)return {error:s.err};if(!s.sha_ok||!s.gen)return {waiting:true};const d=Sim.data.ds;return {sha_ok:s.sha_ok,commit:s.gen.commit,date:s.gen.date,files:s.files,lambda:d.get('lambda'),damp:d.get('damp'),builds:d.get('builds'),renders:d.get('renders')};})()"}
+    {
+     "path": "/simulations/Circular%20Wave%20Interference%20Visualization.html",
+     "width": 1600,
+     "height": 1000,
+     "scroll": 0,
+     "probe": "(()=>{const s=window.__simData;if(!s)return {error:'no stored-data loader on the page'};if(s.err)return {error:s.err};if(!s.sha_ok||!s.gen)return {waiting:true};const d=Sim.data.ds;return {sha_ok:s.sha_ok,commit:s.gen.commit,date:s.gen.date,files:s.files,lambda:d.get('lambda'),damp:d.get('damp'),builds:d.get('builds'),renders:d.get('renders')};})()"
+    }
    ]
   },
   "double_pendulum_smoke": {
@@ -36,8 +47,12 @@
    "gpu": true,
    "timeout_s": 3600,
    "store": "release",
-   "release_files": ["*.pack"],
-   "files": ["double_pendulum.json"],
+   "release_files": [
+    "*.pack"
+   ],
+   "files": [
+    "double_pendulum.json"
+   ],
    "about_files": "Engine test for GPU runs with large data: one pack in the GitHub release sims-double_pendulum_smoke-<date>, the summary with every fingerprint committed. No page plays it.",
    "pages": []
   },
@@ -48,10 +63,29 @@
    "gpu": true,
    "timeout_s": 14400,
    "store": "release",
-   "release_files": ["*.pack"],
-   "files": ["double_pendulum.json"],
+   "release_files": [
+    "*.pack"
+   ],
+   "files": [
+    "double_pendulum.json"
+   ],
    "about_files": "Fig. 2 in full: 25 packs (one per mass-length cell) in the GitHub release sims-double_pendulum_gpu-<date>; the summary with every runs file's pack, offset, size and SHA-256 is committed. No page is listed until the page plays it.",
    "pages": []
+  },
+  "coupled": {
+   "model": "tools/sims/coupled.py",
+   "files": [
+    "coupled.bin"
+   ],
+   "pages": [
+    {
+     "path": "/",
+     "width": 1600,
+     "height": 1000,
+     "scroll": 650,
+     "probe": "(()=>{const h=document.querySelector('[data-bg=rails]');const s=h&&h.__bgScene;if(!s)return {error:'no rails scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,bars:s.Bs.length};})()"
+    }
+   ]
   }
  }
 }

@@ -53,6 +53,7 @@ By itself, when a simulation's model `tools/sims/<sim>.py` is added or changed o
 
 | Simulation | Model | What is stored | Page that plays it |
 |---|---|---|---|
+| Home page, right margin, and `scenes.html` S3: two pendulums tied by a spring (`coupled`, since 23 November 2026) | [tools/sims/coupled.py](../tools/sims/coupled.py) | `coupled.bin`, 4.2 kB: one exactly closing loop of 27.09 s, θ₁ and θ₂ at 30 frames a second; header with parameters, k solved by shooting, checks (energy kept to 4e-13, loop residual 5e-13 rad, swing crossed at 13.54 s against 13.51 s from 2π/(ω₂ − ω₁) ÷ 2, smallest gap between the bobs 0.42 m) | `bg-scenes.js`, scenes `rails` and `pairs` |
 | Fig. 1, Wave interference (`wave_interference2`; generation 1 removed after 2 passed the live check) | [tools/sims/wave_interference2.py](../tools/sims/wave_interference2.py) | 290 files, 36.5 MB: the distance table of a fixed 250 × 250 grid, a ring's angle at 118 wave numbers (the page blends two neighbours exactly) and its height at γ = 0 … 0.6 in steps of 0.025, a cosine table; every table in a bottom and a top half ([fig01-wave-sources.md](simulations/fig01-wave-sources.md)) | `simulations/Circular Wave Interference Visualization.html`, its own loader (`stored()`, `load()`) |
 
 ## Pipeline B in the page
@@ -62,9 +63,14 @@ By itself, when a simulation's model `tools/sims/<sim>.py` is added or changed o
 the scene. A file is 4 bytes of label, a uint32 header length, a JSON header (parameters, checks, column names and units), then
 int16 frames. Until the data has arrived, or if the check fails, the scene draws nothing in that place.
 
-Barton's pendulums (`barton.bin`, columns θ_d, L_d, x_bar, θ_0…θ_7 at 30 frames a second, one exact loop of 64.98 s): every bar
-on the page starts at its own random moment of the loop and hangs a random choice of the eight stored pendulums in random order;
-each frame the page draws the stored frame nearest in time. It integrates nothing.
+Coupled pendulums (`coupled.bin`, columns θ₁, θ₂, frames evenly spaced over one exact loop, the spacing `dt` in the header): every
+pair on the page starts at its own random moment of the loop; each frame the page draws the stored frame nearest in time, at real
+time. It integrates nothing. Barton's pendulums (`barton.bin`) played here until 23 November 2026; the model and its data stay
+until the coupled pendulums are verified live, and `registry.json` lists no page for them any more.
+
+The model was first run before publishing, from the branch `scenes-fix`, as versions 7 and 8 of the same notebook (Kaggle connector,
+CPU), to film the result for the user; those outputs were never committed. The data the site plays is the one the workflow makes
+when the model lands on `main`.
 
 ## Keys
 
