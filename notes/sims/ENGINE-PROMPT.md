@@ -61,12 +61,21 @@ THE FAULTS TO FIX (each seen in real runs on 23 November 2026)
 
 BUILD THIS
 A. R2 as the store.
-   - Credentials: the workflow uploads through R2's S3-compatible endpoint, https://<account id>.r2.cloudflarestorage.com, with
-     rclone or the AWS CLI (both do multipart uploads for big files). It needs an R2 access key with write rights to
-     phyein-usul-runs only: R2_ACCOUNT_ID, R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY as repository secrets. Create the key and the
-     secrets in the user's signed-in browser (the built-in browser or Claude in Chrome), the way the GitHub-to-Cloudflare connection
-     was made. Never ask the user for a token or to click in a dashboard, and never print a key. If this session has no browser on
-     the user's computer, stop and say exactly that, in one sentence.
+   - Credentials. A key already exists, but the engine cannot use it. Fig. 15's files were uploaded on 14 November 2026 with an R2
+     key with full read and write rights, entered once through Claude's secure form and saved in the Claude cloud environment
+     ("Default"). That environment's network layer adds the key to requests to api.cloudflare.com; the key is never written anywhere
+     (notes/fig15/STATE.md, docs/usul.md "The run store"). It works only inside a Claude cloud session that runs in that environment.
+     It cannot be read back, so it cannot be copied into GitHub, and GitHub Actions, where the engine runs, never sees it.
+     Test it first: GET https://api.cloudflare.com/client/v4/accounts answers 200 only where the key is added.
+   - The engine therefore needs its own key, as repository secrets: R2_ACCOUNT_ID, R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY, an R2
+     API token with Object Read and Write on phyein-usul-runs only. The workflow uploads through R2's S3-compatible endpoint,
+     https://<account id>.r2.cloudflarestorage.com, with rclone or the AWS CLI (both do multipart uploads for big files).
+     Create the token and the three secrets in the user's signed-in browser (the built-in browser or Claude in Chrome), the way the
+     GitHub-to-Cloudflare connection was made. Never ask the user for a token or to click in a dashboard, never print a key, and
+     never put one in a file, a log or a notebook. If this session has no browser on the user's computer, stop and say exactly that,
+     in one sentence. That is the only step that needs the user's machine.
+   - Until the secrets exist, a Claude cloud session in the Default environment can still move existing data to R2 with the old key,
+     as Fig. 15 was moved. Do that only for step J, never as the engine's regular path.
    - Upload: download each file from Kaggle, check its SHA-256, upload it to R2 at sims/<sim>/<run>/<file>, read it back (size and
      SHA-256 of what R2 now holds), and delete it from the runner before the next file. A runner has only about 30 GB of disk.
    - Addresses: <run> is <date>-v<Kaggle version>, unique for every run. Nothing is ever overwritten, so the immutable cache stays
