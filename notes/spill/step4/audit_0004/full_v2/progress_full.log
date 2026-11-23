@@ -1,0 +1,5 @@
+[21:21:48 UTC | +    0.4 s] start full: DX 0.003, blocks ['rot', 'slab'], device cpu:0, jax 0.11.1
+[21:21:50 UTC | +    2.3 s] rot: max_s 7.4756 Pa, E_plastic 1.8902e+00 J/m^3, first yield step 108
+[21:21:50 UTC | +    2.3 s] slab: step4_slab.py C1 with EAUDIT=1 (full)
+[21:22:21 UTC | +   33.8 s] slab rc 0
+[21:22:21 UTC | +   33.8 s] all done

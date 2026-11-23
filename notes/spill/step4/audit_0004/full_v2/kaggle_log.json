@@ -1,0 +1,18 @@
+[{"stream_name":"stdout","time":1.2773742399999999,"data":"tools/fig12/kaggle/stout_jax.py 138699 15891d339537c0127c996911274900c329267ccd1ff005107a0152ad48378849\n"}
+,{"stream_name":"stdout","time":1.278099415,"data":"tools/spill/audit_0004.py 14113 8a9136accefc4c1b01ca28304c4ff62ab78417671a5b6cbb1e8b5592f451d832\n"}
+,{"stream_name":"stdout","time":1.278153458,"data":"tools/spill/step4_slab.py 24098 be970e3b3ebf90bfe7fec514ad999d5d801b4584dc298e762842b5e99a03d10c\n"}
+,{"stream_name":"stdout","time":1.278317597,"data":"public/scripts/guinness-glass.js 3109 cc61fc507c8649cc6c62166078dd14a90aaf9db4b152a5d810229434c3886dfc\n"}
+,{"stream_name":"stdout","time":1.281181929,"data":"tools/fig12/kaggle/stout_jax_5acb718.py 132380 e6b3d00f40ed299b63e5e2eaec872a86c9f23791e79c49b9ae421e193438c376\n"}
+,{"stream_name":"stdout","time":11.303934545,"data":"[21:21:48 UTC | +    0.4 s] start full: DX 0.003, blocks ['rot', 'slab'], device cpu:0, jax 0.11.1\n"}
+,{"stream_name":"stdout","time":13.231075177,"data":"[21:21:50 UTC | +    2.3 s] rot: max_s 7.4756 Pa, E_plastic 1.8902e+00 J/m^3, first yield step 108\n"}
+,{"stream_name":"stdout","time":13.231110419,"data":"[21:21:50 UTC | +    2.3 s] slab: step4_slab.py C1 with EAUDIT=1 (full)\n"}
+,{"stream_name":"stdout","time":44.668451884,"data":"[21:22:21 UTC | +   33.8 s] slab rc 0\n"}
+,{"stream_name":"stdout","time":44.668484272,"data":"[21:22:21 UTC | +   33.8 s] all done\n"}
+,{"stream_name":"stdout","time":44.944738049,"data":"end rc 0\n"}
+,{"stream_name":"stderr","time":47.827855668,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":47.827896106,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":48.203718151,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":48.203745724,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":49.195558596,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":50.626756377,"data":"[NbConvertApp] Writing 418100 bytes to __results__.html\n"}
+]

@@ -539,3 +539,6 @@ u_after_Fdev^2) (slab: before the floor faces are zeroed; the version without th
   line never failed; at 3 mm some cells need a further pass. The fix would be `[...][new]` (as the wts line below it); it is a solver change,
   which 0004 rule 6 forbids, so it waits for the owner (Needs the owner). The 3 mm slosh (tests b, c, d-ledger) and ident wait with it.
 - 23 Nov 21:21:33 UTC: audit v2, Kaggle CPU (code d96331d), SUBRUN=full, ONLY=rot,slab: test (a) on the 4.3 slab C1 and the rotation check.
+- 23 Nov 21:21:33-21:22:39 UTC: v2 done. Test (a): E_plastic / W_grav 1.0019 PASS, / E_drop 0.9891 PASS, / W_stress_grid -0.092 FAIL (badly
+  defined: floor faces carry 1.79e-5 J; above them the ratio is 0.670). Rotation: s 7.48 Pa, E_plastic 1.89 J/m^3, both FAIL as predicted.
+  Report notes/coord/to-coordinator/0004-report.md. The 3 mm slosh waits for the owner (enable_ls_extend fix).
