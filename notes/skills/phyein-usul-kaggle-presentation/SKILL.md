@@ -30,7 +30,10 @@ If the container cannot read the store, say so and name the way round (Worker UR
 - A signed link is a bearer ticket: whoever holds the address downloads the file with no login until it expires.
 - To pass one notebook's output to another: make the output a Kaggle dataset (private) and attach it, or fetch from the repository or
   the Worker URL inside the notebook. Attach with the command-line tool from the workflow, because the connector drops attached
-  inputs. UNVERIFIED: that the command-line tool keeps them. Test with a tiny notebook (seconds) before relying on it.
+  inputs. The tool's metadata file has the fields `dataset_sources` and `kernel_sources` (Kaggle's own CLI guide,
+  https://www.kaggle.com/code/citerne/from-local-dev-rtx-6000-kaggle-cli-guide), so attaching is designed in. Source names that fail
+  to resolve are a known pitfall (https://github.com/Kaggle/kaggle-api/issues/433). Not yet tested on this account: run one tiny
+  notebook (seconds) and read `/kaggle/input` before relying on it.
 - A notebook that ever held a link keeps it in its older versions. Do not "clean" by pushing a new version; tell Numa and let
   Numa decide on deletion.
 
@@ -42,8 +45,11 @@ If the container cannot read the store, say so and name the way round (Worker UR
 - **Never public until Numa says finished: Fig. 12, Fig. 16, anything Guinness.**
 - Before any item goes public: its text and files are searched as in section 2, and Numa sees the list of what a visitor would see.
 - A visitor sees only public items; private ones, titles included, are invisible to everyone but the owner.
-- UNVERIFIED: whether a public dataset can be made private again. Check Kaggle's documentation and cite it before telling Numa
-  either way. Until then treat public as a one-way door.
+- **Public to private.** Evidence, checked 24 Nov 2026: Kaggle's launch post (https://www.kaggle.com/discussions/product-feedback/50755)
+  says only that the owner can switch private to public "at any time" in Settings, Sharing; it says nothing about the way back.
+  A community answer (7 years old, a user, not Kaggle staff: https://www.kaggle.com/discussions/product-feedback/153402) says it is
+  one-way and the only escape is to delete the dataset and upload it again. Not confirmed by Kaggle staff. Treat public as a
+  one-way door; the escape costs the dataset's URL, votes and version history.
 - Settings the connector rejects (licence) go through the GitHub workflow that holds the key, with `private` set explicitly on every call.
 
 ## 4. Every Kaggle turn
