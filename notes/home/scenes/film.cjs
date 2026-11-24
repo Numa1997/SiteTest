@@ -14,7 +14,7 @@ fs.mkdirSync(DIR, { recursive: true });
     for (const t of TIMES) {
       await p.waitForTimeout(Math.max(0, t * 1000 - (Date.now() - t0)));
       const c = await p.evaluate(() => { const f = document.querySelector('[data-bg=forest]'), s = f && f.__bgScene; if (!s || !s.A) return null;
-        return { trees: s.A.length, grown: s.A.filter(q => q.mat).length, year: +(s.Y / s.YEAR).toFixed(2), vapour: s.V.length, clouds: (s.Cs || []).length, inCloud: s.V.filter(d => d.c).length, left: (s.Cs || []).filter(c => c.x < innerWidth / 2).length }; });
+        return { trees: s.A.length, grown: s.A.filter(q => q.mat).length, year: +(s.Y / s.YEAR).toFixed(2), vapour: s.V.length, clouds: (s.Cs || []).length, water: +(s.Cs || []).reduce((a, c) => a + c.m, 0).toFixed(1), shown: (s.Cs || []).filter(c => c.a > .3).length }; });
       rows.push(Object.assign({ t }, c)); await p.screenshot({ path: `${DIR}/${w}-t${t}.png` });
     }
     await p.evaluate(() => scrollTo(0, 900)); await p.waitForTimeout(2500);

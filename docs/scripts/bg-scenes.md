@@ -75,17 +75,32 @@ top right (beside the poem and the Fig. 0 card) empty. Those are the only places
 holder in 16 px columns and, in each, measures the sky from 30 px below the top down to 30 px above the first text or card (or to
 55 % of the ground height); a column with less than `OPEN` = 240 px of sky (at most 30 % of the ground height) holds no clouds. So
 on a wide screen the sky is exactly the two corners, and the forest's weather lives there:
-- In spring and summer the leaves of tall trees breathe vapour, and the bare ground under open sky gives off a little more (`SOIL`,
-  0.5 per second per 100 px), so the corners cloud over even before tall trees stand beneath them.
-- The vapour rises to a random height in its column's sky and becomes a droplet that joins the nearest cloud within 160 px, or
-  starts one. A cloud drifts with a slowly wandering wind and turns back where the open sky ends; it is drawn as one body, five to
-  eight round puffs filled once, sized by the water it holds (w = 16 + 26 ∛(Σ r³) px), with its droplets as dots inside.
-- Droplets grow slowly by condensation (`COND` = 0.006 px/s) and merge when they touch, with the chance `EFF` = 0.001 per touch per
-  1/30 s (collision efficiency), volume kept, r = (r₁³ + r₂³)^⅓. Clouds that touch merge too.
-- A droplet falls at 9 r² − u px/s (Stokes' law, u the updraft); once it beats the updraft it leaves its cloud and falls as rain,
-  which feeds the young trees within 70 px of where it lands.
-- In winter the clouds give their water up as snow, slowly (12 % of droplets a second), so the corners thin out in winter and fill
-  again in spring. A page opens with a few clouds already there (one per 60 000 px² of open sky).
+**Clouds in 3D, seen from the ground (24 November 2026).** The user found the first clouds rough, broken and too few, and asked for
+each cloud to be made in 3D and then seen from the ground by changing the frame of reference. So:
+- *Where the eye is.* The eye stands on the ground at the horizontal middle of the holder; the horizon is the ground line GY. A
+  point at height Y above the ground, at distance Z in front of the eye and X to its right, is seen at x = XC + F X / Z,
+  y = GY − F Y / Z (a pinhole camera, `proj()`; F = GY px).
+- *A cloud in its own frame.* `cloud()` builds each cloud once as 8 to 16 round puffs (spheres) standing on a flat base: the puffs
+  near the middle are bigger and higher, a cumulus. Puff positions and radii are in units of the cloud's size s; the base is an
+  ellipse wide enough to reach under every puff. The base of every cloud is at the same height `HB` (1000 m), as in a real
+  cloud field, where all bases sit at the level where rising air first condenses.
+- *Into the eye's frame.* Every frame each puff (X + u s, HB + v s, Z + w s) and the ring of the base are projected (`paint()`).
+  So a near cloud is high on the page and large, a far one small and low near the horizon; the flat base, a floor above the eye,
+  is seen from below as a darker band under the puffs, and nothing of a cloud shows below the far edge of its base. Puffs are
+  drawn far to near, each opaque inside (pale where light from above falls, deeper towards its rim), on a scratch canvas, so
+  overlapping puffs hide each other instead of piling up darker; the whole cloud is then laid on the page at `TONE` 0.42.
+- *Wind and parallax.* One wind (m/s) carries all clouds; it wanders slowly (a random walk pulled back to zero, about a minute's
+  memory, spread `WIND` 4 m/s). The same wind moves a near cloud faster across the page than a far one (screen speed F u / Z).
+  A cloud fades in over open sky and out where it drifts over text or off the page.
+- *Water and rain.* Vapour from the leaves and from the bare ground (`SOIL`) rises to a height in the open sky; there it joins the
+  cloud it reaches, or starts a new, tiny one. A cloud keeps its water m as one number and its size follows it smoothly,
+  s = SIZE ∛m (settling over 5 s): no droplets are drawn inside a cloud, which is what made the first clouds look broken. Its
+  mean droplet radius grows by condensation (`COND`); once it passes 0.6 px, collisions turn water into raindrops at the rate
+  RAIN · m · (r − 0.6), which fall from under the base (Stokes: speed 9 r² − updraft) to the ground and feed the young trees.
+  In winter the clouds give their water up as snow. A cloud also loses water to the dry air around it (time constant `EVAP`,
+  90 s), so supply and loss settle into a sky that is neither clear nor overcast.
+- Measured at 1920 px (`notes/home/scenes/film.cjs`): 16 clouds at 3 s, between 20 and 35 over the next three minutes; no page errors.
+- Every number above is a property of `S.forest` and a slider on the scenes page.
 On a screen narrower than 761 px there is no sky (the hero covers the land).
 
 **Soil.** Leaves fall, rot into specks and sink into the soil. A seedling's root tips bend towards the nearest speck within 120 px
