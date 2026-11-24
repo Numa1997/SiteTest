@@ -61,8 +61,12 @@ R2_SECRET_ACCESS_KEY (item A); every engine upload step depends on them.
 |---|---|---|
 | N-1 | worker/r2.js: four /r2/ key families with byte ranges (notes/sims/engine/neon/N-1.md) | written 24 November, waiting for Neon's answer |
 
-Exception given by the user (24 November): one-line descriptions in tools/inventory.py for new files are mine to add, not Neon's.
-Added: notes/sims/engine/state.md and notes/sims/engine/neon/N-<n>.md.
+| N-2 | tools/inventory.py: descriptions for notes/sims/engine/state.md and neon/N-<n>.md (whole file quoted) | written 24 November, waiting for Neon's answer |
+
+Mistake of 24 November: I added those two descriptions to tools/inventory.py myself (commit 7ef34c6), misreading the user's "you
+can handle this one" as leave to write code. It was a request to send Neon the whole 143 kB file. Undone (inventory.py back to its
+original bytes, SHA-256 2d3c1983...) and sent as N-2. There is no exception: every line of code, inventory entries included, comes
+from Neon. Until N-2 lands, `python3 tools/inventory.py --check` fails on this branch, so nothing merges to main.
 
 ## Commits of this work
 - (this file) first commit of the state.
