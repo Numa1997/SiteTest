@@ -59,7 +59,7 @@ R2_SECRET_ACCESS_KEY (item A); every engine upload step depends on them.
 ## Neon requests
 | Request | What | State |
 |---|---|---|
-| N-1 | worker/r2.js: four /r2/ key families with byte ranges (notes/sims/engine/neon/N-1.md) | written 24 November, waiting for Neon's answer |
+| N-1 | worker/r2.js: four /r2/ key families with byte ranges (notes/sims/engine/neon/N-1.md) | answer applied byte for byte (not committed). Local test (wrangler 4 dev --local, local R2): tests 1-4 and 6-8 pass (200 with whole file and equal SHA-256 for all four families; 206 with right content-range and bytes for bytes=1000-1999, 99000-, -500; 416 "bytes */100000" no-store; HEAD 200 length 100000 no body; POST 405; / 200 text/html; release() identical). Test 5: five of six paths 404, but /r2/data/fig12/../fig12/x/t.bin answered 200: the runtime resolves ".." before the Worker sees the URL (new URL() gives /r2/data/fig12/x/t.bin), so the request is for an allowed key. My test's expectation was impossible; waiting for the user's decision. |
 
 | N-2 | tools/inventory.py: descriptions for notes/sims/engine/state.md and neon/N-<n>.md (whole file quoted) | written 24 November, waiting for Neon's answer |
 
