@@ -1,3 +1,10 @@
+## READ FIRST: hand-over of 25 November 2026
+The user withdrew the Neon rule on 25 November 2026 ("fuck neon"): from now on the session working on this task WRITES THE CODE
+ITSELF. The "YOU WRITE NO CODE" header of notes/sims/ENGINE-PROMPT.md no longer applies; every other rule of that prompt still does.
+This session handed the work to a new cloud session, which continues from here. The next piece of work is the specification in
+notes/sims/engine/neon/N-6.md (R2 store with read-back, run addresses, organised shards, collect mode, status file, sims_smoke, local
+end-to-end test with 12 cases): implement it directly, test it, merge it, then continue with the rest of the prompt's build items.
+
 # The engine "Simulations on Kaggle", rebuilt on R2: state of the work
 
 Read this first after a compaction. Task: notes/sims/ENGINE-PROMPT.md (the user's prompt of 23-24 November 2026). Times are Berlin time.
