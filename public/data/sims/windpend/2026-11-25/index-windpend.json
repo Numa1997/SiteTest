@@ -1,0 +1,43 @@
+{
+ "project": "sims",
+ "job": "windpend",
+ "date": "2026-11-25",
+ "format": 1,
+ "shard": 1,
+ "shards": 1,
+ "grid_part": null,
+ "checks_passed": null,
+ "card": "cpu",
+ "libraries": {
+  "python": "3.13.18",
+  "numpy": "2.1.3",
+  "scipy": "1.16.3",
+  "jax": "0.11.1",
+  "jax_devices": [
+   "cpu:0"
+  ]
+ },
+ "source": {
+  "repo": "Numa1997/SiteTest",
+  "commit": "930bcfe42e4902f82c39a72081987998c287a0db",
+  "path": "tools/sims/windpend.py"
+ },
+ "machine": {
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "cpus": 4,
+  "python": "3.13.18",
+  "numpy": "2.1.3",
+  "scipy": "1.16.3"
+ },
+ "files": {
+  "windpend.bin": {
+   "bytes": 10273,
+   "sha256": "66d2bef74d7f53152e68ece899e7317c265cf1e5da92c84e9bdf9ca248c53a88"
+  },
+  "windpend.json": {
+   "bytes": 1915,
+   "sha256": "8ccefc18ebd5965f033c23fecda8c178edca5d5effbca5901445e2c02b9363ec"
+  }
+ },
+ "wall_s": 26.13831639289856
+}

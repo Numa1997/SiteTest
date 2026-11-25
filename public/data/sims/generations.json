@@ -1371,6 +1371,29 @@
    "dataset": "numakoudsie/phyein-usul-coupled",
    "dataset_path": "phyein-usul-simulations/v10/",
    "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 10, 5416 bytes, filed as one version of this dataset"
+  },
+  {
+   "sim": "windpend",
+   "date": "2026-11-25",
+   "notebook": "numakoudsie/phyein-usul-simulations",
+   "version": 13,
+   "commit": "930bcfe42e4902f82c39a72081987998c287a0db",
+   "index": "windpend/2026-11-25/index-windpend.json",
+   "files": {
+    "windpend.bin": {
+     "bytes": 10273,
+     "sha256": "66d2bef74d7f53152e68ece899e7317c265cf1e5da92c84e9bdf9ca248c53a88"
+    },
+    "windpend.json": {
+     "bytes": 1915,
+     "sha256": "8ccefc18ebd5965f033c23fecda8c178edca5d5effbca5901445e2c02b9363ec"
+    }
+   },
+   "wall_s": 26.1,
+   "collected": "2026-11-25T02:31:00+00:00",
+   "dataset": "numakoudsie/phyein-usul-windpend",
+   "dataset_path": "phyein-usul-simulations/v13/",
+   "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 13, 12188 bytes, filed as one version of this dataset"
   }
  ]
 }
