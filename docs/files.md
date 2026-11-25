@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7156 files, 982.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7161 files, 982.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -15,7 +15,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Simulation pages](#simulation-pages) | 41 |
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
-| [Shared scripts](#shared-scripts) | 37 |
+| [Shared scripts](#shared-scripts) | 38 |
 | [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4802 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
@@ -41,14 +41,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [The site’s Worker (Cloudflare)](#the-sites-worker-cloudflare) | 1 |
 | [GitHub Actions workflows](#github-actions-workflows) | 4 |
 | [GitHub Actions building blocks used by the workflows](#github-actions-building-blocks-used-by-the-workflows) | 1 |
-| [Documentation](#documentation) | 49 |
-| [Tools](#tools) | 376 |
+| [Documentation](#documentation) | 50 |
+| [Tools](#tools) | 377 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 918 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 920 |
 
 ## Repository root
 
@@ -250,6 +250,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/rt3d-worker.js`](../public/scripts/rt3d-worker.js) | 3.0 kB | Fig. 15: the background thread that fetches one stored 3D run, checks its SHA-256, inflates it and turns the 8-bit levels into ψ. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.6 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 45.0 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
+| [`public/scripts/simdata.js`](../public/scripts/simdata.js) | 14.2 kB | SimData: the one loader of stored simulation data for every page: newest live generation of a simulation and format, files from the repository or R2, byte ranges, SHA-256 checked, once per visit, report for the live check. | [simdata.md](scripts/simdata.md) |
 | [`public/scripts/stout-cart.js`](../public/scripts/stout-cart.js) | 132.7 kB | Fig. 12: the solver: 3D Navier–Stokes for the stout in the glass by APIC on a MAC grid (cut-cell wall, ghost-fluid surface, half glass by symmetry), the road, the one-wheel cart, and their two-way coupling. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-gpu-view.js`](../public/scripts/stout-gpu-view.js) | 15.5 kB | Fig. 12: draws the GPU solver’s stout on the graphics chip (screen-space fluid rendering: sphere depth, bilateral smoothing, thickness for Beer–Lambert, the head as the top 12 mm). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-gpu.js`](../public/scripts/stout-gpu.js) | 66.7 kB | Fig. 12: the 3D stout solver on the graphics chip (WebGPU compute shaders): the whole glass, APIC on a MAC grid, level set, Jacobi-preconditioned CG; batches of steps with one read-back. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -5906,6 +5907,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/scripts/dataset.md`](scripts/dataset.md) | 18.1 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
 | [`docs/scripts/fold.md`](scripts/fold.md) | 23.0 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 34.0 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
+| [`docs/scripts/simdata.md`](scripts/simdata.md) | 3.9 kB | Documentation: simdata.js: one loader of stored simulation data for every page. | [simdata.md](scripts/simdata.md) |
 | [`docs/scripts/twoway.md`](scripts/twoway.md) | 7.5 kB | Documentation: public/scripts/twoway.js. | [twoway.md](scripts/twoway.md) |
 | [`docs/scripts/walk.md`](scripts/walk.md) | 28.0 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
 | [`docs/scripts/wave3d-view.md`](scripts/wave3d-view.md) | 4.4 kB | Documentation: `public/scripts/wave3d-view.js` · the lit 3D views of Fig. 14. | [wave3d-view.md](scripts/wave3d-view.md) |
@@ -6085,7 +6087,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 143.5 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 144.0 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -6305,6 +6307,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/sims/land.py`](../tools/sims/land.py) | 3.6 kB | Step 7 of the simulations pipeline: puts the new data on the newest main (generations.json merged entry by entry, docs/files.md generated again), so a merge made during a run cannot stop the save. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/pipeline.py`](../tools/sims/pipeline.py) | 9.9 kB | The simulations pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/registry.json`](../tools/sims/registry.json) | 5.8 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/test_simdata.cjs`](../tools/sims/test_simdata.cjs) | 21.8 kB | Test of simdata.js: a local server with stored generations and headless Chromium, 14 cases (choice of generation, addresses, files, parts, fingerprints, cache, retry, report). | [simdata.md](scripts/simdata.md) |
 | [`tools/sims/verify_live.py`](../tools/sims/verify_live.py) | 6.0 kB | Step 10 of the simulations pipeline: wait for the live site, compare the live files by SHA-256, open the live pages and check they play the data. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/wave_interference2.py`](../tools/sims/wave_interference2.py) | 15.1 kB | Reference model of Fig. 1, generation 2: ring angles at nodes even in k, which the page blends exactly, heights at damping steps of 0.025, every table in a bottom and a top half; computed once on Kaggle. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`tools/spill/drag_check.py`](../tools/spill/drag_check.py) | 2.9 kB | The continuous spill model: its Kaggle CPU checks (pint at rest and a hard shove; the rest diagnostic; air drag against the textbook law). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -7690,6 +7693,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/sims/engine/neon/N-1.md`](../notes/sims/engine/neon/N-1.md) | 9.3 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/engine/neon/N-2.md`](../notes/sims/engine/neon/N-2.md) | 145.2 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/engine/neon/N-3.md`](../notes/sims/engine/neon/N-3.md) | 8.1 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
+| [`notes/sims/engine/neon/N-4.md`](../notes/sims/engine/neon/N-4.md) | 17.4 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
+| [`notes/sims/engine/neon/N-5.md`](../notes/sims/engine/neon/N-5.md) | 145.3 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/engine/state.md`](../notes/sims/engine/state.md) | 8.1 kB | State of the engine rebuild on R2: aim, what is live, the plan, the requests to Neon, commits, the rules. Read first after a compaction. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/reports/double_pendulum/state.md`](../notes/sims/reports/double_pendulum/state.md) | 8.4 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/double_pendulum/study.md`](../notes/sims/reports/double_pendulum/study.md) | 16.3 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |

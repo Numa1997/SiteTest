@@ -356,6 +356,8 @@ RULES = [
     # shared scripts and styles
     (r'public/scripts/sim\.js', 'Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine.', 'docs/scripts/sim.md'),
     (r'public/scripts/dataset\.js', 'Sim.dataset(): the one named data store each simulation writes its numbers into.', 'docs/scripts/dataset.md'),
+    (r'public/scripts/simdata\.js', 'SimData: the one loader of stored simulation data for every page: newest live generation of a simulation and format, files from the repository or R2, byte ranges, SHA-256 checked, once per visit, report for the live check.', 'docs/scripts/simdata.md'),
+    (r'tools/sims/test_simdata\.cjs', 'Test of simdata.js: a local server with stored generations and headless Chromium, 14 cases (choice of generation, addresses, files, parts, fingerprints, cache, retry, report).', 'docs/scripts/simdata.md'),
     (r'public/scripts/twoway\.js', 'The solved, two-way fluid of projects 05 and 06 (offered on 06 since 7 November 2026): a tank as deep as the cart (its size set by the page through setCart), 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page\'s 1 ms machine steps inside its 20 ms fluid steps.', 'docs/scripts/twoway.md'),
     (r'public/scripts/curve\.js', 'Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page\'s store.', 'docs/scripts/curve.md'),
     (r'public/scripts/datalog\.js', 'The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV).', 'docs/scripts/datalog.md'),
