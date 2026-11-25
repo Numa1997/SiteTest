@@ -203,6 +203,32 @@
         .eye__read button { flex: none; min-height: 40px; padding: 0 12px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; background: var(--card); color: var(--accent); font: 500 12px var(--mono); cursor: pointer; }
         .eye__cap { padding: 0 14px 14px; font-size: 14px; line-height: 1.55; color: var(--muted); }
         @media (max-width: 640px) { .eye__fig { margin: 0 -16px; border-radius: 0; border-left: 0; border-right: 0; } .eye__steps button span { display: none; } }
+        /* The catalogue of closed drawings (scripts/fig13-catalogue.js) */
+        .cat { margin: 40px 0 0; }
+        .cat > h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 0 0 6px; color: var(--ink); }
+        .cat > p { margin: 0 0 14px; font-size: 16px; line-height: 1.6; color: var(--ink-2); max-width: 760px; }
+        .cat__fig { margin: 0; background: #140d10; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 10px; overflow: hidden; color: #fff6ea; }
+        .cat__viewer { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 16px; padding: 14px; border-bottom: 1px solid rgba(245,241,234,.14); scroll-margin-top: 10px; }
+        .cat__viewer canvas { display: block; width: 100%; aspect-ratio: 1; border-radius: 8px; }
+        .cat__name { margin: 0 0 8px; font-family: var(--serif); font-size: 23px; font-weight: 400; line-height: 1.25; }
+        .cat__facts { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0 0 10px; font: 13px/1.5 var(--mono); color: rgba(245,241,234,.82); }
+        .cat__facts dt { color: rgba(245,241,234,.55); } .cat__facts dd { margin: 0; }
+        .cat__say { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: rgba(245,241,234,.9); min-height: 3.1em; }
+        .cat__btns { display: flex; flex-wrap: wrap; gap: 6px; }
+        .cat__btns button, .cat__btns select, .cat__bar button, .cat__bar select { min-height: 44px; padding: 0 14px; border: 1px solid rgba(245,241,234,.3); border-radius: 8px; background: transparent; color: #fff6ea; font: 500 13px/1.1 var(--mono); cursor: pointer; touch-action: manipulation; }
+        .cat__btns #cat-push { background: #e2a2aa; border-color: #e2a2aa; color: #140d10; }
+        .cat__btns select option, .cat__bar select option { color: #1c1518; }
+        .cat__bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(245,241,234,.14); }
+        .cat__bar button[aria-pressed="true"] { background: #fff6ea; color: #140d10; border-color: #fff6ea; }
+        .cat__count { margin-left: auto; font: 12px var(--mono); color: rgba(245,241,234,.6); }
+        .cat__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; padding: 12px; max-height: 720px; overflow-y: auto; overscroll-behavior: contain; }
+        .cat__tile { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 4px 7px; border: 1px solid rgba(245,241,234,.14); border-bottom: 3px solid var(--k); border-radius: 8px; background: #1a1114; color: #fff6ea; cursor: pointer; font: 500 12.5px/1.25 var(--mono); touch-action: manipulation; }
+        .cat__tile canvas { display: block; width: 100%; aspect-ratio: 1; }
+        .cat__tile small { font: 11.5px/1.2 var(--mono); color: rgba(245,241,234,.6); }
+        .cat__tile.is-on { border-color: #fff6ea; background: #2a1d21; }
+        .cat__key { margin: 0; padding: 10px 14px 14px; font: 12.5px/1.6 var(--mono); color: rgba(245,241,234,.7); }
+        .cat__key i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 5px; }
+        @media (max-width: 760px) { .cat__viewer { grid-template-columns: 1fr; } .cat__fig { margin: 0 -16px; border-radius: 0; border-left: 0; border-right: 0; } .cat__grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); max-height: 560px; } .cat__count { margin-left: 0; flex-basis: 100%; } }
         .inside { margin: 40px 0 0; }
         .inside__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; align-items: stretch; }
         .inside__grid > .station { margin: 0; display: flex; flex-direction: column; }
@@ -270,7 +296,7 @@
                 <div class="f13__introside">
                     <p class="dedication">To Rim</p>
                     <ul class="onpage" aria-label="On this page">
-                        <li><a href="#eye">The eye</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
+                        <li><a href="#eye">The eye</a></li><li><a href="#catalogue">The catalogue</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
                     </ul>
                 </div>
             </div>
@@ -433,6 +459,37 @@
                 <div class="eye__gwrap"><canvas id="eye-graph" tabindex="0" role="img" aria-label="Graph: share of strikes that are chaotic against the energy of the strike, log scale from 0.5 to 5000 J; zero below 9.8 J, highest between 29.4 and 39.2 J, near zero above 196 J. Tap or use the arrow keys to pin an energy."></canvas></div>
                 <p class="eye__read"><span id="eye-read">Tap the graph to pin an energy: its share is read here and its ellipse is drawn on the eye.</span><button type="button" id="eye-unpin" hidden>Unpin</button></p>
                 <figcaption class="eye__cap">Both pictures read the same map as the sheet (921,600 strikes, each with its twin, 6.67 s each; <code>tools/fig13/chaos_map.py</code>); "chaotic" means map value v &gt; 0.5. Step 1 repeats the measurement live for two strikes and shows its value next to the map's: they differ only by the rounding of the map image. The theory is in sections <a href="#n-eye">5</a> and <a href="#n-x">6</a> of the lecture note.</figcaption>
+            </figure>
+        </section>
+
+        <section class="cat" id="catalogue" aria-labelledby="cat-title">
+            <h2 id="cat-title">The catalogue of closed drawings</h2>
+            <p>Almost every strike on the sheet draws a curve that never closes. A few draw one that does: the pendulum returns exactly to where it began and repeats. Here are 228 of them, each a single strike from hanging still, found on this sheet and checked to close. Tap one to run it. The pair of numbers is how many times the upper and the lower rod go round in one lap; their difference is the number of petals.</p>
+            <figure class="cat__fig">
+                <div class="cat__viewer" id="cat-viewer">
+                    <canvas id="cat-view" role="img" aria-label="The chosen closed drawing: the pendulum runs and its tip retraces the drawing"></canvas>
+                    <div>
+                        <p class="cat__name" id="cat-name">A closed drawing</p>
+                        <dl class="cat__facts" id="cat-facts"></dl>
+                        <p class="cat__say" id="cat-say"></p>
+                        <div class="cat__btns">
+                            <button type="button" id="cat-play">Pause</button>
+                            <button type="button" id="cat-push">Push it</button>
+                            <button type="button" id="cat-again">Start again</button>
+                            <select id="cat-speed" aria-label="Speed"><option value="1">real speed</option><option value="0.5" selected>half speed</option><option value="0.25">quarter speed</option><option value="0.1">a tenth</option></select>
+                            <button type="button" id="cat-sheet">Show its strike on the sheet</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cat__bar">
+                    <div id="cat-filter" role="group" aria-label="Which drawings" style="display:flex;flex-wrap:wrap;gap:6px">
+                        <button type="button" data-f="all" aria-pressed="true">All</button><button type="button" data-f="stable" aria-pressed="false">Stable</button><button type="button" data-f="neutral" aria-pressed="false">Neutral</button><button type="button" data-f="unstable" aria-pressed="false">Unstable</button><button type="button" data-f="flower" aria-pressed="false">Flowers</button><button type="button" data-f="butterfly" aria-pressed="false">Butterflies</button><button type="button" data-f="hunt" aria-pressed="false">The first 14</button>
+                    </div>
+                    <select id="cat-sort" aria-label="Order"><option value="E">by energy</option><option value="T">by period</option><option value="k">by petals</option><option value="s">by stability</option></select>
+                    <span class="cat__count" id="cat-count"></span>
+                </div>
+                <div class="cat__grid" id="cat-grid"></div>
+                <p class="cat__key"><i style="background:#8fe3d0"></i>stable: a push stays small &nbsp; <i style="background:#ffd27a"></i>neutral: a push drifts &nbsp; <i style="background:#ff8c8c"></i>unstable: a push grows. Every picture is integrated in your browser from its strike alone. A closed drawing returns to its start to within 0.001 (angles in rad, momenta in kg·m²/s) after one lap; the unstable ones leave their drawing after some laps even without a push, because the last digit of the arithmetic is already a push.</p>
             </figure>
         </section>
 
@@ -1015,6 +1072,8 @@
     <script src="../scripts/sim.js"></script>
     <script src="../scripts/fig13-hunt-data.js"></script>
     <script src="../scripts/fig13-eye.js" defer></script>
+    <script src="../scripts/fig13-catalogue-data.js" defer></script>
+    <script src="../scripts/fig13-catalogue.js" defer></script>
 <script>
 (() => {
 'use strict';
@@ -1685,7 +1744,7 @@ let stageW = 0;      // rebuild only when the plate's width changed: a phone fir
 window.addEventListener('resize', () => { const w = stage.getBoundingClientRect().width; if (Math.abs(w - stageW) < 1) return; stageW = w; size(); draw(); });
 setPar(); size(); stageW = stage.getBoundingClientRect().width; makePalette(); showRange();
 strikeAt(3.557, 12.211); draw();          // the page opens with the butterfly's strike pinned (Part II): the small picture is never empty
-window.__fig13 = { advance: s => { if (worker) { worker.terminate(); worker = null; wBusy = false; if (pin && !pin.free) pinS = pin.s; } advance(s); draw(); }, worker: () => !!worker, pause: () => { running = false; }, state: () => ({ t, N, P, c1, c2, par, pend, pin, view }), goTo, sect: () => sect, D: () => D, strikeKE, foldsThrough, mapValue, energy: s => { const c = Math.cos(s[0] - s[1]), det = par.A * par.B - par.C * par.C * c * c; return 0.5 * (par.B * s[2] * s[2] - 2 * par.C * c * s[2] * s[3] + par.A * s[3] * s[3]) / det - par.U1 * Math.cos(s[0]) - par.U2 * Math.cos(s[1]); } };
+window.__fig13 = { strikeAt, advance: s => { if (worker) { worker.terminate(); worker = null; wBusy = false; if (pin && !pin.free) pinS = pin.s; } advance(s); draw(); }, worker: () => !!worker, pause: () => { running = false; }, state: () => ({ t, N, P, c1, c2, par, pend, pin, view }), goTo, sect: () => sect, D: () => D, strikeKE, foldsThrough, mapValue, energy: s => { const c = Math.cos(s[0] - s[1]), det = par.A * par.B - par.C * par.C * c * c; return 0.5 * (par.B * s[2] * s[2] - 2 * par.C * c * s[2] * s[3] + par.A * s[3] * s[3]) / det - par.U1 * Math.cos(s[0]) - par.U2 * Math.cos(s[1]); } };
 requestAnimationFrame(frame);
 })();
 </script>
