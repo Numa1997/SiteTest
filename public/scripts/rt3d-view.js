@@ -13,9 +13,11 @@ import * as THREE from '../vendor/three/three.module.min.js';
 const PAPER = 0xf5f1ea, INK = 0x1c1518, GLASS = 0x8b8079;
 export const ZERO = [0xfb, 0xf6, 0xee], CREST = [0xa3, 0x30, 0x3f], TROUGH = [0x55, 0x60, 0x7a];
 
-/* the sheet's colour for v in [-1, 1]: card paper at 0, towards wine (v > 0) or slate (v < 0), full at |v| = 1, mixed in sRGB */
+/* the sheet's colour for v in [-1, 1]: card paper at 0, towards wine (v > 0) or slate (v < 0), full at |v| = 1, mixed in sRGB.
+   The mix grows as sqrt|v| (since 25 November 2026; it was |v|), so a crest at a quarter of the run's largest value is already
+   half coloured: most of a run lies well under its largest value and was drawn almost white. The height stays linear in v. */
 export function colour(v) {
-    v = Math.max(-1, Math.min(1, v)); const e = v >= 0 ? CREST : TROUGH, a = Math.abs(v);
+    v = Math.max(-1, Math.min(1, v)); const e = v >= 0 ? CREST : TROUGH, a = Math.sqrt(Math.abs(v));
     return [ZERO[0] + a * (e[0] - ZERO[0]), ZERO[1] + a * (e[1] - ZERO[1]), ZERO[2] + a * (e[2] - ZERO[2])];
 }
 /* the inverse used by the pixel check: white light scales the three linear components by one factor, which leaves the ratios of
@@ -26,7 +28,7 @@ export function colourV(px) {
     const Z = ZERO, C = CREST, T = TROUGH, q1 = g / r, q2 = r / b;
     const vw = (Z[1] - q1 * Z[0]) / ((Z[1] - C[1]) - q1 * (Z[0] - C[0]));
     const vs = (Z[0] - q2 * Z[2]) / ((Z[0] - T[0]) - q2 * (Z[2] - T[2]));
-    return q2 < Z[0] / Z[2] ? -vs : vw;
+    return q2 < Z[0] / Z[2] ? -vs * Math.abs(vs) : vw * Math.abs(vw);   /* the mix a was sqrt|v|: undo it */
 }
 
 export function create(canvas, opt) {
@@ -42,7 +44,7 @@ export function create(canvas, opt) {
     const sheetMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.6, metalness: 0, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
     sheetMat.toneMapped = false;
     const sheet = new THREE.Mesh(new THREE.BufferGeometry(), sheetMat); sheet.frustumCulled = false; sheet.renderOrder = 1; scene.add(sheet);
-    const wireMat = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.22 }); wireMat.toneMapped = false;
+    const wireMat = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.13 }); wireMat.toneMapped = false;
     const wire = new THREE.LineSegments(new THREE.BufferGeometry(), wireMat); wire.frustumCulled = false; wire.renderOrder = 1; scene.add(wire);
     const LUT = new Float32Array(1025 * 3);
     for (let q = 0; q <= 1024; q++) { const c = colour(q / 512 - 1), k = new THREE.Color(c[0] / 255, c[1] / 255, c[2] / 255).convertSRGBToLinear(); LUT[3 * q] = k.r; LUT[3 * q + 1] = k.g; LUT[3 * q + 2] = k.b; }
@@ -50,44 +52,61 @@ export function create(canvas, opt) {
     /* ---------- the flight axis, under the sheet's left edge: where the packet comes from ---------- */
     const arrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(-44, 0, 0), 10, INK, 1.8, 0.9); scene.add(arrow);   /* on the flight axis, in front of the sheet's left edge */
 
-    /* ---------- the barriers ---------- */
+    /* ---------- the barriers: the potential energy V(x, y, z = 0) on the plane the sheet shows ----------
+       The sheet is the plane z = 0. Up, in this picture, is energy, as in the textbook energy diagram (V(x) drawn as blocks, the
+       packet's energy E as a level, the wave drawn on that level): every barrier is drawn as its cut through z = 0 (a wall: a strip
+       across the whole plane; a disc of radius R: a strip of length 2R; a spherical shell: an annulus), raised to its potential
+       energy V0 (plus the voltage's ramp) on the same energy scale, and the sheet's zero sits at the level E. Where the level E lies
+       under a block's top the packet has too little energy to cross classically (tunnelling); where it lies above, it passes over.
+       Before 25 November 2026 the barriers were glass solids in physical space, 1 a thick in a 64 a box: from the reading distance
+       they looked like pairs of lines, and their height (physical z) shared the up direction with the sheet's lift (ψ). */
     const barrier = new THREE.Group(); scene.add(barrier);
-    const api = { yaw: -0.72, pitch: 0.52, dist: 112, renderer: r, THREE, ok: true };
-    api.setBarriers = function (b) {          /* b: { shape: 'dflat' | 'dcoin' | 'dshell' | 'sflat' | 'scoin' | 'sshell', size, D, S, H } */
-        while (barrier.children.length) { const c = barrier.children.pop(); c.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); }); }
-        if (!b) return;
-        const glass = () => new THREE.MeshPhysicalMaterial({ color: GLASS, roughness: 0.18, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.15, transparent: true, opacity: 0.34, depthWrite: false, side: THREE.DoubleSide });
-        const edge = () => new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.55 });
-        const cut = () => new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.9 });
-        const add = (g, x) => {
-            const m = new THREE.Mesh(g, glass()); m.position.x = x; m.renderOrder = 3; barrier.add(m);
-            const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, 30), edge()); e.position.x = x; e.renderOrder = 4; barrier.add(e);
-            return m;
-        };
-        /* b.shape: 'flat' | 'coin' | 'shell' (generation 2) or 'dflat' ... 'sshell' (generation 1); b.centres: the barrier centres along x
-           (walls, discs); b.radii: the shell radii. Generation 1 gives neither: its pair sits at -S/2, +S/2 (one barrier: -S/2). */
+    const api = { yaw: -0.72, pitch: 0.52, dist: 112, renderer: r, THREE, ok: true, base: 0 };
+    const STONE = 0xa89f93, LEVEL = 0x7a1f2b;
+    const blockMat = () => new THREE.MeshStandardMaterial({ color: STONE, roughness: 0.85, metalness: 0, transparent: true, opacity: 0.62, depthWrite: false, side: THREE.DoubleSide });
+    const inkMat = (o) => new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: o });
+    function clearGroup(gr) { while (gr.children.length) { const c = gr.children.pop(); c.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); }); } }
+    /* b: { shape: 'flat' | 'coin' | 'shell' (or generation 1's 'dflat' ... 'sshell'), size (R), D, S (spacing), centres, radii,
+            V0, bias, ext: [first face, last face], E (the packet's mean energy), k (screen length per energy unit), x0, x1, w (sheet span) } */
+    api.setBarriers = function (b) {
+        clearGroup(barrier); if (!b) return;
         const kind = b.shape.replace(/^[ds](?=(flat|coin|shell)$)/, ''), flat = kind === 'flat', coin = kind === 'coin', shell = kind === 'shell';
-        const two = b.shape[0] === 'd';
-        const xs = b.centres || (two ? [-b.S / 2, b.S / 2] : [-b.S / 2]);
-        const Hh = b.H || 8, W = b.W || 64;
-        if (flat || coin) xs.forEach((x) => {
-            let g;
-            if (flat) g = new THREE.BoxGeometry(b.D, 2 * Hh, W);                                     /* |x - xc| < D/2, all y, z (drawn to the sheet's edge and +-H) */
-            else { g = new THREE.CylinderGeometry(b.size, b.size, b.D, 96, 1, false); g.rotateZ(Math.PI / 2); }   /* axis along the flight */
-            add(g, x);
-            /* where the barrier meets the plane z = 0: the faces x = xc +- D/2, from y = -w to +w */
-            const w = flat ? W / 2 : b.size, pts = [];
-            for (const s of [-1, 1]) { pts.push(new THREE.Vector3(x + s * b.D / 2, 0, -w), new THREE.Vector3(x + s * b.D / 2, 0, w)); }
-            const l = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), cut()); l.renderOrder = 4; barrier.add(l);
-        });
+        const two = b.shape[0] === 'd', k = b.k || 3, V0 = b.V0 == null ? 2 : b.V0, bias = b.bias || 0, ext = b.ext || [-1, 1];
+        const x0 = b.x0 == null ? -32 : b.x0, x1 = b.x1 == null ? 32 : b.x1, w = b.w || 63;
+        const vb = (x) => -bias * Math.min(1, Math.max(0, (x - ext[0]) / (ext[1] - ext[0])));   /* the voltage's ramp, as rt3d2.py's vbias */
+        api.base = (b.E || 0) * k; sheet.position.y = wire.position.y = api.base; arrow.position.y = api.base;
+        /* the floor: V = ramp only, a ribbon along the flight under the sheet (flat when there is no voltage) */
+        const nf = 129, fx = new Float32Array(nf), fp = new Float32Array(nf * 2 * 3);
+        for (let i = 0; i < nf; i++) fx[i] = x0 + (x1 - x0) * i / (nf - 1);
+        for (let i = 0; i < nf; i++) for (let s = 0; s < 2; s++) { const q = 3 * (2 * i + s); fp[q] = fx[i]; fp[q + 1] = vb(fx[i]) * k; fp[q + 2] = (s ? 1 : -1) * w / 2; }
+        const fi = []; for (let i = 0; i < nf - 1; i++) { const a = 2 * i; fi.push(a, a + 1, a + 2, a + 2, a + 1, a + 3); }
+        const fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.BufferAttribute(fp, 3)); fg.setIndex(fi); fg.computeVertexNormals();
+        const floor = new THREE.Mesh(fg, new THREE.MeshStandardMaterial({ color: STONE, roughness: 0.95, transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide }));
+        floor.renderOrder = 0; barrier.add(floor);
+        /* the level E: an outline of the sheet's rest plane, in wine */
+        const lv = [[x0, -w / 2], [x1, -w / 2], [x1, w / 2], [x0, w / 2], [x0, -w / 2]].map((p) => new THREE.Vector3(p[0], api.base, p[1]));
+        const level = new THREE.Line(new THREE.BufferGeometry().setFromPoints(lv), new THREE.LineDashedMaterial({ color: LEVEL, dashSize: 1.2, gapSize: 0.8 }));
+        level.computeLineDistances(); level.renderOrder = 2; barrier.add(level);
+        /* a block from the floor to V0 above it, over the footprint `shape` (a THREE.Shape in the plane, physics (x, y)) */
+        const block = (shapeXY, xc) => {
+            const g = new THREE.ExtrudeGeometry(shapeXY, { depth: V0 * k, bevelEnabled: false, curveSegments: 96 });
+            g.rotateX(-Math.PI / 2);            /* the shape's (x, y) -> screen (x, -z): flip y so physics y maps to screen z */
+            g.scale(1, 1, -1);
+            g.translate(0, vb(xc) * k, 0);
+            const m = new THREE.Mesh(g, blockMat()); m.renderOrder = 3; barrier.add(m);
+            const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, 30), inkMat(0.75)); e.renderOrder = 4; barrier.add(e);
+        };
+        const rect = (xa, xb, ya, yb) => { const sh = new THREE.Shape(); sh.moveTo(xa, ya); sh.lineTo(xb, ya); sh.lineTo(xb, yb); sh.lineTo(xa, yb); sh.closePath(); return sh; };
+        if (flat || coin) {
+            const xs = b.centres || (two ? [-b.S / 2, b.S / 2] : [-b.S / 2]), half = flat ? w / 2 : b.size;
+            xs.forEach((xc) => block(rect(xc - b.D / 2, xc + b.D / 2, -half, half), xc));
+        }
         if (shell) {
             const radii = b.radii || (two ? [b.size, b.size + b.S] : [b.size]);
             radii.forEach((Rc) => {
-                for (const R of [Rc - b.D / 2, Rc + b.D / 2]) {
-                    const m = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 64), glass()); m.renderOrder = 3; barrier.add(m);
-                    const ring = []; for (let k = 0; k <= 160; k++) { const t = 2 * Math.PI * k / 160; ring.push(new THREE.Vector3(R * Math.cos(t), 0, R * Math.sin(t))); }
-                    const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(ring), cut()); l.renderOrder = 4; barrier.add(l);
-                }
+                const sh = new THREE.Shape(); sh.absarc(0, 0, Rc + b.D / 2, 0, 2 * Math.PI, false);
+                const hole = new THREE.Path(); hole.absarc(0, 0, Rc - b.D / 2, 0, 2 * Math.PI, true); sh.holes.push(hole);
+                block(sh, 0);                   /* a shell straddles the ramp; drawn on the ramp at its centre */
             });
         }
         api.barrier = b;
@@ -126,7 +145,7 @@ export function create(canvas, opt) {
         if (!g.boundingSphere) g.computeBoundingSphere();
         api.last = o;
     };
-    api.vertex = function (k) { const a = sheet.geometry.attributes.position; return a ? [a.array[3 * k], a.array[3 * k + 2], a.array[3 * k + 1]] : null; };   /* the drawn vertex k, physics (x, y, z) */
+    api.vertex = function (k) { const a = sheet.geometry.attributes.position; return a ? [a.array[3 * k], a.array[3 * k + 2], a.array[3 * k + 1]] : null; };   /* the drawn vertex k: physics (x, y) and its lift above the level E (the sheet's own height) */
 
     /* ---------- camera, rendering, picking ---------- */
     function place() {
@@ -134,18 +153,18 @@ export function create(canvas, opt) {
         cam.aspect = w / hh; cam.fov = cam.aspect < 1 ? 32 / Math.max(0.6, cam.aspect) : 32; cam.updateProjectionMatrix();
         const d = api.dist * (cam.aspect < 1.2 ? 1.18 / Math.max(0.75, cam.aspect) : 1);   /* a narrow screen stands back to see the whole sheet */
         cam.position.set(d * cp * Math.sin(api.yaw), d * Math.sin(api.pitch), d * cp * Math.cos(api.yaw));
-        cam.lookAt(0, 0, 0);
+        cam.lookAt(0, api.base * 0.5, 0);
     }
     api.resize = function (w, h, dpr) { r.setPixelRatio(dpr || 1); r.setSize(w, h, false); };
     api.render = function () { place(); r.render(scene, cam); };
     api.project = function (p) {   /* physics point -> CSS pixels on the canvas */
-        place(); const v = new THREE.Vector3(p[0], p[2], p[1]).project(cam), w = canvas.clientWidth, hh = canvas.clientHeight;
+        place(); const v = new THREE.Vector3(p[0], p[2] + api.base, p[1]).project(cam), w = canvas.clientWidth, hh = canvas.clientHeight;
         return { x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * hh, inFront: v.z < 1 };
     };
     api.pick = function (cx, cy) {  /* CSS pixel -> the physics point where its ray first meets the sheet */
         place(); const w = canvas.clientWidth, hh = canvas.clientHeight, rc = new THREE.Raycaster();
         rc.setFromCamera(new THREE.Vector2(cx / w * 2 - 1, 1 - cy / hh * 2), cam);
-        const hits = rc.intersectObject(sheet, false); if (!hits.length) return null; const p = hits[0].point; return [p.x, p.z, p.y];
+        const hits = rc.intersectObject(sheet, false); if (!hits.length) return null; const p = hits[0].point; return [p.x, p.z, p.y - api.base];
     };
     api.readPixel = function (cx, cy) {
         const gl = r.getContext(), dpr = r.getPixelRatio(), px = new Uint8Array(4);

@@ -1,0 +1,15 @@
+{
+ "id": "numakoudsie/fig-15-resonant-tunnelling",
+ "title": "Fig 15 Resonant Tunnelling",
+ "code_file": "fig-15-resonant-tunnelling.ipynb",
+ "language": "python",
+ "kernel_type": "notebook",
+ "is_private": true,
+ "enable_gpu": false,
+ "enable_internet": true,
+ "dataset_sources": [
+  "numakoudsie/fig15-resonant-tunnelling"
+ ],
+ "competition_sources": [],
+ "kernel_sources": []
+}
