@@ -875,17 +875,9 @@
   "src": "What moves behind this page",
   "tr": "ما يتحرّك خلف هذه الصفحة"
  },
- "13d3664229cc": {
-  "src": "<b>The forest</b> under the title spreads from a few trees, a year every two minutes; its leaves breathe vapour that rises into the open sky of the two top corners, gathers into clouds and falls back as rain or snow that feeds the young trees.",
-  "tr": "<b>الغابة</b> تحت العنوان تنتشر من أشجار قليلة، وعامُها دقيقتان؛ تتنفّس أوراقها بخارًا يصعد إلى السماء المكشوفة في الركنين العلويّين، فيلتئم غيومًا، ثم يعود مطرًا أو ثلجًا يُطعم الأشجار الفتيّة."
- },
  "3c436ec2e2d5": {
   "src": "<b>The roots</b> in the left margin grow towards the water they sense, branching like river beds, each as thick as the cube root of the tips it feeds (Murray's law).",
   "tr": "<b>الجذور</b> في الهامش الأيسر تمضي نحو الماء الذي تستشعره، وتتشعّب كما تتشعّب مجاري الأنهار، وغِلَظ كلّ جذرٍ على قدر الجذر التكعيبي لعدد الأطراف التي يغذّيها (قانون موراي)."
- },
- "b95032d0d5ff": {
-  "src": "<b>The pendulums</b> in the right margin hang in pairs tied by a weak spring: the swing drains through the spring from one bob to the other and back every 27 s, a beat; the motion was computed once on Kaggle and is played here, not computed.",
-  "tr": "<b>النوّاسات</b> في الهامش الأيمن معلّقة أزواجًا يصل بينها نابض ليّن: تنساب الأرجحة عبر النابض من ثقلٍ إلى صنوه، ثم تعود إليه كلّ ٢٧ ثانية، وتلك هي الضربات؛ حُسبت الحركة مرّةً واحدة على Kaggle، وهي هنا تُعرض ولا تُحسب."
  },
  "dd54478d85b6": {
   "src": "<b>The spinners</b> before the simulations turn at their own pace until a wandering rotating field pulls those it passes into step.",
@@ -898,5 +890,13 @@
  "95c7feeb368f": {
   "src": "Every scene on its own, with its numbers to change →",
   "tr": "كلّ مشهد وحده، بأرقامه التي تستطيع تغييرها ←"
+ },
+ "784af264535d": {
+  "src": "<b>The forest</b> under the title spreads from a few trees, a year every two minutes; its leaves breathe vapour that rises into the open sky of the two top corners and gathers into cumulus clouds that rain it back on the young trees. Around them the sky goes through its year with every kind of cloud: fields of small clouds in spring, cirrus and one thunder cloud in summer, a grey veil thickening to long rain in autumn, low layers and snow in winter.",
+  "tr": "<b>الغابة</b> تحت العنوان تنتشر من أشجار قليلة، وعامُها دقيقتان؛ تتنفّس أوراقها بخارًا يصعد إلى السماء المكشوفة في الركنين العلويّين، فيلتئم غيومًا ركاميّة تردّه مطرًا على الأشجار الفتيّة. وحولها تعبر السماءُ عامَها بكلّ أصناف الغيم: حقولٌ من غيمات صغيرة في الربيع، وسمحاقٌ رهيف وغيمةُ رعدٍ واحدة في الصيف، وغلالةٌ رماديّة تتكاثف في الخريف حتى تصير مطرًا طويلًا، وطبقاتٌ واطئة وثلجٌ في الشتاء."
+ },
+ "9a4a72e0e3a6": {
+  "src": "<b>The paper globes</b> in the right margin hang on threads in a wind that blows down the page with a street of vortices in it; the thin lines are the wind's own lines, and each passing vortex swings the globes aside while gravity brings them back. The motion was computed once on Kaggle and is played here, not computed.",
+  "tr": "<b>كُرات الورق</b> في الهامش الأيمن معلّقة بخيوط في ريحٍ تهبّ نزولًا على الصفحة وتحمل معها صفًّا من الدوّامات؛ الخطوط الرفيعة هي خطوط الريح نفسها، وكلّ دوّامة تمرّ تدفع الكرات جانبًا ثم تعيدها الجاذبيّة إلى مكانها. حُسبت الحركة مرّةً واحدة على Kaggle، وهي هنا تُعرض ولا تُحسب."
  }
 }

@@ -1,4 +1,4 @@
-// Film the right margin of the home page (the pendulums) after scrolling: frames every STEP s, cropped to the margin.
+// Film the right margin of the home page (the globes in the wind) after scrolling: frames every STEP s, cropped to the margin.
 // node notes/home/scenes/rails.cjs <tag> [width]   (serves dist/ on :8766)
 const { chromium } = require('playwright'), fs = require('fs');
 const tag = process.argv[2] || 'now', w = +(process.argv[3] || 1920), DIR = `notes/home/scenes/${tag}`, STEP = +(process.env.STEP || 2), N = +(process.env.N || 14);

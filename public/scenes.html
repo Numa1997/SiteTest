@@ -33,7 +33,7 @@
     <main class="cat">
       <div class="cat__head">
         <div>
-          <p class="cat__kicker">Behind the pages · twelve small pictures</p>
+          <p class="cat__kicker">Behind the pages · thirteen small pictures</p>
           <h1>Living scenes<span class="dot">.</span></h1>
           <p class="cat__lede">
             Behind and between the pages of this site, small pictures move: a forest, roots, pendulums, iron powder, a harmonica.
@@ -54,12 +54,13 @@
             <p class="scn__where">Home page, the land under the title.</p>
             <p><b>What you see.</b> A few trees throw seeds; a seed that finds room grows into a tree in about one spring and summer, and over
             several years of two minutes each the land fills. Leaves fall in autumn, rot in the soil and are taken up by the roots of the young trees.</p>
-            <p><b>What drives it.</b> The leaves breathe vapour that rises into the open sky and gathers into clouds. Each cloud is built
-            in 3D, round puffs on a flat base 1000 m up, and drawn as seen by someone standing on the ground: near clouds high and
-            large, far ones small by the horizon, their flat undersides seen from below, and the same wind carrying near clouds across
-            faster than far ones. A cloud's droplets grow by condensation until collisions merge them into raindrops heavy enough to beat
-            the updraft (their speed grows as r², Stokes' law); the rain feeds the seedlings, and in winter the clouds snow. On the home
-            page the sky is open only in the two top corners, beside the title and beside the poem, so that is where the clouds gather.</p>
+            <p><b>What drives it.</b> The leaves breathe vapour that rises and gathers into cumulus clouds; their droplets grow until
+            collisions merge them into raindrops heavy enough to beat the updraft (speed growing as r², Stokes' law), and the rain feeds the
+            seedlings. Around them the sky goes through its year with all ten kinds of cloud (S13 below): fields of altocumulus and cirrocumulus in
+            spring; cirrus in summer, and, once the cumulus hold enough of the forest's water, one thunder cloud far away; in autumn a warm
+            front's sequence, cirrostratus with its halo, altostratus, then nimbostratus and long rain, and rows of stratocumulus; in
+            winter stratus and snow. Every cloud is built in 3D at its own height and drawn as seen from the ground. On the home page the sky
+            is open only in the two top corners, beside the title and beside the poem, so that is where the clouds are.</p>
           </div>
           <div class="scn__knobs" data-for="forest"></div>
         </section>
@@ -77,22 +78,25 @@
           <div class="scn__knobs" data-for="roots"></div>
         </section>
 
-        <section class="scn" id="pairs">
-          <h2><span class="scn__n">S3</span> Two pendulums and a spring</h2>
-          <div class="scn__stage scn__stage--tall" data-bg="pairs" data-bg-mask="none"></div>
+        <section class="scn" id="wind">
+          <h2><span class="scn__n">S3</span> Paper globes in a wind</h2>
+          <div class="scn__stage scn__stage--tall" data-bg="wind" data-bg-mask="none"></div>
           <div class="scn__text">
-            <p class="scn__where">Home page, the right margin, a pair on every beam.</p>
-            <p><b>What you see.</b> Two pendulums, 1.5 m long with 10 kg steel bobs, joined by a weak spring. The left one starts swinging; within about 13.5 s its
-            swing has drained completely into the right one, and after 27 s it is back. The curves under them are each pendulum's energy over
-            one loop; the line marks the moment on show.</p>
-            <p><b>What drives it.</b> Swinging together, the spring idles and both keep the pendulum's own frequency ω₁ = √(g/L); swinging
-            against each other, the spring works and they go a little faster, ω₂ = √(ω₁² + 2ka²/(mL²)). Starting one pendulum starts both
-            motions at once, and their beat carries the swing across and back with period 2π/(ω₂ − ω₁).
-            The motion is not computed here: <code>tools/sims/coupled.py</code> integrated the full equations once on Kaggle, with the
-            energy kept to a few parts in 10¹³, and this page plays that stored run.</p>
-            <p class="scn__stored" data-stored="coupled"></p>
+            <p class="scn__where">Home page, the right margin, three globes on every beam.</p>
+            <p><b>What you see.</b> A wind blows straight down, and in it a street of vortices slides down with it: two staggered rows that
+            spin opposite ways, as form behind a post in a wind (a Kármán vortex street). The thin lines are the wind's own lines, the paths
+            the air follows at this instant; where they crowd, the air is fast. From each beam hang closed globes of thin paper on threads.
+            Every passing vortex pushes them aside, first one way, then the other, and gravity brings them back. The lower beam
+            repeats the upper one's swing a little later, when the same vortex reaches it.</p>
+            <p><b>What drives it.</b> Gravity, and the air: the drag of the wind moving past each globe, ½ ρ C<sub>D</sub> π R² |w| w with
+            w the globe's speed through the air, and the push of air that speeds up around it, ρV Du/Dt, which for a globe as light as the
+            air it displaces counts as much as its own inertia. The lines are the level lines of the wind's stream function; the same
+            flow and drag law as on the <a href="simulations/double-inverted-pendulum.html">double inverted pendulum</a> page (section 13).
+            The motion is not computed here: <code>tools/sims/windpend.py</code> integrated it once on Kaggle until the swing repeated
+            with the wind's period, and this page plays that stored period, at real time.</p>
+            <p class="scn__stored" data-stored="windpend"></p>
           </div>
-          <div class="scn__knobs" data-for="pairs"></div>
+          <div class="scn__knobs" data-for="wind"></div>
         </section>
 
         <section class="scn" id="spin">
@@ -204,6 +208,26 @@
           </div>
           <div class="scn__knobs" data-for="seeds"></div>
         </section>
+
+        <section class="scn" id="atlas">
+          <h2><span class="scn__n">S13</span> A cloud atlas</h2>
+          <div class="scn__stage scn__stage--tall" data-bg="atlas" data-bg-mask="none"></div>
+          <div class="scn__text">
+            <p class="scn__where">The forest's sky (S1) draws on these; here they stand side by side.</p>
+            <p><b>What you see.</b> The ten kinds of cloud that the World Meteorological Organization's cloud atlas tells apart by form,
+            each at its own level. High, of ice: cirrus (fibres and hooks), cirrocumulus (a sheet of fine grains), cirrostratus (a veil,
+            with a ring around the sun). Middle: altocumulus (a field of small rounded masses), altostratus (a grey sheet; the sun as
+            through ground glass). Low: stratus (a flat grey layer), nimbostratus (dark, shapeless, raining), stratocumulus (long rolls),
+            cumulus (a heap with a flat base). And cumulonimbus, the thunder cloud, standing through all three levels under its anvil.</p>
+            <p><b>What drives it.</b> Geometry. Each cloud is built in 3D, in metres, at its true height (cumulus base 1 km, altocumulus
+            4 km, cirrus 9 km, the thunder cloud's top above 10 km) and drawn as an eye on the ground sees it: a point X to the right, Y up and Z
+            ahead appears at x = F X / Z, y = F Y / Z above the horizon. So the high clouds must stand far away (13 to 17 km here) to appear
+            in the picture at all, a flat layer is seen ever more edge on with distance, and a field of altocumulus crowds towards the
+            horizon. The four layer kinds cover the whole sky in nature; a piece of each is shown, and the ring around the sun, 22° in
+            nature (the angle at which ice crystals bend light), is drawn smaller here to fit.</p>
+          </div>
+          <div class="scn__knobs" data-for="atlas"></div>
+        </section>
       </div>
     </main>
 
@@ -232,12 +256,13 @@
           box.querySelector('.scn__again').addEventListener('click', function () { host.__bgRestart(); });
         });
         /* the stored pendulum run: its parameters and checks, read from the header of the file the page plays */
-        var pe = document.querySelector('[data-stored=coupled]'), ph = document.querySelector('[data-bg=pairs]'), tries = 0;
-        (function wait() { var s = ph && ph.__bgScene; if (s && s.D) { var h = s.D.hdr, p = h.params, d = h.derived, c = h.checks;
-            pe.textContent = 'Stored run: L = ' + p.L + ' m, m = ' + p.m + ' kg, spring at a = ' + p.a + ' m, pivots d = ' + p.d + ' m apart, k = ' + d.k_N_per_m.toFixed(3) +
-              ' N/m, start θ₀ = ' + p.theta0 + ' rad; one loop ' + d.loop_s.toFixed(2) + ' s; the swing has crossed at ' + c.crossed_at_s.toFixed(2) +
-              ' s (2π/(ω₂ − ω₁) ÷ 2 = ' + c.half_beat_linear_s.toFixed(2) + ' s for small swings); energy kept to ' + c.energy_rel_drift.toExponential(1) +
-              '; computed ' + s.D.gen.date + ' from commit ' + String(s.D.gen.commit).slice(0, 7) + ', SHA-256 checked.'; }
+        var pe = document.querySelector('[data-stored=windpend]'), ph = document.querySelector('[data-bg=wind]'), tries = 0;
+        (function wait() { var s = ph && ph.__bgScene; if (s && s.D) { var h = s.D.hdr, p = h.params, d = h.derived, c = h.checks, mx = function (a) { return Math.max.apply(null, a); };
+            pe.textContent = 'Stored run: wind U = ' + p.U + ' m/s, vortices λ = ' + p.lam + ' m apart, rows h = ' + d.h.toFixed(2) + ' m apart, sliding at c = ' + d.c.toFixed(2) +
+              ' m/s, so the wind repeats every T = λ/c = ' + d.T.toFixed(2) + ' s; threads L = ' + p.L + ' m, globes R = ' + p.R + ' m of ' + (p.m_s * 1000) + ' g paper holding ' + (d.m_air_inside * 1000).toFixed(1) +
+              ' g of air; largest swing ' + (mx(c.max_swing_rad) * 180 / Math.PI).toFixed(0) + '°; settled after ' + mx(c.periods_to_settle) + ' periods, repeating to ' + mx(c.loop_residual).toExponential(0) +
+              ' rad; energy balance to ' + mx(c.energy_residual).toExponential(0) + '; the wind keeps the air (div u / |∇u| = ' + c.div_over_grad.toExponential(0) + '); computed ' + s.D.gen.date +
+              ' from commit ' + String(s.D.gen.commit).slice(0, 7) + ', SHA-256 checked.'; }
           else if (s && s.err) pe.textContent = 'The stored run could not be loaded: ' + s.err; else if (tries++ < 100) setTimeout(wait, 200); })();
       });
     </script>

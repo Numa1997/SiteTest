@@ -26,7 +26,7 @@ pendulum card) that nothing may enter: no crown, leaf, droplet or flake, and the
 | Page | Place | Scene | What it shows |
 |---|---|---|---|
 | Home (`index.html`) | the land under the hero, across the whole width; tall trees only where no text stands above, low ones under the buttons; clouds in the two top corners | `forest` | three trees spread into a forest that fills the land over four to six years of two minutes; four seasons; vapour, clouds in the open corners, rain and snow; roots and fungal threads in the soil |
-| Home | both side margins beside the Index and the sections, from below the forest down to the shores strip (fixed holder, drawn in page coordinates so it scrolls with the page; only where a margin is at least 90 px wide, so from about 1400 px) | `rails` | left: the forest's roots go on growing down the page; right: pairs of pendulums tied by a weak spring (beats) |
+| Home | both side margins beside the Index and the sections, from below the forest down to the shores strip (fixed holder, drawn in page coordinates so it scrolls with the page; only where a margin is at least 90 px wide, so from about 1400 px) | `rails` | left: the forest's roots go on growing down the page; right: paper globes on threads swinging in a wind that carries a street of vortices, with the wind's lines drawn |
 | Home | band before Simulations | `spin` | spinners with random speeds; a wandering field locks an island of them into step |
 | Home | band above the footer | `shores` | "the shores of light": things rising out of dust |
 | Simulations | the empty half beside the title (from 1240 px width; none on a narrower screen) | `powder` | iron powder lining up along the field of magnets and of a wire whose current switches on and off |
@@ -36,7 +36,7 @@ pendulum card) that nothing may enter: no crown, leaf, droplet or flake, and the
 | Lucretius | the empty space beside the title (`.bgs-aside--far`, left of it on the Arabic page, from 1240 px) | `motes` | dust trembling in a slanting sunbeam, knocked by atoms nobody sees: Lucretius' own picture (II 112-141) and Brownian motion |
 | Lucretius | fixed, side margins only | `swerve` | falling atoms and the small swerve that lets them meet |
 | Lucretius | band above the footer | `seeds` | seeds and seasons: each thing from its own seed |
-| Scenes (`scenes.html`, since 23 November 2026) | one outlined box per scene, in order S1 to S12 | all ten, plus `roots` and `pairs` | every scene on its own, with its text and its numbers to change (below) |
+| Scenes (`scenes.html`, since 23 November 2026) | one outlined box per scene, in order S1 to S13 | the ten page scenes, plus `roots`, `wind` and `atlas` | every scene on its own, with its text and its numbers to change (below) |
 
 On a narrow screen the chip shrinks into the corner and the bands are lower (`@media (max-width:760px)`).
 
@@ -75,33 +75,75 @@ top right (beside the poem and the Fig. 0 card) empty. Those are the only places
 holder in 16 px columns and, in each, measures the sky from 30 px below the top down to 30 px above the first text or card (or to
 55 % of the ground height); a column with less than `OPEN` = 240 px of sky (at most 30 % of the ground height) holds no clouds. So
 on a wide screen the sky is exactly the two corners, and the forest's weather lives there:
-**Clouds in 3D, seen from the ground (24 November 2026).** The user found the first clouds rough, broken and too few, and asked for
-each cloud to be made in 3D and then seen from the ground by changing the frame of reference. So:
-- *Where the eye is.* The eye stands on the ground at the horizontal middle of the holder; the horizon is the ground line GY. A
-  point at height Y above the ground, at distance Z in front of the eye and X to its right, is seen at x = XC + F X / Z,
-  y = GY − F Y / Z (a pinhole camera, `proj()`; F = GY px).
-- *A cloud in its own frame.* `cloud()` builds each cloud once as 8 to 16 round puffs (spheres) standing on a flat base: the puffs
-  near the middle are bigger and higher, a cumulus. Puff positions and radii are in units of the cloud's size s; the base is an
-  ellipse wide enough to reach under every puff. The base of every cloud is at the same height `HB` (1000 m), as in a real
-  cloud field, where all bases sit at the level where rising air first condenses.
-- *Into the eye's frame.* Every frame each puff (X + u s, HB + v s, Z + w s) and the ring of the base are projected (`paint()`).
-  So a near cloud is high on the page and large, a far one small and low near the horizon; the flat base, a floor above the eye,
-  is seen from below as a darker band under the puffs, and nothing of a cloud shows below the far edge of its base. Puffs are
-  drawn far to near, each opaque inside (pale where light from above falls, deeper towards its rim), on a scratch canvas, so
-  overlapping puffs hide each other instead of piling up darker; the whole cloud is then laid on the page at `TONE` 0.42.
-- *Wind and parallax.* One wind (m/s) carries all clouds; it wanders slowly (a random walk pulled back to zero, about a minute's
-  memory, spread `WIND` 4 m/s). The same wind moves a near cloud faster across the page than a far one (screen speed F u / Z).
-  A cloud fades in over open sky and out where it drifts over text or off the page.
-- *Water and rain.* Vapour from the leaves and from the bare ground (`SOIL`) rises to a height in the open sky; there it joins the
-  cloud it reaches, or starts a new, tiny one. A cloud keeps its water m as one number and its size follows it smoothly,
-  s = SIZE ∛m (settling over 5 s): no droplets are drawn inside a cloud, which is what made the first clouds look broken. Its
-  mean droplet radius grows by condensation (`COND`); once it passes 0.6 px, collisions turn water into raindrops at the rate
-  RAIN · m · (r − 0.6), which fall from under the base (Stokes: speed 9 r² − updraft) to the ground and feed the young trees.
-  In winter the clouds give their water up as snow. A cloud also loses water to the dry air around it (time constant `EVAP`,
-  90 s), so supply and loss settle into a sky that is neither clear nor overcast.
-- Measured at 1920 px (`notes/home/scenes/film.cjs`): 16 clouds at 3 s, between 20 and 35 over the next three minutes; no page errors.
-- Every number above is a property of `S.forest` and a slider on the scenes page.
-On a screen narrower than 761 px there is no sky (the hero covers the land).
+**The sky: ten kinds of cloud, built in 3D and seen from the ground (24 and 25 November 2026).** On 24 November the user asked
+for each cloud to be made in 3D and then seen from the ground by changing the frame of reference; on 25 November, finding
+the one kind of cloud not good enough, for every kind of cloud by shape and form: "the very large, the very long, the thin". The
+sky is now a module of its own in `bg-scenes.js`, `mkSky()`, used by the forest and by the scene `atlas`.
+
+*The eye.* It stands on the ground at the horizontal middle of the holder; the horizon is the ground line GY. A point X m to the
+right, Y m up and Z m ahead is seen at x = XC + F X / Z, y = GY − F Y / Z (`proj()`), with F = 1.5 GY: the top of the picture is
+34° above the horizon. A flat patch of radii (r_x, r_z) lying at height Y is seen as an ellipse F r_x / Z wide and
+F r_z Y / Z² high: the further, the more edge on.
+
+*The ten kinds* (the genera of the WMO International Cloud Atlas, by form and level; temperate latitudes: low to 2 km, middle 2 to
+7 km, high 5 to 13 km). `make(kind)` builds each once, in metres, in its own frame; `paint()` carries its parts into the eye's
+frame and projects them every frame.
+
+| Kind | Height here | How it is built | How it is drawn |
+|---|---|---|---|
+| Cumulus (Cu), a heap | base 1 km (`HB`) | 16 to 25 round puffs on a flat base, the middle ones bigger and higher | one outline around the whole heap, soft pale lumps inside, shaded towards the base, the base's floor darker (`puffs()`) |
+| Cumulonimbus (Cb), the thunder cloud, "the very large" | base 1 km, top 10.4 km | a tower of 15 storeys of six puffs, widening upward (size 1400 m per unit), and an anvil: six flat patches at its top, drawn out downwind | as a heap; the anvil pale above and dark below; rain threads under the base |
+| Stratocumulus (Sc), "the very long" | 1.5 km | four parallel rolls 950 m apart, each a chain of flattened lumps every 340 m over 9 km | each lump a pale flank above a darker flat belly (`lump()`) |
+| Stratus (St) | 0.3 km | five wide flat patches and nine ragged scraps at the edge | soft flat ellipses (`flat()`) |
+| Nimbostratus (Ns) | 0.9 km | six large dark flat patches | soft flat ellipses, with dashed threads of rain or snow sliding down from the base (`shafts()`) |
+| Altocumulus (Ac) | 4 km | a field of 11 × 9 small rounded masses 300 m apart, every other row shifted, a quarter missing | lumps; the field crowds and flattens towards the horizon |
+| Altostratus (As) | 4.5 km | six broad patches and twelve long thin streaks | flat ellipses; the sun behind it a bright blur, as through ground glass |
+| Cirrus (Ci), "the thin" | 9 km | five to eight threads: a small hooked head, a tail 2.5 to 5 km long that falls 400 to 900 m and drifts sideways | tapering strokes, strongest at the head |
+| Cirrocumulus (Cc) | 8.5 km | a sheet of 23 × 15 grains 110 m apart, their rows waved | small dots |
+| Cirrostratus (Cs) | 9.5 km | five broad pale patches and fourteen fine fibres | flat ellipses; around the sun a ring of radius F tan 22°, the halo of ice crystals |
+
+*Two canvases.* Layers, lumps and fibres are drawn at half resolution (they are soft; a quarter of the cost); the heaps at full
+resolution, each on a small canvas of its own that is drawn again only when the heap's size has changed by 2 %. Drawing is kept
+inside the strips of the picture that hold open sky. Measured in headless Chromium at 1920 px (`notes/home/scenes/cost.cjs`,
+software drawing, a fast year): the forest's `draw()` takes 20 to 30 ms a frame through the year; the
+version before the ten kinds took 17 ms.
+
+*The mask.* The sky is drawn whole and then cut by a soft mask built from the open-sky columns (`clouds()`): full where a
+column has open sky, fading over ten columns (160 px) towards text, over 24 px above text, and over 30 % of the ground height where
+only trees stand below. So a layer or a wide cloud never crosses the text and is never cut by an edge. The sky is laid under
+everything else of the scene (the trees, the rain).
+
+*Which kind when* (`SEASON`, parts of the year; each comes and goes over 4 % of a year):
+
+| Part of the year | In the sky |
+|---|---|
+| spring (0 to 0.25) | cumulus; fields of altocumulus (0.04 to 0.30); cirrocumulus (0.10 to 0.27); cirrus from 0.18 |
+| summer (0.25 to 0.5) | cumulus; cirrus (to 0.52); one thunder cloud |
+| autumn (0.5 to 0.75) | a warm front's sequence: cirrostratus with its halo (0.47 to 0.61), altostratus (0.56 to 0.71), nimbostratus and long rain (0.66 to 0.80) |
+| winter (0.75 to 1) | rows of stratocumulus (0.76 to 0.92), stratus (0.86 to 0.99) and snow |
+
+*The cumulus and the forest's water* (unchanged from 24 November). Vapour from the leaves and from the bare ground (`SOIL`) rises
+to a height in the open sky; there it joins the cumulus it reaches, or starts a new one. A cumulus keeps its water m as one
+number and its size follows it smoothly, s = SIZE ∛m (settling over 5 s). Its mean droplet radius grows by condensation (`COND`);
+past 0.6 px, collisions turn water into raindrops at the rate RAIN · m · (r − 0.6), which fall from under the base (Stokes:
+speed 9 r² − updraft) and feed the young trees. It loses water to the dry air (`EVAP`, 60 s), and out of its season it thins away.
+
+*The thunder cloud.* Between 0.27 and 0.34 of the year, if the cumulus together hold more water than `CB` (4), one cumulonimbus
+rises 22 km away in the second-widest strip of sky: its tower grows through all levels over 9 % of a year, its anvil spreads, rain
+falls under it and feeds the seedlings; it fades when autumn comes. One a year at most.
+
+*Wind.* Each level has its own wind, wandering slowly (a random walk pulled back to zero, about a minute's memory): low `WIND`
+(4 m/s) around a steady 3 m/s, middle 2.2 times that around 7 m/s, high 4 times around 14 m/s. The cumulus drift with the low
+wind alone. Perspective turns the same wind into a faster drift for near clouds than for far ones. A layer cloud that leaves the
+picture comes back in from the other side as a new cloud.
+
+*The layers' own weather.* Nimbostratus rains steadily over the open sky; once winter has come (0.76) it and stratus snow.
+
+*The sun* is not drawn, except through the two kinds that show it: a ring through cirrostratus, a blur through altostratus. It
+stands in the widest strip of open sky.
+
+Every number above is a property of `S.forest` (or of `mkSky`) with a comment; those a reader would play with have a slider on the
+scenes page.
 
 **Soil.** Leaves fall, rot into specks and sink into the soil. A seedling's root tips bend towards the nearest speck within 120 px
 and take it up; each speck fades after about a minute if no root reaches it. Grown trees keep a fan of roots, drawn fainter with
@@ -124,16 +166,27 @@ direction of its pulls (plus a slight downward pull and a little noise), 20 step
 radius is the sum of its children's cubes, so line width grows as the cube root of the number of tips it feeds), and sap dots
 climb from the tips back up towards the trees.
 
-**Right: pendulums tied by a spring, played from stored data (23 November 2026).** Barton's pendulums were here until 23 November
-2026; the user found them fast, thin and creepy, and they never visibly gave their motion to each other. Now each beam (one every
-250 px) carries as many pairs as the margin holds (a pair takes its pivot spacing, its swing and 30 px); in each pair two
-pendulums, 1.5 m long and drawn at 80 px per metre, are joined by a weak spring drawn as a zigzag, and the swing drains from one
-bob into the other and back every 27 s. The motion is computed once on Kaggle by `tools/sims/coupled.py` (two pendulums of length
-L and mass m, a spring of stiffness k at the distance a below the pivots, pivots d apart; the full nonlinear equations, DOP853; k
-solved by shooting so that one stored loop closes exactly) and stored as `data/sims/coupled/<date>/coupled.bin`. The page draws
-the stored frame nearest in time, at real time, each pair from its own random moment of the loop; it computes nothing. How the
-data gets here: [../kaggle-sims.md](../kaggle-sims.md). `tools/sims/barton.py` and its data stay in the repository until the new
-pendulums are verified live; no page plays them.
+**Right: paper globes in a wind, played from stored data (25 November 2026).** Barton's pendulums hung here until
+23 November, pairs tied by a spring until 25 November; the user found the first fast and creepy and the second out of place, and
+asked for pendulums swinging in a velocity field of wind, with the field's lines (not arrows) drawn, the problem the site had
+solved before (the flows and the drag law of the double inverted pendulum page, section 13). Now a wind blows down the margin
+and carries a Kármán vortex street; its lines are drawn as thin curves that slide down the page; and from each beam (one every
+250 px) hang three closed globes of thin paper on threads (one, in a margin too narrow for three), which every passing vortex
+swings aside while gravity brings them back.
+- *The model*: `tools/sims/windpend.py`, run once on Kaggle; its docstring derives the equation of motion from the setup. Wind
+  U = 1.6 m/s; vortices λ = 6 m apart in two rows h = 0.281 λ apart, sliding at c = 0.8 U, so the wind repeats every
+  T = λ / c = 4.69 s; threads 1.6 m; globes of radius 0.15 m, 4 g of paper around 16.7 g of air; drag ½ ρ C_D π R² |w| w plus
+  Stokes; the push of accelerating air ρV Du/Dt with added mass ½; the thread's own small drag by the site's (33) and (34).
+- *Why one stored swing serves every beam*: the wind only slides, u(η, ξ, t) = u(η, ξ − c t). A beam ξ lower sees the same wind
+  ξ / c later, so it plays the same stored frames with that delay. `windDraw()` does this for the beams and shifts the stored
+  lines by c t; a vortex is seen reaching each beam as that beam's globes swing.
+- *The lines* are streamlines, stored by the model as curves η(ξ − c t) at equal steps of the stream function: close together
+  where the air is fast. Beyond the stored strip (8 m) the wind is plain and its lines are drawn straight at the same spacing.
+- *Stored*: `data/sims/windpend/<date>/windpend.bin`: one settled period, 141 frames at 30 a second, three angles; then 41 lines
+  of 96 points. Checks in its header: settled after 14 to 17 periods; energy balance to 1e-11; the field keeps the air
+  (div u / |∇u| = 5e-11); largest swing 0.35 rad (20°); the globes never closer than 0.78 m.
+- 1 m is drawn as 60 px. The page computes nothing. How the data gets here: [../kaggle-sims.md](../kaggle-sims.md).
+  `tools/sims/coupled.py`, `tools/sims/barton.py` and their data stay in the repository; no page plays them.
 
 ## How it runs
 
@@ -154,28 +207,33 @@ and they have no data panel.
 
 ## The scenes page (`scenes.html`, 23 November 2026)
 
-One page shows every scene on its own (`notes/sims/PLAN.md`, step 5, asked for by the user): S1 forest, S2 roots, S3 two pendulums
-and a spring, S4 spinners, S5 shores, S6 iron powder, S7 harmonica, S8 chip, S9 mixing, S10 dust in a sunbeam, S11 the swerve,
-S12 seeds. Each sits in an outlined box (`.scn__stage`, 340 px; 460 px for the forest and the pendulums), with where it lives on
-the site, what you see, what drives it, and its numbers to change.
+One page shows every scene on its own (`notes/sims/PLAN.md`, step 5, asked for by the user): S1 forest, S2 roots, S3 paper globes
+in a wind, S4 spinners, S5 shores, S6 iron powder, S7 harmonica, S8 chip, S9 mixing, S10 dust in a sunbeam, S11 the swerve,
+S12 seeds, S13 a cloud atlas. Each sits in an outlined box (`.scn__stage`, 340 px; 460 px for the forest, the wind and the atlas),
+with where it lives on the site, what you see, what drives it, and its numbers to change.
 
 **The numbers to change.** Every scene declares its knobs in a table `K`, each row `[property, meaning, unit, min, max, step,
 restart]`; the numbers themselves are properties of the scene (for example `S.spin.FIELD`, the pull of the rotating field). The
 page's own script builds one slider per row; a slider writes the property of the running scene, and a row marked restart (numbers
 that set up the picture, such as how many grains) starts the scene again through `host.__bgRestart()`. On the other pages the
-same properties keep their default values, so nothing there changed.
+same properties keep their default values.
 
-**Two scenes exist only here.** `roots` is the left rail's root growth in a box (same rules: space colonisation, Murray's law, sap).
-`pairs` is the right rail's pendulums, one large pair, playing the same stored file, with each pendulum's energy over the loop drawn
-underneath, E_i = m g L (1 − cos θ_i) + ½ m L² θ_i'², θ_i' from the neighbouring stored frames: a reading of the stored motion, not
-a second simulation. It has no knob: the stored run is the motion of those pendulums, so it plays at real time only. Under its text
-the page prints the run's parameters and checks from the file's header.
+**Three scenes exist only here.**
+- `roots` is the left rail's root growth in a box (same rules: space colonisation, Murray's law, sap).
+- `wind` is the right rail's globes in the wind in a box: two beams, so the delay between them shows, at a larger scale. It has no
+  knob: the stored run is the motion of those globes in that wind, so it plays at real time only. Under its text the page prints
+  the run's parameters and checks from the file's header.
+- `atlas` is the cloud atlas: the ten kinds side by side, each at its own height and labelled, with the same builders and the same
+  eye as the forest's sky. High clouds stand 13 to 17 km away, the middle ones 10 to 11 km, the low ones 5 to 7 km, the thunder
+  cloud 20 km, standing through all three levels. Two things are not to scale and the page says so: the four layer kinds cover the
+  whole sky in nature and only a piece of each is shown; and the ring around the sun, 22° in nature, is drawn smaller to fit.
+  Knobs: the strength of the drawing, and how far the clouds drift to and fro.
 
 The page is English only for now (`ENGLISH_ONLY` in `tools/i18n/build.py`).
 
 ## The note on the home page
 
 Above the footer, a closed `details.bgs-note` ("What moves behind this page") gives one plain sentence per scene of the home page
-(forest, roots, pendulums, spinners, shores) and links to the scenes page; German and Arabic through `tools/i18n/build.py`.
+(forest and its sky, roots, paper globes in the wind, spinners, shores) and links to the scenes page; German and Arabic through `tools/i18n/build.py`.
 - Checked in headless Chromium at 1920, 1600, 1100 and 390 px, home (English, German, Arabic), scenes, simulations, Portfolios and
   Lucretius pages: no page errors, no sideways scroll; with reduced motion nothing is mounted (`notes/home/scenes/check.cjs`).

@@ -53,7 +53,8 @@ By itself, when a simulation's model `tools/sims/<sim>.py` is added or changed o
 
 | Simulation | Model | What is stored | Page that plays it |
 |---|---|---|---|
-| Home page, right margin, and `scenes.html` S3: two pendulums tied by a spring (`coupled`, since 23 November 2026) | [tools/sims/coupled.py](../tools/sims/coupled.py) | `coupled.bin`, 4.2 kB: one exactly closing loop of 27.09 s, θ₁ and θ₂ at 30 frames a second; header with parameters, k solved by shooting, checks (energy kept to 4e-13, loop residual 5e-13 rad, swing crossed at 13.54 s against 13.51 s from 2π/(ω₂ − ω₁) ÷ 2, smallest gap between the bobs 0.42 m) | `bg-scenes.js`, scenes `rails` and `pairs` |
+| Home page, right margin, and `scenes.html` S3: paper globes on threads in a wind with a Kármán vortex street (`windpend`, since 25 November 2026) | [tools/sims/windpend.py](../tools/sims/windpend.py) | `windpend.bin`, 10.3 kB: one settled period of 4.69 s, three angles at 30 frames a second, then 41 streamlines of 96 points; header with parameters and checks (settled after 14 to 17 periods, energy balance 1e-11, div u / grad u 5e-11, largest swing 0.35 rad, smallest gap between globes 0.78 m) | `bg-scenes.js`, `windDraw()`, scenes `rails` and `wind` |
+| No page since 25 November 2026 (was the home page's right margin from 23 November): two pendulums tied by a spring (`coupled`) | [tools/sims/coupled.py](../tools/sims/coupled.py) | `coupled.bin`, 4.2 kB: one exactly closing loop of 27.09 s, θ₁ and θ₂ at 30 frames a second; header with parameters, k solved by shooting, checks (energy kept to 4e-13, loop residual 5e-13 rad, swing crossed at 13.54 s against 13.51 s from 2π/(ω₂ − ω₁) ÷ 2, smallest gap between the bobs 0.42 m) | `bg-scenes.js`, scenes `rails` and `pairs` |
 | Fig. 1, Wave interference (`wave_interference2`; generation 1 removed after 2 passed the live check) | [tools/sims/wave_interference2.py](../tools/sims/wave_interference2.py) | 290 files, 36.5 MB: the distance table of a fixed 250 × 250 grid, a ring's angle at 118 wave numbers (the page blends two neighbours exactly) and its height at γ = 0 … 0.6 in steps of 0.025, a cosine table; every table in a bottom and a top half ([fig01-wave-sources.md](simulations/fig01-wave-sources.md)) | `simulations/Circular Wave Interference Visualization.html`, its own loader (`stored()`, `load()`) |
 
 ## Pipeline B in the page
@@ -63,14 +64,16 @@ By itself, when a simulation's model `tools/sims/<sim>.py` is added or changed o
 the scene. A file is 4 bytes of label, a uint32 header length, a JSON header (parameters, checks, column names and units), then
 int16 frames. Until the data has arrived, or if the check fails, the scene draws nothing in that place.
 
-Coupled pendulums (`coupled.bin`, columns θ₁, θ₂, frames evenly spaced over one exact loop, the spacing `dt` in the header): every
-pair on the page starts at its own random moment of the loop; each frame the page draws the stored frame nearest in time, at real
-time. It integrates nothing. Barton's pendulums (`barton.bin`) played here until 23 November 2026; the model and its data stay
-until the coupled pendulums are verified live, and `registry.json` lists no page for them any more.
+Paper globes in a wind (`windpend.bin`; after the header all numbers are int16: first the frames, columns θ₁ to θ₃ in 1e-4 rad,
+evenly spaced over one settled period, the spacing `dt` in the header; then, from `lines.offset_int16`, the streamlines, row l
+holding η of line l in mm at ξ − c t = j λ / points). A beam ξ below the top plays the stored frame of the time t − ξ / c, and
+the lines are drawn shifted by c t: the wind only slides, so this is exact (the model's docstring, equation (4)). The page
+integrates nothing. The spring-coupled pendulums (`coupled.bin`) played here from 23 to 25 November 2026 and Barton's pendulums
+(`barton.bin`) before them; both models and their data stay, and `registry.json` lists no page for them.
 
-The model was first run before publishing, from the branch `scenes-fix`, as versions 7 and 8 of the same notebook (Kaggle connector,
-CPU), to film the result for the user; those outputs were never committed. The data the site plays is the one the workflow makes
-when the model lands on `main`.
+Both pendulum models were first run before publishing, from their branches, as versions of the same notebook (Kaggle connector,
+CPU; `coupled` as versions 7 to 9, `windpend` as versions 11 and 12), to film the result; those outputs were never committed. The
+data the site plays is the one the workflow makes when a model lands on `main`.
 
 ## Keys
 

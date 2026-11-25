@@ -73,6 +73,169 @@
   function area() { return W * H / 272000; }                       // 1 = the 680 x 400 sketch the scenes were tuned on
   function margin() { return (W - 1240) / 2; }                     // width of one side margin beside the text column
 
+  function sstep(u) { u = cl(u, 0, 1); return u * u * (3 - 2 * u); }
+
+  /* ---- the sky: the ten kinds of cloud (the genera of the WMO International Cloud Atlas), each built in 3D and seen from the ground ----
+     (25 November 2026: the user asked for every kind of cloud by shape and form, "the very large, the very long, the thin".)
+     Clouds are sorted by their form and by the level they live at (temperate latitudes: low, from the ground to 2 km; middle, 2 to
+     7 km; high, 5 to 13 km). The ten genera, with the height h (m) each is built at here:
+       Ci  Cirrus         high    thin white fibres and hooks ("mares' tails"): ice crystals falling out of a small head and trailing
+       Cc  Cirrocumulus   high    a thin sheet of very small grains in ripples ("mackerel sky")
+       Cs  Cirrostratus   high    a transparent veil over the whole sky; the sun shines through with a ring (halo) of 22° around it
+       Ac  Altocumulus    middle  a field of small rounded masses in rows ("sheep"), shaded underneath
+       As  Altostratus    middle  a grey sheet with streaks; the sun shows as through ground glass
+       Ns  Nimbostratus   low and thick   a dark, shapeless layer that rains or snows for hours
+       Sc  Stratocumulus  low     long rolls of flattened lumps in rows that run for kilometres, with gaps between
+       St  Stratus        low     a flat grey layer with a ragged edge, like fog that does not touch the ground
+       Cu  Cumulus        low     a single heap: flat base, domed top of round puffs
+       Cb  Cumulonimbus   low base, top to 12 km   the thunder cloud: a tower through all levels, spreading into a flat anvil
+     The eye stands on the ground; the horizon is the line y = GY. A point X m to the right, Y m up and Z m ahead is seen at
+         x = XC + F X / Z,   y = GY − F Y / Z                    (a pinhole camera, proj(); F in px sets how wide it looks:
+                                                                 with F = 1.5 GY the top of the picture is 34° above the horizon)
+     Every cloud is first built in its own frame, in metres (make()): round puffs for the heaps, flat patches lying in the plane of
+     its height for the layers, curved threads for the fibres. Each frame its parts are carried into the eye's frame and
+     projected (paint()). A flat patch of radii (rx, rz) at height Y and distance Z is seen as an ellipse F rx / Z wide and
+     F rz Y / Z² high: the further away, the more it is seen edge on. So a field of altocumulus crowds and flattens towards the
+     horizon, a high cloud must be far away to be seen low, and one wind moves near clouds faster across the picture than far ones.
+     Everything is drawn into the sky's own canvas (cv), which the scene then lays on its picture. ---- */
+  var GENUS = {
+    Ci: { n: 'Cirrus', h: 9000, r: '5–13 km', lv: 2 }, Cc: { n: 'Cirrocumulus', h: 8500, r: '5–13 km', lv: 2 }, Cs: { n: 'Cirrostratus', h: 9500, r: '5–13 km', lv: 2 },
+    Ac: { n: 'Altocumulus', h: 4000, r: '2–7 km', lv: 1 }, As: { n: 'Altostratus', h: 4500, r: '2–7 km', lv: 1 },
+    Ns: { n: 'Nimbostratus', h: 900, r: 'base below 2 km', lv: 0 }, Sc: { n: 'Stratocumulus', h: 1500, r: 'below 2 km', lv: 0 }, St: { n: 'Stratus', h: 300, r: 'below 2 km', lv: 0 },
+    Cu: { n: 'Cumulus', h: 1000, r: 'base below 2 km', lv: 0 }, Cb: { n: 'Cumulonimbus', h: 1000, r: 'top to 12 km', lv: 0 } };
+  /* the puffs of a heap, in units of its size s: [across, up (the base is 0), in depth, radius]; far puffs first */
+  function cuPuffs() { var P = [], n = 16 + (R() * 10 | 0); for (var i = 0; i < n; i++) { var u = (R() + R() + R() - 1.5) * .8, w = (R() + R() + R() - 1.5) * .5, core = Math.exp(-(u * u + w * w) / .35), rr = .15 + .24 * core * v(.6, 1.1); P.push([u, rr * .5 + .62 * core * R(), w, rr]); }
+    P.sort(function (p, q) { return q[2] - p[2]; });
+    return { P: P, ax: Math.max.apply(null, P.map(function (q) { return Math.abs(q[0]) + q[3] * .9; })), az: Math.max.apply(null, P.map(function (q) { return Math.abs(q[2]) + q[3] * .9; })) }; }
+  /* a thunder cloud's tower: fifteen storeys of six puffs, widening upward (its top is 6.7 sizes above its base) */
+  function cbPuffs() { var P = []; for (var j = 0; j < 15; j++) for (var q = 0; q < 6; q++) { var an = R() * 2 * PI, rad = (.55 + .05 * j) * Math.sqrt(R()); P.push([rad * Math.cos(an), .3 + j * .42 + v(-.12, .12), rad * Math.sin(an) * .7, .36 + .014 * j + v(-.07, .07)]); }
+    P.sort(function (p, q) { return q[2] - p[2]; }); return { P: P, ax: 1.45, az: 1.15 }; }
+  function mkSky(GY, XC, F) {
+    /* two canvases: the soft one (layers, lumps, fibres) at half the picture's resolution, which costs a quarter and suits their
+       softness; the crisp one, at full resolution, for the heaps drawn in line. RC: the strips of the picture that hold sky. */
+    var Q = .5, cvs = document.createElement('canvas'), g = cvs.getContext('2d'), cv2 = document.createElement('canvas'), g2 = cv2.getContext('2d'), SP = {}, RC = [[0, W]];
+    cvs.width = Math.max(2, Math.ceil(W * Q)); cvs.height = Math.max(2, Math.ceil(GY * Q)); cv2.width = Math.max(2, Math.ceil(W)); cv2.height = Math.max(2, Math.ceil(GY));
+    function proj(X, Y, Z) { var f = F / Z; return [XC + X * f, GY - Y * f, f]; }
+    /* a soft round stamp of one tone (paper 0 to wine 1), made once per tone and stretched into every ellipse drawn */
+    function sprite(t) { var k = Math.round(t * 20); if (!SP[k]) { var c = document.createElement('canvas'), q = c.getContext('2d'), rg; c.width = c.height = 64; rg = q.createRadialGradient(32, 32, 0, 32, 32, 32); rg.addColorStop(0, mixc(k / 20, 1)); rg.addColorStop(.5, mixc(k / 20, .8)); rg.addColorStop(1, mixc(k / 20, 0)); q.fillStyle = rg; q.fillRect(0, 0, 64, 64); SP[k] = c; } return SP[k]; }
+    function ell(px, py, sx, sy, t, a) { if (sx < .3 || a < .004 || px + sx < 0 || px - sx > W || py + sy < 0 || py - sy > GY) return; g.globalAlpha = Math.min(1, a); g.drawImage(sprite(t), px - sx, py - sy, 2 * sx, 2 * sy); }
+    /* a flat patch lying in the horizontal plane at height Y, seen from below */
+    function flat(X, Y, Z, rx, rz, t, a) { if (Z < 30) return; var p = proj(X, Y, Z); ell(p[0], p[1], rx * p[2], Math.max(.7, rz * p[2] * Y / Z), t, a); }
+    /* a rounded mass with thickness th: its pale flank and top above, its darker flat belly below */
+    function lump(X, Y, Z, rx, rz, th, a) { if (Z < 30) return; var p = proj(X, Y, Z), sx = rx * p[2], sy = Math.max(.7, rz * p[2] * Y / Z), up = th * p[2]; ell(p[0], p[1] - up * .6, sx * 1.05, sy + up * .6, .2, a); ell(p[0], p[1] + sy * .15, sx * .85, sy * .8, .5, a * .75); }
+    /* build a cloud of genus k in its own frame (metres); with o given, rebuild that object (a new cloud drifting in) */
+    function make(k, o) {
+      o = o || {}; o.k = k; o.E = null; o.B = null; o.Rn = null; o.sk = -1; var i, j, E = [], B = [];
+      if (k === 'Cu') { var cu = cuPuffs(); o.P = cu.P; o.ax = cu.ax; o.az = cu.az; o.hb = GENUS.Cu.h; o.s = 500; o.ext = 600; }
+      else if (k === 'Cb') { var cb = cbPuffs(); o.P = cb.P; o.ax = cb.ax; o.az = cb.az; o.hb = GENUS.Cb.h; o.s = 1400; o.ext = 5500; o.vg = 1; o.An = []; o.Rn = [];
+        for (i = 0; i < 6; i++) o.An.push([v(-1, 2.6), v(-.7, .7), v(1.5, 2.3), v(1.1, 1.5)]);           /* the anvil: flat patches at the top, drawn out downwind */
+        for (i = 0; i < 12; i++) o.Rn.push([v(-1, 1), v(-.6, .6)]); }
+      else if (k === 'Sc') { var phi = v(-.3, .3), cs = Math.cos(phi), sn = Math.sin(phi);                  /* four long rolls, each a chain of flattened lumps */
+        for (i = 0; i < 4; i++) { var off = (i - 1.5) * 950 + v(-80, 80); for (j = -13; j <= 13; j++) { if (R() < .1) continue; var al = j * 340 + v(-60, 60); E.push([al * cs - off * sn, al * sn + off * cs, v(230, 300), v(170, 230), v(140, 220)]); } } o.ext = 4800; }
+      else if (k === 'Ac') { for (i = -5; i <= 5; i++) for (j = -4; j <= 4; j++) { if (R() < .22) continue; E.push([i * 300 + v(-60, 60) + (j & 1) * 150, j * 300 + v(-60, 60) + 90 * Math.sin(i * .9), v(95, 140), v(95, 140), v(60, 110)]); } o.ext = 1900; }
+      else if (k === 'Cc') { for (i = -11; i <= 11; i++) for (j = -7; j <= 7; j++) { if (R() < .12) continue; E.push([i * 110 + 30 * Math.sin(j * 1.3), j * 110 + 35 * Math.sin(i * .8), v(30, 44)]); } o.ext = 1400; }
+      else if (k === 'Ci') { for (i = 0, j = 5 + (R() * 4 | 0); i < j; i++) E.push([v(-1800, 1800), v(-1200, 1200), v(2500, 5200), v(400, 900), v(-500, 500), v(350, 700)]); o.ext = 5200; }   /* threads: [x, z of the head, length, how far it falls, sideways drift, size of the hook] */
+      else if (k === 'St') { for (i = 0; i < 5; i++) B.push([v(-700, 700), v(-350, 350), v(500, 800), v(350, 500), .4, .42]); for (i = 0; i < 9; i++) B.push([v(-1500, 1500), v(-500, 500), v(70, 140), v(70, 140), .34, .45]); o.ext = 1600; }
+      else if (k === 'Ns') { for (i = 0; i < 6; i++) B.push([v(-2200, 2200), v(-1200, 1200), v(1500, 2400), v(1100, 1600), .58, .18]); o.Rn = []; for (i = 0; i < 16; i++) o.Rn.push([v(-2000, 2000), v(-900, 900)]); o.ext = 4500; }
+      else if (k === 'As') { for (i = 0; i < 6; i++) B.push([v(-4000, 4000), v(-2500, 2500), v(3000, 4500), v(2200, 3000), .38, .3]); for (i = 0; i < 12; i++) B.push([v(-5000, 5000), v(-3000, 3000), v(2500, 4500), v(90, 160), .5, .22]); o.ext = 8000; }
+      else if (k === 'Cs') { for (i = 0; i < 5; i++) B.push([v(-4000, 4000), v(-2500, 2500), v(3000, 4500), v(2200, 3000), .24, .36]); for (i = 0; i < 14; i++) B.push([v(-5000, 5000), v(-3000, 3000), v(2000, 4000), v(60, 110), .4, .2]); o.ext = 8000; }
+      if (E.length) { E.sort(function (p, q) { return q[1] - p[1]; }); o.E = E; } if (B.length) o.B = B;
+      return o;
+    }
+    /* a heap of puffs (cumulus, the tower of a cumulonimbus), drawn as the site draws its trees, with a line around it: one
+       outline around the whole heap, its puffs soft pale lumps inside (the cauliflower look), shaded towards the base; nothing
+       shows below the far edge of the flat base; then the underside, seen from below, as a darker floor. Each heap is drawn on
+       its own small canvas, so the whole heap fades as one. */
+    function puffs(o, a) {
+      if (a < .01) return; var s = o.s, vg = o.vg === undefined ? 1 : Math.min(1, o.vg / .75), key = s * (1 + vg), p0 = proj(o.X, o.hb, o.Z);
+      /* the heap's picture is kept and only drawn again when its size has changed by 2 % (it grows and shrinks with its water) */
+      if (!(Math.abs(key - o.sk) <= .02 * key) || Math.abs(o.sZ - o.Z) > 1) {
+        var P = o.P, pts = [], i, bx0 = 1e9, bx1 = -1e9, by0 = 1e9, by1 = -1e9; o.sk = key; o.sZ = o.Z; o.sw = 0;
+        for (i = 0; i < P.length; i++) { var q = P[i], p = proj(o.X + q[0] * s, o.hb + q[1] * vg * s, o.Z + q[2] * s), rad = q[3] * s * p[2]; pts.push([p[0], p[1], rad]);
+          bx0 = Math.min(bx0, p[0] - rad); bx1 = Math.max(bx1, p[0] + rad); by0 = Math.min(by0, p[1] - rad); by1 = Math.max(by1, p[1] + rad); }
+        var ring = []; for (i = 0; i < 24; i++) { var an = i / 24 * 2 * PI, pb = proj(o.X + Math.cos(an) * o.ax * s, o.hb, o.Z + Math.sin(an) * o.az * s); ring.push(pb); by1 = Math.max(by1, pb[1]); bx0 = Math.min(bx0, pb[0]); bx1 = Math.max(bx1, pb[0]); }
+        var ox = Math.floor(bx0) - 2, oy = Math.floor(by0) - 2, ww = Math.ceil(bx1 - ox) + 4, hh = Math.ceil(by1 - oy) + 4; if (ww < 2 || hh < 2 || ww > 2400 || hh > 2400) return;
+        var scr = o.spr || (o.spr = document.createElement('canvas')); scr.width = ww; scr.height = hh;
+        var c = scr.getContext('2d'); c.translate(-ox, -oy);
+        var low = ring.slice(0, 13); c.beginPath(); c.moveTo(bx0 - 4, by0 - 4); c.lineTo(bx1 + 4, by0 - 4); c.lineTo(bx1 + 4, low[0][1]); low.forEach(function (p) { c.lineTo(p[0], p[1]); }); c.lineTo(bx0 - 4, low[12][1]); c.closePath(); c.clip();
+        /* (a) every puff's circle stroked, then (b) all puffs filled flat: the fill hides every stroke inside the heap, so only the
+           outline of the whole heap is left; (c) each puff a soft pale lump, lit from the upper left; (d) the heap shaded towards
+           its base; (e) below, the floor of the base */
+        c.lineWidth = 2; c.strokeStyle = mixc(.8, .6); c.beginPath(); pts.forEach(function (p) { c.moveTo(p[0] + p[2], p[1]); c.arc(p[0], p[1], p[2], 0, 7); }); c.stroke();
+        c.fillStyle = mixc(.17, 1); c.beginPath(); pts.forEach(function (p) { c.moveTo(p[0] + p[2], p[1]); c.arc(p[0], p[1], p[2], 0, 7); }); c.fill();
+        pts.forEach(function (p) { var rg = c.createRadialGradient(p[0] - p[2] * .22, p[1] - p[2] * .38, p[2] * .05, p[0] - p[2] * .1, p[1] - p[2] * .15, p[2] * .95); rg.addColorStop(0, mixc(.02, .95)); rg.addColorStop(.6, mixc(.08, .55)); rg.addColorStop(1, mixc(.2, 0));
+          c.fillStyle = rg; c.beginPath(); c.arc(p[0], p[1], p[2], 0, 7); c.fill(); });
+        c.globalCompositeOperation = 'source-atop'; var sh = c.createLinearGradient(0, by0, 0, low[6][1]); sh.addColorStop(0, mixc(.5, 0)); sh.addColorStop(.55, mixc(.5, .06)); sh.addColorStop(1, mixc(.55, .5)); c.fillStyle = sh; c.fillRect(bx0 - 4, by0 - 4, bx1 - bx0 + 8, by1 - by0 + 8); c.globalCompositeOperation = 'source-over';
+        var cxr = 0, cyr = 0, rx0 = 1e9, rx1 = -1e9, ry0 = 1e9, ry1 = -1e9; ring.forEach(function (p) { cxr += p[0]; cyr += p[1]; rx0 = Math.min(rx0, p[0]); rx1 = Math.max(rx1, p[0]); ry0 = Math.min(ry0, p[1]); ry1 = Math.max(ry1, p[1]); }); cxr /= 24; cyr /= 24;
+        var rx = Math.max(1, (rx1 - rx0) / 2), ry = Math.max(2, (ry1 - ry0) / 2);
+        c.translate(cxr, cyr); c.scale(1, ry / rx); var rb = c.createRadialGradient(0, 0, 0, 0, 0, rx * .85); rb.addColorStop(0, mixc(.55, .9)); rb.addColorStop(.6, mixc(.48, .7)); rb.addColorStop(1, mixc(.4, 0)); c.fillStyle = rb; c.beginPath(); c.arc(0, 0, rx * .85, 0, 7); c.fill();
+        o.dx = ox - p0[0]; o.dy = oy - p0[1]; o.sw = ww; o.sh = hh;
+      }
+      if (!o.sw || p0[0] + o.dx > W || p0[0] + o.dx + o.sw < 0) return;
+      g2.globalAlpha = Math.min(1, a); g2.drawImage(o.spr, p0[0] + o.dx, p0[1] + o.dy);
+    }
+    /* rain or snow falling out of a base at height hb: dashed threads that slide down */
+    function shafts(o, hb, u, a, T) { g.globalAlpha = Math.min(1, a); g.strokeStyle = mixc(.75, .55); g.lineWidth = 1; g.setLineDash([5, 7]); g.lineDashOffset = -T * 60; g.beginPath();
+      for (var i = 0; i < o.Rn.length; i++) { var e = o.Rn[i], p1 = proj(o.X + e[0] * u, hb, o.Z + e[1] * u), p2 = proj(o.X + e[0] * u + .12 * hb, 0, o.Z + e[1] * u); g.moveTo(p1[0], p1[1]); g.lineTo(p2[0], p2[1]); } g.stroke(); g.setLineDash([]); }
+    /* the sun behind a high veil (a ring of 22° around it, the halo of ice crystals: its radius in the picture is F tan 22°) or behind
+       a grey middle sheet (a bright blur, as through ground glass) */
+    function sun(sx, sy, aAs, aCs, rad) {
+      if (aCs > .01) { g.globalAlpha = Math.min(1, aCs); g.lineWidth = 2.5; g.strokeStyle = mixc(.5, .4); g.beginPath(); g.arc(sx, sy, rad || .404 * F, 0, 7); g.stroke(); g.lineWidth = 1; g.strokeStyle = mixc(.65, .75); g.beginPath(); g.arc(sx, sy, 6, 0, 7); g.stroke(); }
+      if (aAs > .01) { ell(sx, sy, 36, 36, 0, .85 * aAs); ell(sx, sy, 10, 10, 0, aAs); }
+    }
+    function paint(o, a, T) {
+      if (a < .01) return; var k = o.k, h = GENUS[k].h, z = o.sz || 1, E = o.E, i, e, p;
+      if (k === 'Cu') { puffs(o, a); return; }
+      if (k === 'Cb') { if (o.rain) shafts(o, o.hb, o.s, a * o.rain, T); puffs(o, a); var ag = cl((o.vg - .7) / .3, 0, 1), ht = o.hb + 6.5 * o.s;
+        if (ag > 0) { for (i = 0; i < o.An.length; i++) { e = o.An[i]; flat(o.X + e[0] * o.s, ht + .2 * o.s, o.Z + e[1] * o.s, e[2] * o.s * ag * 1.1, e[3] * o.s * ag * 1.1, .2, .9 * a * ag); } for (i = 0; i < o.An.length; i++) { e = o.An[i]; flat(o.X + e[0] * o.s, ht, o.Z + e[1] * o.s, e[2] * o.s * ag * .85, e[3] * o.s * ag * .85, .45, .7 * a * ag); } }
+        return; }
+      if (o.Rn) shafts(o, h, z, a, T);
+      if (o.B) for (i = 0; i < o.B.length; i++) { e = o.B[i]; flat(o.X + e[0] * z, h, o.Z + e[1] * z, e[2] * z, e[3] * z, e[4], e[5] * a); }
+      if (k === 'Sc' || k === 'Ac') for (i = 0; i < E.length; i++) { e = E[i]; lump(o.X + e[0] * z, h, o.Z + e[1] * z, e[2] * z, e[3] * z, e[4] * z, a); }
+      else if (k === 'Cc') { g.globalAlpha = Math.min(1, a * .8); g.fillStyle = mixc(.38, 1); g.beginPath(); for (i = 0; i < E.length; i++) { e = E[i]; var zz = o.Z + e[1] * z; if (zz < 30) continue; p = proj(o.X + e[0] * z, h, zz); var r = Math.max(.8, e[2] * z * p[2]); if (p[0] < -4 || p[0] > W + 4 || p[1] < -4 || p[1] > GY + 4) continue; g.moveTo(p[0] + r, p[1]); g.ellipse(p[0], p[1], r, Math.max(.6, r * Math.min(1, h / zz * 1.3)), 0, 0, 7); } g.fill(); }
+      else if (k === 'Ci') { g.lineCap = 'round'; for (i = 0; i < E.length; i++) { e = E[i]; var pp = null; for (var q = 0; q <= 10; q++) { var s = q / 10, hk = e[5] * Math.pow(Math.max(0, 1 - s / .2), 2), zc = o.Z + (e[1] + e[4] * s * s) * z; if (zc < 30) { pp = null; continue; }
+            p = proj(o.X + (e[0] - e[2] * s + hk * .7) * z, h + (hk - e[3] * Math.pow(s, .8)) * z, zc);
+            if (pp) { g.globalAlpha = Math.min(1, a * (.9 * (1 - s) + .1)); g.strokeStyle = mixc(.85, 1); g.lineWidth = 3.2 * (1 - s) + .9; g.beginPath(); g.moveTo(pp[0], pp[1]); g.lineTo(p[0], p[1]); g.stroke(); } pp = p; } } g.lineCap = 'butt'; }
+      if (o.sun) { p = proj(o.X, h, o.Z); sun(p[0], p[1], k === 'As' ? a : 0, k === 'Cs' ? a : 0, o.halo); }
+    }
+    return { proj: proj, make: make, paint: paint, puffs: puffs, sun: sun,
+      /* begin(strips): clear, and keep all drawing inside the strips [x, width] of the picture that hold sky */
+      begin: function (rc) { RC = rc || [[0, W]]; [[g, Q, cvs], [g2, 1, cv2]].forEach(function (a) { var c = a[0]; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, a[2].width, a[2].height);
+          c.save(); c.setTransform(a[1], 0, 0, a[1], 0, 0); c.beginPath(); RC.forEach(function (r) { c.rect(r[0], 0, r[1], GY); }); c.clip(); }); },
+      wash: function (t, a) { if (a < .004) return; g.globalAlpha = 1; g.fillStyle = mixc(t, a); RC.forEach(function (r) { g.fillRect(r[0], 0, r[1], GY); }); },   /* a layer that covers the whole sky */
+      /* end(mask): keep of the sky only what the mask lets through */
+      end: function (mask) { [g, g2].forEach(function (c) { c.globalAlpha = 1; if (mask) { c.globalCompositeOperation = 'destination-in'; c.drawImage(mask, 0, 0, mask.width, mask.height, 0, 0, W, GY); c.globalCompositeOperation = 'source-over'; } c.restore(); }); },
+      /* lay the sky on the scene's picture x: under what is already drawn there (under = true), or over it */
+      blit: function (x, a, under) { x.globalAlpha = a; if (under) x.globalCompositeOperation = 'destination-over';
+        RC.forEach(function (r) { var soft = function () { x.drawImage(cvs, r[0] * Q, 0, r[1] * Q, Math.floor(GY * Q), r[0], 0, r[1], Math.floor(GY * Q) / Q); }, crisp = function () { x.drawImage(cv2, r[0], 0, r[1], Math.floor(GY), r[0], 0, r[1], Math.floor(GY)); };
+          if (under) { crisp(); soft(); } else { soft(); crisp(); } });
+        x.globalAlpha = 1; x.globalCompositeOperation = 'source-over'; } };
+  }
+
+  /* ---- the wind and its pendulums, drawn from the stored run (tools/sims/windpend.py): used by the right rail of the home page and by
+     the scene `wind`. D: the stored data; t: time (s); cx: the strip's centre line (px); top: the y of ξ = 0; wid: the strip's
+     width (px); sc: px per metre; beams: the y of each beam below top (px); fd(y): how strongly to draw at that depth.
+     Lines: stored row l holds η (mm) of streamline l at ξ − c t = j λ / n. A point y px below top is at ξ = y / sc, so it shows
+     the stored point j = ((ξ − c t) mod λ) n / λ. Pendulums: a beam at ξ_b plays the stored frame of the time t − ξ_b / c. ---- */
+  function windDraw(D, t, cx, top, wid, sc, beams, fd, y0, y1) {
+    var hd = D.hdr, pr = hd.params, dv = hd.derived, F = D.frames, K = hd.columns.length, nf = hd.frames, LI = hd.lines, off = LI.offset_int16, ns = LI.points, lam = pr.lam, c = dv.c, l, y;
+    x.lineWidth = .8; x.strokeStyle = col(.2);
+    for (l = 0; l < LI.n; l++) { var b0 = off + l * ns; if (Math.abs(F[b0] * .001 * sc) > wid / 2 + 40) continue; x.beginPath();
+      for (y = y0 - 6; y <= y1 + 6; y += 6) { var u = ((((y - top) / sc - c * t) / lam) % 1 + 1) % 1 * ns, j = u | 0, e = u - j, px = cx + (F[b0 + j] * (1 - e) + F[b0 + (j + 1) % ns] * e) * .001 * sc; if (y === y0 - 6) x.moveTo(px, y); else x.lineTo(px, y); }
+      x.stroke(); }
+    /* beyond the stored strip the wind is plain: its lines are straight, at the same spacing (equal steps of the stream function) */
+    var dl = pr.WS / (LI.n - 1) * sc; x.beginPath(); for (var px2 = pr.WS / 2 * sc + dl; px2 < wid / 2 + 2; px2 += dl) { x.moveTo(cx + px2, y0); x.lineTo(cx + px2, y1); x.moveTo(cx - px2, y0); x.lineTo(cx - px2, y1); } x.stroke();
+    var Lp = pr.L * sc, Rg = pr.R * sc, all = wid >= 2 * pr.a * sc + 2 * (Rg + Lp * .3) + 8;
+    beams.forEach(function (by0) { var by = top + by0; if (by < y0 - Lp - Rg - 10 || by > y1 + 10) return; var f = fd(by0), k = (((Math.round((t - by0 / sc / c) / hd.dt) % nf) + nf) % nf) * K;
+      x.strokeStyle = col(.5 * f); x.lineWidth = 2.2; ln(cx - Math.min(wid / 2 - 6, pr.a * sc + 30), by, cx + Math.min(wid / 2 - 6, pr.a * sc + 30), by);
+      for (var q = 0; q < K; q++) { if (!all && q !== (K - 1) / 2) continue; var th = F[k + q] * 1e-4, px0 = cx + dv.etas[q] * sc, bx = px0 + Lp * Math.sin(th), bb = by + Lp * Math.cos(th);
+        x.strokeStyle = col(.55 * f); x.lineWidth = 1; ln(px0, by, bx, bb); dot(px0, by, 1.8, .7 * f);
+        /* the globe: thin paper, so the page shows through; an outline, a faint fill and one meridian that turns with the thread */
+        x.fillStyle = 'rgba(245,241,234,' + (.85 * f) + ')'; x.beginPath(); x.arc(bx, bb, Rg, 0, 7); x.fill(); x.fillStyle = col(.08 * f); x.fill(); x.strokeStyle = col(.7 * f); x.lineWidth = 1.1; x.stroke();
+        x.strokeStyle = col(.3 * f); x.lineWidth = .8; x.beginPath(); x.ellipse(bx, bb, Rg * .45, Rg, -th, 0, 7); x.stroke(); }
+    });
+  }
+
   var S = {};
 
   /* ---- motes: dust in a sunbeam, knocked about by atoms nobody sees (Lucretius II 112-141; Brownian motion) ----
@@ -207,11 +370,20 @@
          NCL        px²    open sky per cloud when the page opens
          EVAP       s      a cloud loses its water to the dry air around it with this time constant, so supply and loss settle
                            into a sky that is neither clear nor overcast (water ≈ supply × EVAP)
-         TONE       -      how strongly a whole cloud is drawn over the paper (its body is opaque inside, then faded as one) */
+         TONE       -      how strongly the whole sky is drawn over the paper
+         CB         -      water the cumulus clouds must hold together, in early summer, for a thunder cloud (cumulonimbus) to
+                           rise: the forest's own vapour feeds it; one a year at most
+       The kinds of cloud, how each is built and seen: mkSky() above. Which is in the sky when: SEASON below. */
     K: [['YEAR', 'length of a year', 's', 20, 480, 5], ['GROW', 'light a seedling needs to grow up', 's', 5, 200, 1], ['SEED', 'seeds per grown tree per second of spring and summer', '1/s', 0, .3, .005],
         ['FEED', 'share of rain and rotted leaves that feeds growth', '', 0, 1, .05], ['COND', 'condensation in the clouds', 'px/s', 0, .05, .001], ['RAIN', 'rain from grown droplets', '1/s', 0, 2, .05], ['SOIL', 'vapour from open ground', '1/s per 100 px', 0, 3, .05],
-        ['HB', 'height of the cloud base', 'm', 300, 3000, 50, 1], ['SIZE', 'size of a cloud per unit of water', 'm', 30, 250, 5, 1], ['WIND', 'wind', 'm/s', 0, 15, .5], ['NCL', 'open sky per cloud at the start', 'px²', 8000, 80000, 1000, 1], ['EVAP', 'how long a cloud keeps its water', 's', 10, 600, 5]],
-    YEAR: 120, GROW: 50, SEED: .04, FEED: .25, START: 3, LIFE: [2.5, 4], FALL: .15, COND: .003, RAIN: .08, SOIL: .6, TONE: .42, EVAP: 90, OPEN: 240, HB: 1000, SIZE: 95, WIND: 4, NCL: 25000,
+        ['HB', 'height of the cloud base', 'm', 300, 3000, 50, 1], ['SIZE', 'size of a cloud per unit of water', 'm', 30, 250, 5, 1], ['WIND', 'wind', 'm/s', 0, 15, .5], ['NCL', 'open sky per cloud at the start', 'px²', 8000, 80000, 1000, 1], ['EVAP', 'how long a cloud keeps its water', 's', 10, 600, 5], ['CB', 'water in the sky that starts a thunder cloud', '', 0, 40, .5], ['TONE', 'strength of the sky', '', .1, 1, .02]],
+    YEAR: 120, GROW: 50, SEED: .04, FEED: .25, START: 3, LIFE: [2.5, 4], FALL: .15, COND: .003, RAIN: .2, SOIL: .6, TONE: .55, EVAP: 60, CB: 4,
+    /* when each kind of cloud is in the sky, as parts of the year (0 = the first day of spring, .25 summer, .5 autumn, .75 winter);
+       each comes and goes over 4 % of the year. Spring: cumulus, fields of altocumulus, cirrocumulus. Summer: cumulus, cirrus, and
+       the thunder cloud. Autumn opens as a warm front does: cirrostratus with its halo, thickening to altostratus, then
+       nimbostratus and long rain; then rows of stratocumulus; winter: stratus and snow. */
+    SEASON: { Cu: [-.1, .56, .97, 1.1], Ac: [.04, .30], Cc: [.10, .27], Ci: [.18, .52], Cs: [.47, .61], As: [.56, .71], Ns: [.66, .80], Sc: [.76, .92], St: [.86, .99] },
+    NG: [['Cs', 2], ['Ci', 5], ['Cc', 4], ['As', 2], ['Ac', 5], ['Ns', 2], ['Sc', 3], ['St', 3]],      /* how many clouds of each layer kind drift through the sky */ OPEN: 240, HB: 1000, SIZE: 80, WIND: 4, NCL: 25000,
     mk: function (px, G) { G.j = []; for (var i = 0; i < 97; i++) G.j.push(R()); G.len *= this.sc; G.need *= .45; return { x: px, G: G, fed: 0, mat: 0, age: 0, Rs: [], Rt: [{ x: px, y: this.GY, a: PI / 2 + v(-.3, .3), s: 0 }] }; },
     /* what lies over the land: rectangles of the page's text and cards that no crown, leaf, cloud or flake may enter */
     inOb: function (px, py, pad) { for (var i = 0; i < this.ob.length; i++) { var o = this.ob[i]; if (px > o.l - pad && px < o.r + pad && py > o.t - pad && py < o.b + pad) return true; } return false; },
@@ -252,8 +424,16 @@
       var CL = [], n = Math.ceil(W / 16), self = this, i, k;
       for (i = 0; i < n; i++) { var xl = i * 16, xr = xl + 16, flo = this.GY * .55;
         for (k = 0; k < this.ob.length; k++) { var o = this.ob[k]; if (o.r > xl && o.l < xr) flo = Math.min(flo, o.t); }
-        CL.push(flo - 30 - 30 >= Math.min(this.OPEN, this.GY * .3) ? { t: 30, b: flo - 30 } : null); }
+        CL.push(flo - 30 - 30 >= Math.min(this.OPEN, this.GY * .3) ? { t: 30, b: flo - 30, f: flo < this.GY * .55 ? 0 : 1 } : null); }
       this.CL = CL;
+      /* the mask of the sky: one pixel per 16 px column and row, stretched smoothly over the picture when the sky is laid on it.
+         Full where a column has open sky; fading out over ten columns (160 px) towards text; below a column's sky it fades over 24 px
+         above text, and over 30 % of the ground height where only the trees stand below. So layers and wide clouds never cross
+         the text and are never cut by an edge. */
+      var mh = Math.ceil(this.GY / 16), mk = this.msk = document.createElement('canvas'), mg, j, dist = [], d0 = 99; mk.width = Math.max(1, n); mk.height = Math.max(1, mh); mg = mk.getContext('2d');
+      for (i = 0; i < n; i++) { d0 = CL[i] ? d0 + 1 : 0; dist[i] = d0; } d0 = 99; for (i = n - 1; i >= 0; i--) { d0 = CL[i] ? d0 + 1 : 0; dist[i] = Math.min(dist[i], d0); }
+      for (i = 0; i < n; i++) { var c0 = CL[i]; if (!c0) continue; var hf = sstep(dist[i] / 10), fd = c0.f ? this.GY * .3 : 24;
+        for (j = 0; j < mh; j++) { var av = hf * cl(1 - (j * 16 + 8 - c0.b) / fd, 0, 1); if (av > 0) { mg.fillStyle = 'rgba(0,0,0,' + av + ')'; mg.fillRect(i, j, 1, 1); } } }
       if (this.sky) { var cols = []; CL.forEach(function (c, i) { if (c) cols.push(i); });
         /* clouds already in the sky when the page opens, about one per NCL px² of open sky, spread evenly over it */
         var nT = Math.round(cols.reduce(function (s, i) { return s + 16 * (CL[i].b - CL[i].t); }, 0) / this.NCL);
@@ -270,13 +450,9 @@
        s the cloud's size) and projected. So a near cloud is high on the page and large, a far one small and low near the horizon;
        the base, a flat floor above the eye, is seen from below as a darker band under the puffs; and the wind, the same in
        metres per second for every cloud, carries near clouds faster across the page than far ones (parallax). */
-    proj: function (X, Y, Z) { var f = this.GY / Z; return [this.XC + X * f, this.GY - Y * f, f]; },
-    cloud: function (xs, ys, m) {              /* a new cloud whose base is seen at (xs, ys), holding the water m */
-      var Z = this.GY * this.HB / Math.max(30, this.GY - ys), c = { X: (xs - this.XC) * Z / this.GY, Z: Z, m: m, r: .55, s: this.SIZE * Math.cbrt(m), a: 0, at: 0, P: [] }, n = 8 + (R() * 9 | 0);
-      for (var i = 0; i < n; i++) { var u = (R() + R() + R() - 1.5) * .75, w = (R() + R() + R() - 1.5) * .5, core = Math.exp(-(u * u + w * w) / .35), rr = .22 + .32 * core * v(.6, 1.1);
-        c.P.push([u, rr * .55 + .5 * core * R(), w, rr]); }       /* puff: across u, up v (the base is v = 0), in depth w, radius; all in units of s */
-      c.P.sort(function (p, q) { return q[2] - p[2]; });              /* far puffs first, so near ones are drawn over them */
-      c.ax = Math.max.apply(null, c.P.map(function (q) { return Math.abs(q[0]) + q[3] * .9; })); c.az = Math.max.apply(null, c.P.map(function (q) { return Math.abs(q[2]) + q[3] * .9; }));   /* the base ellipse reaches under every puff */
+    proj: function (X, Y, Z) { var f = this.FF / Z; return [this.XC + X * f, this.GY - Y * f, f]; },
+    cloud: function (xs, ys, m) {              /* a new cumulus whose base is seen at (xs, ys), holding the water m */
+      var Z = this.FF * this.HB / Math.max(30, this.GY - ys), cu = cuPuffs(), c = { k: 'Cu', X: (xs - this.XC) * Z / this.FF, Z: Z, hb: this.HB, m: m, r: .55, s: this.SIZE * Math.cbrt(m), a: 0, at: 0, P: cu.P, ax: cu.ax, az: cu.az };
       this.Cs.push(c); return c; },
     /* where a cloud is seen: its base centre and its half width on the page */
     seen: function (c) { var p = this.proj(c.X, this.HB, c.Z); c.x = p[0]; c.y = p[1]; c.hw = .95 * c.s * p[2]; return c; },
@@ -284,40 +460,27 @@
       var best = null, bd = 1e9, self = this; this.Cs.forEach(function (c) { var dx = Math.abs(c.x - d.x), dy = Math.abs(c.y - 10 - d.y); if (dx < c.hw * 1.2 + 30 && dy < 70 && dx + dy < bd) { bd = dx + dy; best = c; } });
       if (best) best.m += .17; else { var c = this.seen(this.cloud(d.x, d.y + 10, .17)); c.at = 1; }
     },
-    /* draw one cloud: its puffs (shaded, lit from above), then its base seen from below; through a scratch canvas, so the
-       overlapping puffs make one body and the whole cloud fades as one */
-    paint: function (c) {
-      var self = this, s = c.s, P = c.P, pts = [], i, bx0 = 1e9, bx1 = -1e9, by0 = 1e9, by1 = -1e9;
-      for (i = 0; i < P.length; i++) { var q = P[i], p = this.proj(c.X + q[0] * s, this.HB + q[1] * s, c.Z + q[2] * s), rad = q[3] * s * p[2]; pts.push([p[0], p[1], rad, q[1] / (q[3] + .01)]);
-        bx0 = Math.min(bx0, p[0] - rad); bx1 = Math.max(bx1, p[0] + rad); by0 = Math.min(by0, p[1] - rad); by1 = Math.max(by1, p[1] + rad); }
-      var ring = []; for (i = 0; i < 24; i++) { var an = i / 24 * 2 * PI, pb = this.proj(c.X + Math.cos(an) * c.ax * s, this.HB, c.Z + Math.sin(an) * c.az * s); ring.push(pb); by1 = Math.max(by1, pb[1]); bx0 = Math.min(bx0, pb[0]); bx1 = Math.max(bx1, pb[0]); }
-      var ox = Math.floor(bx0) - 2, oy = Math.floor(by0) - 2, ww = Math.ceil(bx1 - ox) + 4, hh = Math.ceil(by1 - oy) + 4; if (ww < 2 || hh < 2 || ww > 2000 || hh > 2000) return;
-      var sc = this.scr || (this.scr = document.createElement('canvas')); if (sc.width < ww) sc.width = ww; if (sc.height < hh) sc.height = hh;
-      var g = sc.getContext('2d'); g.clearRect(0, 0, ww, hh); g.save(); g.translate(-ox, -oy);
-      /* the base is flat: nothing of the cloud shows below the far edge of its base ring */
-      var low = ring.slice(0, 13); g.beginPath(); g.moveTo(bx0 - 4, by0 - 4); g.lineTo(bx1 + 4, by0 - 4); g.lineTo(bx1 + 4, low[0][1]); low.forEach(function (p) { g.lineTo(p[0], p[1]); }); g.lineTo(bx0 - 4, low[12][1]); g.closePath(); g.clip();
-      /* each puff opaque, a mix of paper and wine: pale where the light from above falls, deeper towards its lower rim; only the
-         outermost rim fades, so puffs that overlap hide each other (as in a real cloud) instead of piling up darker */
-      pts.forEach(function (p) { var rg = g.createRadialGradient(p[0] - p[2] * .25, p[1] - p[2] * .45, p[2] * .05, p[0], p[1], p[2]);
-        rg.addColorStop(0, mixc(.10, 1)); rg.addColorStop(.8, mixc(.30, 1)); rg.addColorStop(.93, mixc(.34, .9)); rg.addColorStop(1, mixc(.34, 0)); g.fillStyle = rg; g.beginPath(); g.arc(p[0], p[1], p[2], 0, 7); g.fill(); });
-      /* the underside, seen from below: a darker floor, its edge soft */
-      var cxr = 0, cyr = 0; ring.forEach(function (p) { cxr += p[0]; cyr += p[1]; }); cxr /= ring.length; cyr /= ring.length;
-      var rxs = ring.map(function (p) { return p[0]; }), rx = (Math.max.apply(null, rxs) - Math.min.apply(null, rxs)) / 2, ry = Math.max(2, (Math.max.apply(null, ring.map(function (p) { return p[1]; })) - Math.min.apply(null, ring.map(function (p) { return p[1]; }))) / 2);
-      g.save(); g.translate(cxr, cyr); g.scale(1, ry / rx); var rb = g.createRadialGradient(0, 0, 0, 0, 0, rx * .85); rb.addColorStop(0, mixc(.55, .9)); rb.addColorStop(.6, mixc(.48, .7)); rb.addColorStop(1, mixc(.4, 0)); g.fillStyle = rb; g.beginPath(); g.arc(0, 0, rx * .85, 0, 7); g.fill(); g.restore();
-      g.restore(); x.globalAlpha = c.a * self.TONE; x.drawImage(sc, 0, 0, ww, hh, ox, oy, ww, hh); x.globalAlpha = 1;
-    },
+    paint: function (c) { this.SK.puffs(c, c.a * this.am.Cu); },          /* a cumulus, drawn by the sky (mkSky above) */
+    /* put a cloud of one of the layer kinds somewhere in the part of its plane that the sky's window shows, seen at the column sx */
+    place: function (o, sx) { o.Z = GENUS[o.k].h * this.FF / (this.GY * v(.3, .97)); o.X = (sx - this.XC) * o.Z / this.FF; },
     band: function (px, CL) { CL = CL || this.CL; return CL ? CL[cl((px / 16) | 0, 0, CL.length - 1)] : null; },
     seed: function (near) { for (var k = 0; k < 14; k++) { var px = near && R() < .65 ? near.x + (R() < .5 ? -1 : 1) * v(near.hw * .6 + 10, near.hw + 240) : v(14, W - 14), t = this.fit(px, KINDS[R() * 5 | 0]()); if (t) { this.A.push(t); return t; } } return null; },
     init: function () {
       this.UN = W > 760 ? (+host.getAttribute('data-bg-under') || 0) : 0; this.Hn = []; this.GY = H - 46 - this.UN; this.Fd = []; this.sc = cl(H / 520, .8, 1.7);
       this.A = []; this.L = []; this.M = []; this.ob = []; this.V = []; this.Cs = []; this.Y = 0; this.sn = new Float32Array(Math.ceil(W / 12) + 1); this.sky = W > 760;
-      var self = this, hr = host.getBoundingClientRect();
+      var self = this, hr = host.getBoundingClientRect(); this.FF = 1.5 * this.GY;   /* the eye's focal length (see mkSky) */
       [host.getAttribute('data-bg-avoid'), host.getAttribute('data-bg-avoid-near')].forEach(function (q) { if (q) document.querySelectorAll(q).forEach(function (e) { var r = e.getBoundingClientRect(); if (r.width && r.height) self.ob.push({ l: r.left - hr.left - 14, r: r.right - hr.left + 14, t: r.top - hr.top - 10, b: r.bottom - hr.top + 10 }); }); });
       var m = null; for (var q = 0; q < 80 && !m; q++) { var g = KINDS[0](); g.len = 64; g.maxd = 6; m = this.fit(q ? v(14, W - 14) : Math.max(46, W * .1), g); }
       if (m) { this.A.push(m); this.ripen(m); m.life = this.LIFE[0] * this.YEAR; }
       /* a few more grown trees of mixed ages, so the land is not bare when the page opens and they do not all die at once */
       for (var s = 1; s < this.START; s++) { var t2 = this.seed(m); if (t2) { this.ripen(t2); t2.age = v(0, .8) * t2.life; } }
-      this.XC = W / 2; this.U = 0; this.CL = this.clouds(); this.Cs.forEach(function (c) { self.seen(c); }); },
+      this.XC = W / 2; this.U = 0; this.U2 = 0; this.U3 = 0; this.CL = this.clouds(); this.Cs.forEach(function (c) { self.seen(c); });
+      this.SK = mkSky(this.GY, this.XC, this.FF); this.am = {}; this.cb = null; this.cbY = -1; this.Gs = []; this.sun = null;
+      /* the runs of open sky: the widest holds the sun (seen only through altostratus and cirrostratus), the next the thunder cloud */
+      var runs = [], st = -1; for (var ci = 0; ci <= this.CL.length; ci++) { if (ci < this.CL.length && this.CL[ci]) { if (st < 0) st = ci; } else if (st >= 0) { runs.push([st, ci - 1]); st = -1; } }
+      runs.sort(function (p, q) { return (q[1] - q[0]) - (p[1] - p[0]); });
+      if (this.sky && runs.length) { var r0 = runs[0], r1 = runs[1] || runs[0], bs = this.CL[(r0[0] + r0[1]) >> 1]; this.sun = [(r0[0] + r0[1] + 1) * 8, bs.t + (bs.b - bs.t) * .45]; this.cbx = (r1[0] + r1[1] + 1) * 8; this.rc = runs.map(function (r) { return [r[0] * 16, Math.min(W, (r[1] + 1) * 16) - r[0] * 16]; });
+        this.NG.forEach(function (q) { for (var n2 = 0; n2 < q[1]; n2++) { var o = self.SK.make(q[0]); self.place(o, v(-60, W + 60)); self.Gs.push(o); } }); } },
     draw: function (dt) {
       clear(); var GY = this.GY, self = this; this.Y += dt; var ph = (this.Y / this.YEAR) % 1, sea = ph * 4 | 0;
       x.strokeStyle = col(.25); x.lineWidth = 1; for (var g0 = 0; g0 < W; g0 += 8) if (!this.inOb(g0 + 4, GY, 0)) ln(g0, GY, g0 + 8, GY);
@@ -356,12 +519,32 @@
       /* each cloud: carried by the wind; its size follows its water smoothly (cube root, settling over 5 s); it fades in where it is
          over open sky and out where it drifts over text or off the page; its droplets grow by condensation, and grown droplets
          collide, merge and fall as rain (or, in winter, as snow) from under its base */
+      this.U2 += (-this.U2 / 60 * dt + 2.2 * this.WIND * Math.sqrt(2 / 60 * dt) * (R() + R() + R() - 1.5) * 2); this.U3 += (-this.U3 / 60 * dt + 4 * this.WIND * Math.sqrt(2 / 60 * dt) * (R() + R() + R() - 1.5) * 2);
+      /* how much of each kind is in the sky now: its window of the year (SEASON), approached smoothly */
+      var SK = this.SK, am = this.am, SE = this.SEASON, kk, drew = !!this.sun, lay = function (k) { self.Gs.forEach(function (o) { if (o.k === k) SK.paint(o, am[k], self.Y); }); };
+      for (kk in SE) { var w0 = SE[kk], tg = 0; for (var wi = 0; wi < w0.length; wi += 2) tg = Math.max(tg, sstep((ph - w0[wi]) / .04) * sstep((w0[wi + 1] - ph) / .04)); am[kk] = am[kk] === undefined ? tg : am[kk] + (tg - am[kk]) * Math.min(1, dt / 4); }
+      if (drew) { SK.begin(this.rc);
+        /* the layer clouds drift with the wind of their level (low, middle, high: higher winds are stronger, and each has a steady
+           part); one that leaves the picture comes back in from the other side as a new cloud */
+        var wl = [this.U + 3, this.U2 + 7, this.U3 + 14];
+        this.Gs.forEach(function (o) { var FF = self.FF, f = FF / o.Z, e = o.ext * f, sx; o.X += wl[GENUS[o.k].lv] * dt; sx = self.XC + o.X * f;
+          if (sx - e > W + 40) { SK.make(o.k, o); self.place(o, 0); o.X = (-40 - o.ext * FF / o.Z - self.XC) * o.Z / FF; } else if (sx + e < -40) { SK.make(o.k, o); self.place(o, 0); o.X = (W + 40 + o.ext * FF / o.Z - self.XC) * o.Z / FF; } });
+        /* from the highest to the lowest, so the low ones hide the high ones */
+        lay('Cs'); SK.wash(.25, .1 * am.Cs); SK.sun(this.sun[0], this.sun[1], 0, am.Cs); lay('Ci'); lay('Cc'); lay('As'); SK.wash(.36, .07 * am.As); SK.sun(this.sun[0], this.sun[1], am.As, 0); lay('Ac');
+        /* the thunder cloud: in early summer, when the cumulus hold enough of the forest's water, one tower rises far away (22 km)
+           through all the levels (over 9 % of a year), spreads its anvil, rains hard, and fades when autumn comes */
+        var cb = this.cb, yr = Math.floor(this.Y / this.YEAR), wsum = 0; Cs.forEach(function (c) { wsum += c.m; });
+        if (!cb && ph > .27 && ph < .34 && this.cbY !== yr && wsum > this.CB) { cb = this.cb = SK.make('Cb'); cb.Z = 22000; cb.X = (this.cbx - this.XC) * cb.Z / this.FF; cb.vg = 0; cb.fa = 1; this.cbY = yr; }
+        if (cb) { cb.X += this.U * dt; cb.vg = Math.min(1, cb.vg + dt / (.09 * this.YEAR)); if (ph > .5 || ph < .25) cb.fa -= dt / (.05 * this.YEAR);
+          if (cb.fa <= 0) this.cb = null; else { SK.paint(cb, cb.fa * Math.min(1, cb.vg * 4), this.Y);
+            if (cb.vg > .8 && cb.fa >= 1 && R() < dt * 9) { var cx2 = this.XC + (cb.X + v(-1, 1) * cb.s) * this.FF / cb.Z, bb = this.band(cx2); if (bb) V.push({ x: cx2, y: v(bb.b - 40, bb.b + GY * .1), r: v(1.9, 2.4), q: 1 }); } } }
+        lay('Sc'); }
       Cs.sort(function (p, q) { return q.Z - p.Z; });
       Cs.forEach(function (c) {
         c.X += self.U * dt; self.seen(c);
         c.s += (self.SIZE * Math.cbrt(Math.max(c.m, .01)) - c.s) * Math.min(1, dt / 5);
         var ok = 0; for (var k = -2; k <= 2; k++) { var bk = self.band(c.x + k * c.hw * .5); if (bk && c.y < bk.b + 20 && c.x + k * c.hw * .5 > 0 && c.x + k * c.hw * .5 < W) ok++; }
-        c.at = ok / 5; c.a += ((ok === 5 ? 1 : 0) - c.a) * Math.min(1, dt / 2.5);   /* fully over open sky, or fading out */ c.m *= Math.exp(-dt / (c.at < .4 ? 8 : self.EVAP));   /* over text: it thins away */
+        c.at = ok / 5; c.a += ((ok === 5 ? 1 : 0) - c.a) * Math.min(1, dt / 2.5);   /* fully over open sky, or fading out */ c.m *= Math.exp(-dt / (c.at < .4 || am.Cu < .5 ? 8 : self.EVAP));   /* over text, or out of its season: it thins away */
         if (sea < 3) c.r += self.COND * dt;
         var rate = sea === 3 ? .25 * c.m : self.RAIN * c.m * Math.max(0, c.r - .6);
         if (R() < rate * dt && c.m > .3 && c.a > .3) { var u = v(-.6, .6), w = v(-.4, .4), pb = self.proj(c.X + u * c.s, self.HB, c.Z + w * c.s); c.m -= .15;
@@ -369,6 +552,12 @@
         if (c.a > .01) self.paint(c);
       });
       this.Cs = Cs.filter(function (c) { return c.m > .05 && !(c.a < .01 && c.at === 0); });
+      if (drew) { SK.wash(.6, .05 * am.Ns); lay('Ns'); SK.wash(.4, .06 * am.St); lay('St'); SK.end(this.msk);
+        /* the sky goes behind everything already drawn (trees, rain, the ground) */
+        SK.blit(x, this.TONE, true);
+        /* the layers' own weather: long rain from nimbostratus, snow from it and from stratus once winter has come */
+        var np = (12 * am.Ns + 5 * am.St) * dt * this.CL.length / 30, cold = ph > .76 || ph < .02;
+        for (; np > 0; np -= 1) if (R() < np) { var gj = (R() * this.CL.length) | 0, bj = this.CL[gj]; if (bj) V.push(cold ? { x: gj * 16 + R() * 16, y: v(bj.t, bj.b), r: .5, q: 1, snow: 1 } : { x: gj * 16 + R() * 16, y: v((bj.t + bj.b) / 2, bj.b), r: v(2, 2.5), q: 1 }); } }
       for (var a = 0; a < V.length; a++) { var d = V[a]; if (d.dead) continue; var bd0 = self.band(d.x);
         if (!d.q) { d.y -= 90 * dt; d.x += (R() - .5) * 10 * dt; if (!bd0) { d.dead = 1; continue; } if (d.y < d.h) { d.dead = 1; self.join(d); } else dot(d.x, d.y, .6, .22); continue; }
         var snow = d.snow, vt = snow ? 60 : 9 * d.r * d.r - up, nx = d.x + ((R() - .5) * 8) * dt + (snow ? Math.sin(self.Y * 2 + a) * 8 * dt : 0), ny = d.y + vt * dt;
@@ -453,8 +642,9 @@
   /* ---- rails: the two side margins of the home page below the hero, fixed to the window but drawn in page coordinates, so
      they scroll with the page. Left: the forest's roots go on growing down the page (space colonisation: each tip grows towards
      the scattered water it can sense; thickness by Murray's law, r^3 of a parent = sum of r^3 of its children; sap climbs back
-     up to the trees). Right: pairs of pendulums tied by a weak spring hang from beams; the swing drains from one bob into the
-     other and back (beats); this half is not computed here but played from data computed once on Kaggle (sceneData above). ---- */
+     up to the trees). Right: paper globes on threads hang from beams in a wind that blows down the margin with a street of
+     vortices in it; the wind's lines are drawn, and each passing vortex swings the globes; this half is not computed here but
+     played from data computed once on Kaggle (sceneData above, windDraw below). ---- */
   S.rails = {
     geo: function () {
       var lay = document.querySelector(host.getAttribute('data-bg-around') || 'main'), fo = document.querySelector('[data-bg=forest]'), end = document.querySelector(host.getAttribute('data-bg-until') || 'footer');
@@ -478,11 +668,8 @@
       var G = 250; for (var y = Math.max(40, Math.ceil((y0 - 40) / G) * G + 40); y < L - 170; y += G) this.bar(y);
       this.yLen = L;
     },
-    /* a beam of coupled pendulums: as many pairs as the margin holds side by side (a pair takes the pivot spacing, its swing and 30 px),
-       each starting at its own random moment of the stored loop, so no two pairs and no two visits look alike */
-    bar: function (y) {
-      var off = []; for (var i = 0; i < 4; i++) off.push(R()); this.Bs.push({ y: y, off: off });   /* how many pairs are hung is decided when the data (spacing d) is known */
-    },
+    /* a beam across the margin, from which the paper globes hang (how many is decided when the stored data is known) */
+    bar: function (y) { this.Bs.push({ y: y }); },
     add: function (px, py, par) { var i = this.N.length; this.N.push({ x: px, y: py, p: par, c: 1, k: 0 }); var key = ((px / 32) | 0) + ',' + ((py / 32) | 0); (this.grid[key] = this.grid[key] || []).push(i); return i; },
     near: function (px, py, D) { var best = -1, bd = D * D, cx = (px / 32) | 0, cy = (py / 32) | 0, m = Math.ceil(D / 32); for (var a = -m; a <= m; a++) for (var b = -m; b <= m; b++) { var c = this.grid[(cx + a) + ',' + (cy + b)]; if (!c) continue; for (var k = 0; k < c.length; k++) { var q = this.N[c[k]], dx = q.x - px, dy = q.y - py, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = c[k]; } } } return [best, bd]; },
     growStep: function () {
@@ -510,55 +697,57 @@
         var s = top + o.y; if (s > -5 && s < H + 5) dot(g.l0 + o.x, s, 1.1, .45 * fade(o.y)); return true; });
       if (this.flow.length > 160) this.flow.splice(0, this.flow.length - 160);
       x.restore();
-      /* right: pairs of pendulums tied by a weak spring, played from the stored run (tools/sims/coupled.py, computed on Kaggle).
-         Nothing is computed here: each stored frame gives the two angles, the frame nearest in time is drawn. The swing drains from
-         one bob into the other through the spring and comes back, a beat of about 27 s (docs/kaggle-sims.md). */
-      var D = this.D; if (!D) { if (!this.asked) { this.asked = 1; sceneData('coupled', 'coupled.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } return; }
-      var hd = D.hdr, nf = hd.frames, F = D.frames, pr = hd.params, sc = pr.scale, Lp = pr.L * sc, ap = pr.a * sc, dp = pr.d * sc;
-      x.save(); x.beginPath(); x.rect(g.r0 - 4, 0, this.rw + 8, H); x.clip();
-      this.Bs.forEach(function (B) {
-        var by = top + B.y; if (by < -Lp - 20 || by > H + 10) return; var f = fade(B.y), m = Math.max(1, Math.min(B.off.length, Math.floor((self.rw - 16) / (dp + 2 * Lp * .2 + 30)))), cw = self.rw / m;
-        x.strokeStyle = col(.45 * f); x.lineWidth = 2.2; ln(g.r0 + 6, by, g.r1 - 6, by);
-        for (var q = 0; q < m; q++) {
-          var k = (Math.round(self.t / hd.dt + B.off[q] * nf) % nf) * 2, t1 = F[k] * 1e-4, t2 = F[k + 1] * 1e-4;
-          var p1 = g.r0 + cw * (q + .5) - dp / 2, p2 = p1 + dp, b1x = p1 + Lp * Math.sin(t1), b1y = by + Lp * Math.cos(t1), b2x = p2 + Lp * Math.sin(t2), b2y = by + Lp * Math.cos(t2);
-          var s1x = p1 + ap * Math.sin(t1), s1y = by + ap * Math.cos(t1), s2x = p2 + ap * Math.sin(t2), s2y = by + ap * Math.cos(t2);
-          /* the spring: a zigzag of 9 turns between the two rods */
-          var sx = s2x - s1x, sy = s2y - s1y, sl = Math.hypot(sx, sy) || 1, nx = -sy / sl, ny = sx / sl; x.strokeStyle = col(.5 * f); x.lineWidth = 1; x.beginPath(); x.moveTo(s1x, s1y);
-          for (var z = 1; z < 19; z++) { var u = z / 19, o = (z % 2 ? 3.2 : -3.2) * (z > 1 && z < 18 ? 1 : .5); x.lineTo(s1x + sx * u + nx * o, s1y + sy * u + ny * o); } x.lineTo(s2x, s2y); x.stroke();
-          x.strokeStyle = col(.6 * f); x.lineWidth = 1.3; ln(p1, by, b1x, b1y); ln(p2, by, b2x, b2y);
-          dot(p1, by, 2, .7 * f); dot(p2, by, 2, .7 * f);
-          dot(b1x, b1y, pr.rb * sc, (.45 + .45 * Math.min(1, Math.abs(t1) * 4)) * f); dot(b2x, b2y, pr.rb * sc, (.45 + .45 * Math.min(1, Math.abs(t2) * 4)) * f);
-        }
-      });
+      /* right: paper globes on threads in a wind that carries a Kármán vortex street, played from the stored run
+         (tools/sims/windpend.py, computed on Kaggle; docs/kaggle-sims.md). Nothing is computed here. The wind blows down the margin.
+         Its lines (the paths the air follows at this instant) are stored as curves η(ξ − c t): they are drawn shifted down by c t,
+         so the vortices are seen sliding down the page. The stored swing is that of a beam at the top; because the whole wind only
+         slides, a beam ξ lower sees the same wind ξ / c later, so it plays the same frames with that delay: each vortex pushes
+         the globes of every beam as it passes them. */
+      var D = this.D; if (!D) { if (!this.asked) { this.asked = 1; sceneData('windpend', 'windpend.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } return; }
+      x.save(); x.beginPath(); x.rect(g.r0 - 4, Math.max(0, top), this.rw + 8, Math.min(H, g.bot - sy) - Math.max(0, top)); x.clip();
+      windDraw(D, this.t, (g.r0 + g.r1) / 2, top, this.rw, D.hdr.params.scale, this.Bs.map(function (B) { return B.y; }), fade, Math.max(0, top), Math.min(H, g.bot - sy));
       x.restore();
     }
   };
-  /* ---- pairs: the right rail's coupled pendulums on their own, in a box (the scenes page, scenes.html). The same stored run
-     (tools/sims/coupled.py, computed on Kaggle); nothing is computed here. The box shows one large pair and draws, under it, the
-     energy of each pendulum over the loop, read from the stored angles: E_i = m g L (1 − cos θ_i) + ½ m L² θ_i'², with θ_i'
-     taken from the two neighbouring stored frames. That curve is a reading of the stored motion, not a second simulation. ---- */
-  S.pairs = {
-    SPEED: 1,   /* always real time: the stored run is the motion of these pendulums, so it has no knob (the handoff of 23 November 2026) */
-    K: [],
-    init: function () { var self = this; this.t = 0; if (!this.asked) { this.asked = 1; sceneData('coupled', 'coupled.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } },
+  /* ---- wind: the right rail's paper globes in the wind on their own, in a box (the scenes page, scenes.html). The same stored
+     run (tools/sims/windpend.py, computed on Kaggle); nothing is computed here. Two beams, so the delay between them shows:
+     the lower globes repeat the upper ones' swing ξ / c later, when the same vortex reaches them. ---- */
+  S.wind = {
+    K: [],     /* no numbers to change: the stored run is the motion of these globes in this wind, played at real time */
+    init: function () { var self = this; this.t = 0; if (!this.asked) { this.asked = 1; sceneData('windpend', 'windpend.bin').then(function (d) { self.D = d; }, function (e) { self.err = String(e.message || e); }); } },
     draw: function (dt) {
-      clear(); this.t += dt * this.SPEED; var D = this.D; if (!D) return; var hd = D.hdr, nf = hd.frames, F = D.frames, pr = hd.params;
-      var sc = Math.min((H * .62) / pr.L, (W * .5) / pr.d), Lp = pr.L * sc, ap = pr.a * sc, dp = pr.d * sc, by = 24, cx = W / 2, j = Math.round(this.t / hd.dt) % nf, k = j * 2;
-      var t1 = F[k] * 1e-4, t2 = F[k + 1] * 1e-4, p1 = cx - dp / 2, p2 = cx + dp / 2;
-      x.strokeStyle = col(.6); x.lineWidth = 3; ln(p1 - 40, by, p2 + 40, by);
-      var s1x = p1 + ap * Math.sin(t1), s1y = by + ap * Math.cos(t1), s2x = p2 + ap * Math.sin(t2), s2y = by + ap * Math.cos(t2), sx = s2x - s1x, sy = s2y - s1y, sl = Math.hypot(sx, sy) || 1, nx = -sy / sl, ny = sx / sl;
-      x.strokeStyle = col(.7); x.lineWidth = 1.3; x.beginPath(); x.moveTo(s1x, s1y); for (var z = 1; z < 23; z++) { var o = (z % 2 ? 6 : -6) * (z > 1 && z < 22 ? 1 : .5); x.lineTo(s1x + sx * z / 23 + nx * o, s1y + sy * z / 23 + ny * o); } x.lineTo(s2x, s2y); x.stroke();
-      x.strokeStyle = col(.8); x.lineWidth = 1.8; ln(p1, by, p1 + Lp * Math.sin(t1), by + Lp * Math.cos(t1)); ln(p2, by, p2 + Lp * Math.sin(t2), by + Lp * Math.cos(t2));
-      dot(p1 + Lp * Math.sin(t1), by + Lp * Math.cos(t1), pr.rb * sc, .9); dot(p2 + Lp * Math.sin(t2), by + Lp * Math.cos(t2), pr.rb * sc, .9);
-      /* the energy of each pendulum over one loop, and where we are in it */
-      if (!this.E) { var E = this.E = [new Float32Array(nf), new Float32Array(nf)], g0 = pr.g, mx = 0; for (var f = 0; f < nf; f++) for (var q = 0; q < 2; q++) {
-          var th = F[f * 2 + q] * 1e-4, w = (F[((f + 1) % nf) * 2 + q] - F[((f - 1 + nf) % nf) * 2 + q]) * 1e-4 / (2 * hd.dt); E[q][f] = pr.m * g0 * pr.L * (1 - Math.cos(th)) + .5 * pr.m * pr.L * pr.L * w * w; mx = Math.max(mx, E[q][f]); } this.Emax = mx; }
-      var gx = 20, gw = W - 40, gh = H * .22, gy = H - 14;
-      x.strokeStyle = col(.25); x.lineWidth = 1; ln(gx, gy, gx + gw, gy);
-      for (q = 0; q < 2; q++) { x.strokeStyle = col(q ? .45 : .9); x.setLineDash(q ? [5, 3] : []); x.lineWidth = 1.4; x.beginPath(); for (f = 0; f < nf; f += 2) { var px = gx + gw * f / nf, py = gy - gh * this.E[q][f] / this.Emax; if (f) x.lineTo(px, py); else x.moveTo(px, py); } x.stroke(); }
-      x.setLineDash([]); x.strokeStyle = col(.8); ln(gx + gw * j / nf, gy, gx + gw * j / nf, gy - gh - 6);
-      this.now = { t: j * hd.dt, theta1: t1, theta2: t2, E1: this.E[0][j], E2: this.E[1][j] };
+      clear(); this.t += dt; var D = this.D; if (!D) return; var pr = D.hdr.params, sc = Math.min(H * .36 / pr.L, W / pr.WS);
+      windDraw(D, this.t, W / 2, 0, W, sc, [22, 22 + H * .5], function () { return 1; }, 0, H);
+    }
+  };
+  /* ---- atlas: the ten kinds of cloud side by side, each at its own height and labelled (the scenes page). The same builders and
+     the same eye as the forest's sky (mkSky above): the high clouds far away and high in the picture, the middle ones below
+     them, the low ones lowest and nearest, and the thunder cloud standing through all three levels. The layer kinds (stratus,
+     altostratus, cirrostratus, nimbostratus) cover the whole sky in nature; here a piece of each is shown. ---- */
+  S.atlas = {
+    TONE: .8, SWAY: 1,
+    K: [['TONE', 'strength of the drawing', '', .2, 1, .02], ['SWAY', 'how far the clouds drift to and fro', '×', 0, 4, .1]],
+    /* where each kind stands: across the picture (0 to 1), how high its base is seen (share of the height above the horizon), and
+       the half width it is shown at (px, at a picture 1100 px wide) */
+    AT: [['Ci', .13, .80, 95], ['Cc', .37, .86, 70], ['Cs', .62, .80, 105], ['Ac', .22, .53, 95], ['As', .47, .56, 105], ['St', .075, .24, 80], ['Ns', .245, .26, 85], ['Sc', .50, .31, 175], ['Cu', .76, .21, 62], ['Cb', .92, .075, 0]],
+    init: function () {
+      var self = this, GY = this.GY = H - 20, F = this.F = 1.5 * GY, kx = Math.min(1, W / 1100); this.SK = mkSky(GY, W / 2, F); this.t = 0;
+      this.O = this.AT.map(function (a) { var o = self.SK.make(a[0]), hb = GENUS[a[0]].h; o.Z = hb * F / (a[2] * GY); o.X0 = o.X = (a[1] * W - W / 2) * o.Z / F; o.fx = a[1]; o.ph = R() * 6;
+        if (a[0] === 'Cu') { o.s = a[3] * kx * o.Z / F / o.ax; } else if (a[0] === 'Cb') { o.rain = 1; o.s = Math.min(1400, .13 * W * o.Z / F / 4.2); } else o.sz = a[3] * kx * o.Z / F / o.ext;
+        if (a[0] === 'As' || a[0] === 'Cs') { o.sun = 1; o.halo = a[0] === 'Cs' ? Math.min(.404 * F, 70 * kx) : 0; }
+        return o; });
+      this.O.sort(function (p, q) { return q.Z - p.Z; });
+    },
+    draw: function (dt) {
+      clear(); this.t += dt; var self = this, SK = this.SK, GY = this.GY, F = this.F, small = W < 720;
+      x.strokeStyle = col(.3); x.lineWidth = 1; ln(0, GY, W, GY);
+      SK.begin(); this.O.forEach(function (o) { o.X = o.X0 + self.SWAY * 14 * (o.Z / 1000) * Math.sin(self.t / 11 + o.ph); SK.paint(o, 1, self.t); }); SK.end(null); SK.blit(x, this.TONE, false);
+      /* the names: abbreviation, genus and where it lives, under each cloud; the three levels at the left edge */
+      x.font = (small ? 9 : 10.5) + 'px "IBM Plex Mono", ui-monospace, monospace'; x.textAlign = 'center'; x.textBaseline = 'top';
+      this.O.forEach(function (o) { var G = GENUS[o.k], p = SK.proj(o.X, G.h, o.Z), ly = o.k === 'Cb' ? p[1] - GY * .86 : p[1] + (o.k === 'Cu' ? 14 : G.lv === 2 ? 30 : 34) * Math.min(1, W / 1100) + 6;
+        x.fillStyle = col(.85); x.fillText(o.k + ' · ' + G.n, cl(p[0], 60, W - 60), ly); if (!small) { x.fillStyle = col(.5); x.fillText(G.r, cl(p[0], 60, W - 60), ly + 13); } });
+      if (!small) { x.textAlign = 'left'; x.fillStyle = col(.4); [['HIGH · 5–13 km', .97], ['MIDDLE · 2–7 km', .64], ['LOW · below 2 km', .36]].forEach(function (q) { x.fillText(q[0], 8, GY * (1 - q[1])); }); }
+      x.textAlign = 'left'; x.textBaseline = 'alphabetic';
     }
   };
   /* ---- roots: the left rail's roots on their own, in a box (scenes.html). Space colonisation, as in the rail: water is scattered

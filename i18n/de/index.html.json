@@ -875,17 +875,9 @@
   "src": "What moves behind this page",
   "tr": "Was sich hinter dieser Seite bewegt"
  },
- "13d3664229cc": {
-  "src": "<b>The forest</b> under the title spreads from a few trees, a year every two minutes; its leaves breathe vapour that rises into the open sky of the two top corners, gathers into clouds and falls back as rain or snow that feeds the young trees.",
-  "tr": "<b>Der Wald</b> unter dem Titel breitet sich von wenigen Bäumen aus, ein Jahr alle zwei Minuten; seine Blätter atmen Wasserdampf aus, der in den offenen Himmel der beiden oberen Ecken steigt, sich zu Wolken sammelt und als Regen oder Schnee zurückfällt, der die jungen Bäume nährt."
- },
  "3c436ec2e2d5": {
   "src": "<b>The roots</b> in the left margin grow towards the water they sense, branching like river beds, each as thick as the cube root of the tips it feeds (Murray's law).",
   "tr": "<b>Die Wurzeln</b> am linken Rand wachsen dem Wasser entgegen, das sie spüren, und verzweigen sich wie Flussbetten, jede so dick wie die Kubikwurzel der Spitzen, die sie versorgt (Murraysches Gesetz)."
- },
- "b95032d0d5ff": {
-  "src": "<b>The pendulums</b> in the right margin hang in pairs tied by a weak spring: the swing drains through the spring from one bob to the other and back every 27 s, a beat; the motion was computed once on Kaggle and is played here, not computed.",
-  "tr": "<b>Die Pendel</b> am rechten Rand hängen paarweise, durch eine schwache Feder verbunden: Die Schwingung wandert durch die Feder von einem Pendelkörper zum anderen und alle 27 s wieder zurück, eine Schwebung; die Bewegung wurde einmal auf Kaggle berechnet und wird hier abgespielt, nicht berechnet."
  },
  "dd54478d85b6": {
   "src": "<b>The spinners</b> before the simulations turn at their own pace until a wandering rotating field pulls those it passes into step.",
@@ -898,5 +890,13 @@
  "95c7feeb368f": {
   "src": "Every scene on its own, with its numbers to change →",
   "tr": "Jede Szene für sich, mit ihren Zahlen zum Verändern →"
+ },
+ "784af264535d": {
+  "src": "<b>The forest</b> under the title spreads from a few trees, a year every two minutes; its leaves breathe vapour that rises into the open sky of the two top corners and gathers into cumulus clouds that rain it back on the young trees. Around them the sky goes through its year with every kind of cloud: fields of small clouds in spring, cirrus and one thunder cloud in summer, a grey veil thickening to long rain in autumn, low layers and snow in winter.",
+  "tr": "<b>Der Wald</b> unter dem Titel breitet sich von wenigen Bäumen aus, ein Jahr alle zwei Minuten; seine Blätter atmen Wasserdampf aus, der in den offenen Himmel der beiden oberen Ecken steigt und sich zu Haufenwolken sammelt, die ihn auf die jungen Bäume zurückregnen. Um sie herum durchläuft der Himmel sein Jahr mit allen Wolkenarten: Felder kleiner Wolken im Frühling, Federwolken und eine Gewitterwolke im Sommer, ein grauer Schleier, der sich im Herbst zu langem Regen verdichtet, tiefe Schichten und Schnee im Winter."
+ },
+ "9a4a72e0e3a6": {
+  "src": "<b>The paper globes</b> in the right margin hang on threads in a wind that blows down the page with a street of vortices in it; the thin lines are the wind's own lines, and each passing vortex swings the globes aside while gravity brings them back. The motion was computed once on Kaggle and is played here, not computed.",
+  "tr": "<b>Die Papierkugeln</b> am rechten Rand hängen an Fäden in einem Wind, der die Seite hinabweht und eine Wirbelstraße mit sich führt; die feinen Linien sind die Stromlinien des Windes, und jeder vorbeiziehende Wirbel drückt die Kugeln zur Seite, während die Schwerkraft sie zurückholt. Die Bewegung wurde einmal auf Kaggle berechnet und wird hier abgespielt, nicht berechnet."
  }
 }

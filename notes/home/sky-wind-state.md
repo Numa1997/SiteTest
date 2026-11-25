@@ -10,27 +10,27 @@ Read this first after a compaction.
    the drag law of the double inverted pendulum page, section 13).
 
 ## The user's rules for this work
-- No code by Claude, not one line: every code file comes from Neon (Gemini) through the user (notes/sims/ENGINE-PROMPT.md, "HOW YOU
-  WORK"). Claude writes the requests, applies the answers byte for byte, tests, commits, reports.
+- 25 November 2026, 02:44: "nevermind, you handle all fixes and all enhancements and push": Claude writes the code itself again
+  (the Neon requests N-1 and N-2 were never used and are deleted).
 - Every model run on Kaggle, never locally; Kaggle runs need no fresh yes; monitor each run.
 - Publish without asking once finished, checked against main and tested; the user checks the live site.
 - Refer to the user as "the user"; commits as the user, no AI attribution. Times in Berlin time. Clean up after.
 
-## Decisions
-- Clouds: the ten WMO genera (International Cloud Atlas; temperate levels: low to 2 km, middle 2–7 km, high 5–13 km), each a 3D
-  generator in bg-sky.js, seen through the forest's existing ground camera; the season picks the mix; cumulus keep the water
-  bookkeeping and can grow into a cumulonimbus; a cloud-atlas scene S13 on scenes.html.
-- Pendulums: a wind blowing down the margin with a Kármán vortex street in its wake. Chosen because the field is a travelling
-  pattern, v(η, ξ − c t): it repeats with T = λ / c, and a pendulum lower by Δξ sees the same wind Δξ / c later, so one settled orbit
-  per position across the strip serves every beam, exactly. Light balsa rods with polystyrene balls, so the air's push is a fair part
-  of their weight. Drag as on the site: resistive force theory (33) plus quadratic drag (34); sphere drag for the ball. Field lines =
-  contours of the stored stream function, shifted by c t on the page.
+## What was built (branch `sky-wind-2`, from main e466e6d)
+- `public/scripts/bg-scenes.js`: `mkSky()` (the ten cloud genera in 3D, two canvases, mask), the forest's sky through the year
+  (`SEASON`, `NG`, `CB`, winds per level, the thunder cloud), `windDraw()`, the rails' right half, the scenes `wind` and `atlas`.
+- `tools/sims/windpend.py` and its registry entry; `coupled` keeps its model and data but has no page.
+- `public/scenes.html`: S3 is now the wind, S13 the cloud atlas, S1's text describes the sky.
+- `index.html` note: the forest's and the globes' sentences, with German and Arabic.
+- Docs: `docs/scripts/bg-scenes.md`, `docs/kaggle-sims.md`.
+- Kaggle previews from the branch: notebook numakoudsie/phyein-usul-simulations versions 11 (λ = 4 m) and 12 (λ = 6 m, kept
+  parameters); outputs not committed. The site's data comes from the workflow after the merge.
 
-## Requests to Neon
-- N-1 (notes/home/neon/N-1-request.md): bg-sky.js (new), bg-scenes.js, scenes.html. Status: sent to the user, waiting.
-- N-2 (notes/home/neon/N-2-request.md): tools/sims/windpend.py (new), registry.json. Status: sent to the user, waiting.
-- N-3 (after N-1 is applied and N-2 has run on Kaggle): the player in bg-scenes.js (rails right half, and the pairs scene on the
-  scenes page becomes the wind pendulums), with the field lines.
+## Measured
+- windpend v12: T = 4.69 s; settled in 14 to 17 periods; swings 0.35, 0.27, 0.35 rad; gap 0.78 m; energy residual 1e-11.
+- Pages (check.cjs): 7 pages × 4 widths and reduced motion, no errors, no sideways scroll.
+- Cost (cost.cjs, headless, 1920 px): forest draw 20 to 30 ms a frame (17 ms before the ten kinds); rails 1.6 ms (1.4 ms before).
 
-## Branch
-- `sky-and-wind` from main 5b09422.
+## Open
+- The user found YEAR = 120 s too long (23 November) but asked to keep it; it is the first number of S.forest.
+- The scenes page is English only.
