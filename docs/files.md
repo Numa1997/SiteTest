@@ -76,7 +76,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/lucretius.html`](../public/lucretius.html) | 69.8 kB | The poem page: Lucretius I 146-224 in four columns, Latin, English, German, Arabic (written by make_page.py; /de/ and /ar/ differ only in the words around the poem). | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
 | [`public/portfolios.html`](../public/portfolios.html) | 51.5 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
-| [`public/scenes.html`](../public/scenes.html) | 16.7 kB | The scenes page: every living scene of the site on its own, with what it shows, what drives it and its numbers to change. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`public/scenes.html`](../public/scenes.html) | 17.0 kB | The scenes page: every living scene of the site on its own, with what it shows, what drives it and its numbers to change. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`public/simulations.html`](../public/simulations.html) | 13.0 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
 
 ## German pages (generated)
@@ -224,7 +224,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/scripts/bg-scenes.js`](../public/scripts/bg-scenes.js) | 72.2 kB | Living scenes: ten small moving pictures (forest, iron powder, harmonica, spinners, mixing, chip, letters, seeds, swerve, shores), each mounted in its own place by data-bg. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`public/scripts/bg-scenes.js`](../public/scripts/bg-scenes.js) | 77.5 kB | Living scenes: ten small moving pictures (forest, iron powder, harmonica, spinners, mixing, chip, letters, seeds, swerve, shores), each mounted in its own place by data-bg. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`public/scripts/cart16-view.js`](../public/scripts/cart16-view.js) | 17.4 kB | Fig. 16: Cart16View, the four-wheel cart drawn on Fig. 12's StoutView2 (its camera and glass); the deck's pose from stored data. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 25.3 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
 | [`public/scripts/curve.js`](../public/scripts/curve.js) | 46.9 kB | Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page's store. | [curve.md](scripts/curve.md) |
@@ -5859,7 +5859,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`worker/r2.js`](../worker/r2.js) | 9.2 kB | The site’s Worker: serves the large stored runs from the R2 bucket RUNS under /r2/ (Fig. 15 generation 2) and large simulation data from GitHub releases under /rel/ (byte ranges passed through); every other path is an asset, as before. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`worker/r2.js`](../worker/r2.js) | 9.3 kB | The site’s Worker: serves the large stored runs from the R2 bucket RUNS under /r2/ (Fig. 15 generation 2) and large simulation data from GitHub releases under /rel/ (byte ranges passed through); every other path is an asset, as before. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 
 ## GitHub Actions workflows
 
@@ -5899,7 +5899,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/performance.md`](performance.md) | 53.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 68.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
-| [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 15.0 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 16.8 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.3 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 67.5 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -7689,7 +7689,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/sims/STATE-agents.md`](../notes/sims/STATE-agents.md) | 2.8 kB | State of the Kaggelize work: aim, what is live, the design, the facts checked, what is open. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/engine/neon/N-1.md`](../notes/sims/engine/neon/N-1.md) | 9.3 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/engine/neon/N-2.md`](../notes/sims/engine/neon/N-2.md) | 145.2 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
-| [`notes/sims/engine/state.md`](../notes/sims/engine/state.md) | 7.6 kB | State of the engine rebuild on R2: aim, what is live, the plan, the requests to Neon, commits, the rules. Read first after a compaction. | [kaggle-sims.md](kaggle-sims.md) |
+| [`notes/sims/engine/state.md`](../notes/sims/engine/state.md) | 7.8 kB | State of the engine rebuild on R2: aim, what is live, the plan, the requests to Neon, commits, the rules. Read first after a compaction. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/reports/double_pendulum/state.md`](../notes/sims/reports/double_pendulum/state.md) | 8.4 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/double_pendulum/study.md`](../notes/sims/reports/double_pendulum/study.md) | 16.3 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/wave_interference/state.md`](../notes/sims/reports/wave_interference/state.md) | 1.6 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |

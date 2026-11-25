@@ -1,12 +1,12 @@
 // Phyein Usul's Worker (see wrangler.jsonc and docs/usul.md). The site is static files (assets); this script serves the large
-// stored simulation files that the assets do not hold:
-//   - /r2/<key> from the R2 bucket bound as RUNS, with HTTP byte ranges, restricted to four key families:
+// stored simulation files that assets do not hold:
+//   - /r2/<key> from the R2 bucket bound as RUNS, with HTTP byte ranges, limited to four key families:
 //       1. resonant-tunnelling/YYYY-MM-DD/runs/<name>.bin
 //       2. sims/<sim>/YYYY-MM-DD-v<N>/<file>
-//       3. data/<folder>/<more path>  (five allowed folders under public/data/)
+//       3. data/<folder>/<more path>  (fig12, fig16, schrodinger-sphere, resonant-tunnelling, sims)
 //       4. simulations/fig13/dive/<file>
-//   - /rel/<tag>/<file> from GitHub releases (legacy path kept until nothing reads it).
-// Pages verify every file or byte range against SHA-256 hashes in the repository index, so the Worker needs no trust logic.
+//   - /rel/<tag>/<file> from GitHub releases (legacy path kept while pages still read it).
+// Pages check every downloaded file or part against SHA-256 hashes in the repository index, so the Worker needs no trust logic.
 
 const SEG = /^[A-Za-z0-9_-][A-Za-z0-9_.-]*$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -48,7 +48,7 @@ function noStoreError(body, status, extra = {}) {
   return new Response(body, { status, headers: { ...extra, 'cache-control': 'no-store' } });
 }
 
-// Restrict R2 reads to the four known key families and reject traversal, hidden files, overlong keys, or leftover encoding.
+// Validate a decoded R2 key against the four allowed families and path-safety limits.
 function isAllowedKey(key) {
   if (!key || key.length > 512 || key.includes('..') || key.includes('\\') || key.includes('%')) return false;
   const parts = key.split('/');
@@ -71,7 +71,7 @@ function isAllowedKey(key) {
   return false;
 }
 
-// Accept only a single "bytes=a-b", "bytes=a-", or "bytes=-n" range; return null for anything else so the caller sends the whole file.
+// Parse a single HTTP byte range ("bytes=a-b", "bytes=a-", or "bytes=-n"). Anything else returns null so the caller ignores it.
 function parseSingleRange(header) {
   if (!header) return null;
   const m = SINGLE_RANGE.exec(header.trim());
@@ -96,7 +96,7 @@ function isRangeUnsatisfiable(parsed, size) {
   return parsed.start >= size;
 }
 
-// Compute inclusive byte bounds and part length from R2's returned .range ({offset, length} or {suffix}) and total .size.
+// Resolve R2's returned .range ({offset, length} or {suffix}) and .size into inclusive byte bounds and part length.
 function resolveRange(r2Range, size) {
   if (!r2Range || size <= 0) return null;
   if (r2Range.suffix !== undefined) {
@@ -149,7 +149,7 @@ async function serveR2(request, env, rawKey) {
     return new Response(obj.body, { status: 200, headers: objectHeaders(obj, obj.size) });
   }
 
-  // A zero-byte suffix range can never be satisfied; use head() to report the object's size in 416 (or 404 if missing).
+  // Suffix length 0 is never satisfiable; check head() directly so we can report the true size in 416 (or 404 if missing).
   if (parsedRange.suffix === 0) {
     const head = await env.RUNS.head(key);
     if (!head) return noStoreError('not found', 404);
@@ -160,7 +160,7 @@ async function serveR2(request, env, rawKey) {
   try {
     obj = await env.RUNS.get(key, { range: request.headers });
   } catch (err) {
-    // R2 throws when a requested range starts at or past the end of the object; head() gives the size for the 416 response.
+    // R2 throws when a byte range starts at or past the object's size; head() gives the size needed for the 416 header.
     const head = await env.RUNS.head(key);
     if (!head) return noStoreError('not found', 404);
     if (isRangeUnsatisfiable(parsedRange, head.size)) {
@@ -177,6 +177,7 @@ async function serveR2(request, env, rawKey) {
 
   const part = resolveRange(obj.range, obj.size);
   if (!part) {
+    // R2 returned the full object without a sub-range (for example if a conditional header invalidated the range).
     return new Response(obj.body, { status: 200, headers: objectHeaders(obj, obj.size) });
   }
 
@@ -189,11 +190,10 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname.startsWith('/rel/')) return release(request, url.pathname.slice(5));
-    // Inspect the raw request path before URL normalization so unencoded ".." or "\" segments are rejected rather than rewritten.
+    // Read the raw path before URL normalization so any unencoded ".." segment is rejected instead of collapsed.
     const rawPath = request.url.replace(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^/?#]*/, '').split(/[?#]/)[0];
     if (rawPath.startsWith('/r2/')) return serveR2(request, env, rawPath.slice(4));
-    if (url.pathname.startsWith('/r2/')) return noStoreError('not found', 404);
+    if (url.pathname.startsWith('/r2/')) return serveR2(request, env, url.pathname.slice(4));
     return env.ASSETS.fetch(request);
   },
 };
-
