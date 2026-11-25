@@ -1,37 +1,18 @@
 {
  "fig15": {
-  "dataset": "numakoudsie/fig15-resonant-tunnelling",
-  "title": "Fig. 15 Resonant Tunnelling: simulation data",
-  "subtitle": "Fig. 15 Resonant Tunnelling: every Kaggle run behind the page",
+  "dataset": "numakoudsie/fig-15-resonant-tunnelling-runs-the-page-plays",
+  "title": "Fig. 15 Resonant Tunnelling: runs the page plays",
+  "subtitle": "A wave packet tunnels through 1 to 10 barriers in 3D: every stored run",
   "figure": "Fig. 15 Resonant Tunnelling",
   "page_url": "https://phyeinusul.com/simulations/resonant-tunnelling.html",
   "about": "A quantum wave packet meets two (or more) barriers and gets through almost completely at the resonant energies: 3D Schrodinger runs (Strang split-step Fourier, JAX on Kaggle's GPUs), the exact references that corrected them, and the filed generations the page plays.",
   "doc": "docs/simulations/fig15-resonant-tunnelling.md",
   "site_indexes": [
-   "public/data/resonant-tunnelling/2026-11-13/kaggle/index.json",
-   "public/data/resonant-tunnelling/2026-11-14/kaggle/index.json"
+   "public/data/resonant-tunnelling/2026-11-18/kaggle/index.json"
   ],
   "notebooks": [
-   "numakoudsie/fig15-rt3d-shard-1-of-4",
-   "numakoudsie/fig15-rt3d-shard-2-of-4",
-   "numakoudsie/fig15-rt3d-shard-3-of-4",
-   "numakoudsie/fig15-rt3d-shard-4-of-4",
-   "numakoudsie/fig15-rt3d-singles-v2",
-   "numakoudsie/fig15-rt3d2-shard-1-of-6",
-   "numakoudsie/fig15-rt3d2-shard-2-of-6",
-   "numakoudsie/fig15-rt3d2-shard-3-of-6",
-   "numakoudsie/fig15-rt3d2-shard-4-of-6",
-   "numakoudsie/fig15-rt3d2-shard-5-of-6",
-   "numakoudsie/fig15-rt3d2-shard-6-of-6",
-   "numakoudsie/fig15-rt3d2-fix1",
-   "numakoudsie/fig15-correction-walls-gpu",
-   "numakoudsie/fig15-correction-2d-1-of-4",
-   "numakoudsie/fig15-correction-2d-2-of-4",
-   "numakoudsie/fig15-correction-2d-3-of-4",
-   "numakoudsie/fig15-correction-2d-4-of-4",
-   "numakoudsie/fig15-correction-2d-shells-1-of-2",
-   "numakoudsie/fig15-correction-2d-shells-2-of-2",
-   "numakoudsie/fig15-filer-2026-11-18"
-  ]
+   "numakoudsie/fig-15-resonant-tunnelling"
+  ],
+  "note": "Since 25 November 2026: only the 3,697 runs the page plays (2,782 under 2026-11-18/runs, 915 under 2026-11-14/runs), copied by version 5 of the figure notebook (JOB = curate) and checked by SHA-256 against the live index; public. The old 26.9 GB dataset numakoudsie/fig15-resonant-tunnelling and its 20 notebooks were deleted (docs/kaggle-pipeline.md)."
  }
 }
