@@ -1,0 +1,27 @@
+{
+ "sim": "windpend",
+ "state": "queued",
+ "notebook": "numakoudsie/phyein-usul-simulations",
+ "run": null,
+ "version": 13,
+ "versions": [
+  13
+ ],
+ "shard": 1,
+ "shards": 1,
+ "card": "cpu",
+ "queued_at": "2026-11-25T02:30:04+00:00",
+ "started_at": null,
+ "ended_at": null,
+ "queue_s": null,
+ "run_s": null,
+ "code_commit": "930bcfe42e4902f82c39a72081987998c287a0db",
+ "data_commit": null,
+ "bytes_stored": 0,
+ "failure": null,
+ "expected_s": null,
+ "expected_done": null,
+ "expected_note": "no benchmark file public/data/sims/bench/windpend.json yet",
+ "log_url": "https://www.kaggle.com/code/numakoudsie/phyein-usul-simulations/log",
+ "progress_note": "Kaggle does not report progress during a run; watch the notebook's log page."
+}
