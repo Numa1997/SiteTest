@@ -1,5 +1,23 @@
 # Fig. 2, Double Pendulum: state of the move to Kaggle data
 
+## SESSION OF 25 NOVEMBER 2026 (branch `kaggelize/fig2-r2`), read this block first
+Task (the user, 25 November 2026): kaggelize the next figure through the NEW engine (data in Cloudflare R2, PR 210).
+- Figure chosen: Fig. 2, because notes/sims/PLAN.md, table A ("Computed live ... in this order"), row 1 (Fig. 1) is done and row 2 is
+  Fig. 2; docs/kaggle-sims.md "Figures on the line" lists only coupled and wave_interference2.
+- User's rules for this task: commits as Numa Koudsie only, no AI attribution; own branch; merge main and run tools/inventory.py
+  before every PR; finished tested work merged without asking, then verified live; Kaggle runs pre-approved (GPU too) but read the
+  GPU hours first and ask if a run takes more than half; watch runs with a monitor; Berlin times from a clock; never delete the old
+  live page before the stored one is verified live; if the R2 secrets are missing, stop and give the user the click-by-click steps.
+  Code is written by this session (the Neon rule was withdrawn 25 November 2026).
+- Blocking decision (below, "What the stored grid can and cannot do"): asked the user at 03:2x Berlin, 25 November. Numbers given:
+  per start with its twin 19 594 bytes and 2.605 ms of model time on Kaggle's T4 machine (from run v6: 7 053 765 604 B, 937.7 s,
+  360 000 starts). All slider states: 7.99e12 starts, 157 PB. Stored grid A (15 deg, 5 x 5 cells, 5 x 5 omega): 7.05 GB, 0.26 h.
+  B (1 deg, 5 x 5 cells, 5 x 5 omega): 81 M starts, 1587 GB, 58.6 h. C (1 deg, 5 x 5 cells, released from rest): 3.24 M starts,
+  63.5 GB, 2.34 h. GPU left this week: 108 000 - 4 595 = 103 405 s = 28.7 h (Kaggle connector, 03:22 Berlin), refresh 28 November 01:00 Berlin.
+- Nothing built yet on this branch. Next, after the user's answer: model `tools/sims/double_pendulum_r2.py` (dp_engine.py, store r2,
+  shards if over about 15 GB per Kaggle version), then the page on simdata.js.
+
+
 Written 23 November 2026 at 21:58 Berlin time by the session that started the work; the full run's outcome added at 22:10. Read this before anything else on Fig. 2.
 All times below are Berlin time.
 
