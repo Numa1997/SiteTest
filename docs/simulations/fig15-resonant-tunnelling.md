@@ -57,8 +57,15 @@ separation of variables, the large-radius limit for discs.
 
 - **Fig. 15**: the plane z = 0 as a meshed height sheet (Fig. 14's look: paper at zero, wine crests, slate troughs, a thin ink
   mesh), lifted by Re ψ or |ψ|², with **one scale per run** (the run's largest |ψ|) times a chosen height (× 1, × 3, × 10;
-  clipped at 1.25). The barriers are **static lit glass solids at their true place** (slabs, cylinders, spherical shells), with
-  their cut through z = 0 in ink; they never move with the sheet. Press and drag to turn.
+  clipped at 1.25); its colour mixes towards wine or slate as the square root of the value (since 25 November 2026), so the
+  small values of most of a run are not drawn white. **Up is energy** (since 25 November 2026, `rt3d-view.js`, `setBarriers`): as in
+  the textbook energy diagram, every barrier is drawn as its cut through the plane z = 0 (a wall: a strip across the plane; a disc
+  of radius R: a strip of length 2R; a spherical shell: an annulus) raised to its potential energy V0 on the energy scale
+  `KE = 3` a per energy unit, standing on a floor that tilts with the voltage (rt3d2.py's `vbias`); the sheet's zero sits on the
+  level E of the run (a dashed wine outline). Where E lies under a block's top the packet can only tunnel. Before, the barriers
+  were glass solids in physical space, 1 a thick in a 64 a box: they read as pairs of lines, and their height (physical z) shared
+  the up direction with the sheet's lift. `project`, `pick` and `vertex` work relative to the level, so the read-back checks are
+  unchanged. Press and drag to turn.
 - **Fig. 15b**: `p(x, t)` along the flight, each curve divided by its total in the box; for walls the exact 1D twin dashed on top.
 - **Fig. 15c**: the stored region probabilities against time, the total left in the box, and the lifetime fit.
 - **Fig. 15d**: walls and discs: `T_far` of every 3D run against the exact 1D curves; shells: the lifetime against energy.

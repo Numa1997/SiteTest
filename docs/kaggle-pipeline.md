@@ -90,7 +90,16 @@ versions 2, 8 and 9 of `fig-16-guinness-cart-with-control` (the versions the pag
 version 15 of the CPU notebook `fig-16-cart-diagnostics-cpu` (manifest with SHA-256), uploaded as one archive that Kaggle unpacked;
 all 23 sizes equal the manifest's. Copies: `notes/inventory/datasets/fig16-guinness-cart-control/`. Made through api.kaggle.com
 (`BlobApiService/StartBlobUpload`, then `DatasetApiService/CreateDataset`), because the Kaggle connector has no create call.
-Fig. 15 follows when its running session ends. The deletions and their reasons: `notes/inventory/raw/kaggle-deletions.md`.
+Fig. 15 (25 November 2026, the owner's order to delete everything redundant): one notebook, `numakoudsie/fig-15-resonant-tunnelling`
+(`tools/kaggle/figures/fig-15-resonant-tunnelling/build.py`, jobs `curate` and `check`), and one public dataset,
+`numakoudsie/fig-15-resonant-tunnelling-runs-the-page-plays` (6,189,067,896 bytes): the 3,697 run files the page plays and their
+index, nothing else. Version 5 of the notebook (`curate`, CPU, 1096 s) copied them from the old dataset and checked every file's
+SHA-256 against the live index (`public/data/resonant-tunnelling/2026-11-18/kaggle/index.json`): 3,697 identical, 0 missing; the
+dataset was made from that output in the web page (Create, Notebook output) and holds 2,782 + 915 run files. Then the old dataset
+`numakoudsie/fig15-resonant-tunnelling` (26.9 GB: every output of every run, superseded generations, raw correction runs, the
+filer's four versions) and its 20 notebooks (`fig15-rt3d-*`, `fig15-rt3d2-*`, `fig15-correction-*`, `fig15-filer-2026-11-18`) were
+deleted in the browser. The code of all of them is in this repository at the commits the notebook's table names. Kaggle's connector
+cannot attach a dataset to a notebook (`save_notebook` drops it) nor delete; both were done in the signed-in web page. The deletions and their reasons: `notes/inventory/raw/kaggle-deletions.md`.
 
 ## Store first
 
