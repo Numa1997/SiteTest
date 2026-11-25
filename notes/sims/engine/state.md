@@ -70,5 +70,14 @@ from Neon. Until N-2 lands, `python3 tools/inventory.py --check` fails on this b
 
 Found 25 November: main already had a Neon version of N-1 (c4c47c2, 24 November 10:39 Berlin, by another session), one code line and comments different from mine. Kept main's version; the same eight tests on it: 20 checks passed, 0 failed (local wrangler dev).
 
+## Done and live (25 November 2026)
+- N-1 Worker /r2/ (four key families, byte ranges): on main (c4c47c2, kept from another session; 20 local checks passed).
+- N-2 inventory lines for the notes: on main (PR 206).
+- N-3/N-4/N-5 simdata.js, its test (14 passed, 0 failed), docs/scripts/simdata.md, inventory lines: merged PR 207, live at 02:50 Berlin,
+  live SHA-256 of simdata.js equal to main's.
+- Open: the engine's own R2 key (the user creates it in Cloudflare and puts R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY into
+  GitHub; account id 369cf6416eb1dbb6f48eee530c99ebb5). Next request: the R2 upload step (download from Kaggle, check, upload, read
+  back, remove from the runner's temporary disk only; Kaggle and R2 keep everything), with organised shards.
+
 ## Commits of this work
 - (this file) first commit of the state.
