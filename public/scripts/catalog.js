@@ -257,7 +257,7 @@
             field: 'mechanics',
             stage: 2,
             subject: 'classical mechanics · chaos · control',
-            summary: 'A hundred double pendulums hang still and each is kicked differently; the tip of each draws its own curve, a tidy rosette where the motion is regular, a tangle where it is chaotic, laid over the chaos map of momentum space. Follow one kick to the butterfly, a closed orbit found by Newton\u2019s method; build it by hand from its two waveforms; and watch a motor at the top pin catch a chaotic pendulum, set it on the butterfly and let go, computed live.',
+            summary: 'A hundred double pendulums hang still and each is kicked differently; the tip of each draws its own curve, a tidy rosette where the motion is regular, a tangle where it is chaotic, laid over the chaos map of momentum space, whose glow is an eye: a calm pupil, a chaotic iris and two lashes, all drawn by energy. Follow one kick to the butterfly, a closed orbit found by Newton\u2019s method; build it by hand from its two waveforms; and watch a motor at the top pin catch a chaotic pendulum, set it on the butterfly and let go, computed live.',
             equation: '\\dot\\theta_i = \\frac{\\partial H}{\\partial p_i}, \\qquad \\dot p_1 = -\\frac{\\partial H}{\\partial \\theta_1} + \\tau, \\qquad \\frac{dH}{dt} = \\tau\\,\\dot\\theta_1',
             model: 'compound double pendulum of two uniform rods, Hamilton\u2019s equations; the butterfly as a periodic orbit (boundary condition in time, Floquet multipliers); a torque motor at the top pin',
             method: 'RK4 live in the browser; Newton\u2019s method and DOP853 for the closed orbits; periodic LQR along the orbit for the catch, its gains computed in the browser',

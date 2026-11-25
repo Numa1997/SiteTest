@@ -181,6 +181,28 @@
             .films__reem { height: 54px; } .films__far { height: 46px; }
             .films__stage { margin: 0 -16px; border-radius: 0; }
         }
+        /* How the eye is built: an animation in five steps and a graph (scripts/fig13-eye.js) */
+        .eye { margin: 40px 0 0; }
+        .eye > h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 0 0 6px; color: var(--ink); }
+        .eye > p { margin: 0 0 14px; font-size: 16px; line-height: 1.6; color: var(--ink-2); max-width: 760px; }
+        .eye__fig { margin: 0; background: var(--card); border: 1px solid var(--line-strong, #cdc1ae); border-radius: 10px; overflow: hidden; }
+        .eye__wrap { position: relative; }
+        .eye__wrap canvas { display: block; width: 100%; }
+        .eye__bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px; border-top: 1px solid var(--rule-soft); }
+        .eye__bar button, .eye__steps button { min-height: 44px; padding: 0 14px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; background: var(--card); color: var(--accent); font: 500 13px/1.1 var(--mono); cursor: pointer; touch-action: manipulation; }
+        .eye__bar #eye-play { background: var(--accent); border-color: var(--accent); color: var(--card); min-width: 84px; }
+        .eye__steps { display: flex; gap: 4px; flex: 1 1 auto; flex-wrap: wrap; }
+        .eye__steps button { flex: 1 1 0; min-width: 44px; padding: 0 8px; }
+        .eye__steps button[aria-pressed="true"] { background: var(--accent); color: var(--card); border-color: var(--accent); }
+        .eye__scrub { flex: 1 1 100%; width: 100%; margin: 2px 0 0; accent-color: var(--accent); height: 32px; }
+        .eye__say { margin: 0; padding: 12px 14px; min-height: 5.2em; font-size: 15.5px; line-height: 1.6; color: var(--ink-2); border-top: 1px solid var(--rule-soft); }
+        .eye__gtitle { margin: 0; padding: 12px 14px 0; font: 500 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+        .eye__gwrap { padding: 6px 8px 0; }
+        .eye__gwrap canvas { display: block; width: 100%; cursor: crosshair; touch-action: manipulation; border-radius: 6px; }
+        .eye__read { display: flex; gap: 10px; align-items: center; margin: 0; padding: 10px 14px 14px; font: 13px/1.5 var(--mono); color: var(--ink-2); }
+        .eye__read button { flex: none; min-height: 40px; padding: 0 12px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; background: var(--card); color: var(--accent); font: 500 12px var(--mono); cursor: pointer; }
+        .eye__cap { padding: 0 14px 14px; font-size: 14px; line-height: 1.55; color: var(--muted); }
+        @media (max-width: 640px) { .eye__fig { margin: 0 -16px; border-radius: 0; border-left: 0; border-right: 0; } .eye__steps button span { display: none; } }
         .inside { margin: 40px 0 0; }
         .inside__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; align-items: stretch; }
         .inside__grid > .station { margin: 0; display: flex; flex-direction: column; }
@@ -248,7 +270,7 @@
                 <div class="f13__introside">
                     <p class="dedication">To Rim</p>
                     <ul class="onpage" aria-label="On this page">
-                        <li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
+                        <li><a href="#eye">The eye</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
                     </ul>
                 </div>
             </div>
@@ -392,6 +414,26 @@
                 </ol>
             </div>
             <div class="films__foot"><button type="button" class="films__close" id="films-close" hidden>Close the film</button></div>
+        </section>
+
+        <section class="eye" id="eye" aria-labelledby="eye-title">
+            <h2 id="eye-title">How the eye is built</h2>
+            <p>The glow behind Fig. 13 looks like an eye: a dark pupil, a bright iris around it, and two lashes running out to the edges. It is not decoration. It is a measurement: for every strike, would a twin pendulum struck a hair differently do the same thing? The animation builds it in five steps; the graph says how much of each energy is chaotic.</p>
+            <figure class="eye__fig">
+                <div class="eye__wrap"><canvas id="eye-cv" role="img" aria-label="The eye of the chaos map built in five steps: one strike and its twin, every strike, the energy ellipses, the iris, the fold lines"></canvas></div>
+                <div class="eye__bar">
+                    <button type="button" id="eye-play">Play</button>
+                    <div class="eye__steps" id="eye-steps" role="group" aria-label="Go to a step">
+                        <button type="button">1<span>&nbsp;one strike</span></button><button type="button">2<span>&nbsp;every strike</span></button><button type="button">3<span>&nbsp;energy</span></button><button type="button">4<span>&nbsp;iris</span></button><button type="button">5<span>&nbsp;lashes</span></button>
+                    </div>
+                    <input class="eye__scrub" id="eye-scrub" type="range" min="0" max="310" step="1" value="0" aria-label="Time in the animation">
+                </div>
+                <p class="eye__say" id="eye-say" aria-live="polite"></p>
+                <p class="eye__gtitle">How much of each energy is chaotic</p>
+                <div class="eye__gwrap"><canvas id="eye-graph" tabindex="0" role="img" aria-label="Graph: share of strikes that are chaotic against the energy of the strike, log scale from 0.5 to 5000 J; zero below 9.8 J, highest between 29.4 and 39.2 J, near zero above 196 J. Tap or use the arrow keys to pin an energy."></canvas></div>
+                <p class="eye__read"><span id="eye-read">Tap the graph to pin an energy: its share is read here and its ellipse is drawn on the eye.</span><button type="button" id="eye-unpin" hidden>Unpin</button></p>
+                <figcaption class="eye__cap">Both pictures read the same map as the sheet (921,600 strikes, each with its twin, 6.67 s each; <code>tools/fig13/chaos_map.py</code>); "chaotic" means map value v &gt; 0.5. Step 1 repeats the measurement live for two strikes and shows its value next to the map's: they differ only by the rounding of the map image. The theory is in sections <a href="#n-eye">5</a> and <a href="#n-x">6</a> of the lecture note.</figcaption>
+            </figure>
         </section>
 
         <section class="inside" id="inside" aria-labelledby="inside-title">
@@ -972,6 +1014,7 @@
     <script src="../scripts/fold.js"></script>
     <script src="../scripts/sim.js"></script>
     <script src="../scripts/fig13-hunt-data.js"></script>
+    <script src="../scripts/fig13-eye.js" defer></script>
 <script>
 (() => {
 'use strict';
