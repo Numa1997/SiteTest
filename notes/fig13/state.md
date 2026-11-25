@@ -10,12 +10,16 @@ the flower hunt, the catch (a motor at the top pin brings a chaotic double pendu
 - `#eye` "How the eye is built": `public/scripts/fig13-eye.js`. Animation in five steps (one strike and its twin, every strike, energy
   ellipses and pupil, iris, fold lines = lashes) with Play, step buttons and a time slider; graph of the chaotic share against strike
   energy from the map image; tap the graph to pin an energy (its ellipse is drawn on the eye).
+- `#catalogue` "The catalogue of closed drawings": `public/scripts/fig13-catalogue.js` and `fig13-catalogue-data.js` (228 orbits; built by
+  `tools/fig13/closed_map.py` → `closed_pin.py` → `catalogue_build.py`, stability by `closed_stability.py`).
 - Card picture on the simulations list: `public/images/sims/momentum-spirographs.webp`, drawn by `tools/fig13/eye_thumb.py`.
 - The catch: `tools/fig13/gift/catch.html` and `pendulum.js` (published by `gift/publish_films.py`); 14 targets; measured with
   `node tools/fig13/catch_targets.cjs 60 300`. Numbers in `docs/simulations/fig13-momentum-spirographs.md`.
 - Display work on the stations and films was done by a separate session (20 November 2026), merged to main.
 
 ## Left
+- A finer chaos map (the 1280 × 720 map looks blocky when enlarged): compute on a Kaggle GPU, longer watch, supersampled.
+- Family lines coloured by stability (computed in the scratchpad, not yet on the page); deeper zooms of the chaos boundary with a longer watch.
 - The labels under the catch picture are small on a phone (check whether the display session fixed them).
 - The butterflies are slower to catch than the flowers (median 8 to 35 s); their first catch slips about four times in ten.
 
