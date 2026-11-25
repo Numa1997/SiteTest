@@ -94,7 +94,7 @@ P = dict(
     mu=1.849e-5,     # Pa s, air at 25 °C
     U=1.6,           # m/s, the wind, straight down the strip
     c_over_U=0.8,    # the vortex street drifts at c = 0.8 U (as on the site)
-    lam=4.0,         # m, λ: spacing of the vortices in a row; the wind's period is T = λ / c
+    lam=6.0,         # m, λ: spacing of the vortices in a row; the wind's period is T = λ / c
     h_over_lam=0.281,  # h / λ, von Kármán's ratio
     delta=0.35,      # δ, rounding of each vortex core (the site's ST_D)
     L=1.6,           # m, thread: pivot to the globe's centre
@@ -106,7 +106,7 @@ P = dict(
     rho_t=1140.0,    # kg/m^3, the thread (nylon)
     C_Dt=1.2,        # drag coefficient of a cylinder across the flow (the site's (34))
     K=3,             # pendulums on a beam
-    a=1.1,           # m, they hang at η = −a, 0, +a
+    a=1.2,           # m, they hang at η = −a, 0, +a
     WS=8.0,          # m, width of the strip for which streamlines are stored
     N_l=41,          # streamlines stored
     N_s=96,          # points per streamline along one λ
