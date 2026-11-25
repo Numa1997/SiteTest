@@ -10,8 +10,9 @@ on:
   workflow_dispatch:
     inputs:
       sim: { description: "simulation to compute (a model file tools/sims/<sim>.py, listed in tools/sims/registry.json)", required: true, default: "barton" }
-      mode: { description: "run = compute on Kaggle; dataset = file the output of an existing notebook version as the simulation's Kaggle dataset; figure = file every Kaggle notebook run of a figure (sim = its key in tools/sims/figure_datasets.json, e.g. fig15) as the figure's dataset", required: false, default: "run" }
-      version: { description: "for mode dataset: the version of the notebook numakoudsie/phyein-usul-simulations whose output is filed", required: false, default: "" }
+      mode: { description: "run = compute on Kaggle; collect = fetch, check and store the output of notebook versions that already ran (version = their numbers, comma-separated, in shard order; shard = the shard of the first); dataset = file the output of an existing notebook version as the simulation's Kaggle dataset; figure = file every Kaggle notebook run of a figure (sim = its key in tools/sims/figure_datasets.json, e.g. fig15) as the figure's dataset", required: false, default: "run" }
+      version: { description: "for modes dataset and collect: the version(s) of the notebook numakoudsie/phyein-usul-simulations whose output is used", required: false, default: "" }
+      shard: { description: "for mode collect: the shard number of the first version (1 unless a sharded run is being finished)", required: false, default: "1" }
   workflow_call:        # used by the Kaggelize flow (kaggelize-land.yml), after the owner approved: compute <sim> from the commit <ref>
     inputs:             # of a session's branch; the commit step below then puts that branch and its data on main in one push
       sim: { type: string, required: true }
@@ -27,13 +28,14 @@ jobs:
     timeout-minutes: 360   # GPU runs with large data (registry "gpu", "store": "release") can take hours on Kaggle
     outputs:
       sims: ${{ steps.which.outputs.sims }}
-      sha: ${{ steps.which.outputs.sha }}
+      sha: ${{ steps.compute.outputs.commit || steps.which.outputs.sha }}
+      run_id: ${{ steps.compute.outputs.run }}
     steps:
       - uses: actions/checkout@v4
         with: { ref: "${{ inputs.ref || github.sha }}", fetch-depth: "${{ inputs.ref && '0' || '2' }}" }
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - run: pip install kaggle==2.2.5 six   # kaggle 2.2.5 imports six without declaring it
+      - run: pip install kaggle==2.2.5 six boto3==1.40.70   # kaggle 2.2.5 imports six without declaring it; boto3 speaks to R2 (tools/sims/r2.py)
       - name: Which simulations
         id: which
         env: { SIM: "${{ inputs.sim }}", MODE: "${{ inputs.mode }}" }
@@ -42,11 +44,13 @@ jobs:
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"     # the commit whose code Kaggle runs (a branch's commit when called with ref)
           if [ -n "$SIM" ]; then S="$SIM"
           else S=$(git diff --name-only HEAD~1 HEAD -- 'tools/sims/*.py' | xargs -r -n1 basename | sed 's/\.py$//' | tr '\n' ' '); fi
-          # only simulations listed in tools/sims/registry.json are computed; other files in the folder are the machinery
-          S=$(python3 -c "import json,sys; r=json.load(open('tools/sims/registry.json'))['sims']; print(' '.join(x for x in sys.argv[1:] if x in r))" $S)
-          echo "sims=$S" >> "$GITHUB_OUTPUT"; echo "simulations: $S"
+          # only simulations listed in tools/sims/registry.json are computed; other files in the folder are the machinery. An entry
+          # marked "manual" (the engine's test model) is computed only when named by Run workflow, never by a merge.
+          S=$(python3 -c "import json,sys; r=json.load(open('tools/sims/registry.json'))['sims']; named=sys.argv[1]=='1'; print(' '.join(x for x in sys.argv[2:] if x in r and (named or not r[x].get('manual'))))" "$([ -n "$SIM" ] && echo 1 || echo 0)" $S)
+          F=$(python3 -c "import json,sys; r=json.load(open('tools/sims/registry.json'))['sims']; print('1' if any(r[x].get('free_disk') for x in sys.argv[1:]) else '0')" $S)
+          echo "sims=$S" >> "$GITHUB_OUTPUT"; echo "free_disk=$F" >> "$GITHUB_OUTPUT"; echo "simulations: $S"
       - name: Room for large data
-        if: steps.which.outputs.sims != ''
+        if: steps.which.outputs.sims != '' && steps.which.outputs.free_disk == '1'
         run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL; df -h / | tail -1   # about 30 GB free for a large run's download
       - name: Compute on Kaggle, check, store
         id: compute
@@ -54,12 +58,17 @@ jobs:
         env:
           MODE: ${{ inputs.mode }}
           VERSION: ${{ inputs.version }}
+          SHARD: ${{ inputs.shard }}
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}           # the engine's own R2 token (Object Read & Write on phyein-usul-runs only);
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}     # pipeline.py stops with "the repository secrets R2_... are missing"
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}   # when an "r2" entry is computed without them
           GH_TOKEN: ${{ github.token }}   # large data goes into a GitHub release (tools/sims/pipeline.py, step 5a); contents: write allows it
         run: |
           test -n "$KAGGLE_API_TOKEN" || { echo "the repository secret KAGGLE_API_TOKEN is missing"; exit 1; }
           if [ "$MODE" = "figure" ]; then python3 tools/sims/file_figure.py "${{ steps.which.outputs.sims }}"; exit $?; fi
           if [ "$MODE" = "dataset" ]; then python3 tools/sims/dataset.py "${{ steps.which.outputs.sims }}" "$VERSION"; exit $?; fi
+          if [ "$MODE" = "collect" ]; then python3 tools/sims/pipeline.py "${{ steps.which.outputs.sims }}" "${{ steps.which.outputs.sha }}" --collect "$VERSION" --shard "${SHARD:-1}"; exit $?; fi
           for s in ${{ steps.which.outputs.sims }}; do python3 tools/sims/pipeline.py "$s" "${{ steps.which.outputs.sha }}"; done
       - name: Commit the data
         if: steps.which.outputs.sims != '' && inputs.mode != 'figure'
@@ -81,4 +90,5 @@ jobs:
         with: { python-version: "3.12" }
       - run: pip install playwright==1.65.2 && python -m playwright install --with-deps chromium
       - name: Check the live site
+        # for an "r2" run the result is written into its status file on main (live_ok or failed), by the workflow's identity
         run: for s in ${{ needs.run.outputs.sims }}; do python3 tools/sims/verify_live.py "$s" "${{ needs.run.outputs.sha }}"; done
