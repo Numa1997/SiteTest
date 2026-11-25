@@ -1,3 +1,10 @@
+## READ FIRST: hand-over of 25 November 2026
+The user withdrew the Neon rule on 25 November 2026 ("fuck neon"): from now on the session working on this task WRITES THE CODE
+ITSELF. The "YOU WRITE NO CODE" header of notes/sims/ENGINE-PROMPT.md no longer applies; every other rule of that prompt still does.
+This session handed the work to a new cloud session, which continues from here. The next piece of work is the specification in
+notes/sims/engine/neon/N-6.md (R2 store with read-back, run addresses, organised shards, collect mode, status file, sims_smoke, local
+end-to-end test with 12 cases): implement it directly, test it, merge it, then continue with the rest of the prompt's build items.
+
 # The engine "Simulations on Kaggle", rebuilt on R2: state of the work
 
 Read this first after a compaction. Task: notes/sims/ENGINE-PROMPT.md (the user's prompt of 23-24 November 2026). Times are Berlin time.
@@ -69,6 +76,15 @@ original bytes, SHA-256 2d3c1983...) and sent as N-2. There is no exception: eve
 from Neon. Until N-2 lands, `python3 tools/inventory.py --check` fails on this branch, so nothing merges to main.
 
 Found 25 November: main already had a Neon version of N-1 (c4c47c2, 24 November 10:39 Berlin, by another session), one code line and comments different from mine. Kept main's version; the same eight tests on it: 20 checks passed, 0 failed (local wrangler dev).
+
+## Done and live (25 November 2026)
+- N-1 Worker /r2/ (four key families, byte ranges): on main (c4c47c2, kept from another session; 20 local checks passed).
+- N-2 inventory lines for the notes: on main (PR 206).
+- N-3/N-4/N-5 simdata.js, its test (14 passed, 0 failed), docs/scripts/simdata.md, inventory lines: merged PR 207, live at 02:50 Berlin,
+  live SHA-256 of simdata.js equal to main's.
+- Open: the engine's own R2 key (the user creates it in Cloudflare and puts R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY into
+  GitHub; account id 369cf6416eb1dbb6f48eee530c99ebb5). Next request: the R2 upload step (download from Kaggle, check, upload, read
+  back, remove from the runner's temporary disk only; Kaggle and R2 keep everything), with organised shards.
 
 ## Commits of this work
 - (this file) first commit of the state.
