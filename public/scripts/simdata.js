@@ -1,17 +1,47 @@
 // Shared loader for stored simulation data (computed once on Kaggle, stored in the repository or in Cloudflare R2).
 // Every page opens its simulation through window.SimData, which reads generations.json once per visit, picks the
-// newest usable generation for the requested format, verifies every downloaded file or byte range by length and
-// SHA-256 before returning bytes to the page, caches promises so nothing is fetched twice on the same generation,
-// and keeps window.__simData updated for the live check.
+// newest usable generation for the requested format, retries transient fetch failures once, verifies every downloaded
+// file or byte range by length and SHA-256 before returning bytes to the page, shares one visit-wide download cache
+// across all generation objects, and keeps window.__simData updated for the live check without wiping prior results.
 (function () {
   'use strict';
 
+  const RETRY_DELAY_MS = 500;
+  const RETRY_STATUSES = { 500: true, 502: true, 503: true, 504: true };
+
+  // Visit-wide caches shared by every open() call on the page.
   const indexCache = Object.create(null);
+  const dataCache = Object.create(null);
   let latestSim = null;
 
   function normalizeBase(base) {
     if (!base) return '/';
     return base.endsWith('/') ? base : base + '/';
+  }
+
+  function delay(ms) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, ms);
+    });
+  }
+
+  // Retry once after 500 ms on network failure or HTTP 500/502/503/504; never retry 4xx or verification failures.
+  async function fetchWithRetry(url, init) {
+    let res;
+    try {
+      res = await fetch(url, init);
+    } catch (err) {
+      await delay(RETRY_DELAY_MS);
+      return fetch(url, init);
+    }
+    if (RETRY_STATUSES[res.status]) {
+      if (res.body && typeof res.body.cancel === 'function') {
+        res.body.cancel().catch(function () {});
+      }
+      await delay(RETRY_DELAY_MS);
+      return fetch(url, init);
+    }
+    return res;
   }
 
   function ensureReport(sim) {
@@ -39,17 +69,8 @@
     window.__simData.err = cur.err;
   }
 
-  function registerReport(sim, rec) {
-    ensureReport(sim);
-    window.__simData.all[sim] = rec;
-    latestSim = sim;
-    syncTop();
-  }
-
-  function activateReport(sim, rec) {
-    ensureReport(sim);
-    window.__simData.all[sim] = rec;
-    syncTop();
+  function sameGeneration(gen, entry) {
+    return !!gen && gen.date === entry.date && gen.version === entry.version;
   }
 
   async function sha256Hex(buf) {
@@ -72,7 +93,7 @@
       indexCache[url] = (async function () {
         let res;
         try {
-          res = await fetch(url);
+          res = await fetchWithRetry(url);
         } catch (err) {
           throw new Error('generations.json: ' + (err && err.message ? err.message : String(err)));
         }
@@ -115,22 +136,29 @@
     const base = normalizeBase(options.base);
     const host = options.host || null;
 
-    const rec = {
-      sim: sim,
-      gen: null,
-      sha_ok: false,
-      files: [],
-      err: null,
-    };
-    registerReport(sim, rec);
+    // Create the top-level report on the first open(), without overwriting any existing report for this sim.
+    ensureReport(sim);
+    if (!window.__simData.all[sim]) {
+      window.__simData.all[sim] = {
+        sim: sim,
+        gen: null,
+        sha_ok: false,
+        files: [],
+        err: null,
+      };
+    }
+    latestSim = sim;
+    syncTop();
 
     let list;
     try {
       list = await loadIndex(base);
     } catch (err) {
       const wrapped = err instanceof Error ? err : new Error(String(err));
-      rec.err = wrapped.message;
-      rec.sha_ok = false;
+      const cur = window.__simData.all[sim];
+      if (cur.err === null) cur.err = wrapped.message;
+      cur.sha_ok = false;
+      latestSim = sim;
       syncTop();
       fail(host, wrapped.message);
       throw wrapped;
@@ -156,8 +184,10 @@
 
     if (!best) {
       const err = new Error('no stored data for ' + sim + ', format ' + format);
-      rec.err = err.message;
-      rec.sha_ok = false;
+      const cur = window.__simData.all[sim];
+      if (cur.err === null) cur.err = err.message;
+      cur.sha_ok = false;
+      latestSim = sim;
       syncTop();
       fail(host, err.message);
       throw err;
@@ -165,21 +195,32 @@
 
     const store = best.store || 'repo';
     const resolvedFormat = best.format == null ? 1 : best.format;
-    rec.gen = {
+    const genInfo = {
       date: best.date,
       version: best.version,
       commit: best.commit,
       format: resolvedFormat,
       store: store,
     };
-    syncTop();
 
-    const fileCache = Object.create(null);
-    const partCache = Object.create(null);
-    const fileRequested = Object.create(null);
-    const partRequested = Object.create(null);
-    const fileError = Object.create(null);
-    const partError = Object.create(null);
+    // Preserve verified files and errors when reopening the same generation; start fresh only for a different generation.
+    const existing = window.__simData.all[sim];
+    let rec;
+    if (existing && (existing.gen === null || sameGeneration(existing.gen, best))) {
+      rec = existing;
+      rec.gen = genInfo;
+    } else {
+      rec = {
+        sim: sim,
+        gen: genInfo,
+        sha_ok: false,
+        files: [],
+        err: null,
+      };
+      window.__simData.all[sim] = rec;
+    }
+    latestSim = sim;
+    syncTop();
 
     function fileAddress(fileName) {
       if (store === 'r2') {
@@ -196,130 +237,163 @@
     }
 
     function recordPass(name) {
-      rec.files.push(name);
+      if (rec.files.indexOf(name) === -1) rec.files.push(name);
       rec.sha_ok = rec.err === null && rec.files.length > 0;
-      activateReport(sim, rec);
+      syncTop();
     }
 
     function recordFail(err, notifyHost) {
       if (rec.err === null) rec.err = err.message;
       rec.sha_ok = false;
-      activateReport(sim, rec);
+      syncTop();
       if (notifyHost) fail(host, err.message);
     }
 
-    function startFile(name, fromPrefetch) {
-      if (!fromPrefetch) fileRequested[name] = true;
-      if (fileCache[name]) {
-        if (!fromPrefetch && fileError[name]) {
-          fail(host, fileError[name].message);
-        }
-        return fileCache[name];
-      }
-      const p = (async function () {
-        try {
-          const files = best.files;
-          if (!files || !Object.prototype.hasOwnProperty.call(files, name)) {
-            throw new Error(name + ': not listed in generations.json');
-          }
-          const meta = files[name];
-          let res;
-          try {
-            res = await fetch(fileAddress(name));
-          } catch (err) {
-            throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
-          }
-          if (res.status !== 200) {
-            throw new Error(name + ': HTTP ' + res.status);
-          }
-          let buf;
-          try {
-            buf = await res.arrayBuffer();
-          } catch (err) {
-            throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
-          }
-          if (typeof meta.bytes === 'number' && buf.byteLength !== meta.bytes) {
-            throw new Error(name + ': expected ' + meta.bytes + ' bytes, got ' + buf.byteLength);
-          }
-          let hex;
-          try {
-            hex = await sha256Hex(buf);
-          } catch (err) {
-            throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
-          }
-          if (typeof meta.sha256 !== 'string' || hex !== meta.sha256.toLowerCase()) {
-            throw new Error(name + ': SHA-256 differs from generations.json');
-          }
+    // Share one promise per full address (plus range for parts) across all generation objects opened during the visit.
+    function startCached(cacheKey, name, fromPrefetch, fetchAndVerify) {
+      let cached = dataCache[cacheKey];
+      if (cached) {
+        if (cached.done) {
           recordPass(name);
+        } else if (cached.error) {
+          recordFail(cached.error, !fromPrefetch);
+        } else {
+          cached.waiters.push({
+            recordPass: recordPass,
+            recordFail: recordFail,
+            name: name,
+            notifyHost: !fromPrefetch,
+          });
+        }
+        return cached.promise;
+      }
+
+      cached = {
+        promise: null,
+        done: false,
+        error: null,
+        waiters: [
+          {
+            recordPass: recordPass,
+            recordFail: recordFail,
+            name: name,
+            notifyHost: !fromPrefetch,
+          },
+        ],
+      };
+
+      cached.promise = (async function () {
+        try {
+          const buf = await fetchAndVerify();
+          cached.done = true;
+          const waiters = cached.waiters;
+          cached.waiters = [];
+          for (let i = 0; i < waiters.length; i++) {
+            waiters[i].recordPass(waiters[i].name);
+          }
           return buf;
         } catch (err) {
           const wrapped = err instanceof Error ? err : new Error(name + ': ' + String(err));
-          fileError[name] = wrapped;
-          recordFail(wrapped, !!fileRequested[name]);
+          cached.error = wrapped;
+          const waiters = cached.waiters;
+          cached.waiters = [];
+          for (let i = 0; i < waiters.length; i++) {
+            waiters[i].recordFail(wrapped, waiters[i].notifyHost);
+          }
           throw wrapped;
         }
       })();
-      fileCache[name] = p;
-      return p;
+
+      dataCache[cacheKey] = cached;
+      return cached.promise;
+    }
+
+    function rejectImmediate(err, fromPrefetch) {
+      recordFail(err, !fromPrefetch);
+      return Promise.reject(err);
+    }
+
+    function startFile(name, fromPrefetch) {
+      const files = best.files;
+      if (!files || !Object.prototype.hasOwnProperty.call(files, name)) {
+        return rejectImmediate(new Error(name + ': not listed in generations.json'), fromPrefetch);
+      }
+      const meta = files[name];
+      const addr = fileAddress(name);
+      return startCached(addr, name, fromPrefetch, async function () {
+        let res;
+        try {
+          res = await fetchWithRetry(addr);
+        } catch (err) {
+          throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
+        }
+        if (res.status !== 200) {
+          throw new Error(name + ': HTTP ' + res.status);
+        }
+        let buf;
+        try {
+          buf = await res.arrayBuffer();
+        } catch (err) {
+          throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
+        }
+        if (typeof meta.bytes === 'number' && buf.byteLength !== meta.bytes) {
+          throw new Error(name + ': expected ' + meta.bytes + ' bytes, got ' + buf.byteLength);
+        }
+        let hex;
+        try {
+          hex = await sha256Hex(buf);
+        } catch (err) {
+          throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
+        }
+        if (typeof meta.sha256 !== 'string' || hex !== meta.sha256.toLowerCase()) {
+          throw new Error(name + ': SHA-256 differs from generations.json');
+        }
+        return buf;
+      });
     }
 
     function startPart(name, fromPrefetch) {
-      if (!fromPrefetch) partRequested[name] = true;
-      if (partCache[name]) {
-        if (!fromPrefetch && partError[name]) {
-          fail(host, partError[name].message);
-        }
-        return partCache[name];
+      const parts = best.parts;
+      if (!parts || !Object.prototype.hasOwnProperty.call(parts, name)) {
+        return rejectImmediate(new Error(name + ': not listed in generations.json'), fromPrefetch);
       }
-      const p = (async function () {
+      const meta = parts[name];
+      if (!meta || !meta.pack || typeof meta.offset !== 'number' || typeof meta.bytes !== 'number' || meta.bytes <= 0) {
+        return rejectImmediate(new Error(name + ': invalid part entry in generations.json'), fromPrefetch);
+      }
+      const addr = fileAddress(meta.pack);
+      const rangeHeader = 'bytes=' + meta.offset + '-' + (meta.offset + meta.bytes - 1);
+      const cacheKey = addr + '\0' + rangeHeader;
+      return startCached(cacheKey, name, fromPrefetch, async function () {
+        let res;
         try {
-          const parts = best.parts;
-          if (!parts || !Object.prototype.hasOwnProperty.call(parts, name)) {
-            throw new Error(name + ': not listed in generations.json');
-          }
-          const meta = parts[name];
-          if (!meta || !meta.pack || typeof meta.offset !== 'number' || typeof meta.bytes !== 'number' || meta.bytes <= 0) {
-            throw new Error(name + ': invalid part entry in generations.json');
-          }
-          const rangeHeader = 'bytes=' + meta.offset + '-' + (meta.offset + meta.bytes - 1);
-          let res;
-          try {
-            res = await fetch(fileAddress(meta.pack), { headers: { Range: rangeHeader } });
-          } catch (err) {
-            throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
-          }
-          if (res.status !== 206) {
-            throw new Error(name + ': HTTP ' + res.status);
-          }
-          let buf;
-          try {
-            buf = await res.arrayBuffer();
-          } catch (err) {
-            throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
-          }
-          if (buf.byteLength !== meta.bytes) {
-            throw new Error(name + ': expected ' + meta.bytes + ' bytes, got ' + buf.byteLength);
-          }
-          let hex;
-          try {
-            hex = await sha256Hex(buf);
-          } catch (err) {
-            throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
-          }
-          if (typeof meta.sha256 !== 'string' || hex !== meta.sha256.toLowerCase()) {
-            throw new Error(name + ': SHA-256 differs from generations.json');
-          }
-          recordPass(name);
-          return buf;
+          res = await fetchWithRetry(addr, { headers: { Range: rangeHeader } });
         } catch (err) {
-          const wrapped = err instanceof Error ? err : new Error(name + ': ' + String(err));
-          partError[name] = wrapped;
-          recordFail(wrapped, !!partRequested[name]);
-          throw wrapped;
+          throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
         }
-      })();
-      partCache[name] = p;
-      return p;
+        if (res.status !== 206) {
+          throw new Error(name + ': HTTP ' + res.status);
+        }
+        let buf;
+        try {
+          buf = await res.arrayBuffer();
+        } catch (err) {
+          throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
+        }
+        if (buf.byteLength !== meta.bytes) {
+          throw new Error(name + ': expected ' + meta.bytes + ' bytes, got ' + buf.byteLength);
+        }
+        let hex;
+        try {
+          hex = await sha256Hex(buf);
+        } catch (err) {
+          throw new Error(name + ': ' + (err && err.message ? err.message : String(err)));
+        }
+        if (typeof meta.sha256 !== 'string' || hex !== meta.sha256.toLowerCase()) {
+          throw new Error(name + ': SHA-256 differs from generations.json');
+        }
+        return buf;
+      });
     }
 
     function file(name) {
@@ -361,3 +435,4 @@
     fail: fail,
   };
 })();
+
