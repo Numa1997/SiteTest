@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7152 files, 982.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7156 files, 982.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -15,14 +15,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Simulation pages](#simulation-pages) | 41 |
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
-| [Shared scripts](#shared-scripts) | 37 |
+| [Shared scripts](#shared-scripts) | 38 |
 | [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4802 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
 | [Latin Modern](#latin-modern) | 5 |
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
-| [Thumbnails](#thumbnails) | 17 |
+| [Thumbnails](#thumbnails) | 18 |
 | [Figures of Double Pendulum under Control](#figures-of-double-pendulum-under-control) | 4 |
 | [Logo](#logo) | 20 |
 | [The CV page](#the-cv-page) | 4 |
@@ -42,13 +42,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [GitHub Actions workflows](#github-actions-workflows) | 4 |
 | [GitHub Actions building blocks used by the workflows](#github-actions-building-blocks-used-by-the-workflows) | 1 |
 | [Documentation](#documentation) | 49 |
-| [Tools](#tools) | 376 |
+| [Tools](#tools) | 377 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 914 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 915 |
 
 ## Repository root
 
@@ -159,7 +159,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/flower-hunt.html`](../public/simulations/flower-hunt.html) | 40.0 kB | Fig. 13 study · The Flower Hunt: closed flowers and butterflies found as periodic orbits by Newton's method, a test bench and study notes. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/guinness-cart-control.html`](../public/simulations/guinness-cart-control.html) | 81.2 kB | Fig. 16 · A Pint of Guinness on a Cart Built to Carry It: the simulation, its data panel, walkthrough and lecture note. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`public/simulations/guinness-kaggle.html`](../public/simulations/guinness-kaggle.html) | 297.0 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-guinness-kaggle.md](simulations/fig12-guinness-kaggle.md) |
-| [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 200.6 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 206.1 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.2 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.3 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 71.3 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
@@ -226,11 +226,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`public/scripts/bg-scenes.js`](../public/scripts/bg-scenes.js) | 77.5 kB | Living scenes: ten small moving pictures (forest, iron powder, harmonica, spinners, mixing, chip, letters, seeds, swerve, shores), each mounted in its own place by data-bg. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`public/scripts/cart16-view.js`](../public/scripts/cart16-view.js) | 17.4 kB | Fig. 16: Cart16View, the four-wheel cart drawn on Fig. 12's StoutView2 (its camera and glass); the deck's pose from stored data. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
-| [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 25.3 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
+| [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 25.4 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
 | [`public/scripts/curve.js`](../public/scripts/curve.js) | 46.9 kB | Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page's store. | [curve.md](scripts/curve.md) |
 | [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 104.7 kB | The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
 | [`public/scripts/fig13-engine.js`](../public/scripts/fig13-engine.js) | 6.0 kB | Fig. 13: the general double pendulum (Hamilton's equations, RK4) and the long-exposure plate, shared by the Fig. 13 pages. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/scripts/fig13-eye.js`](../public/scripts/fig13-eye.js) | 27.6 kB | Fig. 13: how the eye is built, an animation in five steps and the graph of chaos against energy, both read from the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/fig13-hunt-data.js`](../public/scripts/fig13-hunt-data.js) | 17.7 kB | Fig. 13: the flowers and butterflies of the flower hunt, written by tools/fig13/hunt_export.py; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/fig13-sheet-worker.js`](../public/scripts/fig13-sheet-worker.js) | 3.5 kB | Fig. 13: the sheet's worker, integrating the grid of pendulums on a second thread; rk4n and tip copied from the page (checked by tools/fig13/sheet_worker_check.cjs). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/fig14-iso-worker.js`](../public/scripts/fig14-iso-worker.js) | 3.0 kB | Fig. 14 sheets, off the main thread (module worker): Lanczos resampling of the 3D field and marching cubes for Re psi = +c and -c. | [wave3d-view.md](scripts/wave3d-view.md) |
@@ -5377,6 +5378,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/images/sims/driven-oscillator.webp`](../public/images/sims/driven-oscillator.webp) | 23.7 kB | Thumbnail of Fig. 9 · Driven Oscillator, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/guinness-cart-control.webp`](../public/images/sims/guinness-cart-control.webp) | 24.3 kB | Thumbnail of Fig. 16 · A Pint of Guinness on a Cart Built to Carry It, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/guinness-kaggle.webp`](../public/images/sims/guinness-kaggle.webp) | 10.4 kB | Thumbnail of Fig. 12 · A Pint of Guinness on a One-Wheel Cart, 800 × 500 px. | [assets.md](assets.md) |
+| [`public/images/sims/momentum-spirographs.webp`](../public/images/sims/momentum-spirographs.webp) | 64.8 kB | Thumbnail of Fig. 13 · Spirographs in Momentum Space, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/pendulum-control.webp`](../public/images/sims/pendulum-control.webp) | 14.0 kB | Thumbnail of Fig. 11 · Double Pendulum under Control, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/phasor-sums.webp`](../public/images/sims/phasor-sums.webp) | 12.2 kB | Thumbnail of Fig. 7 · Phasor Sums, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/resonant-tunnelling.webp`](../public/images/sims/resonant-tunnelling.webp) | 25.4 kB | Thumbnail of Fig. 15 · Resonant Tunnelling, 800 × 500 px. | [assets.md](assets.md) |
@@ -5922,7 +5924,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 88.1 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`, DELETED 18 November 2026). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 38.0 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 39.8 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 32.0 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 15.4 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 19.0 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -6003,6 +6005,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig13/catch_stats.cjs`](../tools/fig13/catch_stats.cjs) | 4.7 kB | Fig. 13: the catch statistics of the lecture note from the browser's own pendulum.js, in Node (random starts, the basin, one strike; any step size and seed). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/catch_targets.cjs`](../tools/fig13/catch_targets.cjs) | 2.1 kB | Fig. 13: the catch measured for every pattern of PEND.TARGETS (ten flowers, four butterflies) from the browser's own pendulum.js, in Node: held or not, time from the press, hold torque. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/chaos_map.py`](../tools/fig13/chaos_map.py) | 6.9 kB | Fig. 13 generator: the chaos map of momentum space (twin pendulums, numba). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/eye_thumb.py`](../tools/fig13/eye_thumb.py) | 3.4 kB | Fig. 13: draws the card picture images/sims/momentum-spirographs.webp, the eye of the chaos map with its energy ellipses and fold lines. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/fig13_note.html`](../tools/fig13/fig13_note.html) | 34.7 kB | Fig. 13: Part I of the page's lecture note (the sheet and the eye); build_page.py joins it with the other parts into momentum-spirographs.html. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/film_posters.cjs`](../tools/fig13/film_posters.cjs) | 1.9 kB | Fig. 13 generator: a still and the length of each film of the films panel, in headless Chromium. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/butterfly3d.html`](../tools/fig13/gift/butterfly3d.html) | 19.0 kB | Fig. 13 film source (the bell above the floor, 3-D); render.cjs writes its frames. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -6085,7 +6088,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 143.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 143.6 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -7324,6 +7327,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig13/sheet-display-state.md`](../notes/fig13/sheet-display-state.md) | 5.2 kB | Fig. 13: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig13/state.md`](../notes/fig13/state.md) | 2.2 kB | Fig. 13: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/band_test.cjs`](../notes/fig14/band_test.cjs) | 1.7 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/check.md`](../notes/fig14/check.md) | 32.9 kB | Fig. 14: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 
