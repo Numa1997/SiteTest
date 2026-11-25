@@ -77,6 +77,10 @@ when the model lands on `main`.
 - **`KAGGLE_API_TOKEN`**, a repository secret (GitHub → repository Settings → Secrets and variables → Actions). The official Kaggle
   tool (`pip install kaggle==2.2.5 six`; that version imports `six` without installing it, seen on the first real run, 21 November 2026) reads it from the environment. GitHub never shows a secret again, never prints it in logs, and
   does not give it to copies (forks) of the repository.
+- **`R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`** (since 25 November 2026), repository secrets for entries with
+  `"store": "r2"`: an R2 API token with Object Read & Write on the bucket `phyein-usul-runs` only, made by the owner in the Cloudflare
+  dashboard (R2 Object Storage → Manage API tokens). [tools/sims/r2.py](../tools/sims/r2.py) reads them from the environment and never
+  prints them; without them an r2 entry stops at once with "the repository secrets R2_... are missing".
 - **No GitHub key is needed**: GitHub gives every workflow run its own short-lived token; `permissions: contents: write` lets it
   commit to this repository and nothing else.
 
@@ -231,3 +235,73 @@ and retry it while Kaggle answers "Not Found".
 Kaggle's limits: 200 GB per dataset, 200 GB of private datasets in all, 50 files at the top level ([Kaggle's dataset
 documentation](https://www.kaggle.com/docs/datasets)). Filing uses its own concurrency group per simulation, so it never waits behind
 a Kaggle run.
+
+## The data in Cloudflare R2 (25 November 2026)
+
+From 25 November 2026 a registry entry can say `"store": "r2"`. Its data then goes into the Cloudflare R2 bucket `phyein-usul-runs`
+and not into the repository; the site's Worker serves it under `/r2/` ([worker/r2.js](../worker/r2.js)), and pages read it through
+[public/scripts/simdata.js](../public/scripts/simdata.js). Entries without `"store"` (barton, coupled, wave_interference2) and
+`"store": "release"` entries work exactly as before.
+
+**Run addresses.** A run's address is `<date>-v<version>`: the UTC day the notebook wrote in its index and the Kaggle notebook
+version (for a sharded run, the version of shard 1). Its files are the R2 objects `sims/<sim>/<run>/<file>`, or
+`sims/<sim>/<run>/shard-<i>-of-<n>/<file>` for a run cut into n shards. A rerun on the same day gets a new address, so an object, once
+stored, is never replaced: the Worker caches every `/r2/` address for a year as immutable, and new bytes under an old address would
+reach some readers and not others. The repository keeps only `public/data/sims/<sim>/<run>/index-<sim>.json` (every file with its
+size, SHA-256 and shard, the notebook versions, card, libraries, the model's `checks_passed`) and the small files the entry names in
+`"repo_files"`. The entry in `generations.json` carries `run`, `store: "r2"`, `versions`, `shards`, `format` and every file's size and
+SHA-256; a rerun adds an entry and never replaces one.
+
+**Storing with proof** ([tools/sims/r2.py](../tools/sims/r2.py)). Before an upload the key is asked for (HEAD). If R2 already holds the
+same size and SHA-256 there (kept as the object's metadata `sha256`), nothing is sent ("already stored"; collecting twice is harmless).
+If it holds anything else, the run stops: a key is never overwritten. After the upload the whole object is downloaded again as a stream
+and its size and SHA-256 compared with the index; a difference deletes the bad object and stops the run. Each network call is tried
+up to four times, after 2, 8 and 30 s, on a network error or a 5xx answer; a 4xx answer is not tried again. A run whose model reports
+`checks_passed: false` is refused before anything is uploaded.
+
+**Shards.** A large model can say `"shards": n`; its run function is then called as `run(out_dir, shard=i, shards=n)` and computes its
+own part of the parameter grid. Each shard is one Kaggle notebook version, so each version's output stays below Kaggle's working
+folder (about 20 GB). The engine takes the shards one after another: push, wait, download that version, check, upload to R2, file into
+the Kaggle dataset, delete the local copy, next. The runner (about 30 GB free) never holds more than one shard. A failed shard stops
+the run; the shards already stored stay, and collect mode finishes the run.
+
+**Waiting.** An error answer from `kaggle kernels status`, or one that cannot be read, is tried again with growing waits for up to
+10 minutes; only a real "error" or "cancel" state stops the run. The time limit `timeout_s` counts from the first poll that reports the
+run as running: time spent in Kaggle's queue is not the model's fault (`"queue_s"`, default 5 hours, bounds the queue).
+
+**Collect mode.** Run workflow with mode = collect, sim = the simulation, version = the notebook version (for a sharded run the versions
+of the missing shards, comma-separated, in shard order) and shard = the shard of the first. It downloads those versions' stored output
+(`kaggle kernels output <notebook>/<version>`) and carries it through the same checks, upload, index, generation and dataset filing,
+without computing again.
+
+**The status file** `public/data/sims/status/<sim>.json` says where the newest run stands: `queued` (pushed), `running`, `saved`
+(landed on main, with the data commit), `live_ok` (the live check passed) or `failed` (with one sentence why), with the notebook
+version(s), shard, card, times in UTC (queued, started, ended; queue and run seconds), bytes stored and the log address on Kaggle.
+Kaggle does not report progress during a run, so the file says so. The expected duration comes only from a measured benchmark,
+`public/data/sims/bench/<sim>.json`; without one the file says that there is none. It is pushed to main at every change of state by
+the workflow's identity (commit message "Simulation status: <sim> <state>"); each push is a small commit that Cloudflare publishes.
+
+**Landing without disturbing the run** ([tools/sims/land.py](../tools/sims/land.py)). Every push to main (the data and every status
+change) is built in a separate git worktree of the newest main, made once per runner and reset for each push, never in the run's own
+checkout; `docs/files.md` is generated again there; if main moved meanwhile, it starts again on the newest main (five tries).
+
+**The live check** ([tools/sims/verify_live.py](../tools/sims/verify_live.py)) for an r2 run: it waits until the live
+`generations.json` lists the run, downloads and hashes every file through `/r2/` while the total stays at most 100 MB, and asks every
+other file for its first 1 MiB with a Range header, requiring 206 and a Content-Range total equal to its size. The result goes into
+the status file. `--site` points it at another origin (the local test).
+
+**The test model** `sims_smoke` ([tools/sims/sims_smoke.py](../tools/sims/sims_smoke.py), registry `"manual": true`: computed only by
+Run workflow, never by a merge) writes two small files whose bytes depend only on the shard, and returns `checks_passed: false` when
+the environment variable `SIMS_SMOKE_FAIL` is 1. Its data goes to the private dataset `numakoudsie/phyein-usul-sims-smoke`.
+
+**The local test** `python3 tools/sims/test_engine_r2.py` ([tools/sims/test_engine_r2.py](../tools/sims/test_engine_r2.py)) runs the
+whole line on one machine with nothing real touched: a bare git repository as origin (holding the parts of this repository the engine
+reads and writes), a local S3 server (moto) as R2, a stand-in for the Kaggle tool that runs the pushed notebook text locally, and a
+local web server for the live check. Its 12 cases: one-shard run; three shards; same-day rerun; a file altered after the index
+(refused, nothing uploaded, status failed); a different object at the key (refused, unchanged) and the same object (skipped);
+`checks_passed` false (refused); collect mode; two status errors; a long queue; another commit pushed to main during the run (kept);
+a repo-store entry (barton, as before); the live check (passes, then fails on a replaced object). Result on 25 November 2026:
+12 passed, 0 failed, 67.9 s wall time on the cloud session's machine.
+
+**Disk.** The step that frees about 30 GB on the runner runs only for entries with `"free_disk": true` (the two release entries of
+the double pendulum have it).

@@ -66,7 +66,8 @@
    "figure": "Fig. 2 Double Pendulum",
    "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
    "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
-   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames."
+   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames.",
+   "free_disk": true
   },
   "double_pendulum_gpu": {
    "dataset": "numakoudsie/fig2-double-pendulum",
@@ -86,7 +87,8 @@
    "figure": "Fig. 2 Double Pendulum",
    "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
    "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
-   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames."
+   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames.",
+   "free_disk": true
   },
   "coupled": {
    "model": "tools/sims/coupled.py",
@@ -108,6 +110,21 @@
    "page_url": "https://phyeinusul.com",
    "dataset_subtitle": "Coupled pendulums on the Phyein Usul home page: every Kaggle run",
    "dataset_about": "Two pendulums joined by a spring trade their swing back and forth: the scene in the margin of the home page."
+  },
+  "sims_smoke": {
+   "model": "tools/sims/sims_smoke.py",
+   "store": "r2",
+   "shards": 1,
+   "format": 1,
+   "manual": true,
+   "files": [],
+   "pages": [],
+   "dataset": "numakoudsie/phyein-usul-sims-smoke",
+   "dataset_title": "Phyein Usul engine test data",
+   "figure": "Engine test (no page)",
+   "page_url": "https://phyeinusul.com",
+   "dataset_subtitle": "Small test runs of the Phyein Usul simulation engine",
+   "dataset_about": "Data of the engine's own test model sims_smoke; no page plays it."
   }
  }
 }
