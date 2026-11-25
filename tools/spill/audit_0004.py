@@ -18,8 +18,9 @@ KDIR = os.path.join(ROOT, "tools", "fig12", "kaggle"); sys.path.insert(0, KDIR)
 import jax  # noqa: E402
 import jax.numpy as jnp  # noqa: E402
 import stout_jax as SJ  # noqa: E402
+EVPFIX = os.environ.get("EVPFIX", "0") == "1"   # 25 Nov 2026: Stout.evp_consistent and evp_hw on (the energy fix, instruction 0007)
 SUB = os.environ.get("SUBRUN", "smoke"); DXA = float(os.environ.get("DX", "0.003")); ONLY = os.environ.get("ONLY", "rot,slab,ident,slosh").split(",")
-VOUT = os.path.join(OUT, "audit_0004"); os.makedirs(VOUT, exist_ok=True)
+VOUT = os.path.join(OUT, "audit_0004_fix" if EVPFIX else "audit_0004"); os.makedirs(VOUT, exist_ok=True)
 T0 = time.time()
 js = open(os.path.join(ROOT, "public", "scripts", "guinness-glass.js")).read()
 RG = np.array([float(v) for v in js.split("R: [")[1].split("]")[0].split(",")]); DZP, FILL = 0.0005, 0.125; F16 = (0.155, 0.062, -0.030)
@@ -39,6 +40,7 @@ def setup(mod, dxd, audit):
     S = mod.Stout(G, model="wall", K_frac=1.0, M_drops=4096, head_mode="evp"); S.gamma = 0.0
     S.enable_side_vis(); info = S.enable_ls_extend(); S.wall_guard = True
     if audit: S.audit = True; S.diag_g2p = True
+    if audit and EVPFIX: S.evp_consistent = True; S.evp_hw = True
     s = S.init_state()
     if audit: s = dict(s, be_cell=jnp.tile(jnp.asarray([1, 1, 1, 0, 0, 0], jnp.float32), (S.N, 1)))
     return G, S, s, info
@@ -51,7 +53,7 @@ if "rot" in ONLY:
     try:
         Om, dt, n = 30.0, 7.67e-4, 1000
         C = jnp.asarray([[[0.0, -Om, 0.0], [Om, 0.0, 0.0], [0.0, 0.0, 0.0]]], jnp.float32)
-        be = jnp.asarray([[1, 1, 1, 0, 0, 0]], jnp.float32); rm = jax.jit(lambda b: SJ.evp_return_map(b, C, dt))
+        be = jnp.asarray([[1, 1, 1, 0, 0, 0]], jnp.float32); rm = jax.jit(lambda b: SJ.evp_return_map(b, C, dt, hw=EVPFIX))
         smax = 0.0; epl = 0.0; first_yield = None; rows = []
         for k in range(1, n + 1):
             be, y, gp, s_new, det, res = rm(be)

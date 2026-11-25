@@ -124,14 +124,19 @@ def evp_tau(be6, G=G_HEAD):
     return G * (be6 - jnp.stack([tr, tr, tr, 0.0 * tr, 0.0 * tr, 0.0 * tr], -1))
 
 
-def evp_return_map(be6, C, dt, G=G_HEAD, tau_y=TAU_Y, A1=EVP_A1, A2=EVP_A2, n_gp=6, n_c=5):
+def evp_return_map(be6, C, dt, G=G_HEAD, tau_y=TAU_Y, A1=EVP_A1, A2=EVP_A2, n_gp=6, n_c=5, hw=False):
     """One backward-Euler step of the elasto-viscoplastic head, per particle. be6 (N, 6) float32, C (N, 3, 3) the velocity gradient
     (C[i, a] = d u_i / d x_a). Returns be6_new, yielded (bool), gp (1/s), s_new (Pa), det(be_new), the relative residual of the
     gp equation after n_gp Newton steps. Newton in u = gp^0.47 on h(u) = G dt u^(1/0.47) + A2 u^(0.70/0.47) + A1 u - (s_tr - tau_y),
     from u0 = min((s_tr - tau_y)/A1, ((s_tr - tau_y)/(G dt))^0.47), an upper bound of the root (h is convex and increasing), so the
     iterates fall monotonically onto it. det(D + c I) = 1 by Newton on c^3 - I2 c + I3 - 1 = 0 from c0 = 1 + sqrt(4 I2 / 3) (above
     the largest root, the cubic convex beyond it: monotone)."""
-    f = jnp.eye(3, dtype=F32)[None] + dt * C
+    if hw:   # 25 Nov 2026 (flag evp_hw): Hughes-Winget increment f = (I - dt C / 2)^-1 (I + dt C / 2); for a pure rotation C = W it is
+        # exactly orthogonal, so be = I stays I and spin makes no stress (f = I + dt C grows s by G (W dt)^2 / sqrt 3 per step)
+        I3h = jnp.eye(3, dtype=F32)[None]
+        f = jnp.linalg.solve(I3h - 0.5 * dt * C, I3h + 0.5 * dt * C)
+    else:
+        f = jnp.eye(3, dtype=F32)[None] + dt * C
     B = sym_unpack(be6); Bt = f @ B @ jnp.swapaxes(f, -1, -2)
     Bt = Bt / jnp.cbrt(jnp.maximum(det3(Bt), 1e-30))[..., None, None]
     tr = jnp.trace(Bt, axis1=-2, axis2=-1) / 3.0; I3m = jnp.eye(3, dtype=F32)[None]
@@ -1379,6 +1384,20 @@ class Stout:
         med = lambda s: jnp.nanmedian(H[idx[s][0], idx[s][1]])
         return jnp.nan_to_num(0.5 * (med(1) - med(-1)) / shape).astype(F64)
 
+    def evp_grad(self, X, vel):
+        """25 Nov 2026 (flag evp_consistent): the velocity gradient C[i, a] = sum over the 8 MAC corners of u_i grad_a w, at positions X,
+        with exactly the weights and weight gradients P2G uses for F_dev. With vel = the kick's velocity (see step), sum_p V_p tau_p : C_p
+        equals the kinetic energy the F_dev kick takes from the grid divided by dt: the return map then works on the deformation the
+        stress force acted on (the discrete adjoint), so the foam cannot dissipate energy the flow never gave it."""
+        dx = self.dx; g = (X - self.origin) / dx; Cs = []
+        for comp in range(3):
+            fl, ok, w, wv, cf, fr = self._corners(g, comp, self.fshape[comp])
+            val = jnp.where(ok, vel[comp].reshape(-1)[fl], 0.0)
+            sg = 2.0 * cf - 1.0
+            gw = jnp.stack([sg[..., 0] * wv[..., 1] * wv[..., 2], wv[..., 0] * sg[..., 1] * wv[..., 2], wv[..., 0] * wv[..., 1] * sg[..., 2]], -1)
+            Cs.append(jnp.sum(val[..., None] * gw, 0) / dx)
+        return jnp.stack(Cs, 1)
+
     def step(self, s, dt, gx, gz, prep=None, rot=None, wind=None):
         """rot = (om, al, zS): the glass also turns (Fig. 16); None: the glass only translates (Fig. 12, unchanged)."""
         dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
@@ -1403,9 +1422,14 @@ class Stout:
         if self.evp:   # Step 4: the glass's stress (stout and head), then the head's deviatoric force u += dt F_dev / max(M_f, m_floor)
             vel, ew_s, ew_f = self.friction_evp(vel, mass, dt, ex); ew = ew_s + ew_f
             if aud: au.append(vel)
+            v_bk = vel
             vel = [jnp.where((self.th[c] > 0) & (mass[c] > 1e-6), vel[c] + dt * ex["Fdev"][c] / jnp.maximum(ex["M"][c], self.m_floor), vel[c]).astype(F32)
                    for c in range(3)]
             if aud: au.append(vel)
+            if getattr(self, "evp_consistent", False):   # the kick's work-conjugate velocity: (M / max(M, m_floor)) x the kick's midpoint
+                # velocity on the kicked faces, 0 elsewhere; then sum_f u_k . F_dev dt is exactly the kick's kinetic-energy change
+                uk = [jnp.where((self.th[c] > 0) & (mass[c] > 1e-6), ex["M"][c] / jnp.maximum(ex["M"][c], self.m_floor) * 0.5 * (v_bk[c] + vel[c]), 0.0).astype(F32)
+                      for c in range(3)]
         elif self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
         vel = self.body_force(vel, mass, dt, gx, gz, rot)
         if self.cont and wind is not None: vel = self.air_drag(vel, mass, pr["ph"], pr["liq"], dt, wind, beta=None if ex is None else ex["beta"])
@@ -1440,7 +1464,10 @@ class Stout:
         s, mom = self.g2p(s, vel, dt, gx, gz, rot, uc=uc, vel_out=vel_out)
         evd = {}
         if self.evp:   # Step 4: the head's return map, after G2P, with the APIC velocity gradient C of the new step
-            ben, yl, gp, s_new, det, rres = evp_return_map(s["be"], s["C"], dt)
+            if getattr(self, "evp_consistent", False):   # the gradient of the kick's velocity at the P2G positions (step start)
+                ben, yl, gp, s_new, det, rres = evp_return_map(s["be"], self.evp_grad(s0["xp"], uk), dt, hw=getattr(self, "evp_hw", False))
+            else:
+                ben, yl, gp, s_new, det, rres = evp_return_map(s["be"], s["C"], dt, hw=getattr(self, "evp_hw", False))
             hd = s["is_head"] & s["act"]
             if aud: s, adiag = self._audit_evp(s0, s, au, vel, mass, ex, dt, gz, ben, yl, gp, s_new, hd)
             s = dict(s, be=jnp.where(hd[:, None], ben, s["be"]))
