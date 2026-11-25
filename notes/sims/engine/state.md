@@ -68,5 +68,7 @@ can handle this one" as leave to write code. It was a request to send Neon the w
 original bytes, SHA-256 2d3c1983...) and sent as N-2. There is no exception: every line of code, inventory entries included, comes
 from Neon. Until N-2 lands, `python3 tools/inventory.py --check` fails on this branch, so nothing merges to main.
 
+Found 25 November: main already had a Neon version of N-1 (c4c47c2, 24 November 10:39 Berlin, by another session), one code line and comments different from mine. Kept main's version; the same eight tests on it: 20 checks passed, 0 failed (local wrangler dev).
+
 ## Commits of this work
 - (this file) first commit of the state.
