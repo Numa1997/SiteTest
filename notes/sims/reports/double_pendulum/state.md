@@ -14,6 +14,10 @@ Task (the user, 25 November 2026): kaggelize the next figure through the NEW eng
   360 000 starts). All slider states: 7.99e12 starts, 157 PB. Stored grid A (15 deg, 5 x 5 cells, 5 x 5 omega): 7.05 GB, 0.26 h.
   B (1 deg, 5 x 5 cells, 5 x 5 omega): 81 M starts, 1587 GB, 58.6 h. C (1 deg, 5 x 5 cells, released from rest): 3.24 M starts,
   63.5 GB, 2.34 h. GPU left this week: 108 000 - 4 595 = 103 405 s = 28.7 h (Kaggle connector, 03:22 Berlin), refresh 28 November 01:00 Berlin.
+- ANSWER (the user, 26 November 2026): option A, plus a hybrid: the browser computes what the stored grid cannot hold
+  (starts between grid nodes, the sand curve), as engineering practice does. Design proposed to the user, awaiting yes:
+  on a grid node the page plays the stored run; off the grid it runs the old live RK4, with a visible label saying which;
+  the stored runs double as the check of the live code (same RK4, same h, compared on grid starts).
 - Nothing built yet on this branch. Next, after the user's answer: model `tools/sims/double_pendulum_r2.py` (dp_engine.py, store r2,
   shards if over about 15 GB per Kaggle version), then the page on simdata.js.
 
