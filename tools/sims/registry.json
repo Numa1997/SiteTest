@@ -265,6 +265,39 @@
    "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
    "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
    "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start takes until a rod passes over the top), computed along curves through the pendulum's parameter space and recorded as films, on Kaggle's GPU with the page's own RK4."
+  },
+  "spinners": {
+   "model": "tools/sims/spinners.py",
+   "files": [
+    "spin-K0-k0.bin",
+    "spin-K0-k1.bin",
+    "spin-K0-k3.bin",
+    "spin-K4-k0.bin",
+    "spin-K4-k1.bin",
+    "spin-K4-k3.bin",
+    "spin-K10-k0.bin",
+    "spin-K10-k1.bin",
+    "spin-K10-k3.bin",
+    "spin-K20-k0.bin",
+    "spin-K20-k1.bin",
+    "spin-K20-k3.bin",
+    "spinners.json"
+   ],
+   "pages": [
+    {
+     "path": "/",
+     "width": 1600,
+     "height": 1000,
+     "scroll": 1400,
+     "probe": "(()=>{const h=document.querySelector('[data-bg=spin]');const s=h&&h.__bgScene;if(!s)return {error:'no spin scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,N:s.D.hdr.N};})()"
+    }
+   ],
+   "dataset": "numakoudsie/phyein-usul-spinners",
+   "dataset_title": "Spinners locked by a rotating field: simulation data",
+   "figure": "Fig. 17 Living scenes: spinners",
+   "page_url": "https://phyeinusul.com/simulations/living-scenes.html",
+   "dataset_subtitle": "Rotors in oil locked by a wandering rotating field (Adler and Kuramoto): every Kaggle run",
+   "dataset_about": "A lattice of small rotors, each with its own rate, in a rotating magnetic field that wanders over them: those whose rate is near the field's lock to it while it passes (Adler's equation). The scene before the simulations on the Phyein Usul home page, and Fig. 17."
   }
  }
 }

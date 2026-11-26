@@ -188,11 +188,33 @@ swings aside while gravity brings them back.
 - 1 m is drawn as 60 px. The page computes nothing. How the data gets here: [../kaggle-sims.md](../kaggle-sims.md).
   `tools/sims/coupled.py`, `tools/sims/barton.py` and their data stay in the repository; no page plays them.
 
+**Home page, band before the simulations: spinners, played from stored data (26 November 2026).** A lattice of 72 × 9
+three-armed rotors, each with its own rate; a field turning at Ω = 3 rad/s wanders over them and pulls those near its centre into
+step; neighbours pull on each other too. Until 26 November the browser integrated this with a simple step of its own; now it plays
+runs computed once on Kaggle.
+- *The model*: `tools/sims/spinners.py`; its docstring derives the equation from the torques on a small magnet in oil:
+  θ'ᵢ = ωᵢ + K(rᵢ, t) sin(Ωt − θᵢ) + κ Σ sin(θⱼ − θᵢ), K = K₀ exp(−|r − s(t)|² / 2σ²), σ = 4 lattice spacings, own rates
+  |ωᵢ| between 1.5 and 5 rad/s with random sense. Twelve runs: K₀ ∈ {0, 4, 10, 20} rad/s, κ ∈ {0, 1, 3} rad/s; 80 s at
+  15 frames a second; SciPy DOP853, tolerances 1e-9.
+- *Stored*: `data/sims/spinners/<date>/spin-K<K₀>-k<κ>.bin` (0.8 MB each): label `SPN1`, header, then bytes, not int16: the angles
+  as uint8 (frame × rotor, the nearest of 256 steps of a turn), then float32 per frame s_x, s_y, φ and the share of rotors within σ
+  of the field's centre whose rate over the last second is within 0.3 rad/s of Ω. `spinners.json` holds the own rates, the start
+  angles and the checks (Adler's slip period to 8e-9, the locking radius on the whole lattice with a still field, a rerun at
+  tolerance 1e-11 that moves no angle by more than 0.038 rad).
+- *Drawing*: 28 px a lattice spacing across, 29.5 down; the band shows the middle columns that fit. A holder marked
+  `data-bg-fit` (Fig. 17, the scenes page) shrinks the lattice to fit, 13 px a spacing at least. Each rotor turns the short way
+  between frames; it is drawn bright when its turn over one frame is within 0.6 rad/s of the field's. The run plays its first 79 s
+  and fades its last second into its first. The knobs `FIELD` (K₀) and `NEIGH` (κ) offer only the stored values: a knob row whose
+  step is a list means "these values were computed; choose one". The page computes nothing. The derivation is in Fig. 17
+  (`simulations/living-scenes.html`, section 2).
+
 ## How it runs
 
 One `requestAnimationFrame` loop serves all instances at no more than about 30 frames a second. An `IntersectionObserver`
 switches an instance off when it leaves the window, and the loop pauses on a hidden tab. A resize re-sizes each canvas
-(debounced). With `prefers-reduced-motion: reduce` nothing is mounted at all. Hidden in print. `window.__bgScenes.count`
+(debounced). With `prefers-reduced-motion: reduce` nothing moves in the background of a page: only holders marked `data-bg-motion="allow"`, the
+scenes of Fig. 17 that the reader has come to see on purpose, are mounted. A holder that is hidden when the page loads (Fig. 17
+shows one scene at a time) is sized when it is shown, through `host.__bgSize()`. Hidden in print. `window.__bgScenes.count`
 gives the number of mounted scenes, and each holder's `__bgScene` its scene object, for tests.
 
 Every scene is an object `{ init(), draw(dt) }` inside `mount()`, sized from its own element (`W`, `H`), with particle
@@ -213,10 +235,16 @@ S12 seeds, S13 a cloud atlas. Each sits in an outlined box (`.scn__stage`, 340 p
 with where it lives on the site, what you see, what drives it, and its numbers to change.
 
 **The numbers to change.** Every scene declares its knobs in a table `K`, each row `[property, meaning, unit, min, max, step,
-restart]`; the numbers themselves are properties of the scene (for example `S.spin.FIELD`, the pull of the rotating field). The
+restart]` (a list in place of the step: the values that were computed on Kaggle, offered as buttons); the numbers themselves are properties of the scene (for example `S.spin.FIELD`, the pull of the rotating field). The
 page's own script builds one slider per row; a slider writes the property of the running scene, and a row marked restart (numbers
 that set up the picture, such as how many grains) starts the scene again through `host.__bgRestart()`. On the other pages the
 same properties keep their default values.
+
+**Fig. 17, Living Scenes (`simulations/living-scenes.html`, 26 November 2026).** The same thirteen scenes as a simulation page:
+one stage shows one scene at a time (all holders sit in the stage; the chips show one and call `__bgSize()`), the panel builds the
+knobs from `K` the same way (a list in the step column becomes buttons for the stored values), and the readouts and the box "Where
+these numbers come from" read the stored file's header and columns, four times a second. Its lecture note has one section per
+physics scene; the spinners are section 2. Documented in [../simulations/fig17-living-scenes.md](../simulations/fig17-living-scenes.md).
 
 **Three scenes exist only here.**
 - `roots` is the left rail's root growth in a box (same rules: space colonisation, Murray's law, sap).
