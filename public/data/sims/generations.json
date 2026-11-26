@@ -1399,8 +1399,8 @@
    "sim": "spinners",
    "date": "2026-11-26",
    "notebook": "numakoudsie/phyein-usul-simulations",
-   "version": 17,
-   "commit": "da6e4b93dfd4cdf0238199cd124b942039907147",
+   "version": 18,
+   "commit": "909ab42727ec912c989a2c89b60a5a3ec8b5c230",
    "index": "spinners/2026-11-26/index-spinners.json",
    "files": {
     "spin-K0-k0.bin": {
@@ -1452,15 +1452,15 @@
      "sha256": "e2346e10ce5de1ffc6040f0b91a9397bc70bdf632bf7932924879c7976300559"
     },
     "spinners.json": {
-     "bytes": 19488,
-     "sha256": "ad7847a11f1b06f2c0f7d2899e2d01755d70c5c19634d750e47337673970e351"
+     "bytes": 19487,
+     "sha256": "54cec9c5a2152ed765cd44ef5a25234c375cf7a1aca0ee3bb4d705d3743a6a8f"
     }
    },
-   "wall_s": 70.4,
-   "collected": "2026-11-26T03:34:32+00:00",
+   "wall_s": 42.8,
+   "collected": "2026-11-26T03:40:27+00:00",
    "dataset": "numakoudsie/phyein-usul-spinners",
-   "dataset_path": "phyein-usul-simulations/v17/",
-   "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 17, 9585147 bytes, filed as one version of this dataset"
+   "dataset_path": "phyein-usul-simulations/v18/",
+   "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 18, 9585146 bytes, filed as one version of this dataset"
   }
  ]
 }
