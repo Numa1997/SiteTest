@@ -22,7 +22,7 @@ lecture notes and whatnot". This is step 5 of notes/sims/PLAN.md ("a page of lec
 ## Order of the scenes
 | # | Scene | Model | State |
 |---|---|---|---|
-| 1 | spinners (`spin`) | overdamped rotors, Adler / Kuramoto, rotating field | model, page, note §2 done 26 Nov; publishing (PR from fig17-scenes) |
+| 1 | spinners (`spin`) | overdamped rotors, Adler / Kuramoto, rotating field | live 26 Nov 04:41 (PR #217, #218, #219; data from Kaggle v18, commit 909ab42, live check passed) |
 | 2 | dust in a sunbeam (`motes`) | Ornstein–Uhlenbeck (Langevin) | |
 | 3 | mixing (`mix`) | hard-disc gas of three species, event-driven | |
 | 4 | the swerve (`swerve`) | falling atoms, collisions | |
@@ -48,6 +48,13 @@ lecture notes and whatnot". This is step 5 of notes/sims/PLAN.md ("a page of lec
 - Tested locally with the v16 file K10-k1 staged in dist only (page.cjs: all scenes drawn, no errors except the expected 404s of
   unstaged runs).
 
+- 04:28 PR #217 merged. Workflow run 1 (Kaggle v17) failed at landing: inventory had no rule for data names with a hyphen (#218).
+  Collect of v17 landed the data but the live check failed: the registry listed all 13 files, the page loads one (#219: lists
+  spin-K10-k1.bin, as double_pendulum does). Run mode again: Kaggle v18 from 909ab42, landed, live check passed 04:41.
+- Live browser check of Fig. 17 on phyeinusul.com: all scenes drawn, the K0 = 20 run loads; the only console error is the
+  Cloudflare Insights beacon blocked by the site's CSP (every page, not this work).
+- Remote branches fig17-scenes, fix/spinners-inventory, fix/spinners-registry, notes/fig17-state: delete in the GitHub UI
+  (deleting from here fails).
+
 ## Next
-- Merge, watch the workflow (Kaggle run, land, verify_live), check the live page.
-- Then motes (Ornstein–Uhlenbeck): model, run, section 3 of the note.
+- Motes (Ornstein–Uhlenbeck): model, run, section 3 of the note.
