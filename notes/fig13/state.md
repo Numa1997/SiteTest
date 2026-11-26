@@ -6,20 +6,23 @@ Kept current by the chat that builds Fig. 13. Reread after a compaction before a
 Fig. 13 at https://phyeinusul.com/simulations/momentum-spirographs.html: the momentum sheet with its chaos map ("the eye"), the butterfly,
 the flower hunt, the catch (a motor at the top pin brings a chaotic double pendulum onto any of 14 closed orbits, on request), the films.
 
-## Live (25 November 2026)
+## Live (26 November 2026)
 - `#eye` "How the eye is built": `public/scripts/fig13-eye.js`. Animation in five steps (one strike and its twin, every strike, energy
   ellipses and pupil, iris, fold lines = lashes) with Play, step buttons and a time slider; graph of the chaotic share against strike
   energy from the map image; tap the graph to pin an energy (its ellipse is drawn on the eye).
 - `#catalogue` "The catalogue of closed drawings": `public/scripts/fig13-catalogue.js` and `fig13-catalogue-data.js` (228 orbits; built by
   `tools/fig13/closed_map.py` → `closed_pin.py` → `catalogue_build.py`, stability by `closed_stability.py`).
+- `#families` "Where the repeating motions live" and `#zoom-title` "Into the border between order and chaos":
+  `public/scripts/fig13-families.js` with ten pictures in `public/images/fig13/` (families-petals, families-stability, chaos-sheet-fine,
+  chaos-eye-fine, chaos-zoom0..5). Four views with legend and plain explanation each, magnify, tap to pin, run the nearest catalogue orbit;
+  seven-picture zoom with frames. Numbers from `tools/fig13/families_ground.py`.
 - Card picture on the simulations list: `public/images/sims/momentum-spirographs.webp`, drawn by `tools/fig13/eye_thumb.py`.
 - The catch: `tools/fig13/gift/catch.html` and `pendulum.js` (published by `gift/publish_films.py`); 14 targets; measured with
   `node tools/fig13/catch_targets.cjs 60 300`. Numbers in `docs/simulations/fig13-momentum-spirographs.md`.
 - Display work on the stations and films was done by a separate session (20 November 2026), merged to main.
 
 ## Left
-- Computed, not yet on the page: the fine GPU chaos maps (tools/fig13/kaggle_fractal.py, run 26 Nov 2026; arrays not in the repository,
-  re-download from the Kaggle notebook's output) and the stability colouring (render_stability.py).
+- The arrays behind the fine maps and the stability colouring are not in the repository (Kaggle notebook output, scratch files).
 - The labels under the catch picture are small on a phone (check whether the display session fixed them).
 - The butterflies are slower to catch than the flowers (median 8 to 35 s); their first catch slips about four times in ten.
 
