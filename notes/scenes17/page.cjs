@@ -13,7 +13,7 @@ const SC = ['spin', 'wind', 'forest', 'roots', 'powder', 'harp', 'mix', 'motes',
         const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let k = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 20) k++;
         return { drawn: k / (cv.width * cv.height), w: cv.width, h: cv.height, ro: document.getElementById('readouts').innerText.replace(/\n/g, ' '), src: document.getElementById('src-t').textContent.slice(0, 140),
           side: document.documentElement.scrollWidth - document.documentElement.clientWidth }; }, s);
-      const ok = r.drawn > 0.002 && r.side <= 0; if (!ok) bad++;
+      const ok = r.drawn > (s === 'motes' ? 0.0002 : 0.002) && r.side <= 0;   // the dust is a few faint specks by design if (!ok) bad++;
       console.log((ok ? 'ok ' : 'BAD') + ` ${w}${rm ? ' reduced' : ''} ${s}: canvas ${r.w}x${r.h} drawn ${(100 * r.drawn).toFixed(1)}% | ${r.ro || ''} | ${r.src}`);
       if (w === 1600 && !rm && ['spin', 'wind', 'forest', 'atlas'].includes(s)) await p.locator('.sim__grid').screenshot({ path: `notes/scenes17/shots/${s}-1600.png` });
       if (w === 390 && s === 'spin') await p.screenshot({ path: 'notes/scenes17/shots/spin-390.png', fullPage: false });

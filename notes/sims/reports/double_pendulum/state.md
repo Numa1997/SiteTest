@@ -14,12 +14,34 @@ Task (the user, 25 November 2026): kaggelize the next figure through the NEW eng
   360 000 starts). All slider states: 7.99e12 starts, 157 PB. Stored grid A (15 deg, 5 x 5 cells, 5 x 5 omega): 7.05 GB, 0.26 h.
   B (1 deg, 5 x 5 cells, 5 x 5 omega): 81 M starts, 1587 GB, 58.6 h. C (1 deg, 5 x 5 cells, released from rest): 3.24 M starts,
   63.5 GB, 2.34 h. GPU left this week: 108 000 - 4 595 = 103 405 s = 28.7 h (Kaggle connector, 03:22 Berlin), refresh 28 November 01:00 Berlin.
-- ANSWER (the user, 26 November 2026): option A, plus a hybrid: the browser computes what the stored grid cannot hold
-  (starts between grid nodes, the sand curve), as engineering practice does. Design proposed to the user, awaiting yes:
-  on a grid node the page plays the stored run; off the grid it runs the old live RK4, with a visible label saying which;
-  the stored runs double as the check of the live code (same RK4, same h, compared on grid starts).
-- Nothing built yet on this branch. Next, after the user's answer: model `tools/sims/double_pendulum_r2.py` (dp_engine.py, store r2,
-  shards if over about 15 GB per Kaggle version), then the page on simdata.js.
+- ANSWER (the user, 26 November 2026): both hybrids rejected. The rule (notes/sims/chaos-and-storage.md): Kaggle computes the
+  parameter map and records it as a FILM; the page shows the film beside the live simulation, which stays as it is (browser RK4,
+  every control). Chosen map: the flip-time map (theta_1 x theta_2 from rest, time until a rod passes the top, 10 s window),
+  swept through ln(m_2/m_1) = -2.3 ... 2.3. Old stored grid (release, 7.05 GB) stays until the film is live, then the user decides.
+- Built (branch kaggelize/fig2-r2): tools/sims/dp_film.py (engine), double_pendulum_film_smoke.py (72 x 72, 9 frames, CPU/GPU
+  bench), double_pendulum_film.py (720 x 720, 369 frames); registry entries, both "manual", store r2, gpu, dataset fig2.
+  Encoding tested here on made-up maps only (no integration). Expected full run from the old measured GPU rate 8.97e7 start-steps/s
+  (v6: 720 000 x 12 000 / 96.3 s): 720^2 x 6000 x 369 / 8.97e7 = 12 800 s = 3.6 h; to be replaced by the smoke run's measurement.
+- Merged PR 214 (model, registry, notes) at 04:00 Berlin, 26 November. Run workflow double_pendulum_film_smoke (run 45746139071)
+  stopped at 04:01 Berlin: "the repository secrets R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ACCOUNT_ID are missing". Nothing
+  reached Kaggle. WAITING FOR THE USER to create the R2 token and the three secrets; then rerun the smoke.
+- CORRECTION by the user (26 November, later): the film is not one sweep but a SET OF CURVES through the parameter space
+  (notes/sims/chaos-and-storage.md, "The rule" and "Fig. 2: the display and the curves"). Rebuilt: dp_film.py takes a curve;
+  five curves (mass, length, ring, push, octave), one registry entry and model file each, double_pendulum_film_<curve>
+  (manual, store r2, gpu, 720 x 720, 240 frames); smoke = 72 x 72, 8 points of push, CPU/GPU bench. On main.
+- Page (branch kaggelize/fig2-r2 ONLY, not on main: without data it would show the loader's failure sentence): Fig. 2b under the
+  live figure: curve selector, the curve drawn in its parameter plane with a dot, film, frame slider, "Read a start" switch
+  (click pins; stored value, the page's RK4 rerun, film pixel), "Swing this start" hands exact values to the live simulation.
+  Tested 26 November in headless Chromium at 1600 and 390 px against MADE-UP maps (a pattern, no physics): loads through
+  simdata.js from /r2/, SHA-256 ok, plays, pointer sweep changes nothing, pin reads stored value and pixel (gap 8 of 255),
+  swing starts the live run at the pinned values, a curve without data shows the one sentence, no page errors, no sideways
+  scroll. The live-against-stored comparison can only be judged on real data.
+- WAITING FOR THE USER: R2 token and the three repository secrets (the user said: tomorrow).
+- Then, in this order: (1) GPU hours left; Run workflow double_pendulum_film_smoke with a monitor; read bench and checks.
+  (2) Full runs one by one, mass first; if the five together exceed half the GPU hours left, ask with the numbers.
+  (3) Page against real data: three-way proof, screenshots; docs (docs/simulations/fig02-double-pendulum.md, kaggle-sims.md row,
+  PLAN.md row), lecture-note section on the films, registry pages + probe, i18n (tools/i18n/build.py), merge, verify live.
+  (4) Then ask the user what to do with the old stored grid (release, 7.05 GB) and the entries double_pendulum, *_gpu, *_smoke.
 
 
 Written 23 November 2026 at 21:58 Berlin time by the session that started the work; the full run's outcome added at 22:10. Read this before anything else on Fig. 2.

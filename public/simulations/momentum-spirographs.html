@@ -229,6 +229,38 @@
         .cat__key { margin: 0; padding: 10px 14px 14px; font: 12.5px/1.6 var(--mono); color: rgba(245,241,234,.7); }
         .cat__key i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 5px; }
         @media (max-width: 760px) { .cat__viewer { grid-template-columns: 1fr; } .cat__fig { margin: 0 -16px; border-radius: 0; border-left: 0; border-right: 0; } .cat__grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); max-height: 560px; } .cat__count { margin-left: 0; flex-basis: 100%; } }
+        /* Where the repeating motions live, and the zoom into the fractal border (scripts/fig13-families.js) */
+        .fam { margin: 40px 0 0; }
+        .fam > h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 0 0 6px; color: var(--ink); }
+        .fam > h3 { font-family: var(--serif); font-size: 24px; font-weight: 400; margin: 34px 0 6px; color: var(--ink); }
+        .fam > p { margin: 0 0 14px; font-size: 16px; line-height: 1.6; color: var(--ink-2); max-width: 760px; }
+        .fam__fig { margin: 0; background: #140d10; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 10px; overflow: hidden; color: #fff6ea; }
+        .fam__bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(245,241,234,.14); }
+        .fam__bar > div { display: flex; flex-wrap: wrap; gap: 6px; }
+        .fam__bar button, .fam__read button { min-height: 44px; padding: 0 14px; border: 1px solid rgba(245,241,234,.3); border-radius: 8px; background: transparent; color: #fff6ea; font: 500 13px/1.1 var(--mono); cursor: pointer; touch-action: manipulation; }
+        .fam__bar button[aria-pressed="true"] { background: #fff6ea; color: #140d10; border-color: #fff6ea; }
+        .fam__bar .fam__right { margin-left: auto; }
+        .fam__pan { overflow: auto; overscroll-behavior: contain; max-height: 82vh; background: #140d10; }
+        .fam__in { position: relative; width: 100%; cursor: crosshair; }
+        .fam__in img { display: block; width: 100%; aspect-ratio: 16 / 9; }
+        .fam__dot { position: absolute; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border: 1.5px solid #fff6ea; border-radius: 50%; background: rgba(20,13,16,.55); pointer-events: none; }
+        .fam__pin { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 2px #140d10; pointer-events: none; }
+        .fam__key { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; margin: 0; padding: 10px 14px; font: 12.5px/1.5 var(--mono); color: rgba(245,241,234,.82); border-top: 1px solid rgba(245,241,234,.14); }
+        .fam__key b { font-weight: 500; color: #fff6ea; flex-basis: 100%; }
+        .fam__key i { display: inline-block; width: 16px; height: 8px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+        .fam__read { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin: 0; padding: 10px 14px; min-height: 4.6em; font: 13px/1.55 var(--mono); color: rgba(245,241,234,.9); border-top: 1px solid rgba(245,241,234,.14); }
+        .fam__read span { flex: 1 1 260px; }
+        .fam__say { padding: 4px 14px 12px; border-top: 1px solid rgba(245,241,234,.14); }
+        .fam__say p { margin: 10px 0 0; max-width: 760px; font-size: 15.5px; line-height: 1.6; color: rgba(245,241,234,.9); }
+        .fam__say b { color: #fff6ea; }
+        .fam__cap { padding: 0 14px 14px; font-size: 14px; line-height: 1.55; color: rgba(245,241,234,.62); }
+        .fam__cap a, .fam__cap code { color: rgba(245,241,234,.85); }
+        .fam__zoom { position: relative; }
+        .fam__zoom img { display: block; width: 100%; aspect-ratio: 16 / 9; }
+        .fam__frame { position: absolute; min-width: 44px; min-height: 26px; padding: 0; border: 2px solid #fff; border-radius: 3px; background: rgba(255,255,255,.08); box-shadow: 0 0 0 2px rgba(20,13,16,.7); cursor: zoom-in; transform-origin: center; }
+        .fam__steps { flex: 1 1 auto; }
+        .fam__steps button { flex: 1 1 0; min-width: 40px; padding: 0 6px; }
+        @media (max-width: 760px) { .fam__fig { margin: 0 -16px; border-radius: 0; border-left: 0; border-right: 0; } .fam__bar .fam__right { margin-left: 0; } }
         .inside { margin: 40px 0 0; }
         .inside__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; align-items: stretch; }
         .inside__grid > .station { margin: 0; display: flex; flex-direction: column; }
@@ -296,7 +328,7 @@
                 <div class="f13__introside">
                     <p class="dedication">To Rim</p>
                     <ul class="onpage" aria-label="On this page">
-                        <li><a href="#eye">The eye</a></li><li><a href="#catalogue">The catalogue</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
+                        <li><a href="#eye">The eye</a></li><li><a href="#families">The repeating motions</a></li><li><a href="#zoom-title">The fractal</a></li><li><a href="#catalogue">The catalogue</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
                     </ul>
                 </div>
             </div>
@@ -459,6 +491,43 @@
                 <div class="eye__gwrap"><canvas id="eye-graph" tabindex="0" role="img" aria-label="Graph: share of strikes that are chaotic against the energy of the strike, log scale from 0.5 to 5000 J; zero below 9.8 J, highest between 29.4 and 39.2 J, near zero above 196 J. Tap or use the arrow keys to pin an energy."></canvas></div>
                 <p class="eye__read"><span id="eye-read">Tap the graph to pin an energy: its share is read here and its ellipse is drawn on the eye.</span><button type="button" id="eye-unpin" hidden>Unpin</button></p>
                 <figcaption class="eye__cap">Both pictures read the same map as the sheet (921,600 strikes, each with its twin, 6.67 s each; <code>tools/fig13/chaos_map.py</code>); "chaotic" means map value v &gt; 0.5. Step 1 repeats the measurement live for two strikes and shows its value next to the map's: they differ only by the rounding of the map image. The theory is in sections <a href="#n-eye">5</a> and <a href="#n-x">6</a> of the lecture note.</figcaption>
+            </figure>
+        </section>
+
+        <section class="fam" id="families" aria-labelledby="fam-title">
+            <h2 id="fam-title">Where the repeating motions live</h2>
+            <p>Strike the hanging pendulum and its tip usually scribbles a curve that never closes. For some strikes it closes: after a certain time both rods are back where they were, moving as they were, and the same drawing is traced again and again. This picture marks every strike on the sheet that does this. They are not scattered grains. They form lines, hundreds of them, and the lines are sorted here in two ways: by the kind of drawing, and by whether the motion survives a small push.</p>
+            <figure class="fam__fig">
+                <div class="fam__bar">
+                    <div id="fam-views" role="group" aria-label="What the picture shows">
+                        <button type="button" data-v="kind" aria-pressed="true">By kind of drawing</button><button type="button" data-v="stab" aria-pressed="false">Stable or unstable</button><button type="button" data-v="chaos" aria-pressed="false">The ground alone</button><button type="button" data-v="eye" aria-pressed="false">The eye, close</button>
+                    </div>
+                    <div class="fam__right">
+                        <div id="fam-zoom" role="group" aria-label="Magnify the picture" style="display:flex;gap:6px"><button type="button" data-z="1" aria-pressed="true">1×</button><button type="button" data-z="2" aria-pressed="false">2×</button><button type="button" data-z="4" aria-pressed="false">4×</button></div>
+                        <button type="button" id="fam-dots" aria-pressed="true">The 228</button>
+                    </div>
+                </div>
+                <div class="fam__pan" id="fam-pan"><div class="fam__in" id="fam-in"><img id="fam-img" alt="The momentum sheet with every strike that gives a repeating motion drawn as a coloured line. The lines run out from the centre like spokes and crowd, bend and break inside the eye." decoding="async"><span class="fam__pin" id="fam-pin" hidden></span></div></div>
+                <p class="fam__key" id="fam-key"></p>
+                <p class="fam__read"><span id="fam-read" aria-live="polite"></span><button type="button" id="fam-run" hidden>Run it in the catalogue</button><button type="button" id="fam-unpin" hidden>Unpin</button></p>
+                <div class="fam__say" id="fam-say"></div>
+                <figcaption class="fam__cap">Across: the push on the upper rod, −35.6 to 35.6 kg·m²/s. Up: the push on the lower rod, −20 to 20. With 2× or 4× the picture can be dragged. The small rings are the 228 motions of the <a href="#catalogue">catalogue</a> below; tap one and run it there. How the lines were found: on a grid of 1920 × 1080 strikes, each followed for 12 passes of the upper rod through straight, a line is where the lower rod's angle at such a pass changes sign between neighbours (<code>tools/fig13/closed_map.py</code>); stability from one lap of the linearised motion (<code>tools/fig13/closed_stability.py</code>). The lines are drawn wider than they are: a true line has no width.</figcaption>
+            </figure>
+
+            <h3 id="zoom-title">Into the border between order and chaos</h3>
+            <p>The repeating motions that flip (magenta above) sit in the bright ground and along its edge, where dark meets bright. That border is worth a closer look. Each picture below is the framed piece of the one before, about eight times closer, computed afresh from the equations: 1920 × 1080 strikes, each with its twin, each watched for 26.67 s.</p>
+            <figure class="fam__fig">
+                <div class="fam__zoom"><img id="zm-img" alt="The chaos map, magnified step by step into the border between regular and chaotic strikes; at every step the border shows new stripes." decoding="async"><button type="button" class="fam__frame" id="zm-frame" aria-label="Go into the framed piece"></button></div>
+                <div class="fam__bar">
+                    <button type="button" id="zm-play">Play</button>
+                    <div class="fam__steps" id="zm-steps" role="group" aria-label="Go to a picture"><button type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">4</button><button type="button">5</button><button type="button">6</button><button type="button">7</button></div>
+                </div>
+                <p class="fam__read"><span id="zm-read" aria-live="polite"></span></p>
+                <div class="fam__say"><p id="zm-say"></p>
+                    <p><b>Why this is a fractal.</b> Look closer at the coast of an island on a map and it straightens out; in the end you see a line with land on one side and sea on the other. This border does the opposite. Seven pictures deep, 291,000 times closer, there are still stripes inside stripes, and the chaotic share has not moved from about half: 47, 51, 48, 49, 47, 46 %. A border that looks equally ragged at every scale is what the word fractal means.</p>
+                    <p><b>What it means for the pendulum.</b> Near this border you cannot say what a strike will do unless you know it almost perfectly. Measured on this map: know the strike twice as well, and the share of strikes you still cannot call falls only by a factor 1.37, not 2. To halve your doubt you must measure about 4.7 times better.</p>
+                    <p><b>Where the pictures stop being trustworthy.</b> Each strike is watched for a fixed time. A strike whose twin needs longer than that to drift away is painted dark although it is chaotic. So the very finest stripes belong to the watch time as much as to the pendulum; watching longer would move them, not remove them.</p></div>
+                <figcaption class="fam__cap">Computed on two graphics cards with <code>tools/fig13/kaggle_fractal.py</code> and painted by <code>tools/fig13/render_fractal.py</code>. "Chaotic" means the map value v is above 0.5, as in <a href="#eye">How the eye is built</a>. The factor 1.37 is 2 to the power 0.45, the measured uncertainty exponent; it puts the dimension of the border near 1.55, between a line (1) and an area (2).</figcaption>
             </figure>
         </section>
 
@@ -1074,6 +1143,7 @@
     <script src="../scripts/fig13-eye.js" defer></script>
     <script src="../scripts/fig13-catalogue-data.js" defer></script>
     <script src="../scripts/fig13-catalogue.js" defer></script>
+    <script src="../scripts/fig13-families.js" defer></script>
 <script>
 (() => {
 'use strict';
