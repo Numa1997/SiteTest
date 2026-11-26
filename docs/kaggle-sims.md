@@ -54,6 +54,7 @@ By itself, when a simulation's model `tools/sims/<sim>.py` is added or changed o
 | Simulation | Model | What is stored | Page that plays it |
 |---|---|---|---|
 | Home page, right margin, and `scenes.html` S3: paper globes on threads in a wind with a Kármán vortex street (`windpend`, since 25 November 2026) | [tools/sims/windpend.py](../tools/sims/windpend.py) | `windpend.bin`, 10.3 kB: one settled period of 4.69 s, three angles at 30 frames a second, then 41 streamlines of 96 points; header with parameters and checks (settled after 14 to 17 periods, energy balance 1e-11, div u / grad u 5e-11, largest swing 0.35 rad, smallest gap between globes 0.78 m) | `bg-scenes.js`, `windDraw()`, scenes `rails` and `wind` |
+| Home page, band before the simulations; `scenes.html` S4; Fig. 17 section 2: spinners pulled into step by a wandering rotating field (`spinners`, since 26 November 2026) | [tools/sims/spinners.py](../tools/sims/spinners.py) | twelve runs `spin-K<K₀>-k<κ>.bin`, 0.8 MB each (K₀ ∈ {0, 4, 10, 20}, κ ∈ {0, 1, 3} rad/s): 648 rotors, 1200 frames at 15 a second, angles as uint8, then the field's centre, angle and the locked share per frame as float32; `spinners.json`: own rates, start angles, checks (Adler slip period to 8e-9, locking radius on the whole lattice, rerun at tolerance 1e-11 within 0.038 rad) | `bg-scenes.js`, scene `spin`; `simulations/living-scenes.html` |
 | No page since 25 November 2026 (was the home page's right margin from 23 November): two pendulums tied by a spring (`coupled`) | [tools/sims/coupled.py](../tools/sims/coupled.py) | `coupled.bin`, 4.2 kB: one exactly closing loop of 27.09 s, θ₁ and θ₂ at 30 frames a second; header with parameters, k solved by shooting, checks (energy kept to 4e-13, loop residual 5e-13 rad, swing crossed at 13.54 s against 13.51 s from 2π/(ω₂ − ω₁) ÷ 2, smallest gap between the bobs 0.42 m) | `bg-scenes.js`, scenes `rails` and `pairs` |
 | Fig. 1, Wave interference (`wave_interference2`; generation 1 removed after 2 passed the live check) | [tools/sims/wave_interference2.py](../tools/sims/wave_interference2.py) | 290 files, 36.5 MB: the distance table of a fixed 250 × 250 grid, a ring's angle at 118 wave numbers (the page blends two neighbours exactly) and its height at γ = 0 … 0.6 in steps of 0.025, a cosine table; every table in a bottom and a top half ([fig01-wave-sources.md](simulations/fig01-wave-sources.md)) | `simulations/Circular Wave Interference Visualization.html`, its own loader (`stored()`, `load()`) |
 
@@ -71,8 +72,11 @@ the lines are drawn shifted by c t: the wind only slides, so this is exact (the 
 integrates nothing. The spring-coupled pendulums (`coupled.bin`) played here from 23 to 25 November 2026 and Barton's pendulums
 (`barton.bin`) before them; both models and their data stay, and `registry.json` lists no page for them.
 
+Spinners (`spin-*.bin`, label `SPN1`): after the header the payload is bytes, not int16, so `sceneData` also hands over `raw`, the
+payload as it is; the scene reads frames × N uint8 angles (θ = byte × 2π/256), then frames × 4 float32. The header names the layout.
+
 Both pendulum models were first run before publishing, from their branches, as versions of the same notebook (Kaggle connector,
-CPU; `coupled` as versions 7 to 9, `windpend` as versions 11 and 12), to film the result; those outputs were never committed. The
+CPU; `coupled` as versions 7 to 9, `windpend` as versions 11 and 12, `spinners` as versions 14 to 16), to film the result; those outputs were never committed. The
 data the site plays is the one the workflow makes when a model lands on `main`.
 
 ## Keys

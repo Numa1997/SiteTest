@@ -147,7 +147,7 @@
     "film.json",
     "film.mp4"
    ],
-   "about_files": "Small test of the flip-time film (72 x 72 starts, 9 masses) and CPU/GPU timing; no page plays it.",
+   "about_files": "Small test of the flip-time films (72 x 72 starts, 8 points of the curve push) and CPU/GPU timing; no page plays it.",
    "store": "r2",
    "shards": 1,
    "format": 1,
@@ -159,16 +159,16 @@
    "figure": "Fig. 2 Double Pendulum",
    "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
    "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
-   "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start released from rest takes until a rod passes over the top), swept through the mass ratio and recorded as a film, computed on Kaggle's GPU with the page's own RK4."
+   "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start takes until a rod passes over the top), computed along curves through the pendulum's parameter space and recorded as films, on Kaggle's GPU with the page's own RK4."
   },
-  "double_pendulum_film": {
-   "model": "tools/sims/double_pendulum_film.py",
+  "double_pendulum_film_mass": {
+   "model": "tools/sims/double_pendulum_film_mass.py",
    "timeout_s": 18000,
    "files": [
     "film.json",
     "film.mp4"
    ],
-   "about_files": "The flip-time film of Fig. 2: 369 maps of 720 x 720 starts, film.mp4, poster.png, film.json. Marked manual until the smoke run has measured its time; then started by Run workflow.",
+   "about_files": "Flip-time film of Fig. 2 along the curve \"mass\" (Sand pours into the lower bob): 240 maps of 720 x 720 starts, film.mp4, poster.png, film.json. Manual: started by Run workflow once the smoke run has measured the time.",
    "store": "r2",
    "shards": 1,
    "format": 1,
@@ -180,7 +180,124 @@
    "figure": "Fig. 2 Double Pendulum",
    "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
    "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
-   "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start released from rest takes until a rod passes over the top), swept through the mass ratio and recorded as a film, computed on Kaggle's GPU with the page's own RK4."
+   "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start takes until a rod passes over the top), computed along curves through the pendulum's parameter space and recorded as films, on Kaggle's GPU with the page's own RK4."
+  },
+  "double_pendulum_film_length": {
+   "model": "tools/sims/double_pendulum_film_length.py",
+   "timeout_s": 18000,
+   "files": [
+    "film.json",
+    "film.mp4"
+   ],
+   "about_files": "Flip-time film of Fig. 2 along the curve \"length\" (The lower rod grows): 240 maps of 720 x 720 starts, film.mp4, poster.png, film.json. Manual: started by Run workflow once the smoke run has measured the time.",
+   "store": "r2",
+   "shards": 1,
+   "format": 1,
+   "gpu": true,
+   "manual": true,
+   "pages": [],
+   "dataset": "numakoudsie/fig2-double-pendulum",
+   "dataset_title": "Fig. 2 Double Pendulum: simulation data",
+   "figure": "Fig. 2 Double Pendulum",
+   "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
+   "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
+   "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start takes until a rod passes over the top), computed along curves through the pendulum's parameter space and recorded as films, on Kaggle's GPU with the page's own RK4."
+  },
+  "double_pendulum_film_ring": {
+   "model": "tools/sims/double_pendulum_film_ring.py",
+   "timeout_s": 18000,
+   "files": [
+    "film.json",
+    "film.mp4"
+   ],
+   "about_files": "Flip-time film of Fig. 2 along the curve \"ring\" (Once round the mass-length plane): 240 maps of 720 x 720 starts, film.mp4, poster.png, film.json. Manual: started by Run workflow once the smoke run has measured the time.",
+   "store": "r2",
+   "shards": 1,
+   "format": 1,
+   "gpu": true,
+   "manual": true,
+   "pages": [],
+   "dataset": "numakoudsie/fig2-double-pendulum",
+   "dataset_title": "Fig. 2 Double Pendulum: simulation data",
+   "figure": "Fig. 2 Double Pendulum",
+   "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
+   "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
+   "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start takes until a rod passes over the top), computed along curves through the pendulum's parameter space and recorded as films, on Kaggle's GPU with the page's own RK4."
+  },
+  "double_pendulum_film_push": {
+   "model": "tools/sims/double_pendulum_film_push.py",
+   "timeout_s": 18000,
+   "files": [
+    "film.json",
+    "film.mp4"
+   ],
+   "about_files": "Flip-time film of Fig. 2 along the curve \"push\" (Every direction of a push): 240 maps of 720 x 720 starts, film.mp4, poster.png, film.json. Manual: started by Run workflow once the smoke run has measured the time.",
+   "store": "r2",
+   "shards": 1,
+   "format": 1,
+   "gpu": true,
+   "manual": true,
+   "pages": [],
+   "dataset": "numakoudsie/fig2-double-pendulum",
+   "dataset_title": "Fig. 2 Double Pendulum: simulation data",
+   "figure": "Fig. 2 Double Pendulum",
+   "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
+   "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
+   "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start takes until a rod passes over the top), computed along curves through the pendulum's parameter space and recorded as films, on Kaggle's GPU with the page's own RK4."
+  },
+  "double_pendulum_film_octave": {
+   "model": "tools/sims/double_pendulum_film_octave.py",
+   "timeout_s": 18000,
+   "files": [
+    "film.json",
+    "film.mp4"
+   ],
+   "about_files": "Flip-time film of Fig. 2 along the curve \"octave\" (The two tones stay an octave apart): 240 maps of 720 x 720 starts, film.mp4, poster.png, film.json. Manual: started by Run workflow once the smoke run has measured the time.",
+   "store": "r2",
+   "shards": 1,
+   "format": 1,
+   "gpu": true,
+   "manual": true,
+   "pages": [],
+   "dataset": "numakoudsie/fig2-double-pendulum",
+   "dataset_title": "Fig. 2 Double Pendulum: simulation data",
+   "figure": "Fig. 2 Double Pendulum",
+   "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
+   "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
+   "dataset_about": "Two rods, two masses, chaos: the flip-time map (how long each start takes until a rod passes over the top), computed along curves through the pendulum's parameter space and recorded as films, on Kaggle's GPU with the page's own RK4."
+  },
+  "spinners": {
+   "model": "tools/sims/spinners.py",
+   "files": [
+    "spin-K0-k0.bin",
+    "spin-K0-k1.bin",
+    "spin-K0-k3.bin",
+    "spin-K4-k0.bin",
+    "spin-K4-k1.bin",
+    "spin-K4-k3.bin",
+    "spin-K10-k0.bin",
+    "spin-K10-k1.bin",
+    "spin-K10-k3.bin",
+    "spin-K20-k0.bin",
+    "spin-K20-k1.bin",
+    "spin-K20-k3.bin",
+    "spinners.json"
+   ],
+   "pages": [
+    {
+     "path": "/",
+     "width": 1600,
+     "height": 1000,
+     "scroll": 1400,
+     "probe": "(()=>{const h=document.querySelector('[data-bg=spin]');const s=h&&h.__bgScene;if(!s)return {error:'no spin scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,N:s.D.hdr.N};})()"
+    }
+   ],
+   "dataset": "numakoudsie/phyein-usul-spinners",
+   "dataset_title": "Spinners locked by a rotating field: simulation data",
+   "figure": "Fig. 17 Living scenes: spinners",
+   "page_url": "https://phyeinusul.com/simulations/living-scenes.html",
+   "dataset_subtitle": "Rotors in oil locked by a wandering rotating field (Adler and Kuramoto): every Kaggle run",
+   "dataset_about": "A lattice of small rotors, each with its own rate, in a rotating magnetic field that wanders over them: those whose rate is near the field's lock to it while it passes (Adler's equation). The scene before the simulations on the Phyein Usul home page, and Fig. 17."
   }
  }
 }

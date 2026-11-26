@@ -2955,5 +2955,18 @@
  "∞ (circle)": "∞ (دائرة)",
  "∫ F Ẋ dt, rerun with the same RK4 to sample n": "∫ F Ẋ dt، أُعيد حسابه بطريقة RK4 نفسها حتى العيّنة n",
  "∫ c<sub>stop</sub> ℓ̇² dt, rerun with the same RK4 to sample n": "∫ c<sub>stop</sub> ℓ̇² dt، أُعيد حسابه بطريقة RK4 نفسها حتى العيّنة n",
- "✕ Stored and recomputed ": "✕ مخزّنة ومحسوبة من جديد "
+ "✕ Stored and recomputed ": "✕ مخزّنة ومحسوبة من جديد ",
+ "Living Scenes": "مشاهد حيّة",
+ "the scenes behind the pages · computed on Kaggle where they are physics": "المشاهد التي تسكن خلف الصفحات · تُحسب على Kaggle حيثما كانت فيزياء",
+ "The thirteen small moving pictures behind the pages of this site, one at a time, with their numbers to change. Where a scene is physics it is computed once on Kaggle and played back; the lecture note explains it section by section, starting with spinners pulled into step by a rotating field: Adler’s equation, the slip period and the locking radius.": "ثلاث عشرة صورةً صغيرةً متحركةً تسكن خلف صفحات هذا الموقع، تُعرض هنا واحدةً بعد أخرى، ومعها أعدادها لتغيّرها بيدك. ما كان منها فيزياء يُحسب مرةً واحدةً على Kaggle ثم يُعاد عرضه، والمحاضرة المرافقة تشرحه قسمًا قسمًا، مبتدئةً بدوّاماتٍ صغيرةٍ يجذبها حقلٌ دوّار إلى إيقاعه: معادلة أدلر، وزمن الانزلاق، ونصف قطر الأَسر.",
+ "overdamped rotors with their own rates, pulled by a rotating field whose strength falls off from a wandering centre and by their four neighbours (Adler’s equation on a Kuramoto lattice); the other scenes in their own sections as they are computed": "دوّاراتٌ مُخمَدةٌ إخمادًا زائدًا، لكلٍّ منها سرعته الذاتية، يشدّها حقلٌ دوّار تخفت قوته كلما ابتعدت عن مركزٍ جوّال، ويشدّها جيرانها الأربعة (معادلة أدلر على شبكة كوراموتو)؛ أما سائر المشاهد ففي أقسامٍ خاصةٍ بها حين تُحسب",
+ "SciPy DOP853 on Kaggle, tolerances 1e-9, 12 stored runs of 648 rotors over 80 s at 15 frames per second, checked against Adler’s slip period and the locking radius; the page plays the stored angles after checking their SHA-256": "SciPy DOP853 على Kaggle بتسامحٍ قدره 1e-9، واثنا عشر تشغيلًا مخزّنًا لـ 648 دوّارًا على مدى 80 ثانية بخمس عشرة صورةً في الثانية، مُتحقَّقٌ منها بزمن انزلاق أدلر ونصف قطر الأَسر؛ وتعرض الصفحة الزوايا المخزّنة بعد التحقق من بصمتها SHA-256",
+ "scene; the field’s pull and the neighbours’ pull (stored values); the drawing numbers of each scene; start again": "المشهد؛ شدّ الحقل وشدّ الجيران (قيمٌ مخزّنة)؛ أعداد الرسم في كل مشهد؛ ابدأ من جديد",
+ "synchronization": "التزامن",
+ "phase locking": "الإقفال الطوري",
+ "Adler equation": "معادلة أدلر",
+ "Kuramoto model": "نموذج كوراموتو",
+ "overdamped motion": "الحركة المُخمَدة إخمادًا زائدًا",
+ "slip period": "زمن الانزلاق",
+ "entrainment": "الانجرار"
 }

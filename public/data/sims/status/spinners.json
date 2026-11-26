@@ -1,0 +1,27 @@
+{
+ "sim": "spinners",
+ "state": "running",
+ "notebook": "numakoudsie/phyein-usul-simulations",
+ "run": null,
+ "version": 17,
+ "versions": [
+  17
+ ],
+ "shard": 1,
+ "shards": 1,
+ "card": "cpu",
+ "queued_at": "2026-11-26T03:29:05+00:00",
+ "started_at": "2026-11-26T03:29:36+00:00",
+ "ended_at": null,
+ "queue_s": 31,
+ "run_s": null,
+ "code_commit": "da6e4b93dfd4cdf0238199cd124b942039907147",
+ "data_commit": null,
+ "bytes_stored": 0,
+ "failure": null,
+ "expected_s": null,
+ "expected_done": null,
+ "expected_note": "no benchmark file public/data/sims/bench/spinners.json yet",
+ "log_url": "https://www.kaggle.com/code/numakoudsie/phyein-usul-simulations/log",
+ "progress_note": "Kaggle does not report progress during a run; watch the notebook's log page."
+}
