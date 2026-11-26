@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7172 files, 983.1 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7175 files, 983.1 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -42,7 +42,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [GitHub Actions workflows](#github-actions-workflows) | 4 |
 | [GitHub Actions building blocks used by the workflows](#github-actions-building-blocks-used-by-the-workflows) | 1 |
 | [Documentation](#documentation) | 50 |
-| [Tools](#tools) | 382 |
+| [Tools](#tools) | 385 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -5928,7 +5928,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 88.1 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`, DELETED 18 November 2026). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 42.2 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 43.5 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 32.0 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 15.4 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 19.0 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -6056,8 +6056,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig13/hunt.py`](../tools/fig13/hunt.py) | 8.1 kB | Fig. 13 generator: the flower hunt: g = 0 theory, scans and Newton's method for closed orbits. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/hunt_export.py`](../tools/fig13/hunt_export.py) | 3.2 kB | Fig. 13 generator: writes public/scripts/fig13-hunt-data.js. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/hunt_inspect.py`](../tools/fig13/hunt_inspect.py) | 5.0 kB | Fig. 13 generator: Poincare sections and Floquet traces of the hunted orbits. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/kaggle_fractal.py`](../tools/fig13/kaggle_fractal.py) | 12.2 kB | Fig. 13: the chaos map fine and deep on Kaggle GPUs (whole sheet and eye at 3840 x 2160, six nested zooms to 32,768x) and the renderers for it and for the stability of the closed-orbit families. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/map_png.py`](../tools/fig13/map_png.py) | 1.2 kB | Fig. 13 generator: the chaos map as a PNG in the house palette. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/release_check.py`](../tools/fig13/release_check.py) | 2.7 kB | Fig. 13: how long released pendulums stay on the butterfly, by DOP853, from the runs written by catch_stats.cjs. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/render_fractal.py`](../tools/fig13/render_fractal.py) | 2.3 kB | Fig. 13: the chaos map fine and deep on Kaggle GPUs (whole sheet and eye at 3840 x 2160, six nested zooms to 32,768x) and the renderers for it and for the stability of the closed-orbit families. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/render_stability.py`](../tools/fig13/render_stability.py) | 3.1 kB | Fig. 13: the chaos map fine and deep on Kaggle GPUs (whole sheet and eye at 3840 x 2160, six nested zooms to 32,768x) and the renderers for it and for the stability of the closed-orbit families. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/sheet_worker_check.cjs`](../tools/fig13/sheet_worker_check.cjs) | 982 B | Fig. 13 check: fails if the sheet worker's rk4n or tip differ from the page's. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig16/build_page.py`](../tools/fig16/build_page.py) | 16.6 kB | Fig. 16: builds the page from its source, every number filled from the stored data; --check. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/fig16/cart16.py`](../tools/fig16/cart16.py) | 13.6 kB | Fig. 16 design study (before the GPU run): decoding Fig. 12's rides, the few-mode stout fitted and validated, the head's spill rule, the early concept studies. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -6096,7 +6099,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 145.0 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 145.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |

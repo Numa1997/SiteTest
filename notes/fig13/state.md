@@ -18,8 +18,8 @@ the flower hunt, the catch (a motor at the top pin brings a chaotic double pendu
 - Display work on the stations and films was done by a separate session (20 November 2026), merged to main.
 
 ## Left
-- A finer chaos map (the 1280 × 720 map looks blocky when enlarged): compute on a Kaggle GPU, longer watch, supersampled.
-- Family lines coloured by stability (computed in the scratchpad, not yet on the page); deeper zooms of the chaos boundary with a longer watch.
+- Computed, not yet on the page: the fine GPU chaos maps (tools/fig13/kaggle_fractal.py, run 26 Nov 2026; arrays not in the repository,
+  re-download from the Kaggle notebook's output) and the stability colouring (render_stability.py).
 - The labels under the catch picture are small on a phone (check whether the display session fixed them).
 - The butterflies are slower to catch than the flowers (median 8 to 35 s); their first catch slips about four times in ten.
 
