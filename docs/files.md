@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7175 files, 983.1 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7189 files, 983.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -16,7 +16,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 41 |
-| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4802 |
+| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4806 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
@@ -42,13 +42,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [GitHub Actions workflows](#github-actions-workflows) | 4 |
 | [GitHub Actions building blocks used by the workflows](#github-actions-building-blocks-used-by-the-workflows) | 1 |
 | [Documentation](#documentation) | 50 |
-| [Tools](#tools) | 385 |
+| [Tools](#tools) | 392 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 922 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 925 |
 
 ## Repository root
 
@@ -58,7 +58,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`AGENTS.md`](../AGENTS.md) | 15.9 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 5.6 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 8.9 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
-| [`index.html`](../index.html) | 87.1 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
+| [`index.html`](../index.html) | 87.4 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package-lock.json`](../package-lock.json) | 72.1 kB | Pins the exact versions of the build tools (Vite and its dependencies, 141 packages), since 20 November 2026. | [rebuild.md](method/rebuild.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -76,14 +76,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/lucretius.html`](../public/lucretius.html) | 69.8 kB | The poem page: Lucretius I 146-224 in four columns, Latin, English, German, Arabic (written by make_page.py; /de/ and /ar/ differ only in the words around the poem). | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
 | [`public/portfolios.html`](../public/portfolios.html) | 51.5 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
-| [`public/scenes.html`](../public/scenes.html) | 17.0 kB | The scenes page: every living scene of the site on its own, with what it shows, what drives it and its numbers to change. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`public/scenes.html`](../public/scenes.html) | 19.9 kB | The scenes page: every living scene of the site on its own, with what it shows, what drives it and its numbers to change. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`public/simulations.html`](../public/simulations.html) | 13.0 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
 
 ## German pages (generated)
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/de/index.html`](../public/de/index.html) | 86.5 kB | German index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/index.html`](../public/de/index.html) | 86.8 kB | German index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/lucretius.html`](../public/de/lucretius.html) | 70.1 kB | German lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/portfolios.html`](../public/de/portfolios.html) | 54.6 kB | German portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/simulations.html`](../public/de/simulations.html) | 13.2 kB | German simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
@@ -105,7 +105,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/ar/index.html`](../public/ar/index.html) | 90.1 kB | Arabic index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/index.html`](../public/ar/index.html) | 90.5 kB | Arabic index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/lucretius.html`](../public/ar/lucretius.html) | 71.5 kB | Arabic lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/portfolios.html`](../public/ar/portfolios.html) | 65.1 kB | Arabic portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations.html`](../public/ar/simulations.html) | 14.0 kB | Arabic simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
@@ -162,7 +162,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 213.2 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.2 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.3 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 71.3 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 71.8 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 233.1 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.7 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
@@ -224,7 +224,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/scripts/bg-scenes.js`](../public/scripts/bg-scenes.js) | 77.5 kB | Living scenes: ten small moving pictures (forest, iron powder, harmonica, spinners, mixing, chip, letters, seeds, swerve, shores), each mounted in its own place by data-bg. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`public/scripts/bg-scenes.js`](../public/scripts/bg-scenes.js) | 102.6 kB | Living scenes: ten small moving pictures (forest, iron powder, harmonica, spinners, mixing, chip, letters, seeds, swerve, shores), each mounted in its own place by data-bg. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`public/scripts/cart16-view.js`](../public/scripts/cart16-view.js) | 17.4 kB | Fig. 16: Cart16View, the four-wheel cart drawn on Fig. 12's StoutView2 (its camera and glass); the deck's pose from stored data. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 25.4 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
 | [`public/scripts/curve.js`](../public/scripts/curve.js) | 46.9 kB | Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page's store. | [curve.md](scripts/curve.md) |
@@ -249,7 +249,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/marching.js`](../public/scripts/marching.js) | 5.7 kB | Marching cubes on a rectangular grid (tables from three.js), shared by wave3d-view.js and fig14-iso-worker.js. | [wave3d-view.md](scripts/wave3d-view.md) |
 | [`public/scripts/pint3d-view.js`](../public/scripts/pint3d-view.js) | 10.4 kB | Figs. 12 and 16: the 3D close-up of the pint (three.js module): the stored stout surface, head, drops and lumps of one stored picture, riding with the glass. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`public/scripts/resonant-note.js`](../public/scripts/resonant-note.js) | 199.1 kB | Fig. 15 lecture note: the whole study, injected into the page’s <article> and typeset by sim.js (KaTeX); the 1D theory as the exact core, the 3D computation and its measured grid error, discs and shells, the device. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`public/scripts/rt3d-view.js`](../public/scripts/rt3d-view.js) | 13.6 kB | Fig. 15: the 3D view (three.js): the meshed height sheet in the house colours and the barriers as static lit glass solids at their true place; turning by press and drag. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/scripts/rt3d-view.js`](../public/scripts/rt3d-view.js) | 16.3 kB | Fig. 15: the 3D view (three.js): the meshed height sheet in the house colours and the barriers as static lit glass solids at their true place; turning by press and drag. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-worker.js`](../public/scripts/rt3d-worker.js) | 3.0 kB | Fig. 15: the background thread that fetches one stored 3D run, checks its SHA-256, inflates it and turns the 8-bit levels into ψ. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.6 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 45.0 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
@@ -4920,7 +4920,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/data/sims/double_pendulum_gpu/2026-11-23/index-double_pendulum_gpu.json`](../public/data/sims/double_pendulum_gpu/2026-11-23/index-double_pendulum_gpu.json) | 3.7 kB | Simulation data computed on Kaggle on 2026-11-23: provenance of the double_pendulum_gpu run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_smoke/2026-11-23/double_pendulum.json`](../public/data/sims/double_pendulum_smoke/2026-11-23/double_pendulum.json) | 2.3 kB | Simulation data computed on Kaggle on 2026-11-23: parameters and checks of the double_pendulum_smoke model run. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json`](../public/data/sims/double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json) | 678 B | Simulation data computed on Kaggle on 2026-11-23: provenance of the double_pendulum_smoke run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
-| [`public/data/sims/generations.json`](../public/data/sims/generations.json) | 47.4 kB | Simulation data computed on Kaggle: one entry per simulation and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/sims/pipeline.py. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/generations.json`](../public/data/sims/generations.json) | 48.3 kB | Simulation data computed on Kaggle: one entry per simulation and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/sims/pipeline.py. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/status/windpend.json`](../public/data/sims/status/windpend.json) | 816 B | Where the engine’s newest run of windpend stands (queued, running, saved, live_ok or failed), with its times, Kaggle version and data commit; written during the run by tools/sims/pipeline.py, land.py and verify_live.py. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g000_hi.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g000_hi.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.000, top half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g000_lo.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g000_lo.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.000, bottom half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g025_hi.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g025_hi.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.025, top half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
@@ -5212,6 +5213,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/data/sims/wave_interference2/2026-11-23/ring_k117_hi.bin`](../public/data/sims/wave_interference2/2026-11-23/ring_k117_hi.bin) | 125.3 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the angle k r of a ring at k node 117, top half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/ring_k117_lo.bin`](../public/data/sims/wave_interference2/2026-11-23/ring_k117_lo.bin) | 125.3 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the angle k r of a ring at k node 117, bottom half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/wave_interference2.json`](../public/data/sims/wave_interference2/2026-11-23/wave_interference2.json) | 11.3 kB | Simulation data computed on Kaggle on 2026-11-23: parameters and checks of the wave_interference2 model run. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/windpend/2026-11-25/index-windpend.json`](../public/data/sims/windpend/2026-11-25/index-windpend.json) | 883 B | Simulation data computed on Kaggle on 2026-11-25: provenance of the windpend run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/windpend/2026-11-25/windpend.bin`](../public/data/sims/windpend/2026-11-25/windpend.bin) | 10.3 kB | Simulation data computed on Kaggle on 2026-11-25: the frames of windpend, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/windpend/2026-11-25/windpend.json`](../public/data/sims/windpend/2026-11-25/windpend.json) | 1.9 kB | Simulation data computed on Kaggle on 2026-11-25: parameters and checks of the windpend model run. | [kaggle-sims.md](kaggle-sims.md) |
 
 ## Stylesheets
 
@@ -5873,7 +5877,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`.github/workflows/kaggelize-land.yml`](../.github/workflows/kaggelize-land.yml) | 2.6 kB | Kaggelize, the landing: the owner's approval, then the Kaggle line from the session's branch, then the caretaker session. | [kaggelize.md](kaggelize.md) |
 | [`.github/workflows/kaggelize-one.yml`](../.github/workflows/kaggelize-one.yml) | 7.3 kB | Kaggelize for one simulation, start to end: study, PAUSE 1, build, landing, corrections, result. | [kaggelize.md](kaggelize.md) |
 | [`.github/workflows/kaggelize.yml`](../.github/workflows/kaggelize.yml) | 3.2 kB | Kaggelize, the Run button: type simulation titles; for each one a study session, the owner's approval, a build session, the owner's approval, the Kaggle line, a caretaker session, and up to two corrections. | [kaggelize.md](kaggelize.md) |
-| [`.github/workflows/sims-kaggle.yml`](../.github/workflows/sims-kaggle.yml) | 6.1 kB | Simulations on Kaggle: when a simulation model listed in tools/sims/registry.json is added or changed on main (or by hand), compute it once on Kaggle, check the output by SHA-256, commit it to public/data/sims/, check the live site. | [kaggle-sims.md](kaggle-sims.md) |
+| [`.github/workflows/sims-kaggle.yml`](../.github/workflows/sims-kaggle.yml) | 7.8 kB | Simulations on Kaggle: when a simulation model listed in tools/sims/registry.json is added or changed on main (or by hand), compute it once on Kaggle, check the output by SHA-256, commit it to public/data/sims/, check the live site. | [kaggle-sims.md](kaggle-sims.md) |
 
 ## GitHub Actions building blocks used by the workflows
 
@@ -5892,8 +5896,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/glossary.md`](glossary.md) | 17.0 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
 | [`docs/i18n.md`](i18n.md) | 18.5 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
 | [`docs/kaggelize.md`](kaggelize.md) | 10.3 kB | Documentation: Kaggelize: one button that moves a simulation to data computed once on Kaggle. | [kaggelize.md](kaggelize.md) |
-| [`docs/kaggle-pipeline.md`](kaggle-pipeline.md) | 21.0 kB | Documentation: The Kaggle pipeline: computing on Kaggle, playing on the website. | [kaggle-pipeline.md](kaggle-pipeline.md) |
-| [`docs/kaggle-sims.md`](kaggle-sims.md) | 22.1 kB | Documentation: Simulations on Kaggle: computed once, stored in GitHub, served by Cloudflare, played by the page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`docs/kaggle-pipeline.md`](kaggle-pipeline.md) | 22.2 kB | Documentation: The Kaggle pipeline: computing on Kaggle, playing on the website. | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`docs/kaggle-sims.md`](kaggle-sims.md) | 30.2 kB | Documentation: Simulations on Kaggle: computed once, stored in GitHub, served by Cloudflare, played by the page. | [kaggle-sims.md](kaggle-sims.md) |
 | [`docs/kaggle.md`](kaggle.md) | 4.4 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
 | [`docs/method/model.md`](method/model.md) | 16.1 kB | Documentation: How Phyein Usul is built: the model behind the repository. | [model.md](method/model.md) |
 | [`docs/method/rebuild.md`](method/rebuild.md) | 9.3 kB | Documentation: Can Phyein Usul be rebuilt? What exists, what is missing, what was saved. | [rebuild.md](method/rebuild.md) |
@@ -5904,7 +5908,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/performance.md`](performance.md) | 53.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 68.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
-| [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 16.8 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 22.0 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.3 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 67.5 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -5930,7 +5934,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 88.1 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`, DELETED 18 November 2026). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 43.5 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 32.0 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
-| [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 15.4 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 16.2 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 19.0 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
@@ -6099,12 +6103,15 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 145.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 148.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-14-schrodinger-sphere/fig-14-schrodinger-sphere.ipynb`](../tools/kaggle/figures/fig-14-schrodinger-sphere/fig-14-schrodinger-sphere.ipynb) | 8.2 kB | The Kaggle notebook fig-14-schrodinger-sphere (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-14-schrodinger-sphere/kernel-metadata.json`](../tools/kaggle/figures/fig-14-schrodinger-sphere/kernel-metadata.json) | 421 B | The Kaggle notebook fig-14-schrodinger-sphere (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`tools/kaggle/figures/fig-15-resonant-tunnelling/build.py`](../tools/kaggle/figures/fig-15-resonant-tunnelling/build.py) | 7.9 kB | The Kaggle notebook fig-15-resonant-tunnelling (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`tools/kaggle/figures/fig-15-resonant-tunnelling/fig-15-resonant-tunnelling.ipynb`](../tools/kaggle/figures/fig-15-resonant-tunnelling/fig-15-resonant-tunnelling.ipynb) | 6.4 kB | The Kaggle notebook fig-15-resonant-tunnelling (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`tools/kaggle/figures/fig-15-resonant-tunnelling/kernel-metadata.json`](../tools/kaggle/figures/fig-15-resonant-tunnelling/kernel-metadata.json) | 380 B | The Kaggle notebook fig-15-resonant-tunnelling (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/pinned-code/0054020/tools/fig12/kaggle/run_b.py`](../tools/kaggle/pinned-code/0054020/tools/fig12/kaggle/run_b.py) | 20.7 kB | Solver file exactly as it was at commit 0054020 (run_b.py), kept so the stored runs can be recomputed without the git history. | [rebuild.md](method/rebuild.md) |
 | [`tools/kaggle/pinned-code/0054020/tools/fig12/kaggle/stout_jax.py`](../tools/kaggle/pinned-code/0054020/tools/fig12/kaggle/stout_jax.py) | 78.9 kB | Solver file exactly as it was at commit 0054020 (stout_jax.py), kept so the stored runs can be recomputed without the git history. | [rebuild.md](method/rebuild.md) |
 | [`tools/kaggle/pinned-code/0054020/tools/fig16/build_page.py`](../tools/kaggle/pinned-code/0054020/tools/fig16/build_page.py) | 16.6 kB | Solver file exactly as it was at commit 0054020 (build_page.py), kept so the stored runs can be recomputed without the git history. | [rebuild.md](method/rebuild.md) |
@@ -6313,15 +6320,19 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/sims/double_pendulum_gpu.py`](../tools/sims/double_pendulum_gpu.py) | 801 B | Fig. 2 in full on Kaggle’s GPU: every start of the grid (360 000, each with its twin) by dp_engine.py, stored as 25 packs in a GitHub release. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`tools/sims/double_pendulum_smoke.py`](../tools/sims/double_pendulum_smoke.py) | 576 B | Engine test for GPU runs with large data: a small part of the double pendulum grid through every step (GPU notebook, GitHub release, landing, the Worker’s /rel/ path). | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/dp_engine.py`](../tools/sims/dp_engine.py) | 19.9 kB | The double pendulum on Kaggle’s GPU (JAX, the page’s own RK4 in 64-bit), every start of the grid with its twin, packed per mass-length cell; used by double_pendulum_smoke.py (and the full run). | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
-| [`tools/sims/figure_datasets.json`](../tools/sims/figure_datasets.json) | 1.7 kB | For file_figure.py: per figure, its Kaggle dataset, title, subtitle, page and every notebook that made its data. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/figure_datasets.json`](../tools/sims/figure_datasets.json) | 1.2 kB | For file_figure.py: per figure, its Kaggle dataset, title, subtitle, page and every notebook that made its data. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/file_figure.py`](../tools/sims/file_figure.py) | 8.6 kB | Files every Kaggle notebook run of a figure made before the engine (code, whole output, log, SHA-256 manifest per notebook version) as the figure’s private Kaggle dataset; Run workflow with mode = figure. | [kaggle-sims.md](kaggle-sims.md) |
-| [`tools/sims/kaggle_sims.py`](../tools/sims/kaggle_sims.py) | 2.0 kB | Text of the Kaggle notebook phyein-usul-simulations: fetches tools/sims at a pinned commit and runs one simulation model. | [kaggle-sims.md](kaggle-sims.md) |
-| [`tools/sims/land.py`](../tools/sims/land.py) | 3.6 kB | Step 7 of the simulations pipeline: puts the new data on the newest main (generations.json merged entry by entry, docs/files.md generated again), so a merge made during a run cannot stop the save. | [kaggle-sims.md](kaggle-sims.md) |
-| [`tools/sims/pipeline.py`](../tools/sims/pipeline.py) | 9.9 kB | The simulations pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation. | [kaggle-sims.md](kaggle-sims.md) |
-| [`tools/sims/registry.json`](../tools/sims/registry.json) | 5.8 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/kaggle_sims.py`](../tools/sims/kaggle_sims.py) | 4.0 kB | Text of the Kaggle notebook phyein-usul-simulations: fetches tools/sims at a pinned commit and runs one simulation model. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/land.py`](../tools/sims/land.py) | 7.2 kB | Step 7 of the simulations pipeline: puts the new data and the run’s status file on the newest main from a separate worktree (generations.json merged entry by entry, docs/files.md generated again), so a merge made during a run cannot stop the save. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/pipeline.py`](../tools/sims/pipeline.py) | 26.4 kB | The simulations pipeline: push the notebook (one version per shard), wait, download, check every SHA-256, store the data (R2, the repository or a release), its generation and the run’s status; collect mode for versions that already ran. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/r2.py`](../tools/sims/r2.py) | 6.6 kB | The engine’s store: uploads a run’s files to the Cloudflare R2 bucket phyein-usul-runs, never over a different object, and reads every upload back to compare size and SHA-256. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/registry.json`](../tools/sims/registry.json) | 7.0 kB | Registry of the simulations computed on Kaggle: their model, their files and the live pages that play them; only names listed here go to Kaggle. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/sims_smoke.py`](../tools/sims/sims_smoke.py) | 1.2 kB | The engine’s own test model (no physics): two small files whose bytes depend only on the shard, and a checks_passed switch; computed only by Run workflow. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/test_engine_r2.py`](../tools/sims/test_engine_r2.py) | 23.2 kB | Local end-to-end test of the engine on R2: a bare git origin, a local S3 server, a stand-in for the Kaggle tool and a local site; 12 cases. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/test_simdata.cjs`](../tools/sims/test_simdata.cjs) | 21.8 kB | Test of simdata.js: a local server with stored generations and headless Chromium, 14 cases (choice of generation, addresses, files, parts, fingerprints, cache, retry, report). | [simdata.md](scripts/simdata.md) |
-| [`tools/sims/verify_live.py`](../tools/sims/verify_live.py) | 6.0 kB | Step 10 of the simulations pipeline: wait for the live site, compare the live files by SHA-256, open the live pages and check they play the data. | [kaggle-sims.md](kaggle-sims.md) |
+| [`tools/sims/verify_live.py`](../tools/sims/verify_live.py) | 10.5 kB | Step 10 of the simulations pipeline: wait for the live site, compare the live files by SHA-256, open the live pages and check they play the data. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/wave_interference2.py`](../tools/sims/wave_interference2.py) | 15.1 kB | Reference model of Fig. 1, generation 2: ring angles at nodes even in k, which the page blends exactly, heights at damping steps of 0.025, every table in a bottom and a top half; computed once on Kaggle. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
+| [`tools/sims/windpend.py`](../tools/sims/windpend.py) | 19.6 kB | Reference model of the paper globes on threads in a wind with a Kármán vortex street (the right margin of the home page and scenes.html S3): the wind field and its streamlines, drag and the push of accelerating air, one settled period, checks. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/spill/drag_check.py`](../tools/spill/drag_check.py) | 2.9 kB | The continuous spill model: its Kaggle CPU checks (pint at rest and a hard shove; the rest diagnostic; air drag against the textbook law). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/spill/rest_diag.py`](../tools/spill/rest_diag.py) | 2.4 kB | The continuous spill model: its Kaggle CPU checks (pint at rest and a hard shove; the rest diagnostic; air drag against the textbook law). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/spill/smoke_cpu.py`](../tools/spill/smoke_cpu.py) | 8.0 kB | The continuous spill model: its Kaggle CPU checks (pint at rest and a hard shove; the rest diagnostic; air drag against the textbook law). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -6338,7 +6349,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/ar/hydraulics__hydraulic_control.json`](../i18n/ar/hydraulics__hydraulic_control.json) | 79.1 kB | Arabic table of hydraulics__hydraulic_control: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/hydraulics__theory_template.json`](../i18n/ar/hydraulics__theory_template.json) | 2.2 kB | Arabic table of hydraulics__theory_template: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/hydraulics_strings.json`](../i18n/ar/hydraulics_strings.json) | 34.2 kB | Arabic table of hydraulics_strings: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/ar/index.html.json`](../i18n/ar/index.html.json) | 42.2 kB | Arabic table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/index.html.json`](../i18n/ar/index.html.json) | 42.9 kB | Arabic table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/lucretius.html.json`](../i18n/ar/lucretius.html.json) | 10.0 kB | Arabic table of lucretius.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/portfolios.html.json`](../i18n/ar/portfolios.html.json) | 124.5 kB | Arabic table of portfolios.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations.html.json`](../i18n/ar/simulations.html.json) | 6.8 kB | Arabic table of simulations.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -6365,7 +6376,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/de/hydraulics__hydraulic_control.json`](../i18n/de/hydraulics__hydraulic_control.json) | 71.1 kB | German table of hydraulics__hydraulic_control: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics__theory_template.json`](../i18n/de/hydraulics__theory_template.json) | 1.9 kB | German table of hydraulics__theory_template: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics_strings.json`](../i18n/de/hydraulics_strings.json) | 28.3 kB | German table of hydraulics_strings: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/de/index.html.json`](../i18n/de/index.html.json) | 37.2 kB | German table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/index.html.json`](../i18n/de/index.html.json) | 37.8 kB | German table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/lucretius.html.json`](../i18n/de/lucretius.html.json) | 8.7 kB | German table of lucretius.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/portfolios.html.json`](../i18n/de/portfolios.html.json) | 109.3 kB | German table of portfolios.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations.html.json`](../i18n/de/simulations.html.json) | 5.9 kB | German table of simulations.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -7542,10 +7553,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/home/scenes/after/counts.json`](../notes/home/scenes/after/counts.json) | 3.4 kB | Forest counts (trees, grown, clouds) read from the home page over 60 s at three widths, after the fix of 23 November 2026. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`notes/home/scenes/before/counts.json`](../notes/home/scenes/before/counts.json) | 2.4 kB | Forest counts (trees, grown, clouds) read from the home page over 60 s at three widths, before the fix of 23 November 2026. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`notes/home/scenes/check.cjs`](../notes/home/scenes/check.cjs) | 1.8 kB | Page errors, sideways scroll and reduced motion on every page with scenes, at 1920, 1600, 1100 and 390 px. | [bg-scenes.md](scripts/bg-scenes.md) |
-| [`notes/home/scenes/each.cjs`](../notes/home/scenes/each.cjs) | 871 B | Screenshots every scene of scenes.html after it has run in view. | [bg-scenes.md](scripts/bg-scenes.md) |
-| [`notes/home/scenes/film.cjs`](../notes/home/scenes/film.cjs) | 2.5 kB | Films the home page scenes over 60 s at 1920, 1600 and 1100 px and reads the forest's counts (trees, grown, clouds) from the page. | [bg-scenes.md](scripts/bg-scenes.md) |
-| [`notes/home/scenes/rails.cjs`](../notes/home/scenes/rails.cjs) | 1.6 kB | Films the right margin of the home page (the coupled pendulums) after scrolling. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`notes/home/scenes/cost.cjs`](../notes/home/scenes/cost.cjs) | 1.4 kB | Measures what one frame of a scene costs to draw (mean and worst milliseconds inside its draw()), on the live site or a local build. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`notes/home/scenes/each.cjs`](../notes/home/scenes/each.cjs) | 872 B | Screenshots every scene of scenes.html after it has run in view. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`notes/home/scenes/film.cjs`](../notes/home/scenes/film.cjs) | 2.8 kB | Films the home page scenes over 60 s at 1920, 1600 and 1100 px and reads the forest's counts (trees, grown, clouds) from the page. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`notes/home/scenes/rails.cjs`](../notes/home/scenes/rails.cjs) | 1.6 kB | Films the right margin of the home page (the globes in the wind) after scrolling. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`notes/home/scenes/sheet.py`](../notes/home/scenes/sheet.py) | 929 B | Tiles the two top corners of the filmed home page over time into one sheet, to look at the sky through a year. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
+| [`notes/home/sky-wind-state.md`](../notes/home/sky-wind-state.md) | 2.6 kB | State of the session that gave the forest its ten kinds of cloud and the right margin its paper globes in a wind (25 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
 
 <details><summary>135 files: Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets.</summary>
 
@@ -7709,8 +7723,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/sims/engine/neon/N-4.md`](../notes/sims/engine/neon/N-4.md) | 17.4 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/engine/neon/N-5.md`](../notes/sims/engine/neon/N-5.md) | 145.3 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/engine/neon/N-6.md`](../notes/sims/engine/neon/N-6.md) | 57.2 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
-| [`notes/sims/engine/state.md`](../notes/sims/engine/state.md) | 9.6 kB | State of the engine rebuild on R2: aim, what is live, the plan, the requests to Neon, commits, the rules. Read first after a compaction. | [kaggle-sims.md](kaggle-sims.md) |
-| [`notes/sims/reports/double_pendulum/state.md`](../notes/sims/reports/double_pendulum/state.md) | 8.4 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
+| [`notes/sims/engine/state.md`](../notes/sims/engine/state.md) | 11.0 kB | State of the engine rebuild on R2: aim, what is live, the plan, the requests to Neon, commits, the rules. Read first after a compaction. | [kaggle-sims.md](kaggle-sims.md) |
+| [`notes/sims/reports/double_pendulum/state.md`](../notes/sims/reports/double_pendulum/state.md) | 10.3 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/double_pendulum/study.md`](../notes/sims/reports/double_pendulum/study.md) | 16.3 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/wave_interference/state.md`](../notes/sims/reports/wave_interference/state.md) | 1.6 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/wave_interference/study.md`](../notes/sims/reports/wave_interference/study.md) | 18.5 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |

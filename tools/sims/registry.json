@@ -66,7 +66,8 @@
    "figure": "Fig. 2 Double Pendulum",
    "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
    "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
-   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames."
+   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames.",
+   "free_disk": true
   },
   "double_pendulum_gpu": {
    "dataset": "numakoudsie/fig2-double-pendulum",
@@ -86,12 +87,42 @@
    "figure": "Fig. 2 Double Pendulum",
    "page_url": "https://phyeinusul.com/simulations/Double%20Pendulum.html",
    "dataset_subtitle": "Fig. 2 Double Pendulum: every Kaggle run behind the page, as the site plays it",
-   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames."
+   "dataset_about": "Two rods, two masses, chaos: the swing computed on Kaggle's GPU with the page's own RK4 (step 1/600 s, 64-bit) for every start the page offers, 20 s each, stored as packs of int16 frames.",
+   "free_disk": true
   },
   "coupled": {
    "model": "tools/sims/coupled.py",
    "files": [
     "coupled.bin"
+   ],
+   "pages": [],
+   "dataset": "numakoudsie/phyein-usul-coupled",
+   "dataset_title": "Coupled pendulums: simulation data",
+   "figure": "Coupled pendulums (home page)",
+   "page_url": "https://phyeinusul.com",
+   "dataset_subtitle": "Coupled pendulums on the Phyein Usul home page: every Kaggle run",
+   "dataset_about": "Two pendulums joined by a spring trade their swing back and forth: the scene in the margin of the home page.",
+   "note": "Replaced on the home page by windpend (25 November 2026); the model and its data are kept."
+  },
+  "sims_smoke": {
+   "model": "tools/sims/sims_smoke.py",
+   "store": "r2",
+   "shards": 1,
+   "format": 1,
+   "manual": true,
+   "files": [],
+   "pages": [],
+   "dataset": "numakoudsie/phyein-usul-sims-smoke",
+   "dataset_title": "Phyein Usul engine test data",
+   "figure": "Engine test (no page)",
+   "page_url": "https://phyeinusul.com",
+   "dataset_subtitle": "Small test runs of the Phyein Usul simulation engine",
+   "dataset_about": "Data of the engine's own test model sims_smoke; no page plays it."
+  },
+  "windpend": {
+   "model": "tools/sims/windpend.py",
+   "files": [
+    "windpend.bin"
    ],
    "pages": [
     {
@@ -99,15 +130,15 @@
      "width": 1600,
      "height": 1000,
      "scroll": 650,
-     "probe": "(()=>{const h=document.querySelector('[data-bg=rails]');const s=h&&h.__bgScene;if(!s)return {error:'no rails scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,bars:s.Bs.length};})()"
+     "probe": "(()=>{const h=document.querySelector('[data-bg=rails]');const s=h&&h.__bgScene;if(!s)return {error:'no rails scene on the page'};if(s.err)return {error:s.err};if(!s.D)return {waiting:true};return {sha_ok:s.D.sha_ok,commit:s.D.gen.commit,date:s.D.gen.date,frames:s.D.hdr.frames,lines:s.D.hdr.lines.n,bars:s.Bs.length};})()"
     }
    ],
-   "dataset": "numakoudsie/phyein-usul-coupled",
-   "dataset_title": "Coupled pendulums: simulation data",
-   "figure": "Coupled pendulums (home page)",
+   "dataset": "numakoudsie/phyein-usul-windpend",
+   "dataset_title": "Paper globes in a wind: simulation data",
+   "figure": "Paper globes in a wind (home page)",
    "page_url": "https://phyeinusul.com",
-   "dataset_subtitle": "Coupled pendulums on the Phyein Usul home page: every Kaggle run",
-   "dataset_about": "Two pendulums joined by a spring trade their swing back and forth: the scene in the margin of the home page."
+   "dataset_subtitle": "Paper globes swinging in a wind on the Phyein Usul home page: every Kaggle run",
+   "dataset_about": "Paper globes on threads swing in a wind that carries a street of vortices; the wind's lines are drawn with them: the scene in the margin of the home page."
   }
  }
 }

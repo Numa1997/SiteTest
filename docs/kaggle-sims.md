@@ -53,7 +53,8 @@ By itself, when a simulation's model `tools/sims/<sim>.py` is added or changed o
 
 | Simulation | Model | What is stored | Page that plays it |
 |---|---|---|---|
-| Home page, right margin, and `scenes.html` S3: two pendulums tied by a spring (`coupled`, since 23 November 2026) | [tools/sims/coupled.py](../tools/sims/coupled.py) | `coupled.bin`, 4.2 kB: one exactly closing loop of 27.09 s, θ₁ and θ₂ at 30 frames a second; header with parameters, k solved by shooting, checks (energy kept to 4e-13, loop residual 5e-13 rad, swing crossed at 13.54 s against 13.51 s from 2π/(ω₂ − ω₁) ÷ 2, smallest gap between the bobs 0.42 m) | `bg-scenes.js`, scenes `rails` and `pairs` |
+| Home page, right margin, and `scenes.html` S3: paper globes on threads in a wind with a Kármán vortex street (`windpend`, since 25 November 2026) | [tools/sims/windpend.py](../tools/sims/windpend.py) | `windpend.bin`, 10.3 kB: one settled period of 4.69 s, three angles at 30 frames a second, then 41 streamlines of 96 points; header with parameters and checks (settled after 14 to 17 periods, energy balance 1e-11, div u / grad u 5e-11, largest swing 0.35 rad, smallest gap between globes 0.78 m) | `bg-scenes.js`, `windDraw()`, scenes `rails` and `wind` |
+| No page since 25 November 2026 (was the home page's right margin from 23 November): two pendulums tied by a spring (`coupled`) | [tools/sims/coupled.py](../tools/sims/coupled.py) | `coupled.bin`, 4.2 kB: one exactly closing loop of 27.09 s, θ₁ and θ₂ at 30 frames a second; header with parameters, k solved by shooting, checks (energy kept to 4e-13, loop residual 5e-13 rad, swing crossed at 13.54 s against 13.51 s from 2π/(ω₂ − ω₁) ÷ 2, smallest gap between the bobs 0.42 m) | `bg-scenes.js`, scenes `rails` and `pairs` |
 | Fig. 1, Wave interference (`wave_interference2`; generation 1 removed after 2 passed the live check) | [tools/sims/wave_interference2.py](../tools/sims/wave_interference2.py) | 290 files, 36.5 MB: the distance table of a fixed 250 × 250 grid, a ring's angle at 118 wave numbers (the page blends two neighbours exactly) and its height at γ = 0 … 0.6 in steps of 0.025, a cosine table; every table in a bottom and a top half ([fig01-wave-sources.md](simulations/fig01-wave-sources.md)) | `simulations/Circular Wave Interference Visualization.html`, its own loader (`stored()`, `load()`) |
 
 ## Pipeline B in the page
@@ -63,20 +64,26 @@ By itself, when a simulation's model `tools/sims/<sim>.py` is added or changed o
 the scene. A file is 4 bytes of label, a uint32 header length, a JSON header (parameters, checks, column names and units), then
 int16 frames. Until the data has arrived, or if the check fails, the scene draws nothing in that place.
 
-Coupled pendulums (`coupled.bin`, columns θ₁, θ₂, frames evenly spaced over one exact loop, the spacing `dt` in the header): every
-pair on the page starts at its own random moment of the loop; each frame the page draws the stored frame nearest in time, at real
-time. It integrates nothing. Barton's pendulums (`barton.bin`) played here until 23 November 2026; the model and its data stay
-until the coupled pendulums are verified live, and `registry.json` lists no page for them any more.
+Paper globes in a wind (`windpend.bin`; after the header all numbers are int16: first the frames, columns θ₁ to θ₃ in 1e-4 rad,
+evenly spaced over one settled period, the spacing `dt` in the header; then, from `lines.offset_int16`, the streamlines, row l
+holding η of line l in mm at ξ − c t = j λ / points). A beam ξ below the top plays the stored frame of the time t − ξ / c, and
+the lines are drawn shifted by c t: the wind only slides, so this is exact (the model's docstring, equation (4)). The page
+integrates nothing. The spring-coupled pendulums (`coupled.bin`) played here from 23 to 25 November 2026 and Barton's pendulums
+(`barton.bin`) before them; both models and their data stay, and `registry.json` lists no page for them.
 
-The model was first run before publishing, from the branch `scenes-fix`, as versions 7 and 8 of the same notebook (Kaggle connector,
-CPU), to film the result for the user; those outputs were never committed. The data the site plays is the one the workflow makes
-when the model lands on `main`.
+Both pendulum models were first run before publishing, from their branches, as versions of the same notebook (Kaggle connector,
+CPU; `coupled` as versions 7 to 9, `windpend` as versions 11 and 12), to film the result; those outputs were never committed. The
+data the site plays is the one the workflow makes when a model lands on `main`.
 
 ## Keys
 
 - **`KAGGLE_API_TOKEN`**, a repository secret (GitHub → repository Settings → Secrets and variables → Actions). The official Kaggle
   tool (`pip install kaggle==2.2.5 six`; that version imports `six` without installing it, seen on the first real run, 21 November 2026) reads it from the environment. GitHub never shows a secret again, never prints it in logs, and
   does not give it to copies (forks) of the repository.
+- **`R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`** (since 25 November 2026), repository secrets for entries with
+  `"store": "r2"`: an R2 API token with Object Read & Write on the bucket `phyein-usul-runs` only, made by the owner in the Cloudflare
+  dashboard (R2 Object Storage → Manage API tokens). [tools/sims/r2.py](../tools/sims/r2.py) reads them from the environment and never
+  prints them; without them an r2 entry stops at once with "the repository secrets R2_... are missing".
 - **No GitHub key is needed**: GitHub gives every workflow run its own short-lived token; `permissions: contents: write` lets it
   commit to this repository and nothing else.
 
@@ -231,3 +238,73 @@ and retry it while Kaggle answers "Not Found".
 Kaggle's limits: 200 GB per dataset, 200 GB of private datasets in all, 50 files at the top level ([Kaggle's dataset
 documentation](https://www.kaggle.com/docs/datasets)). Filing uses its own concurrency group per simulation, so it never waits behind
 a Kaggle run.
+
+## The data in Cloudflare R2 (25 November 2026)
+
+From 25 November 2026 a registry entry can say `"store": "r2"`. Its data then goes into the Cloudflare R2 bucket `phyein-usul-runs`
+and not into the repository; the site's Worker serves it under `/r2/` ([worker/r2.js](../worker/r2.js)), and pages read it through
+[public/scripts/simdata.js](../public/scripts/simdata.js). Entries without `"store"` (barton, coupled, wave_interference2) and
+`"store": "release"` entries work exactly as before.
+
+**Run addresses.** A run's address is `<date>-v<version>`: the UTC day the notebook wrote in its index and the Kaggle notebook
+version (for a sharded run, the version of shard 1). Its files are the R2 objects `sims/<sim>/<run>/<file>`, or
+`sims/<sim>/<run>/shard-<i>-of-<n>/<file>` for a run cut into n shards. A rerun on the same day gets a new address, so an object, once
+stored, is never replaced: the Worker caches every `/r2/` address for a year as immutable, and new bytes under an old address would
+reach some readers and not others. The repository keeps only `public/data/sims/<sim>/<run>/index-<sim>.json` (every file with its
+size, SHA-256 and shard, the notebook versions, card, libraries, the model's `checks_passed`) and the small files the entry names in
+`"repo_files"`. The entry in `generations.json` carries `run`, `store: "r2"`, `versions`, `shards`, `format` and every file's size and
+SHA-256; a rerun adds an entry and never replaces one.
+
+**Storing with proof** ([tools/sims/r2.py](../tools/sims/r2.py)). Before an upload the key is asked for (HEAD). If R2 already holds the
+same size and SHA-256 there (kept as the object's metadata `sha256`), nothing is sent ("already stored"; collecting twice is harmless).
+If it holds anything else, the run stops: a key is never overwritten. After the upload the whole object is downloaded again as a stream
+and its size and SHA-256 compared with the index; a difference deletes the bad object and stops the run. Each network call is tried
+up to four times, after 2, 8 and 30 s, on a network error or a 5xx answer; a 4xx answer is not tried again. A run whose model reports
+`checks_passed: false` is refused before anything is uploaded.
+
+**Shards.** A large model can say `"shards": n`; its run function is then called as `run(out_dir, shard=i, shards=n)` and computes its
+own part of the parameter grid. Each shard is one Kaggle notebook version, so each version's output stays below Kaggle's working
+folder (about 20 GB). The engine takes the shards one after another: push, wait, download that version, check, upload to R2, file into
+the Kaggle dataset, delete the local copy, next. The runner (about 30 GB free) never holds more than one shard. A failed shard stops
+the run; the shards already stored stay, and collect mode finishes the run.
+
+**Waiting.** An error answer from `kaggle kernels status`, or one that cannot be read, is tried again with growing waits for up to
+10 minutes; only a real "error" or "cancel" state stops the run. The time limit `timeout_s` counts from the first poll that reports the
+run as running: time spent in Kaggle's queue is not the model's fault (`"queue_s"`, default 5 hours, bounds the queue).
+
+**Collect mode.** Run workflow with mode = collect, sim = the simulation, version = the notebook version (for a sharded run the versions
+of the missing shards, comma-separated, in shard order) and shard = the shard of the first. It downloads those versions' stored output
+(`kaggle kernels output <notebook>/<version>`) and carries it through the same checks, upload, index, generation and dataset filing,
+without computing again.
+
+**The status file** `public/data/sims/status/<sim>.json` says where the newest run stands: `queued` (pushed), `running`, `saved`
+(landed on main, with the data commit), `live_ok` (the live check passed) or `failed` (with one sentence why), with the notebook
+version(s), shard, card, times in UTC (queued, started, ended; queue and run seconds), bytes stored and the log address on Kaggle.
+Kaggle does not report progress during a run, so the file says so. The expected duration comes only from a measured benchmark,
+`public/data/sims/bench/<sim>.json`; without one the file says that there is none. It is pushed to main at every change of state by
+the workflow's identity (commit message "Simulation status: <sim> <state>"); each push is a small commit that Cloudflare publishes.
+
+**Landing without disturbing the run** ([tools/sims/land.py](../tools/sims/land.py)). Every push to main (the data and every status
+change) is built in a separate git worktree of the newest main, made once per runner and reset for each push, never in the run's own
+checkout; `docs/files.md` is generated again there; if main moved meanwhile, it starts again on the newest main (five tries).
+
+**The live check** ([tools/sims/verify_live.py](../tools/sims/verify_live.py)) for an r2 run: it waits until the live
+`generations.json` lists the run, downloads and hashes every file through `/r2/` while the total stays at most 100 MB, and asks every
+other file for its first 1 MiB with a Range header, requiring 206 and a Content-Range total equal to its size. The result goes into
+the status file. `--site` points it at another origin (the local test).
+
+**The test model** `sims_smoke` ([tools/sims/sims_smoke.py](../tools/sims/sims_smoke.py), registry `"manual": true`: computed only by
+Run workflow, never by a merge) writes two small files whose bytes depend only on the shard, and returns `checks_passed: false` when
+the environment variable `SIMS_SMOKE_FAIL` is 1. Its data goes to the private dataset `numakoudsie/phyein-usul-sims-smoke`.
+
+**The local test** `python3 tools/sims/test_engine_r2.py` ([tools/sims/test_engine_r2.py](../tools/sims/test_engine_r2.py)) runs the
+whole line on one machine with nothing real touched: a bare git repository as origin (holding the parts of this repository the engine
+reads and writes), a local S3 server (moto) as R2, a stand-in for the Kaggle tool that runs the pushed notebook text locally, and a
+local web server for the live check. Its 12 cases: one-shard run; three shards; same-day rerun; a file altered after the index
+(refused, nothing uploaded, status failed); a different object at the key (refused, unchanged) and the same object (skipped);
+`checks_passed` false (refused); collect mode; two status errors; a long queue; another commit pushed to main during the run (kept);
+a repo-store entry (barton, as before); the live check (passes, then fails on a replaced object). Result on 25 November 2026:
+12 passed, 0 failed, 67.9 s wall time on the cloud session's machine.
+
+**Disk.** The step that frees about 30 GB on the runner runs only for entries with `"free_disk": true` (the two release entries of
+the double pendulum have it).

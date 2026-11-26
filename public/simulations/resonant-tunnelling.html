@@ -69,7 +69,7 @@
             <div class="figs">
                 <figure class="stage">
                     <div class="stage__canvas wave" id="stage">
-                        <canvas id="wave" aria-label="An electron wave in the plane through the flight axis, drawn as a lifted sheet, passing through barriers drawn as glass solids that stand still"></canvas>
+                        <canvas id="wave" aria-label="An electron wave in the plane through the flight axis, drawn as a lifted sheet at the level of its energy, meeting barriers drawn as blocks as tall as their potential energy"></canvas>
                         <p class="hint" id="hint">drag to turn</p>
                         <p class="load" id="load"></p>
                     </div>
@@ -223,7 +223,7 @@
            SHA-256 and the numbers read from it once by file_rt3d2.py) and loads one run at a time from the run store (Cloudflare R2,
            served under /r2/ by the site's Worker). It interpolates between stored frames and computes nothing else. */
         var DATA_BASE = '../data/resonant-tunnelling/', RUNS_ROOT = '/r2/';
-        var PLAY_SECONDS = 15, HS = 6;                    /* a run plays in 15 s; height 1 of the scale is 6 a on screen */
+        var PLAY_SECONDS = 15, HS = 6, KE = 3;            /* a run plays in 15 s; height 1 of the wave's scale is 6 a on screen; one energy unit is 3 a (rt3d-view.js: the energy picture) */
         var INK = '#1c1518', WINE = '#a3303f', ACCENT = '#7a1f2b', SLATE = '#55607a', MUT = '#8b8079', RULE = '#d9d0c2', GLASSC = 'rgba(139,128,121,.28)';
         var MONO = "10px 'IBM Plex Mono', ui-monospace, monospace";
         var NR = 64, NY = 2 * NR - 1, Y0 = -31.5, DX = 0.5;   /* the stored half-plane y >= 0, 64 rows, mirrored about y = 0 */
@@ -313,7 +313,8 @@
         }
         function placeBarriers() {
             if (!v3 || !run) return; var h = run.head, s = h.spec;
-            v3.setBarriers({ shape: s.shape, size: s.R, D: s.D, S: s.P, centres: h.centres, radii: s.shape === 'shell' ? Array.from({ length: s.N }, function (_, k) { return s.R + k * s.P; }) : null, H: 8, W: 64 });
+            v3.setBarriers({ shape: s.shape, size: s.R, D: s.D, S: s.P, centres: h.centres, radii: s.shape === 'shell' ? Array.from({ length: s.N }, function (_, k) { return s.R + k * s.P; }) : null,
+                V0: s.V0, bias: s.bias || 0, ext: h.extent, E: s.E, k: KE, x0: X0, x1: X0 + (NX - 1) * DX, w: (NY - 1) * DX });
             v3.setSpan(NX * DX);
         }
 
@@ -353,7 +354,7 @@
         function drawFrame() {
             if (!run) return;
             var c0 = performance.now(); interp(); buildSheet();
-            if (v3) { fit3(); v3.setSheet({ nx: NX, ny: NY, x0: X0, y0: Y0, h: DX, H: Hs, T: Ts, every: 2, key: 'rt3d' + NX }); }
+            if (v3) { fit3(); v3.setSheet({ nx: NX, ny: NY, x0: X0, y0: Y0, h: DX, H: Hs, T: Ts, every: 4, key: 'rt3d' + NX }); }
             var c1 = performance.now(); if (v3) v3.render(); var c2 = performance.now();
             writeFrameStore(); drawPX(); drawPT(); var c3 = performance.now();
             cost.push([c1 - c0, c2 - c1, c3 - c2]); if (cost.length > 240) cost.shift();
@@ -589,7 +590,7 @@
         function setLabels() {
             var names = regionNames(run.head.spec);
             ['l-a', 'l-b', 'l-c'].forEach(function (id, k) { var el = document.getElementById(id); if (names[k]) { el.textContent = names[k][1][0].toUpperCase() + names[k][1].slice(1); el.parentNode.hidden = false; } else el.parentNode.hidden = true; });
-            document.getElementById('cap-view').textContent = (VIEW === 're' ? 'Re ψ' : '|ψ|²') + ' in the plane through the flight axis; the barriers in glass' + (run.head.spec.bias ? '; voltage ' + run.head.spec.bias : '');
+            document.getElementById('cap-view').textContent = (VIEW === 're' ? 'Re ψ' : '|ψ|²') + ' in the plane through the flight axis, drawn on the level of its energy E (dashed outline); the barriers as their potential energy V₀ in that plane, in grey blocks on the same energy scale' + (run.head.spec.bias ? '; the floor tilts with the voltage ' + run.head.spec.bias : '') + '. Where E lies below a block’s top the wave can only tunnel through it.';
         }
 
         /* ---------- the store (dataset.js) ---------- */
@@ -684,7 +685,7 @@
             return { what: 'the sheet at (x = ' + p.x.toFixed(2) + ', y = ' + p.y.toFixed(2) + '): its vertex height and the pixels where it lands',
                 drawn: 'vertex height ' + p.vtx[2].toFixed(5) + ' a = ' + p.drawn.toFixed(6) + ' of the scale; ' + (hidden ? 'another part of the sheet stands in front of it here' : 'pixel rgb(' + px.slice(0, 3).join(', ') + '), colour read back as ' + med.toFixed(2)),
                 expected: (VIEW === 're' ? 'Re ψ / S' : '|ψ|² / S²') + ' × ' + GAIN + ' = ' + p.v.toFixed(6) + (Math.abs(p.v) > 1.25 ? ' (clipped to ±1.25)' : '') + '; height difference ' + dh.toExponential(1),
-                ok: hOk && cOk, note: 'Height: the sheet’s own vertex at this stored point, divided by 6 a, against the value interpolated from the store; they agree to the rounding of 32-bit numbers. Colour: the sheet runs from slate through paper to wine; light changes a pixel’s brightness but hardly the ratios of its red, green and blue, so the page solves those ratios for the place on the colour scale in the 5 × 5 pixels around the vertex and asks that the stored value lie within their span, widened by 0.12. The alpha of the pixel is checked first: a transparent pixel would pass any colour test. Glass barriers in front of the point tint it: turn the view if the colour check fails there.' };
+                ok: hOk && cOk, note: 'Height: the sheet’s own vertex at this stored point, divided by 6 a, against the value interpolated from the store; they agree to the rounding of 32-bit numbers. Colour: the sheet runs from slate through paper to wine, the mix growing as the square root of the value; light changes a pixel’s brightness but hardly the ratios of its red, green and blue, so the page solves those ratios for the place on the colour scale in the 5 × 5 pixels around the vertex and asks that the stored value lie within their span, widened by 0.12. The alpha of the pixel is checked first: a transparent pixel would pass any colour test. A barrier block in front of the point tints it: turn the view if the colour check fails there.' };
         }
         Sim.data = {
             get ds() { return ds; }, kicker: 'Fig. 15 · data', file: 'fig15-resonant-tunnelling-3d',

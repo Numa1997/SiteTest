@@ -5,4 +5,4 @@ const { chromium } = require('playwright'); const w = +(process.argv[2] || 1600)
   await p.goto('http://localhost:8766/scenes.html', { waitUntil: 'networkidle' });
   for (const id of await p.$$eval('.scn', a => a.map(e => e.id))) { const el = await p.$('#' + id + ' .scn__stage'); await el.scrollIntoViewIfNeeded(); await p.waitForTimeout(T * 1000);
     await el.screenshot({ path: `notes/home/scenes/after/scene-${id}-${w}.png` }); }
-  console.log('errors', errs.length, await p.$eval('[data-stored=coupled]', e => e.textContent)); await b.close(); })();
+  console.log('errors', errs.length, await p.$eval('[data-stored=windpend]', e => e.textContent)); await b.close(); })();

@@ -1,3 +1,16 @@
+## STATE AT 25 November 2026, 03:16 Berlin (session on branch `branch/engine-r2-n6`)
+- N-6 is built by this session (no Neon): tools/sims/r2.py (upload with read-back, never overwrite, retries 2/8/30 s), run addresses
+  <date>-v<version>, shards one Kaggle version each, collect mode (--collect/--shard; workflow mode collect), status file
+  public/data/sims/status/<sim>.json (queued, running, saved, live_ok, failed), land.py in a reused git worktree of origin/main,
+  verify_live.py for r2 runs (hash up to 100 MB, then 1 MiB ranges), registry sims_smoke ("manual", store r2), "free_disk" on the
+  two release entries, workflow inputs mode collect and shard, boto3==1.40.70, R2 secrets passed to the compute step.
+- Test: python3 tools/sims/test_engine_r2.py: 12 passed, 0 failed, 67.9 s (measured 03:15). py_compile of all seven files passes;
+  tools/inventory.py --check passes (rules added for r2.py, sims_smoke.py, test_engine_r2.py, status/, bench/, <date>-v<N>/ runs).
+- Docs: docs/kaggle-sims.md, new section "The data in Cloudflare R2" and the R2 keys.
+- Not yet proven on the real line: `kaggle kernels output <notebook>/<version>` with kaggle 2.2.5, and the R2 upload with real keys.
+  Next: merge to main; then Run workflow sims_smoke once the three R2 secrets exist (user's step), then build items B-L.
+- The user asked (03:1x) for a new cloud session to kaggelize the next figure on the new engine; started after this merge.
+
 ## READ FIRST: hand-over of 25 November 2026
 The user withdrew the Neon rule on 25 November 2026 ("fuck neon"): from now on the session working on this task WRITES THE CODE
 ITSELF. The "YOU WRITE NO CODE" header of notes/sims/ENGINE-PROMPT.md no longer applies; every other rule of that prompt still does.
