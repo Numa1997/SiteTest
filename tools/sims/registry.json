@@ -149,12 +149,12 @@
     "spin-K4-k0.bin",
     "spin-K4-k1.bin",
     "spin-K4-k3.bin",
-    "spin-K12-k0.bin",
-    "spin-K12-k1.bin",
-    "spin-K12-k3.bin",
-    "spin-K32-k0.bin",
-    "spin-K32-k1.bin",
-    "spin-K32-k3.bin",
+    "spin-K10-k0.bin",
+    "spin-K10-k1.bin",
+    "spin-K10-k3.bin",
+    "spin-K20-k0.bin",
+    "spin-K20-k1.bin",
+    "spin-K20-k3.bin",
     "spinners.json"
    ],
    "pages": [

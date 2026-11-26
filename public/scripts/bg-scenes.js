@@ -35,16 +35,17 @@
      only then is it handed over. The file: 4 bytes of label, a uint32 header length, a JSON header, then int16 frames. ---- */
   var DATA = new URL('../data/sims/', (document.currentScript || {}).src || location.href).href, GEN = null, STORE = {};
   function sceneData(name, file) {
-    if (STORE[name]) return STORE[name];
+    var key = name + '/' + file; if (STORE[key]) return STORE[key];
     GEN = GEN || fetch(DATA + 'generations.json').then(function (r) { if (!r.ok) throw new Error('no generations.json'); return r.json(); });
-    return STORE[name] = GEN.then(function (g) {
+    return STORE[key] = GEN.then(function (g) {
       var e = g.generations.filter(function (q) { return q.sim === name; }).pop(); if (!e) throw new Error('no data for ' + name);
       return fetch(DATA + name + '/' + e.date + '/' + file).then(function (r) { if (!r.ok) throw new Error(file + ' ' + r.status); return r.arrayBuffer(); }).then(function (buf) {
         return crypto.subtle.digest('SHA-256', buf).then(function (d) {
           var hex = Array.prototype.map.call(new Uint8Array(d), function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join('');
           if (hex !== e.files[file].sha256) throw new Error(file + ': SHA-256 differs from generations.json');
           var hl = new DataView(buf).getUint32(4, true), hdr = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, hl)));
-          return { hdr: hdr, frames: new Int16Array(buf.slice(8 + hl)), cols: hdr.columns.length, gen: e, sha_ok: true };
+          var pay = buf.slice(8 + hl);   /* the numbers after the header: int16 for most models; spinners.py stores bytes (it reads `raw`) */
+          return { hdr: hdr, frames: pay.byteLength % 2 ? null : new Int16Array(pay), raw: pay, cols: hdr.columns.length, gen: e, sha_ok: true };
         });
       });
     });
@@ -777,16 +778,37 @@
         if (d <= st) { o.x = tq.x; o.y = tq.y; if (tq.p < 0) return false; o.i = tq.p; } else { o.x += dx / d * st; o.y += dy / d * st; } dot(o.x, o.y, 1.3, .6); return true; });
       x.lineCap = 'butt'; }
   };
-  /* ---- spin: spinners at random; a wandering rotating field brings those in reach into step ---- */
+  /* ---- spin: rotors in oil, each turning at its own rate; a rotating field wandering over them brings those it passes into step.
+     Played from runs computed once on Kaggle (tools/sims/spinners.py; Fig. 17, section S4); nothing is computed here.
+     The model: θ_i' = ω_i + K(r_i, t) sin(Ωt − θ_i) + κ Σ_nb sin(θ_j − θ_i), K = K₀ exp(−|r − s(t)|² / 2σ²) (Adler, Kuramoto).
+     Stored: 12 runs, K₀ ∈ {0, 4, 10, 20} rad/s × κ ∈ {0, 1, 3} rad/s, a lattice of 72 × 9 rotors over 80 s at 15 frames a second
+     (angles in steps of 2π/256) with the field's centre, its direction and the share of rotors locked near it. The band shows the
+     middle of the lattice, 28 px per lattice spacing. Between two stored frames each rotor is turned the short way. The run is
+     looped: over its last second the end is cross-faded into its start (the field's path closes; the rotors that slip do not).
+     A rotor is drawn bright when its rate, read from the stored frames, is within 0.6 rad/s of the field's rate Ω. ---- */
   S.spin = {
-    FIELD: 16, NEIGH: .9, TURN: 3,
-    K: [['FIELD', 'pull of the rotating field', '1/s', 0, 40, .5], ['NEIGH', 'pull between neighbours', '1/s', 0, 4, .05], ['TURN', 'turning rate of the field', 'rad/s', 0, 8, .1]],
-    init: function () { this.t = 0; this.O = []; this.nc = Math.floor(W / 28); this.nr = Math.floor(H / 29.5); var ox = (W - (this.nc - 1) * 28) / 2, oy = (H - (this.nr - 1) * 29.5) / 2; for (var j = 0; j < this.nr; j++) for (var i = 0; i < this.nc; i++) this.O.push({ x: ox + i * 28, y: oy + j * 29.5, th: R() * 2 * PI, w: (R() < .5 ? -1 : 1) * v(1.5, 5) }); this.sg = cl(Math.min(W, H) * .33, 110, 300); },
+    FIELD: 10, NEIGH: 1,
+    K: [['FIELD', 'pull of the rotating field at its centre, K₀ (stored values)', 'rad/s', 0, 20, [0, 4, 10, 20]], ['NEIGH', 'pull between neighbours, κ (stored values)', 'rad/s', 0, 3, [0, 1, 3]]],
+    init: function () { this.t = 0; this.nc = Math.min(72, Math.floor(W / 28)); this.nr = Math.min(9, Math.max(1, Math.floor(H / 29.5))); this.load(); },
+    load: function () { var self = this, f = 'spin-K' + this.FIELD + '-k' + this.NEIGH + '.bin'; if (this.want === f) return; this.want = f;
+      sceneData('spinners', f).then(function (d) { if (self.want === f) { self.D = d; self.A = new Uint8Array(d.raw, 0, d.hdr.frames * d.hdr.N); self.F = new Float32Array(d.raw.slice(d.hdr.frames * d.hdr.N)); } }, function (e) { self.err = String(e.message || e); }); },
+    /* one moment τ (s) of the stored run: the rotors at alpha a */
+    paint: function (tau, a) {
+      var hd = this.D.hdr, N = hd.N, Nc = hd.N_c, fps = hd.fps, nf = hd.frames, u = tau * fps, f = Math.min(nf - 2, Math.floor(u)), e = u - f, A = this.A, Fd = this.F, TW = 2 * PI / 256,
+        c0 = Math.floor((Nc - this.nc) / 2), r0 = Math.floor((hd.N_r - this.nr) / 2), ox = (W - (this.nc - 1) * 28) / 2, oy = (H - (this.nr - 1) * 29.5) / 2, Om = Fd[f * 4 + 2 + 4] - Fd[f * 4 + 2], i, j, k;
+      var phi = Fd[f * 4 + 2] * (1 - e) + Fd[f * 4 + 6] * e, sx = Fd[f * 4] * (1 - e) + Fd[f * 4 + 4] * e, sy = Fd[f * 4 + 1] * (1 - e) + Fd[f * 4 + 5] * e, px = ox + (sx - c0) * 28, py = oy + (sy - r0) * 29.5;
+      x.globalAlpha = a; x.strokeStyle = col(.12); x.lineWidth = 1; x.beginPath(); x.arc(px, py, 4 * 28, 0, 7); x.stroke(); x.lineWidth = 8; x.lineCap = 'round'; ln(px - 40 * Math.cos(phi), py - 40 * Math.sin(phi), px + 40 * Math.cos(phi), py + 40 * Math.sin(phi)); x.lineCap = 'butt';
+      for (j = 0; j < this.nr; j++) for (i = 0; i < this.nc; i++) {
+        var n = (r0 + j) * Nc + c0 + i, a0 = A[f * N + n] * TW, a1 = A[(f + 1) * N + n] * TW, d = a1 - a0; d -= 2 * PI * Math.round(d / (2 * PI));
+        var th = a0 + d * e, lock = Math.abs(d - Om) < .6 / fps ? 1 : 0, al = .3 + .6 * lock, cx = ox + i * 28, cy = oy + j * 29.5;
+        x.strokeStyle = col(al); x.lineWidth = 1.3; x.beginPath(); for (k = 0; k < 3; k++) { var an = th + k * 2.094; x.moveTo(cx, cy); x.lineTo(cx + 10 * Math.cos(an), cy + 10 * Math.sin(an)); } x.stroke(); dot(cx + 10 * Math.cos(th), cy + 10 * Math.sin(th), 2.4, Math.min(1, al + .2));
+      }
+      x.globalAlpha = 1;
+    },
     draw: function (dt) {
-      clear(); this.t += dt; var t = this.t, phi = this.TURN * t, sx = W / 2 + W * .37 * Math.sin(t * .21), sy = H / 2 + H * .33 * Math.sin(t * .33 + 1), O = this.O, nc = this.nc, N = O.length, s2 = 2 * this.sg * this.sg, n, k;
-      x.strokeStyle = col(.12); x.lineWidth = 1; x.beginPath(); x.arc(sx, sy, this.sg, 0, 7); x.stroke(); x.lineWidth = 8; x.lineCap = 'round'; ln(sx - 40 * Math.cos(phi), sy - 40 * Math.sin(phi), sx + 40 * Math.cos(phi), sy + 40 * Math.sin(phi)); x.lineCap = 'butt';
-      for (n = 0; n < N; n++) { var o = O[n], dx = o.x - sx, dy = o.y - sy, K = this.FIELD * Math.exp(-(dx * dx + dy * dy) / s2), c = 0, i = n % nc; if (i > 0) c += Math.sin(O[n - 1].th - o.th); if (i < nc - 1) c += Math.sin(O[n + 1].th - o.th); if (n >= nc) c += Math.sin(O[n - nc].th - o.th); if (n < N - nc) c += Math.sin(O[n + nc].th - o.th); o.d = o.w + K * Math.sin(phi - o.th) + this.NEIGH * c; o.K = K; }
-      for (n = 0; n < N; n++) { o = O[n]; o.th += o.d * dt; var lock = Math.pow(Math.max(0, Math.cos(o.th - phi)), 4) * Math.min(1, o.K / 5), a = .3 + .65 * lock; x.strokeStyle = col(a); x.lineWidth = 1.3; x.beginPath(); for (k = 0; k < 3; k++) { var an = o.th + k * 2.094; x.moveTo(o.x, o.y); x.lineTo(o.x + 10 * Math.cos(an), o.y + 10 * Math.sin(an)); } x.stroke(); dot(o.x + 10 * Math.cos(o.th), o.y + 10 * Math.sin(o.th), 2.4, Math.min(1, a + .2)); }
+      clear(); this.t += dt; this.load(); if (!this.D) return; var T = this.D.hdr.frames / this.D.hdr.fps, L = T - 1, tau = this.t % L;
+      this.tau = tau;
+      if (tau < 1) { this.paint(tau + L, 1 - tau); this.paint(tau, tau); } else this.paint(tau, 1);
     }
   };
 

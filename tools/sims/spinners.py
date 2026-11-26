@@ -37,7 +37,7 @@ slip do not, and the page cross-fades the last second into the first (it says so
 
 CHECKS (in the header)
 - adler: one rotor, κ = 0, K constant, for a list of ω: the measured mean rate against (4); largest relative error;
-- tolerance: the run (K₀ = 12, κ = 1) again at rtol 1e-11: largest angle difference;
+- tolerance: the run (K₀ = 10, κ = 1) again at rtol 1e-11: largest angle difference;
 - locked: in each run, the share of rotors within σ of the field's centre whose rate stays within LOCK_TOL of Ω over the last
   second, against the share predicted by |ω_i − Ω| < K(r_i) with κ = 0 (they differ where the neighbours help or hinder);
 - quantisation: angles are stored in steps of 2π/256 (0.7° at most).
@@ -59,9 +59,10 @@ P = dict(
     A_x=0.37 * 72, A_y=0.33 * 9,  # lattice spacings, how far the field's centre swings across and down
     n_x=3, n_y=5,         # whole swings of the centre across and down per run: the path closes after T_RUN
     T_RUN=80.0,           # s, length of one stored run
-    FPS=12,               # stored frames per second (the page draws in between by turning each rotor the short way)
+    FPS=15,               # stored frames per second; a rotor turns at most |ω| + K₀ + 4κ ≈ 37 rad/s, so 2.5 rad a frame, less than
+                          # half a turn: the page draws in between by turning each rotor the short way, and never the wrong way
     SEED=17,              # seed of the own rates and start angles
-    K0_GRID=[0.0, 4.0, 12.0, 32.0],        # rad/s, the field's pull at its centre, K₀ = m B₀ / ζ
+    K0_GRID=[0.0, 4.0, 10.0, 20.0],   # rad/s, the field's pull at its centre, K₀ = m B₀ / ζ
     KAPPA_GRID=[0.0, 1.0, 3.0],            # rad/s, the neighbours' pull, κ
     LOCK_TOL=0.3,         # rad/s, a rotor counts as locked when its rate stays within this of Ω
 )
@@ -121,7 +122,7 @@ def run(out_dir="."):
             # predicted with κ = 0 at the end of the run
             near = (X - sx[-1]) ** 2 + (Y - sy[-1]) ** 2 < P["sigma"] ** 2; Kc = K0 * np.exp(-((X - sx[-1]) ** 2 + (Y - sy[-1]) ** 2) / (2 * P["sigma"] ** 2))
             pred = float(np.mean(np.abs(w[near] - Om) < Kc[near])) if near.any() else 0.0
-            q = np.floor(np.mod(TH, 2 * np.pi) / (2 * np.pi) * 256).astype(np.uint8) % 256
+            q = (np.floor(np.mod(TH, 2 * np.pi) / (2 * np.pi) * 256).astype(np.int64) % 256).astype(np.uint8)
             fd = np.stack([sx, sy, phi, share], 1).astype("<f4")
             name = "spin-K%g-k%g.bin" % (K0, kap)
             hdr = dict(model="spinners", version=1, K0=K0, kappa=kap, frames=nf, fps=P["FPS"], N=N, N_c=P["N_c"], N_r=P["N_r"],
@@ -133,7 +134,7 @@ def run(out_dir="."):
             runs.append(dict(file=name, K0=K0, kappa=kap, mean_locked=hdr["mean_locked"], locked_end=hdr["locked_end"], steps=hdr["steps"]))
             print(name, json.dumps(runs[-1]), flush=True)
     # tolerance check on one run
-    rhs = rhs_factory(P, 12.0, 1.0, w, X, Y)
+    rhs = rhs_factory(P, 10.0, 1.0, w, X, Y)
     a = solve_ivp(rhs, (0, P["T_RUN"]), th0, method="DOP853", rtol=1e-9, atol=1e-9, dense_output=True).sol(tt)
     b = solve_ivp(rhs, (0, P["T_RUN"]), th0, method="DOP853", rtol=1e-11, atol=1e-11, dense_output=True).sol(tt)
     ad = adler_check(P)
