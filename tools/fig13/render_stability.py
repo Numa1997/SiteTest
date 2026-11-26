@@ -1,10 +1,11 @@
-"""The families of closed orbits, coloured by stability. Input: stab.py's array (p1, p2, T, s, label) per line point.
+"""Usage: python3 tools/fig13/render_stability.py STAB.npy OUT.png WIDTH EXPOSURE [p1a p1b p2a p2b]
+The families of closed orbits, coloured by stability. Input: stab.py's array (p1, p2, T, s, label) per line point.
 s = trace of one lap's monodromy - 2 = lam + 1/lam. |s| < 2: stable, shown green, brighter the faster a push circles round;
 near +-2: neutral, gold; s > 2: unstable, red; s < -2: unstable with a flip each lap, magenta; brighter the faster the push grows per second."""
 import numpy as np, sys, json
 from PIL import Image, ImageDraw, ImageFont
 from scipy.ndimage import gaussian_filter
-S_='/tmp/claude-0/-home-user-SiteTest/1c12404a-a910-5155-b389-b69ad4e58af2/scratchpad'
+
 D=np.load(sys.argv[1]); D=D[np.isfinite(D[:,3])]; OW=int(sys.argv[3]); OH=OW*9//16; EXP=float(sys.argv[4])
 PW,PH=20*16/9,20.0; box=[float(x) for x in sys.argv[5:9]] if len(sys.argv)>8 else [-PW,PW,-PH,PH]
 px=(D[:,0]-box[0])/(box[1]-box[0])*OW; py=(box[3]-D[:,1])/(box[3]-box[2])*OH; s=D[:,3]; T=D[:,2]
@@ -23,7 +24,7 @@ for dy,wy in ((0,1-fy),(1,fy)):
 sc=OW/1920*(2*PW)/(box[1]-box[0])
 glow=acc+np.dstack([gaussian_filter(acc[...,i],1.5*max(sc,1)) for i in range(3)])*1.8+np.dstack([gaussian_filter(acc[...,i],6*max(sc,1)) for i in range(3)])*1.3
 img=1-np.exp(-glow*EXP/max(sc,1)**0.5)
-ch=Image.open('/home/user/SiteTest/public/images/fig13/chaos-map-rods-P20.png')
+ch=Image.open(__import__('os').path.join(__import__('os').path.dirname(__import__('os').path.abspath(__file__)), '../../public/images/fig13/chaos-map-rods-P20.png'))
 bx=((box[0]/(2*PW)+.5)*1280,(.5-box[3]/40)*720,(box[1]/(2*PW)+.5)*1280,(.5-box[2]/40)*720)
 ch=np.array(ch.resize((OW,OH),Image.BICUBIC,box=bx)).astype(float)/255; bg=np.array([20,13,16])/255.; a=0.3*ch[...,3:4]
 base=bg*(1-a)+ch[...,:3]*a; out=base+(1-base)*img

@@ -1,8 +1,9 @@
-"""Render the GPU chaos maps: v = log(1000 d)/log(1000) as in map_png.py, painted with a richer ramp
+"""Usage: python3 tools/fig13/render_fractal.py FOLDER
+Render the GPU chaos maps (kaggle_fractal.py): v = log(1000 d)/log(1000) as in map_png.py, painted with a richer ramp
 (night -> wine -> rose -> cream), plus a mild unsharp mask; no resampling of the computed pixels other than the final downscale."""
 import numpy as np, json, sys
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
-D='/tmp/claude-0/-home-user-SiteTest/1c12404a-a910-5155-b389-b69ad4e58af2/scratchpad/kgout/'
+D=sys.argv[1].rstrip('/')+'/'   # folder with the downloaded Kaggle outputs (results.json, *.npy)
 R=json.load(open(D+'results.json'))
 stops=np.array([[0.00,20,13,16],[0.25,46,18,28],[0.50,122,31,43],[0.72,196,96,112],[0.88,226,162,170],[1.00,255,240,226]])
 def paint(v):
