@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7216 files, 988.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7217 files, 988.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -16,7 +16,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 42 |
-| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4806 |
+| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4807 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
@@ -4923,6 +4923,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/data/sims/double_pendulum_smoke/2026-11-23/double_pendulum.json`](../public/data/sims/double_pendulum_smoke/2026-11-23/double_pendulum.json) | 2.3 kB | Simulation data computed on Kaggle on 2026-11-23: parameters and checks of the double_pendulum_smoke model run. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json`](../public/data/sims/double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json) | 678 B | Simulation data computed on Kaggle on 2026-11-23: provenance of the double_pendulum_smoke run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/generations.json`](../public/data/sims/generations.json) | 48.3 kB | Simulation data computed on Kaggle: one entry per simulation and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/sims/pipeline.py. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/status/spinners.json`](../public/data/sims/status/spinners.json) | 735 B | Where the engine’s newest run of spinners stands (queued, running, saved, live_ok or failed), with its times, Kaggle version and data commit; written during the run by tools/sims/pipeline.py, land.py and verify_live.py. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/status/windpend.json`](../public/data/sims/status/windpend.json) | 816 B | Where the engine’s newest run of windpend stands (queued, running, saved, live_ok or failed), with its times, Kaggle version and data commit; written during the run by tools/sims/pipeline.py, land.py and verify_live.py. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g000_hi.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g000_hi.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.000, top half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g000_lo.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g000_lo.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.000, bottom half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
@@ -7737,7 +7738,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/lucretius/poem-146-224.json`](../notes/lucretius/poem-146-224.json) | 15.8 kB | Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-ar-146-224.json`](../notes/lucretius/poem-ar-146-224.json) | 10.8 kB | The Arabic of Lucretius I 146-224 (tenth version, free verse, fully vowelled), translated from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
 | [`notes/scenes17/figs.py`](../notes/scenes17/figs.py) | 7.1 kB | Fig. 17 section 2: plots the three SVG figures of the spinners note from the formulas and the stored spinners.json. | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
-| [`notes/scenes17/page.cjs`](../notes/scenes17/page.cjs) | 3.0 kB | Fig. 17 browser check: errors, sideways scroll, every scene drawn (alpha first), readouts, at 1600 and 390 px and with reduced motion. | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
+| [`notes/scenes17/page.cjs`](../notes/scenes17/page.cjs) | 3.1 kB | Fig. 17 browser check: errors, sideways scroll, every scene drawn (alpha first), readouts, at 1600 and 390 px and with reduced motion. | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
 | [`notes/scenes17/state.md`](../notes/scenes17/state.md) | 4.0 kB | State of the Fig. 17 work (Living Scenes, from 26 November 2026): the ask, decisions, scene order, what is live and what is left. | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
 | [`notes/sims/ENGINE-PROMPT.md`](../notes/sims/ENGINE-PROMPT.md) | 34.5 kB | The prompt for the session that rebuilds the engine Simulations on Kaggle: fully automated, every simulation's data in Cloudflare R2. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/KAGGELIZE-PROMPT.md`](../notes/sims/KAGGELIZE-PROMPT.md) | 21.8 kB | The prompt that moves one simulation (its only variable) to data computed once on Kaggle: learn the page, derive the physics in Wolfram, design the data without cuts, write the model, measure CPU against GPU, compute through the engine, play, compare, publish, clean up. | [PLAN.md](../notes/sims/PLAN.md) |
