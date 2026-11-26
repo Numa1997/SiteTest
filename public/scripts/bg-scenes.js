@@ -21,7 +21,10 @@
      mix      three species, three shapes, three temperatures; walls lift; collisions mix and equalise them
      chip     blocks are traced, wires routed block to block, then the die is stamped across a wafer */
 (function () {
-  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  /* with reduced motion asked for, nothing moves in the background of a page; only a scene the reader has come to see on purpose
+     (a holder marked data-bg-motion="allow", the scenes of Fig. 17) is still mounted */
+  var RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if (RM && !document.querySelector('[data-bg-motion="allow"]')) return;
   var INST = [];
   var MASKS = {
     down: 'linear-gradient(to bottom,#000 0,#000 35%,transparent 100%)', up: 'linear-gradient(to top,#000 0,#000 35%,transparent 100%)',
@@ -890,12 +893,13 @@
   var inst = { on: !('IntersectionObserver' in window),
     size: function () { var w = fixed ? innerWidth : host.clientWidth, h = fixed ? innerHeight : host.clientHeight; if (!w || !h) return; if (Math.abs(w - W) < 30 && Math.abs(h - H) < 100 && W) return; W = w; H = h; cv.width = W; cv.height = H; cur.init(); },
     draw: function (dt) { if (W) cur.draw(dt); } };
+  host.__bgSize = function () { inst.size(); };   /* Fig. 17 shows one scene at a time: it sizes a holder when it is shown */
   inst.size(); INST.push(inst);
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { inst.on = e[e.length - 1].isIntersecting; }, { rootMargin: '80px' }).observe(host);
   }
 
   var hosts = document.querySelectorAll('[data-bg]'), i;
-  for (i = 0; i < hosts.length; i++) { try { mount(hosts[i]); } catch (e) { if (window.console) console.error('bg-scenes', e); } }
+  for (i = 0; i < hosts.length; i++) { if (RM && hosts[i].getAttribute('data-bg-motion') !== 'allow') continue; try { mount(hosts[i]); } catch (e) { if (window.console) console.error('bg-scenes', e); } }
   var last = 0, raf = 0, rz = 0;
   function frame(ms) { raf = requestAnimationFrame(frame); var t = ms / 1000; if (t - last < 1 / 31) return; var dt = Math.min(.05, t - last); last = t; for (var k = 0; k < INST.length; k++) if (INST[k].on) { try { INST[k].draw(dt); } catch (e) { INST[k].on = false; if (window.console) console.error('bg-scenes', e); } } }
   function go() { cancelAnimationFrame(raf); if (!document.hidden && INST.length) { last = performance.now() / 1000; raf = requestAnimationFrame(frame); } }

@@ -36,10 +36,14 @@ frames a second. The field's path is closed over T_RUN (n_x and n_y whole turns)
 slip do not, and the page cross-fades the last second into the first (it says so).
 
 CHECKS (in the header)
-- adler: one rotor, κ = 0, K constant, for a list of ω: the measured mean rate against (4); largest relative error;
+- adler: one rotor, κ = 0, K constant, for a list of ω: the time between slips (solver events) against (4), and for locked rotors
+  the distance of the mean rate from Ω;
+- static: the full lattice code with the field held still at the centre, κ = 0, K₀ = 10, 120 s: rotors predicted locked by
+  |ω_i − Ω| < K(r_i) against rotors that make no slip in the second half; the disagreements, with their predicted slip times;
 - tolerance: the run (K₀ = 10, κ = 1) again at rtol 1e-11: largest angle difference;
-- locked: in each run, the share of rotors within σ of the field's centre whose rate stays within LOCK_TOL of Ω over the last
-  second, against the share predicted by |ω_i − Ω| < K(r_i) with κ = 0 (they differ where the neighbours help or hinder);
+- turning with the field: in each run, frame by frame, the share of rotors within σ of the field's centre whose rate over the
+  last second is within LOCK_TOL of Ω (stored as the fourth field column; rotors whose own rate is already near Ω count too,
+  which is why the share is not zero at K₀ = 0);
 - quantisation: angles are stored in steps of 2π/256 (0.7° at most).
 
 OUTPUT, one file per run, spin-K<K0>-k<kappa>.bin: b"SPN1", uint32 header length, a JSON header, then
@@ -90,15 +94,40 @@ def rhs_factory(P, K0, kappa, w, X, Y):
 
 
 def adler_check(P):
-    """One rotor, κ = 0, K constant: the mean rate against equation (4)."""
+    """One rotor, κ = 0, K constant. Slipping rotors: the time between slips (psi = theta - Omega t passing a whole turn, found as
+    events of the solver) against equation (4). Locked rotors: how far the mean rate over 100 s to 200 s is from Omega."""
     Om, K = P["OMEGA"], 4.0; out = []
     for w in [-5.0, -2.0, 0.5, 2.0, 6.0, 7.5, 9.0]:
+        d = w - Om
         f = lambda t, y: [w + K * np.sin(Om * t - y[0])]
-        s = solve_ivp(f, (0, 200), [0.0], method="DOP853", rtol=1e-10, atol=1e-10, dense_output=True)
-        t0, t1 = 100.0, 200.0; rate = (s.sol(t1)[0] - s.sol(t0)[0]) / (t1 - t0); d = w - Om
-        pred = Om if abs(d) < K else Om + np.sign(d) * np.sqrt(d * d - K * K)
-        out.append(dict(omega=w, measured=float(rate), predicted=float(pred), rel_err=float(abs(rate - pred) / max(abs(pred), 1e-12))))
+        if abs(d) > K:
+            ev = lambda t, y: np.sin((y[0] - Om * t) / 2.0)
+            s = solve_ivp(f, (0, 200), [0.0], method="DOP853", rtol=1e-10, atol=1e-10, events=ev)
+            te = s.t_events[0]; te = te[te > 1e-9]
+            T_meas = float((te[-1] - te[0]) / (te.size - 1)); T_pred = float(2 * np.pi / np.sqrt(d * d - K * K))
+            out.append(dict(omega=w, kind="slips", slips=int(te.size - 1), T_slip_measured=T_meas, T_slip_predicted=T_pred,
+                            rel_err=abs(T_meas - T_pred) / T_pred))
+        else:
+            s = solve_ivp(f, (0, 200), [0.0], method="DOP853", rtol=1e-10, atol=1e-10, dense_output=True)
+            rate = float((s.sol(200.0)[0] - s.sol(100.0)[0]) / 100.0)
+            out.append(dict(omega=w, kind="locked", rate_measured=rate, rate_predicted=Om, abs_err_rad_s=abs(rate - Om)))
     return out
+
+
+def static_check(P, w, th0, X, Y, K0=10.0, T=120.0):
+    """The whole lattice code with the field held still at the centre, κ = 0: each rotor is predicted locked when |ω_i − Ω| < K(r_i)
+    (equation 3) and measured locked when it makes no slip in the second half of the run, |ψ(T) − ψ(T/2)| < π."""
+    Pz = dict(P, A_x=0.0, A_y=0.0); Om = P["OMEGA"]
+    rhs = rhs_factory(Pz, K0, 0.0, w, X, Y)
+    s = solve_ivp(rhs, (0, T), th0, method="DOP853", rtol=1e-9, atol=1e-9, dense_output=True)
+    psi = lambda t: s.sol(t) - Om * t
+    meas = np.abs(psi(T) - psi(T / 2)) < np.pi
+    sx, sy = centre(Pz, 0.0); Kr = K0 * np.exp(-((X - sx) ** 2 + (Y - sy) ** 2) / (2 * P["sigma"] ** 2)); d = w - Om
+    pred = np.abs(d) < Kr
+    bad = np.flatnonzero(meas != pred)
+    Tslip = [float(2 * np.pi / np.sqrt(max(d[i] ** 2 - Kr[i] ** 2, 1e-300))) for i in bad]
+    return dict(K0=K0, T=T, rotors=int(w.size), predicted_locked=int(pred.sum()), measured_locked=int(meas.sum()),
+                disagree=int(bad.size), disagree_T_slip_predicted=Tslip)
 
 
 def run(out_dir="."):
@@ -119,26 +148,25 @@ def run(out_dir="."):
                 rate = (TH[f] - TH[f - lag]) * P["FPS"] / lag
                 share[f] = float(np.mean(np.abs(rate[near] - Om) < P["LOCK_TOL"])) if near.any() else 0.0
             share[:lag] = share[lag]
-            # predicted with κ = 0 at the end of the run
-            near = (X - sx[-1]) ** 2 + (Y - sy[-1]) ** 2 < P["sigma"] ** 2; Kc = K0 * np.exp(-((X - sx[-1]) ** 2 + (Y - sy[-1]) ** 2) / (2 * P["sigma"] ** 2))
-            pred = float(np.mean(np.abs(w[near] - Om) < Kc[near])) if near.any() else 0.0
             q = (np.floor(np.mod(TH, 2 * np.pi) / (2 * np.pi) * 256).astype(np.int64) % 256).astype(np.uint8)
             fd = np.stack([sx, sy, phi, share], 1).astype("<f4")
             name = "spin-K%g-k%g.bin" % (K0, kap)
             hdr = dict(model="spinners", version=1, K0=K0, kappa=kap, frames=nf, fps=P["FPS"], N=N, N_c=P["N_c"], N_r=P["N_r"],
                        columns=["theta"], layout=dict(angles="uint8 frames×N, θ mod 2π in steps of 2π/256, rows of N_c", field="float32 frames×4: s_x, s_y, φ, locked share"),
-                       locked_end=dict(measured=float(share[-1]), predicted_kappa0=pred), mean_locked=float(share.mean()), steps=int(s.t.size))
+                       mean_locked=float(share.mean()), steps=int(s.t.size))
             hb = json.dumps(hdr, separators=(",", ":")).encode()
             with open(os.path.join(out_dir, name), "wb") as fh:
                 fh.write(b"SPN1"); fh.write(struct.pack("<I", len(hb))); fh.write(hb); fh.write(q.tobytes()); fh.write(fd.tobytes())
-            runs.append(dict(file=name, K0=K0, kappa=kap, mean_locked=hdr["mean_locked"], locked_end=hdr["locked_end"], steps=hdr["steps"]))
+            runs.append(dict(file=name, K0=K0, kappa=kap, mean_locked=hdr["mean_locked"], steps=hdr["steps"]))
             print(name, json.dumps(runs[-1]), flush=True)
     # tolerance check on one run
     rhs = rhs_factory(P, 10.0, 1.0, w, X, Y)
     a = solve_ivp(rhs, (0, P["T_RUN"]), th0, method="DOP853", rtol=1e-9, atol=1e-9, dense_output=True).sol(tt)
     b = solve_ivp(rhs, (0, P["T_RUN"]), th0, method="DOP853", rtol=1e-11, atol=1e-11, dense_output=True).sol(tt)
     ad = adler_check(P)
-    checks = dict(adler=ad, adler_max_rel_err=max(r["rel_err"] for r in ad), tolerance_diff_rad=float(np.max(np.abs(a - b))), quantisation_rad=float(np.pi / 256))
+    checks = dict(adler=ad, adler_slip_max_rel_err=max(r["rel_err"] for r in ad if r["kind"] == "slips"),
+                  adler_locked_max_abs_err=max(r["abs_err_rad_s"] for r in ad if r["kind"] == "locked"),
+                  static=static_check(P, w, th0, X, Y), tolerance_diff_rad=float(np.max(np.abs(a - b))), quantisation_rad=float(np.pi / 256))
     summ = dict(model="spinners", version=1, params=P, omega=w.round(6).tolist(), theta0=th0.round(6).tolist(), runs=runs, checks=checks, wall_s=time.time() - t0)
     json.dump(summ, open(os.path.join(out_dir, "spinners.json"), "w"), indent=1)
     print(json.dumps(dict(checks=checks, wall=summ["wall_s"]), indent=1))
