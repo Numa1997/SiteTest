@@ -49,15 +49,46 @@ Packing a film harder (no twin, fewer frames) saves a factor of 2 or 3, never th
 
 ## The rule (the user, 26 November 2026)
 
-A simulation with this character (nonlinear and chaotic, or whose data would be huge) is not stored start by start. Instead:
+A simulation with this character (nonlinear and chaotic, or whose data would be huge) is not stored start by start. Its
+parameters span a space. With two parameters, a relationship between them is a curve in a plane; with more, the parameters span
+an area and then a manifold, and a curve along it is still one very specific relationship between all of them. So:
 
-1. **Kaggle computes the interesting parameterized manifold** of the system: a map over its parameter space that the browser
-   could never compute in a frame, swept through a further parameter, and records it as a **film**. The film's numbers are
-   stored beside it, so every pixel can be traced to a stored value.
-2. **The page shows the film**, and next to it **the live simulation stays**, computed in the visitor's browser, with every
-   control at its full range and step, for play and for changing parameters live.
-3. The two are joined: a point picked in the film can be started in the live simulation, and the live run checks the stored
-   value (same equations, same method, same step).
+1. **Choose a set of interesting curves** p(u) through the parameter space, each a rule that ties the parameters together.
+2. **Kaggle computes the display at every point of each curve** and records the trip along the curve as a **film**. The
+   film's numbers are stored beside it, so every pixel can be traced to a stored value.
+3. **The page shows the films**, with the curve itself drawn in its parameter plane and a dot at the point being shown, and
+   next to them **the live simulation stays**, computed in the visitor's browser, every control at its full range and step.
+4. The two are joined: a point picked in a film is run again by the page's own code as a check, and can be handed to the live
+   simulation.
 
-For Fig. 2 the manifold is the flip-time map: each pixel is a start (theta_1, theta_2) released from rest; its colour is the time
-until either rod first passes over the top; the film sweeps the mass ratio m_2/m_1 from 0.1 to 10.
+A first reading of the rule (one film, the mass axis only) was too narrow; the user corrected it the same day.
+
+## Fig. 2: the display and the curves
+
+The display: a picture whose pixel is a start (theta_1 across, theta_2 up, every half degree) and whose colour is the time until
+either rod first passes over the top (10 s window, the page's own RK4). The parameter space the curves run through:
+p = (m_2/m_1, l_2/l_1, omega_1(0), omega_2(0)).
+
+| Curve | The relationship | Why it is interesting |
+|---|---|---|
+| mass | ln(m_2/m_1) from -2.3 to 2.3; equal rods; from rest | sand pours into the lower bob (the page's own parameter curve) |
+| length | ln(l_2/l_1) from -1.6 to 1.6; equal masses; from rest | the lower rod grows from a fifth to five times the upper |
+| ring | ln m = 2.3 cos 2 pi u, ln l = 1.6 sin 2 pi u; from rest | closed: once round the whole mass-length plane, the film loops without a seam |
+| push | omega_1 = 5 cos 2 pi u, omega_2 = 5 sin 2 pi u | closed: every direction of a 5 rad/s push; frame u + 1/2 is the mirror image of frame u (a check) |
+| octave | l_2/l_1 from 0.295 to 3.387, m_2/m_1 = 6.25 lam / (1 + lam)^2 - 1 | the two small-swing frequencies stay exactly 2 : 1 all along it |
+
+The octave curve, derived. Linearise about both rods hanging: M q'' + K q = 0 with
+M = [[(m_1+m_2) l_1^2, m_2 l_1 l_2], [m_2 l_1 l_2, m_2 l_2^2]], K = diag((m_1+m_2) g l_1, m_2 g l_2). With x = omega^2 l_1 / g,
+lam = l_2/l_1, mu = m_2/m_1, det(K - omega^2 M) = 0 becomes
+
+    lam x^2 - (1 + mu)(1 + lam) x + (1 + mu) = 0.
+
+Its roots obey (x_+ + x_-)^2 / (x_+ x_-) = (1 + mu)(1 + lam)^2 / lam. A frequency ratio of 2 means x_+/x_- = 4, for which the
+left side is 25/4, so mu = 6.25 lam / (1 + lam)^2 - 1. Checks: equal masses and rods give 8, i.e. x_+/x_- = 3 + 2 sqrt 2 and a
+frequency ratio 2.4142 = 1 + sqrt 2, the known value; and the eigenvalues of M^-1 K at all 240 points of the curve give a ratio
+within 8.9e-16 of 2 (computed 26 November 2026; algebra only, no equation of motion integrated).
+
+Each film: 240 points of the curve x 720 x 720 starts = 124 416 000 runs of 10 s; maps 240 x 1 036 800 B = 249 MB plus the
+video. Expected GPU time per film, scaled from the old pendulum run's measured rate (8.97e7 start-steps a second on two T4,
+notebook version 6): 720^2 x 6000 x 240 / 8.97e7 = 8 320 s = 2.3 h; five films 11.6 h. Not yet measured for this model: the
+small test run (double_pendulum_film_smoke) measures it before any full run is started.

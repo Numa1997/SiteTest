@@ -1,4 +1,4 @@
-/* Fig. 2b, the flip-time film of the double pendulum (docs/simulations/fig02-double-pendulum.md, "The flip-time film").
+/* Fig. 2b, the flip-time films of the double pendulum, one per curve through its parameter space (docs/simulations/fig02-double-pendulum.md, "The flip-time film").
    The film and its maps were computed once on Kaggle (tools/sims/dp_film.py) and are read from Cloudflare R2 through
    scripts/simdata.js. This file computes no physics of its own: it plays the film, reads stored values, and asks the page's own
    live integrator (window.__dpLive, set by the page script) to run a picked start again as the check.
@@ -10,24 +10,25 @@
     var slider = document.getElementById('film-f'), fOut = document.getElementById('film-f-out'), playBtn = document.getElementById('film-play');
     var readBox = document.getElementById('film-read'), swingBtn = document.getElementById('film-swing'), strip = document.getElementById('film-pin');
     var cap = document.getElementById('film-cap'), rM = document.getElementById('film-r-m'), rK = document.getElementById('film-r-k'), rL = document.getElementById('film-r-live');
-    var bar = document.getElementById('film-bar');
+    var bar = document.getElementById('film-bar'), sel = document.getElementById('film-curve'), plane = document.getElementById('film-plane');
     if (!box || !video) return;
     var ds = Sim.data && Sim.data.ds;
-    var S = window.__dpFilm = { hdr: null, gen: null, f: 0, pin: null, err: null, words: 0 };
-    var hdr, g, n, fps, frames, lastWords = 0, pal = null, grab = document.createElement('canvas'), gctx = null;
+    var S = window.__dpFilm = { hdr: null, gen: null, curve: null, f: 0, pin: null, err: null, words: 0 };
+    var hdr, g, n, fps, frames, lastWords = 0, declared = false, ticking = false, grab = document.createElement('canvas'), gctx = null;
 
     function declare() {
-        if (!ds) return;
+        if (!ds || declared) return; declared = true;
         ds.var('film_f', [], 'int', { symbol: 'f', long_name: 'film frame shown', computed_in: 'dp-film.js', formula: 'floor(t_video × fps)', digits: 0, source: 'Read from the video clock.' });
-        ds.var('film_m2', [], 'float', { symbol: 'm₂ (film)', units: 'kg', long_name: 'lower mass of the film frame shown', computed_in: 'tools/sims/dp_film.py on Kaggle', formula: 'm₁ e^(ln m₀ + f Δ)', digits: 4, source: 'Stored in film.json, frames[f].m2.' });
+        ds.var('film_m2', [], 'float', { symbol: 'm₂ (film)', units: 'kg', long_name: 'lower mass of the film frame shown', computed_in: 'tools/sims/dp_film.py on Kaggle', formula: 'the curve’s formula at u', digits: 4, source: 'Stored in film.json, frames[f].m2.' });
+        ds.var('film_l2', [], 'float', { symbol: 'l₂ (film)', units: 'm', long_name: 'lower rod of the film frame shown', computed_in: 'tools/sims/dp_film.py on Kaggle', formula: 'the curve’s formula at u', digits: 4, source: 'Stored in film.json, frames[f].l2.' });
         ds.var('pin_th1', [], 'float', { symbol: 'θ₁ (pin)', units: '°', long_name: 'start angle of the pinned pixel', computed_in: 'dp-film.js', formula: '−180 + 360 b / n', digits: 1 });
         ds.var('pin_th2', [], 'float', { symbol: 'θ₂ (pin)', units: '°', long_name: 'start angle of the pinned pixel', computed_in: 'dp-film.js', formula: '−180 + 360 a / n', digits: 1 });
         ds.var('pin_k', [], 'int', { symbol: 'k', long_name: 'stored step of the first flip (65535: none within 10 s)', computed_in: 'tools/sims/dp_film.py on Kaggle', formula: 'first step with |θ₁| > π or |θ₂| > π', digits: 0, source: 'Read from map_<f>.bin, checked by SHA-256.' });
         ds.var('pin_t', [], 'float', { symbol: 't_flip', units: 's', long_name: 'stored time of the first flip', computed_in: 'dp-film.js', formula: 'k h', digits: 4 });
         ds.var('pin_k_live', [], 'int', { symbol: 'k (live)', long_name: 'the same start run again now by the page’s own RK4', computed_in: 'the page script, flipStep()', formula: 'first step with |θ₁| > π or |θ₂| > π', digits: 0 });
-        Sim.data.groups.push({ title: T('Flip-time film (computed on Kaggle)'), note: T('the film frame shown and the pinned start'), vars: ['film_f', 'film_m2', 'pin_th1', 'pin_th2', 'pin_k', 'pin_t', 'pin_k_live'] });
+        Sim.data.groups.push({ title: T('Flip-time film (computed on Kaggle)'), note: T('the film frame shown and the pinned start'), vars: ['film_f', 'film_m2', 'film_l2', 'pin_th1', 'pin_th2', 'pin_k', 'pin_t', 'pin_k_live'] });
         Sim.data.check.pin_t = function () { return S.pin ? { formula: 't = k h', inputs: [['k', S.pin.k, '', 0], ['h', hdr.params.h, 's', 6]], value: S.pin.k < hdr.params.failed ? S.pin.k * hdr.params.h : undefined } : { formula: T('no start pinned'), inputs: [], value: undefined }; };
-        Sim.data.check.pin_k = function () { return S.pin ? { formula: T('the page’s RK4 (h = 1/600 s) from θ₁, θ₂ and m₂ read from the store, ω = 0'), inputs: [['θ₁', S.pin.d1, '°', 1], ['θ₂', S.pin.d2, '°', 1], ['m₂', S.pin.m2, 'kg', 6]], value: S.pin.live } : { formula: T('no start pinned'), inputs: [], value: undefined }; };
+        Sim.data.check.pin_k = function () { return S.pin ? { formula: T('the page’s RK4 (h = 1/600 s) from θ₁, θ₂ and the frame’s stored m₂, l₂, ω₁, ω₂'), inputs: [['θ₁', S.pin.d1, '°', 1], ['θ₂', S.pin.d2, '°', 1], ['m₂', S.pin.q.m2, 'kg', 6], ['l₂', S.pin.q.l2, 'm', 6], ['ω₁', S.pin.q.w1, 'rad/s', 4], ['ω₂', S.pin.q.w2, 'rad/s', 4]], value: S.pin.live } : { formula: T('no start pinned'), inputs: [], value: undefined }; };
         Sim.data.drawn = Sim.data.drawn || {};
         Sim.data.drawn.pin_k = function () { return S.pin ? S.pin.px : { what: T('no start pinned'), drawn: '', expected: '', ok: true }; };
     }
@@ -41,17 +42,42 @@
     }
     function frameOf(t) { return Math.max(0, Math.min(frames - 1, Math.floor(t * fps))); }
     function ratio(m) { return m < 1 ? '1/' + (1 / m).toFixed(2) : m.toFixed(2); }
+    function point(fr) {
+        var out = [];
+        if (fr.ln_m !== 0) out.push('m₂/m₁ = ' + ratio(fr.m2 / hdr.params.m1));
+        if (fr.ln_l !== 0) out.push('l₂/l₁ = ' + ratio(fr.l2 / hdr.params.l1));
+        if (fr.w1 !== 0 || fr.w2 !== 0) out.push('ω = (' + fr.w1.toFixed(2) + ', ' + fr.w2.toFixed(2) + ') rad/s');
+        return out.length ? out.join(', ') : T('equal masses and rods, from rest');
+    }
+    var AX = { ln_m: 'm₂/m₁', ln_l: 'l₂/l₁', w1: 'ω₁', w2: 'ω₂', u: 'u' };
+    function drawPlane() {                          // the curve in its parameter plane, and the point of the frame shown
+        var r = plane.getBoundingClientRect(), dpr = window.devicePixelRatio || 1, w = r.width, h = r.height, ax = hdr.curve.axes;
+        plane.width = Math.round(w * dpr); plane.height = Math.round(h * dpr);
+        var c = plane.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h);
+        var xs = hdr.frames.map(function (q) { return q[ax[0]]; }), ys = hdr.frames.map(function (q) { return q[ax[1]]; });
+        var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys), pad = 22;
+        var X = function (v) { return pad + 8 + (v - x0) / ((x1 - x0) || 1) * (w - 2 * pad - 8); }, Y = function (v) { return h - pad - (v - y0) / ((y1 - y0) || 1) * (h - 2 * pad); };
+        c.strokeStyle = '#7a1f2b'; c.lineWidth = 1.5; c.beginPath();
+        xs.forEach(function (v, i) { if (i) c.lineTo(X(v), Y(ys[i])); else c.moveTo(X(v), Y(ys[i])); });
+        if (hdr.curve.closed) c.closePath(); c.stroke();
+        c.fillStyle = '#7a1f2b'; c.beginPath(); c.arc(X(xs[S.f]), Y(ys[S.f]), 4.5, 0, 2 * Math.PI); c.fill();
+        c.fillStyle = '#5a504b'; c.font = '10px "IBM Plex Mono", monospace';
+        var lab = function (k, v) { return k === 'ln_m' || k === 'ln_l' ? ratio(Math.exp(v)) : (+v.toFixed(2)); };
+        c.textAlign = 'left'; c.fillText(AX[ax[0]] + ' ' + lab(ax[0], x0), 4, h - 5); c.textAlign = 'right'; c.fillText(lab(ax[0], x1), w - 4, h - 5);
+        c.textAlign = 'left'; c.fillText(AX[ax[1]] + ' ' + lab(ax[1], y1), 4, 11);
+    }
 
     function words(force) {                         // text rewritten at most 4 times a second while the film plays
         var now = performance.now();
         if (!force && now - lastWords < 250) return;
         lastWords = now; S.words++;
         var fr = hdr.frames[S.f];
-        cap.textContent = 'm₂/m₁ = ' + ratio(fr.m2 / hdr.params.m1);
+        cap.textContent = point(fr);
         fOut.textContent = (S.f + 1) + ' / ' + frames;
-        rM.textContent = ratio(fr.m2 / hdr.params.m1) + (S.f % 4 === 0 ? T(' (a slider step)') : '');
-        slider.value = S.f; Sim.slider && slider.style.setProperty('--p', (S.f / (frames - 1)) * 100 + '%');
-        if (ds) { ds.set('film_f', S.f); ds.set('film_m2', fr.m2); }
+        rM.textContent = point(fr);
+        slider.value = S.f; slider.style.setProperty('--p', (S.f / (frames - 1)) * 100 + '%');
+        drawPlane();
+        if (ds) { ds.set('film_f', S.f); ds.set('film_m2', fr.m2); ds.set('film_l2', fr.l2); }
     }
 
     function drawMark() {                           // the pin's ring, every frame
@@ -89,19 +115,19 @@
         strip.hidden = false; strip.textContent = T('Reading the stored map of this frame …');
         return g.file(name).then(function (buf) {
             var k = new DataView(buf).getUint16(2 * (a * n + b), true);
-            var d1 = -180 + 360 * b / n, d2 = -180 + 360 * a / n, lnm = fr.ln_m;
-            var live = window.__dpLive ? window.__dpLive.flipStep(d1 * Math.PI / 180, d2 * Math.PI / 180, lnm, hdr.params.k_max) : undefined;
+            var d1 = -180 + 360 * b / n, d2 = -180 + 360 * a / n;
+            var live = window.__dpLive ? window.__dpLive.flipStep(d1 * Math.PI / 180, d2 * Math.PI / 180, fr, hdr.params.k_max) : undefined;
             var px = readPixel(a, b), want = colourOf(k), gap = Math.max(Math.abs(px[0] - want[0]), Math.abs(px[1] - want[1]), Math.abs(px[2] - want[2]));
             var drawn = px[3] === 0 ? T('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')';
-            S.pin = { f: f, a: a, b: b, d1: d1, d2: d2, lnm: lnm, m2: fr.m2, k: k, live: live, gap: gap,
+            S.pin = { f: f, a: a, b: b, d1: d1, d2: d2, q: fr, k: k, live: live, gap: gap,
                 px: { what: T('film pixel, column ') + b + T(', row ') + (n - 1 - a), drawn: drawn, expected: 'rgb(' + want.join(', ') + ')' + T(', the colour of the stored value'),
                       ok: px[3] === 255 && gap <= 24, note: T('The film is H.264, a lossy code: the model measured its gap against the stored colours (film.json, checks.film_vs_map).') } };
             var tk = k === hdr.params.never ? T('no flip within 10 s') : k === hdr.params.failed ? T('the method failed') : T('first flip at step ') + k + ' (t = ' + (k * hdr.params.h).toFixed(3) + ' s)';
             rK.textContent = k === hdr.params.never ? T('none in 10 s') : (k * hdr.params.h).toFixed(3) + ' s';
             rL.textContent = live === k ? T('identical') : (live === hdr.params.never ? T('none in 10 s') : (live * hdr.params.h).toFixed(3) + ' s');
-            strip.textContent = 'θ₁ = ' + d1.toFixed(1) + '°, θ₂ = ' + d2.toFixed(1) + '°, m₂/m₁ = ' + ratio(fr.m2 / hdr.params.m1) + ' · ' + T('stored: ') + tk +
-                ' · ' + T('the page’s RK4 now: ') + (live === k ? T('the same step') : T('step ') + live) + ' · ' + T('pixel ') + drawn + T(' against ') + 'rgb(' + want.join(', ') + ')' + T(', gap ') + gap;
-            swingBtn.disabled = !(S.f % 4 === 0 && b % 2 === 0 && a % 2 === 0);
+            strip.textContent = 'θ₁ = ' + d1.toFixed(1) + '°, θ₂ = ' + d2.toFixed(1) + '°, ' + point(fr) + ' · ' + T('stored: ') + tk +
+                ' · ' + T('the page’s RK4 now: ') + (live === k ? T('the same step') : live === hdr.params.never ? T('no flip within 10 s') : T('step ') + live) + ' · ' + T('pixel ') + drawn + T(' against ') + 'rgb(' + want.join(', ') + ')' + T(', gap ') + gap;
+            swingBtn.disabled = false;
             if (ds) { ds.set('pin_th1', d1); ds.set('pin_th2', d2); ds.set('pin_k', k); ds.set('pin_t', k < hdr.params.failed ? k * hdr.params.h : NaN); ds.set('pin_k_live', live); }
         }).catch(function (e) { strip.textContent = String(e && e.message || e); });
     }
@@ -125,36 +151,43 @@
         for (var i = 0; i < w; i++) { var q = hdr.colour.lut[Math.round(255 * i / (w - 1))]; c.fillStyle = 'rgb(' + q.join(',') + ')'; c.fillRect(i, 0, 1, h); }
     }
 
-    function boot() {
-        declare();
-        SimData.open('double_pendulum_film', { format: 1, base: '../', host: box }).then(function (gen) {
+    function load(key) {
+        hdr = S.hdr = null; S.pin = null; S.err = null; S.curve = key; swingBtn.disabled = true; strip.hidden = !readBox.checked; rK.textContent = rL.textContent = '—';
+        return SimData.open('double_pendulum_film_' + key, { format: 1, base: '../', host: box }).then(function (gen) {
             g = gen; S.gen = { date: gen.date, version: gen.version, commit: gen.commit, run: gen.entry && gen.entry.run };
             return g.file('film.json');
         }).then(function (buf) {
+            if (S.curve !== key) return;
             hdr = S.hdr = JSON.parse(new TextDecoder().decode(buf));
-            n = hdr.params.n; fps = hdr.params.fps; frames = hdr.params.frames;
+            n = hdr.params.n; fps = hdr.params.fps; frames = hdr.params.frames; S.f = 0; gctx = null;
             slider.max = frames - 1; legend();
-            video.src = g.url('film.mp4'); video.poster = g.url('poster.png');
+            video.loop = true; video.poster = g.url('poster.png'); video.src = g.url('film.mp4');
             video.addEventListener('loadeddata', function () { words(true); }, { once: true });
-            setPlaying(!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches));
-            requestAnimationFrame(tick);
+            words(true);
+            setPlaying(!readBox.checked && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches));
+            if (!ticking) { ticking = true; requestAnimationFrame(tick); }
         }).catch(function (e) { S.err = String(e && e.message || e); });
+    }
+
+    function boot() {
+        declare();
+        load(sel.value);
+        sel.addEventListener('change', function () { load(sel.value); });
         playBtn.addEventListener('click', function () { if (readBox.checked) return; setPlaying(video.paused); });
         slider.addEventListener('input', function () {
             if (!hdr) return;
             setPlaying(false);
-            var f = parseInt(slider.value, 10); if (readBox.checked) f -= f % 4;
-            seek(f).then(function () { if (S.pin) pinAt(S.pin.a, S.pin.b); });
+            seek(parseInt(slider.value, 10)).then(function () { if (S.pin) pinAt(S.pin.a, S.pin.b); });
         });
         readBox.addEventListener('change', function () {
             if (!hdr) return;
-            if (readBox.checked) { setPlaying(false); slider.step = 4; seek(S.f - (S.f % 4)); strip.hidden = false; strip.textContent = T('Click a point of the film to pin its start.'); box.style.cursor = 'crosshair'; }
-            else { slider.step = 1; S.pin = null; strip.hidden = true; swingBtn.disabled = true; box.style.cursor = ''; rK.textContent = rL.textContent = '—'; }
+            if (readBox.checked) { setPlaying(false); seek(S.f); strip.hidden = false; strip.textContent = T('Click a point of the film to pin its start.'); box.style.cursor = 'crosshair'; }
+            else { S.pin = null; strip.hidden = true; swingBtn.disabled = true; box.style.cursor = ''; rK.textContent = rL.textContent = '—'; }
         });
         box.addEventListener('click', onClick);
         swingBtn.addEventListener('click', function () {
             if (!S.pin || !window.__dpLive) return;
-            window.__dpLive.swing(S.pin.d1, S.pin.d2, S.pin.lnm);
+            window.__dpLive.swing(S.pin.d1, S.pin.d2, S.pin.q);
             var st = document.getElementById('stage'); if (st) st.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }

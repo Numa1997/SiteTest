@@ -119,27 +119,35 @@
                     <canvas id="film-mark" aria-hidden="true"></canvas>
                 </div>
                 <figcaption class="stage__cap">
-                    <span><b>Fig. 2b</b> · where the pendulum flips · computed once on Kaggle, <span class="tx">\(\theta_1\)</span> across, <span class="tx">\(\theta_2\)</span> up, both −180° … 180°</span>
-                    <span id="film-cap">m₂/m₁ = …</span>
+                    <span><b>Fig. 2b</b> · where the pendulum flips, filmed along a curve through its parameters · computed once on Kaggle, <span class="tx">\(\theta_1\)</span> across, <span class="tx">\(\theta_2\)</span> up, both −180° … 180°</span>
+                    <span id="film-cap">…</span>
                 </figcaption>
                 <p class="stage__cap" id="film-pin" hidden></p>
             </figure>
 
             <aside class="panel" aria-label="Film controls">
                 <div class="panel__group">
-                    <p class="panel__label">Film</p>
+                    <p class="panel__label">Film along a curve</p>
+                    <select class="sel" id="film-curve" aria-label="Curve through the parameter space">
+                        <option value="mass">Sand pours into the lower bob</option>
+                        <option value="length">The lower rod grows</option>
+                        <option value="ring">Once round the mass–length plane</option>
+                        <option value="push">Every direction of a push</option>
+                        <option value="octave">The two tones stay an octave apart</option>
+                    </select>
+                    <div class="curve__plot"><canvas id="film-plane" aria-label="The curve in its parameter plane, with the point of the frame shown" style="position: absolute; inset: 0; width: 100%; height: 100%;"></canvas></div>
                     <div class="actions">
                         <button type="button" class="btn" id="film-play">Pause</button>
                         <button type="button" class="btn btn--ghost" id="film-swing" disabled>Swing this start</button>
                     </div>
                     <label class="ctl">
-                        <span class="ctl__row"><span>Frame (lower mass)</span><output id="film-f-out" for="film-f"></output></span>
-                        <input type="range" id="film-f" min="0" max="368" step="1" value="0">
+                        <span class="ctl__row"><span>Point on the curve</span><output id="film-f-out" for="film-f"></output></span>
+                        <input type="range" id="film-f" min="0" max="239" step="1" value="0">
                     </label>
                     <label class="switch"><span>Read a start · click to pin</span><input type="checkbox" id="film-read"></label>
                 </div>
                 <dl class="readouts">
-                    <div class="wide"><dt>Mass ratio m₂/m₁ of this frame</dt><dd id="film-r-m">—</dd></div>
+                    <div class="wide"><dt>Parameters at this point</dt><dd id="film-r-m">—</dd></div>
                     <div><dt>Stored first flip</dt><dd id="film-r-k">—</dd></div>
                     <div><dt>Page’s RK4 now</dt><dd id="film-r-live" class="is-accent">—</dd></div>
                 </dl>
@@ -147,7 +155,7 @@
                     <li><canvas id="film-bar" style="width: 120px; height: 10px;" aria-hidden="true"></canvas>first flip 0.05 s … 10 s (log)</li>
                     <li><span class="sw sw--dot" style="background: rgb(16, 20, 26);"></span>no flip in 10 s</li>
                 </ul>
-                <details class="curve__why"><summary>What is stored and what is drawn</summary><p>Each pixel is one start released from rest: θ₁ across, θ₂ up, every half degree. Kaggle ran each start with this page’s own method (RK4, h = 1/600 s, 64-bit) for 10 s and stored the step of the first time either rod passed over the top, in 369 maps, one for each lower mass from m₂/m₁ = 0.10 to 9.97. The film shows those maps as colour; it is an H.264 video, so its colours differ slightly from the stored values, and the model measured that gap. The film is streamed, not checked by fingerprint; every map you read is checked by SHA-256 before it is used. Read a start pins a whole-degree start on a frame where the mass is a step of the mass slider, so Swing this start can hand it to the live simulation above, which runs it in your browser.</p></details>
+                <details class="curve__why"><summary>What is stored and what is drawn</summary><p>The pendulum has more parameters than a picture has axes. Each pixel is one start: θ₁ across, θ₂ up, every half degree. The other parameters (the mass ratio, the length ratio, the two starting angular velocities) are tied together by one curve, drawn above in its own plane; the film is the trip along it. At each of 240 points of the curve Kaggle ran all 518 400 starts with this page’s own method (RK4, h = 1/600 s, 64-bit) for 10 s and stored the step at which a rod first passed over the top. The film shows those maps as colour; it is an H.264 video, so its colours differ slightly from the stored values, and the model measured that gap. The film is streamed, not checked by fingerprint; every map you read is checked by SHA-256 before it is used. Read a start pins a whole-degree start, runs it again here with the page’s own code, and compares; Swing this start hands its exact values to the live simulation above (the sliders then show the nearest step).</p></details>
             </aside>
         </div>
 
@@ -959,8 +967,8 @@
             Sim.data.check[name] = function () { return twinPositionCheck(i); };
             Sim.data.drawn[name] = function () { return twinPixel(i < 2 ? 1 : 2); };
         });
-        window.__dpLive = { flipStep: function (a, b, lnm, kmax) { var keep = [m2, l2], s = [a, b, 0, 0], k, r = 65535; m2 = m1 * Math.exp(lnm); l2 = l1; for (k = 1; k <= kmax; k++) { s = rk4(s, H); if (!(isFinite(s[0]) && isFinite(s[1]) && isFinite(s[2]) && isFinite(s[3]))) { r = 65534; break; } if (Math.abs(s[0]) > Math.PI || Math.abs(s[1]) > Math.PI) { r = k; break; } } m2 = keep[0]; l2 = keep[1]; return r; },
-            swing: function (d1, d2, lnm) { mass.set(lnm); len.set(0); th1.set(d1); th2.set(d2); w1.set(0); w2.set(0); restart(); clk.set(true); } };
+        window.__dpLive = { flipStep: function (a, b, q, kmax) { var keep = [m2, l2], s = [a, b, q.w1, q.w2], k, r = 65535; m2 = q.m2; l2 = q.l2; for (k = 1; k <= kmax; k++) { s = rk4(s, H); if (!(isFinite(s[0]) && isFinite(s[1]) && isFinite(s[2]) && isFinite(s[3]))) { r = 65534; break; } if (Math.abs(s[0]) > Math.PI || Math.abs(s[1]) > Math.PI) { r = k; break; } } m2 = keep[0]; l2 = keep[1]; return r; },
+            swing: function (d1, d2, q) { mass.set(q.ln_m); len.set(q.ln_l); th1.set(d1); th2.set(d2); w1.set(q.w1); w2.set(q.w2); restart(); m2 = q.m2; l2 = q.l2; state = [d1 * Math.PI / 180, d2 * Math.PI / 180, q.w1, q.w2]; twin = twinBox.checked ? [state[0] + EPS, state[1], state[2], state[3]] : null; E0 = energy(state); ds.set('m2', m2); ds.set('l2', l2); ds.set('E0', E0); ds.set('th1_0', state[0]); ds.set('th2_0', state[1]); ds.set('w1_0', state[2]); ds.set('w2_0', state[3]); layout(); clearTrail(); clk.set(true); } };
         restart();
         resize();
         diagnostics(0);

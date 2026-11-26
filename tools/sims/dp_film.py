@@ -5,9 +5,21 @@ no start can be made from its stored neighbours and storing every start the slid
 The user's rule of 26 November 2026: Kaggle computes the interesting map over the parameters and records it as a film; the page
 shows the film beside the live simulation, which the visitor's browser still computes.
 
-The map. Each pixel is one start released from rest, theta_1 along x and theta_2 along y, both from -180 to +180 degrees. Its value
-is the first time either rod passes over the top (|theta_1| > pi or |theta_2| > pi, angles followed continuously from the start),
-looked for during T_MAX seconds. The film sweeps the lower mass: frame f has ln(m_2/m_1) = LN_M0 + f * DLN_M, from 0.1 to 9.97.
+The picture. Each pixel is one start, theta_1 along x and theta_2 along y, both from -180 to +180 degrees. Its value is the
+first time either rod passes over the top (|theta_1| > pi or |theta_2| > pi, angles followed continuously from the start),
+looked for during T_MAX seconds.
+
+The curve. The remaining parameters form a space, p = (ln(m_2/m_1), ln(l_2/l_1), omega_1(0), omega_2(0)). A film is the picture
+computed at every point of one curve p(u), u = f / frames (closed curves) or f / (frames - 1) (open ones). The curves, CURVES:
+    mass    ln m from -2.3 to 2.3; equal rods, from rest                     (sand pours into the lower bob)
+    length  ln l from -1.6 to 1.6; equal masses, from rest                   (the lower rod grows)
+    ring    ln m = 2.3 cos 2 pi u, ln l = 1.6 sin 2 pi u; from rest          (closed: once round the mass-length plane)
+    push    omega_1 = 5 cos 2 pi u, omega_2 = 5 sin 2 pi u; equal masses and rods   (closed: every direction of a 5 rad/s push)
+    octave  l from 0.295 to 3.387 (log-evenly), m = 6.25 l / (1 + l)^2 - 1; from rest: the curve on which the two small-swing
+            frequencies stay exactly 2 : 1. Derivation: linearised about hanging, with x = omega^2 l_1 / g, lam = l_2 / l_1,
+            mu = m_2 / m_1, det(K - omega^2 M) = 0 gives lam x^2 - (1 + mu)(1 + lam) x + (1 + mu) = 0; its roots have
+            (x_+ + x_-)^2 / (x_+ x_-) = (1 + mu)(1 + lam)^2 / lam, and a frequency ratio 2 means x_+ / x_- = 4, so that
+            expression is 25/4. (Check "octave_ratio": the eigenvalues of M^-1 K at every frame.)
 
 The setup and its equations, exactly the page's (public/simulations/Double Pendulum.html, deriv() and rk4()). Massless rods of
 lengths l_1, l_2, point masses m_1, m_2, gravity g, no friction; theta from the downward vertical, counter-clockwise positive;
@@ -18,7 +30,8 @@ delta = theta_1 - theta_2:
                - 2 sin(delta) m_2 (omega_2^2 l_2 + omega_1^2 l_1 cos delta)] / (l_1 D)                           [rad/s^2]
     alpha_2 = 2 sin(delta) [omega_1^2 l_1 (m_1 + m_2) + g (m_1 + m_2) cos theta_1 + omega_2^2 l_2 m_2 cos delta] / (l_2 D)
 
-Energy E = T + V with V = -(m_1 + m_2) g l_1 cos theta_1 - m_2 g l_2 cos theta_2 is conserved. Released from rest, E = V(start).
+Energy E = T + V, T = 1/2 (m_1 + m_2) l_1^2 omega_1^2 + 1/2 m_2 l_2^2 omega_2^2 + m_2 l_1 l_2 omega_1 omega_2 cos(delta),
+V = -(m_1 + m_2) g l_1 cos theta_1 - m_2 g l_2 cos theta_2, is conserved.
 Rod 2 can pass the top only if E >= V_2* = -(m_1 + m_2) g l_1 + m_2 g l_2 (the least V with theta_2 = pi), rod 1 only if
 E >= V_1* = (m_1 + m_2) g l_1 - m_2 g l_2 (the least V with theta_1 = pi). A start below both can never flip: a check.
 
@@ -32,12 +45,12 @@ Output (out_dir):
     film.mp4        the maps as colour (H.264, yuv420p, FPS frames a second, a key frame every second), image row 0 = theta_2 at
                     the top (+180 - step), column 0 = theta_1 = -180. Colour of a value: see colour() and the table in film.json.
     poster.png      the frame with m_2 = m_1, lossless.
-    film.json       parameters, grid, frames, colour table, every check, timings.
+    film.json       parameters, the curve (key, name, every frame's m_2, l_2, omega_1, omega_2), colour table, every check, timings.
 run(out_dir) returns the header with "checks_passed"; with a failed check the engine stores nothing (docs/kaggle-sims.md)."""
 import hashlib, json, math, os, subprocess, sys, time
 import numpy as np
 
-G, M1, L1, L2 = 9.81, 1.0, 1.0, 1.0        # m/s^2, kg, m, m (the page's g, m_1, l_1; the length ratio is 1, its default)
+G, M1, L1 = 9.81, 1.0, 1.0                 # m/s^2, kg, m (the page's g, m_1, l_1)
 H = 1 / 600                                # s, the page's RK4 step
 T_MAX = 10.0                               # s, how long each start is followed
 K_MAX = int(round(T_MAX / H))              # 6000 steps
@@ -77,8 +90,42 @@ def grid(n):
     deg = -180.0 + 360.0 * np.arange(n) / n
     return deg * math.pi / 180
 
-def energy0(t1, t2, m2):
-    return -(M1 + m2) * G * L1 * np.cos(t1) - m2 * G * L2 * np.cos(t2)
+def energy0(t1, t2, m2, l2, w1, w2):
+    return (0.5 * (M1 + m2) * L1 * L1 * w1 * w1 + 0.5 * m2 * l2 * l2 * w2 * w2 + m2 * L1 * l2 * w1 * w2 * np.cos(t1 - t2)
+            - (M1 + m2) * G * L1 * np.cos(t1) - m2 * G * l2 * np.cos(t2))
+
+# ---- the curves through the parameter space: u in [0, 1] -> (ln m, ln l, omega_1, omega_2) ----
+def _octave(u):
+    lam = math.exp(math.log(0.295) + u * (math.log(3.387) - math.log(0.295)))
+    return (math.log(6.25 * lam / (1 + lam) ** 2 - 1), math.log(lam), 0.0, 0.0)
+
+CURVES = {
+    "mass":   dict(name="Sand pours into the lower bob", closed=False, axes=("ln_m", "u"), f=lambda u: (-2.3 + 4.6 * u, 0.0, 0.0, 0.0),
+                   formula="ln(m2/m1) = -2.3 + 4.6 u; l2 = l1; from rest"),
+    "length": dict(name="The lower rod grows", closed=False, axes=("ln_l", "u"), f=lambda u: (0.0, -1.6 + 3.2 * u, 0.0, 0.0),
+                   formula="ln(l2/l1) = -1.6 + 3.2 u; m2 = m1; from rest"),
+    "ring":   dict(name="Once round the mass-length plane", closed=True, axes=("ln_m", "ln_l"),
+                   f=lambda u: (2.3 * math.cos(2 * math.pi * u), 1.6 * math.sin(2 * math.pi * u), 0.0, 0.0),
+                   formula="ln(m2/m1) = 2.3 cos 2 pi u, ln(l2/l1) = 1.6 sin 2 pi u; from rest"),
+    "push":   dict(name="Every direction of a push", closed=True, axes=("w1", "w2"),
+                   f=lambda u: (0.0, 0.0, 5 * math.cos(2 * math.pi * u), 5 * math.sin(2 * math.pi * u)),
+                   formula="omega1 = 5 cos 2 pi u, omega2 = 5 sin 2 pi u rad/s; m2 = m1, l2 = l1"),
+    "octave": dict(name="The two tones stay an octave apart", closed=False, axes=("ln_m", "ln_l"), f=_octave,
+                   formula="l2/l1 from 0.295 to 3.387, m2/m1 = 6.25 (l2/l1) / (1 + l2/l1)^2 - 1; from rest"),
+}
+
+def curve_points(key, frames):
+    c = CURVES[key]; out = []
+    for f in range(frames):
+        u = f / frames if c["closed"] else f / (frames - 1)
+        lm, ll, w1, w2 = c["f"](u)
+        out.append(dict(f=f, u=u, ln_m=lm, ln_l=ll, m2=M1 * math.exp(lm), l2=L1 * math.exp(ll), w1=w1, w2=w2))
+    return out
+
+def mode_ratio(m2, l2):
+    """Ratio of the two small-swing frequencies: eigenvalues of M^-1 K, linearised about both rods hanging."""
+    M = np.array([[(M1 + m2) * L1 * L1, m2 * L1 * l2], [m2 * L1 * l2, m2 * l2 * l2]]); K = np.diag([(M1 + m2) * G * L1, m2 * G * l2])
+    w2 = np.sort(np.linalg.eigvals(np.linalg.solve(M, K)).real); return float(math.sqrt(w2[1] / w2[0]))
 
 # ---- the GPU kernel ----
 def make_jax():
@@ -96,12 +143,12 @@ def make_jax():
         a2 = (2 * jnp.sin(d) * (o1 * o1 * L1 * (M1 + m2) + G * (M1 + m2) * jnp.cos(t1) + o2 * o2 * l2 * m2 * jnp.cos(d))) / (l2 * den)
         return jnp.stack([o1, o2, a1, a2])
 
-    def flipmap(t1, t2, m2, h, nsteps):
-        s0 = jnp.stack([t1, t2, jnp.zeros_like(t1), jnp.zeros_like(t1)])
+    def flipmap(t1, t2, m2, l2, w1, w2, h, nsteps):
+        s0 = jnp.stack([t1, t2, jnp.zeros_like(t1) + w1, jnp.zeros_like(t1) + w2])
         f0 = jnp.full(t1.shape, NEVER, dtype=jnp.int32)
         def body(k, c):
             s, f = c
-            k1 = deriv(s, m2, L2); k2 = deriv(s + h / 2 * k1, m2, L2); k3 = deriv(s + h / 2 * k2, m2, L2); k4 = deriv(s + h * k3, m2, L2)
+            k1 = deriv(s, m2, l2); k2 = deriv(s + h / 2 * k1, m2, l2); k3 = deriv(s + h / 2 * k2, m2, l2); k4 = deriv(s + h * k3, m2, l2)
             s = s + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
             fin = jnp.all(jnp.isfinite(s), axis=0)
             hit = (jnp.abs(s[0]) > jnp.pi) | (jnp.abs(s[1]) > jnp.pi)
@@ -110,16 +157,16 @@ def make_jax():
             return s, f
         return jax.lax.fori_loop(0, nsteps, body, (s0, f0))[1]
 
-    return jax, jax.jit(flipmap, static_argnums=(4,))
+    return jax, jax.jit(flipmap, static_argnums=(7,))
 
-def page_rk4_flip(t1, t2, m2, h=H, nsteps=K_MAX):
+def page_rk4_flip(t1, t2, m2, l2, w1, w2, h=H, nsteps=K_MAX):
     """A plain copy of the page's deriv() and rk4(), one start, in Python floats; returns the flip step as the map stores it."""
     def deriv(s):
         a, b, o1, o2 = s; d = a - b; den = 2 * M1 + m2 - m2 * math.cos(2 * d)
-        a1 = (-G * (2 * M1 + m2) * math.sin(a) - m2 * G * math.sin(a - 2 * b) - 2 * math.sin(d) * m2 * (o2 * o2 * L2 + o1 * o1 * L1 * math.cos(d))) / (L1 * den)
-        a2 = (2 * math.sin(d) * (o1 * o1 * L1 * (M1 + m2) + G * (M1 + m2) * math.cos(a) + o2 * o2 * L2 * m2 * math.cos(d))) / (L2 * den)
+        a1 = (-G * (2 * M1 + m2) * math.sin(a) - m2 * G * math.sin(a - 2 * b) - 2 * math.sin(d) * m2 * (o2 * o2 * l2 + o1 * o1 * L1 * math.cos(d))) / (L1 * den)
+        a2 = (2 * math.sin(d) * (o1 * o1 * L1 * (M1 + m2) + G * (M1 + m2) * math.cos(a) + o2 * o2 * l2 * m2 * math.cos(d))) / (l2 * den)
         return [o1, o2, a1, a2]
-    s = [t1, t2, 0.0, 0.0]
+    s = [t1, t2, w1, w2]
     for k in range(nsteps):
         k1 = deriv(s); s2 = [s[i] + h / 2 * k1[i] for i in range(4)]; k2 = deriv(s2); s3 = [s[i] + h / 2 * k2[i] for i in range(4)]
         k3 = deriv(s3); s4 = [s[i] + h * k3[i] for i in range(4)]; k4 = deriv(s4)
@@ -150,59 +197,64 @@ def sha(p):
         for c in iter(lambda: f.read(1 << 22), b""): h.update(c)
     return h.hexdigest()
 
-def run(out, n=720, ln_m0=-2.3, dln_m=0.0125, frames=369, bench_cpu=False, model="double_pendulum_film"):
+def run(out, n=720, curve="mass", frames=240, bench_cpu=False, model="double_pendulum_film"):
     t0 = time.time(); os.makedirs(out, exist_ok=True)
     jax, flipmap = make_jax(); import jax.numpy as jnp
-    log("devices", jax.devices(), "grid", n, "x", n, "frames", frames)
+    C = CURVES[curve]; pts = curve_points(curve, frames)
+    log("devices", jax.devices(), "curve", curve, "grid", n, "x", n, "frames", frames)
     th = grid(n); T1, T2 = np.meshgrid(th, th)                 # T1[a, b] = th[b] (column), T2[a, b] = th[a] (row)
     t1d, t2d = jnp.asarray(T1.ravel()), jnp.asarray(T2.ravel())
-    lnm = [round(ln_m0 + f * dln_m, 10) for f in range(frames)]
     ck, bench = {}, {}
-    # compile once, then time one frame per device
-    tg = time.time(); flipmap(t1d, t2d, 1.0, H, K_MAX).block_until_ready(); bench["gpu_first_frame_s_incl_compile"] = time.time() - tg
+    args = lambda q: (q["m2"], q["l2"], q["w1"], q["w2"])
+    tg = time.time(); flipmap(t1d, t2d, *args(pts[0]), H, K_MAX).block_until_ready(); bench["gpu_first_frame_s_incl_compile"] = time.time() - tg
     if bench_cpu:
         try:
             cpu = jax.devices("cpu")[0]; nb = 64; tb = grid(nb); A, B = np.meshgrid(tb, tb)
             with jax.default_device(cpu):
-                a, b = jnp.asarray(A.ravel()), jnp.asarray(B.ravel()); flipmap(a, b, 1.0, H, K_MAX).block_until_ready()
-                tc = time.time(); flipmap(a, b, 1.0, H, K_MAX).block_until_ready(); bench["cpu_s_per_start_step"] = (time.time() - tc) / (nb * nb * K_MAX)
-            a, b = jnp.asarray(A.ravel()), jnp.asarray(B.ravel()); flipmap(a, b, 1.0, H, K_MAX).block_until_ready()
-            tc = time.time(); flipmap(a, b, 1.0, H, K_MAX).block_until_ready(); bench["gpu_s_per_start_step_64x64"] = (time.time() - tc) / (nb * nb * K_MAX)
+                a, b = jnp.asarray(A.ravel()), jnp.asarray(B.ravel()); flipmap(a, b, 1.0, 1.0, 0.0, 0.0, H, K_MAX).block_until_ready()
+                tc = time.time(); flipmap(a, b, 1.0, 1.0, 0.0, 0.0, H, K_MAX).block_until_ready(); bench["cpu_s_per_start_step"] = (time.time() - tc) / (nb * nb * K_MAX)
+            a, b = jnp.asarray(A.ravel()), jnp.asarray(B.ravel()); flipmap(a, b, 1.0, 1.0, 0.0, 0.0, H, K_MAX).block_until_ready()
+            tc = time.time(); flipmap(a, b, 1.0, 1.0, 0.0, 0.0, H, K_MAX).block_until_ready(); bench["gpu_s_per_start_step_64x64"] = (time.time() - tc) / (nb * nb * K_MAX)
         except Exception as e:
             bench["cpu_error"] = repr(e)
     maps, frame_info, gpu_s = {}, [], 0.0
-    for f, lm in enumerate(lnm):
-        m2 = M1 * math.exp(lm); tg = time.time()
-        M = np.asarray(flipmap(t1d, t2d, m2, H, K_MAX)).reshape(n, n).astype(np.uint16); dt = time.time() - tg; gpu_s += dt
+    for q in pts:
+        f, m2, l2, w1, w2 = q["f"], q["m2"], q["l2"], q["w1"], q["w2"]; tg = time.time()
+        M = np.asarray(flipmap(t1d, t2d, m2, l2, w1, w2, H, K_MAX)).reshape(n, n).astype(np.uint16); dt = time.time() - tg; gpu_s += dt
         name = "map_%03d.bin" % f; M.astype("<u2").tofile(os.path.join(out, name)); maps[f] = M
-        E = energy0(T1, T2, m2); thr = min((M1 + m2) * G * L1 - m2 * G * L2, -(M1 + m2) * G * L1 + m2 * G * L2)
-        S = (M1 + m2) * G * L1 + m2 * G * L2
+        E = energy0(T1, T2, m2, l2, w1, w2); thr = min((M1 + m2) * G * L1 - m2 * G * l2, -(M1 + m2) * G * L1 + m2 * G * l2)
+        S = (M1 + m2) * G * L1 + m2 * G * l2
         bad = int(((E < thr - 1e-6 * S) & (M < FAILED)).sum())
-        frame_info.append(dict(f=f, file=name, ln_m=lm, m2=m2, flipped=int((M < FAILED).sum()), never=int((M == NEVER).sum()),
+        frame_info.append(dict(q, file=name, flipped=int((M < FAILED).sum()), never=int((M == NEVER).sum()),
                                failed=int((M == FAILED).sum()), energy_forbidden_flips=bad, gpu_s=round(dt, 3)))
         if f % 10 == 0 or f == frames - 1:
             left = (time.time() - t0) / (f + 1) * (frames - f - 1)
-            log(f"frame {f + 1}/{frames}  m2/m1={m2:.4f}  {dt:.2f} s  so far {time.time() - t0:.0f} s  expected rest {left:.0f} s")
+            log(f"frame {f + 1}/{frames}  m2={m2:.4f} l2={l2:.4f} w=({w1:.2f},{w2:.2f})  {dt:.2f} s  so far {time.time() - t0:.0f} s  expected rest {left:.0f} s")
     bench["gpu_s_per_frame_mean"] = gpu_s / frames; bench["gpu_s_per_start_step"] = gpu_s / (frames * n * n * K_MAX)
     # ---- checks ----
     ck["energy_forbidden_flips"] = dict(value=sum(x["energy_forbidden_flips"] for x in frame_info), must_be=0,
                                         what="starts with E below both flip thresholds V_1*, V_2* that flipped anyway")
-    sym = []
-    for f in (0, frames // 2, frames - 1):
-        M = maps[f][1:, 1:]; sym.append(float((M == M[::-1, ::-1]).mean()))
-    ck["mirror_symmetry"] = dict(value=min(sym), at_least=0.98, frames=[0, frames // 2, frames - 1], per_frame=sym,
-                                 what="share of pixels equal to the pixel at (-theta_1, -theta_2): the equations are odd under theta -> -theta")
+    # the equations are odd under (theta, omega) -> (-theta, -omega): a frame from rest mirrors itself; on the push ring frame f mirrors
+    # the frame half a turn on
+    pairs = [(f, f) for f in (0, frames // 2, frames - 1) if pts[f]["w1"] == 0 and pts[f]["w2"] == 0]
+    if curve == "push" and frames % 2 == 0: pairs = [(f, f + frames // 2) for f in (0, frames // 8, frames // 4)]
+    sym = [float((maps[f][1:, 1:] == maps[g][1:, 1:][::-1, ::-1]).mean()) for f, g in pairs]
+    ck["mirror_symmetry"] = dict(value=min(sym) if sym else None, at_least=0.98, frame_pairs=pairs, per_pair=sym,
+                                 what="share of pixels equal to the mirrored pixel (-theta_1, -theta_2) of the frame with (-omega_1, -omega_2)")
+    if curve == "octave":
+        dev = max(abs(mode_ratio(q["m2"], q["l2"]) - 2) for q in pts)
+        ck["octave_ratio"] = dict(value=dev, at_most=1e-9, what="largest |omega_fast / omega_slow - 2| over the frames, from the eigenvalues of M^-1 K")
     rng = np.random.default_rng(0); same, diffs = 0, []
     picks = [(f, int(rng.integers(n)), int(rng.integers(n))) for f in (0, frames // 2, frames - 1) for _ in range(16)]
     tp = time.time()
     for f, a, b in picks:
-        k = page_rk4_flip(th[b], th[a], M1 * math.exp(lnm[f])); s = int(maps[f][a, b]); same += (k == s)
+        k = page_rk4_flip(th[b], th[a], *args(pts[f])); s = int(maps[f][a, b]); same += (k == s)
         if k < FAILED and s < FAILED: diffs.append(abs(k - s))
     ck["gpu_vs_page_rk4"] = dict(value=same / len(picks), at_least=0.75, starts=len(picks), median_step_diff=float(np.median(diffs)) if diffs else None,
                                  what="share of 48 random pixels whose stored flip step equals a plain Python copy of the page's RK4", seconds=round(time.time() - tp, 1))
-    fh = next(f for f, lm in enumerate(lnm) if abs(lm) < 1e-9) if any(abs(lm) < 1e-9 for lm in lnm) else frames // 2
+    fh = frames // 2
     sub = slice(0, n, 8); a2, b2 = jnp.asarray(T1[sub, sub].ravel()), jnp.asarray(T2[sub, sub].ravel())
-    Mh = np.asarray(flipmap(a2, b2, M1 * math.exp(lnm[fh]), H / 2, 2 * K_MAX)).reshape(T1[sub, sub].shape)
+    Mh = np.asarray(flipmap(a2, b2, *args(pts[fh]), H / 2, 2 * K_MAX)).reshape(T1[sub, sub].shape)
     Mf = maps[fh][sub, sub].astype(np.int64); fl1, fl2 = Mf < FAILED, Mh < FAILED
     tdiff = np.abs(Mf * H - Mh * (H / 2))[fl1 & fl2]
     ck["step_halving"] = dict(value=float((fl1 == fl2).mean()), at_least=0.8, frame=fh, pixels=int(fl1.size),
@@ -225,15 +277,17 @@ def run(out, n=720, ln_m0=-2.3, dln_m=0.0125, frames=369, bench_cpu=False, model
                              what="the H.264 gap: decoded film against the colour of the stored value, 0..255 per channel")
     try:
         from PIL import Image
-        Image.fromarray(image(maps[fh])).save(os.path.join(out, "poster.png"))
+        Image.fromarray(image(maps[0])).save(os.path.join(out, "poster.png"))
     except Exception as e:
         ck["poster_error"] = repr(e)
-    passed = (ck["energy_forbidden_flips"]["value"] == 0 and ck["mirror_symmetry"]["value"] >= 0.98 and ck["gpu_vs_page_rk4"]["value"] >= 0.75
+    passed = (ck["energy_forbidden_flips"]["value"] == 0 and (ck["mirror_symmetry"]["value"] is None or ck["mirror_symmetry"]["value"] >= 0.98)
+              and ck.get("octave_ratio", dict(value=0))["value"] <= 1e-9 and ck["gpu_vs_page_rk4"]["value"] >= 0.75
               and ck["step_halving"]["value"] >= 0.8 and ck["film_vs_map"]["frames_decoded"] == frames)
     files = {x: dict(bytes=os.path.getsize(os.path.join(out, x)), sha256=sha(os.path.join(out, x))) for x in ("film.mp4", "poster.png") if os.path.exists(os.path.join(out, x))}
     hdr = dict(model=model, format=1, method="RK4, h = 1/600 s, float64, the page's own formulas and order; JAX on the GPU; flip looked for after every step",
-               params=dict(g=G, m1=M1, l1=L1, l2=L2, h=H, T_max=T_MAX, k_max=K_MAX, never=NEVER, failed=FAILED, n=n,
-                           theta_deg="-180 + 360 * index / n", ln_m0=ln_m0, dln_m=dln_m, frames=frames, fps=FPS),
+               params=dict(g=G, m1=M1, l1=L1, h=H, T_max=T_MAX, k_max=K_MAX, never=NEVER, failed=FAILED, n=n,
+                           theta_deg="-180 + 360 * index / n", frames=frames, fps=FPS),
+               curve=dict(key=curve, name=C["name"], closed=C["closed"], axes=C["axes"], formula=C["formula"]),
                layout=dict(map="map_<fff>.bin: n x n little-endian uint16, row = theta_2 index, column = theta_1 index",
                            film="film.mp4: frame f at time (f + 0.5) / fps; image row 0 = the largest theta_2, column 0 = theta_1 = -180 degrees"),
                colour=dict(scale="q = round(255 * clip(ln(k h / t_lo) / ln(T_max / t_lo), 0, 1))", t_lo=T_LO, stops=STOPS, lut=LUT.tolist(),
@@ -243,7 +297,7 @@ def run(out, n=720, ln_m0=-2.3, dln_m=0.0125, frames=369, bench_cpu=False, model
     json.dump(hdr, open(os.path.join(out, "film.json"), "w"), indent=0)
     log("done", frames, "frames", f"{gpu_s:.0f} s on the GPU", f"{time.time() - t0:.0f} s in all", "checks passed" if passed else "CHECKS FAILED")
     log(json.dumps(dict(checks=ck, bench=bench)))
-    return dict(model=model, checks_passed=bool(passed), grid_part=dict(frames=[0, frames - 1]))
+    return dict(model=model, checks_passed=bool(passed), grid_part=dict(curve=curve, frames=[0, frames - 1]))
 
 if __name__ == "__main__":
-    print(run(sys.argv[1], n=int(sys.argv[2]) if len(sys.argv) > 2 else 72, frames=9, dln_m=0.575))
+    print(run(sys.argv[1], n=int(sys.argv[2]) if len(sys.argv) > 2 else 72, curve=sys.argv[3] if len(sys.argv) > 3 else "mass", frames=8))
