@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7218 files, 988.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7232 files, 998.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -16,7 +16,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 42 |
-| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4807 |
+| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4821 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
@@ -4922,7 +4922,21 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/data/sims/double_pendulum_gpu/2026-11-23/index-double_pendulum_gpu.json`](../public/data/sims/double_pendulum_gpu/2026-11-23/index-double_pendulum_gpu.json) | 3.7 kB | Simulation data computed on Kaggle on 2026-11-23: provenance of the double_pendulum_gpu run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_smoke/2026-11-23/double_pendulum.json`](../public/data/sims/double_pendulum_smoke/2026-11-23/double_pendulum.json) | 2.3 kB | Simulation data computed on Kaggle on 2026-11-23: parameters and checks of the double_pendulum_smoke model run. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json`](../public/data/sims/double_pendulum_smoke/2026-11-23/index-double_pendulum_smoke.json) | 678 B | Simulation data computed on Kaggle on 2026-11-23: provenance of the double_pendulum_smoke run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
-| [`public/data/sims/generations.json`](../public/data/sims/generations.json) | 48.3 kB | Simulation data computed on Kaggle: one entry per simulation and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/sims/pipeline.py. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/generations.json`](../public/data/sims/generations.json) | 50.6 kB | Simulation data computed on Kaggle: one entry per simulation and date, with the Kaggle notebook, version, code commit and each file's SHA-256; written by tools/sims/pipeline.py. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/index-spinners.json`](../public/data/sims/spinners/2026-11-26/index-spinners.json) | 2.3 kB | Simulation data computed on Kaggle on 2026-11-26: provenance of the spinners run (notebook, commit, machine, files with SHA-256). | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K0-k0.bin`](../public/data/sims/spinners/2026-11-26/spin-K0-k0.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K0-k1.bin`](../public/data/sims/spinners/2026-11-26/spin-K0-k1.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K0-k3.bin`](../public/data/sims/spinners/2026-11-26/spin-K0-k3.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K10-k0.bin`](../public/data/sims/spinners/2026-11-26/spin-K10-k0.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K10-k1.bin`](../public/data/sims/spinners/2026-11-26/spin-K10-k1.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K10-k3.bin`](../public/data/sims/spinners/2026-11-26/spin-K10-k3.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K20-k0.bin`](../public/data/sims/spinners/2026-11-26/spin-K20-k0.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K20-k1.bin`](../public/data/sims/spinners/2026-11-26/spin-K20-k1.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K20-k3.bin`](../public/data/sims/spinners/2026-11-26/spin-K20-k3.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K4-k0.bin`](../public/data/sims/spinners/2026-11-26/spin-K4-k0.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K4-k1.bin`](../public/data/sims/spinners/2026-11-26/spin-K4-k1.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spin-K4-k3.bin`](../public/data/sims/spinners/2026-11-26/spin-K4-k3.bin) | 797.1 kB | Simulation data computed on Kaggle on 2026-11-26: the frames of spinners, played by its page. | [kaggle-sims.md](kaggle-sims.md) |
+| [`public/data/sims/spinners/2026-11-26/spinners.json`](../public/data/sims/spinners/2026-11-26/spinners.json) | 19.5 kB | Simulation data computed on Kaggle on 2026-11-26: parameters and checks of the spinners model run. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/status/spinners.json`](../public/data/sims/status/spinners.json) | 757 B | Where the engine’s newest run of spinners stands (queued, running, saved, live_ok or failed), with its times, Kaggle version and data commit; written during the run by tools/sims/pipeline.py, land.py and verify_live.py. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/status/windpend.json`](../public/data/sims/status/windpend.json) | 816 B | Where the engine’s newest run of windpend stands (queued, running, saved, live_ok or failed), with its times, Kaggle version and data commit; written during the run by tools/sims/pipeline.py, land.py and verify_live.py. | [kaggle-sims.md](kaggle-sims.md) |
 | [`public/data/sims/wave_interference2/2026-11-23/damp_g000_hi.bin`](../public/data/sims/wave_interference2/2026-11-23/damp_g000_hi.bin) | 125.2 kB | Fig. 1 data (generation 2) computed on Kaggle on 2026-11-23: the height of a ring at the damping 0.000, top half. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |

@@ -1394,6 +1394,73 @@
    "dataset": "numakoudsie/phyein-usul-windpend",
    "dataset_path": "phyein-usul-simulations/v13/",
    "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 13, 12188 bytes, filed as one version of this dataset"
+  },
+  {
+   "sim": "spinners",
+   "date": "2026-11-26",
+   "notebook": "numakoudsie/phyein-usul-simulations",
+   "version": 17,
+   "commit": "da6e4b93dfd4cdf0238199cd124b942039907147",
+   "index": "spinners/2026-11-26/index-spinners.json",
+   "files": {
+    "spin-K0-k0.bin": {
+     "bytes": 797136,
+     "sha256": "92b9759830e8c380c9ed8e7252f0273b2ca4ba9171847deb27e1f0492013c793"
+    },
+    "spin-K0-k1.bin": {
+     "bytes": 797138,
+     "sha256": "ec766bc5313de2061fccc537e8c58122a1a9d160c59c824273adfd6abb04362f"
+    },
+    "spin-K0-k3.bin": {
+     "bytes": 797140,
+     "sha256": "bbfbe6516d564442238a3c80a2e37a5c3598dfa9c1a22491e4bc5539b6d5af2b"
+    },
+    "spin-K10-k0.bin": {
+     "bytes": 797138,
+     "sha256": "43d4a2868c75c0edc8b8a6acce2c52a1db219f5e5403e34a13bd70ff92a8416f"
+    },
+    "spin-K10-k1.bin": {
+     "bytes": 797139,
+     "sha256": "299b03742976566550fc392db5204f8a02a92683b8bb8e0e99be963f5b6e8a31"
+    },
+    "spin-K10-k3.bin": {
+     "bytes": 797139,
+     "sha256": "5f317b0089975e520c730db11d06c70786a8472a355f8ae2f70dbded5fa84dd5"
+    },
+    "spin-K20-k0.bin": {
+     "bytes": 797138,
+     "sha256": "954cdea0d52cf2096bab73459c2196d96699d590c8edace5240101ee2a903969"
+    },
+    "spin-K20-k1.bin": {
+     "bytes": 797139,
+     "sha256": "c937b66f8089639625247b6e2cce72152f211761f20c0251c32d3c48f819c1c1"
+    },
+    "spin-K20-k3.bin": {
+     "bytes": 797139,
+     "sha256": "ee14d9420a44249c1622b477eb7559ce87fe5fb3bfeb596edf88f066eb1d2883"
+    },
+    "spin-K4-k0.bin": {
+     "bytes": 797137,
+     "sha256": "ed6b69d7885f8c06333845ca02845047930ce4f9eb9649a3915e0aab5639b44f"
+    },
+    "spin-K4-k1.bin": {
+     "bytes": 797137,
+     "sha256": "ffcd37de048b2d80c065b43d9e0bcc9aea14d29bd38c7538945c54e788a95f4c"
+    },
+    "spin-K4-k3.bin": {
+     "bytes": 797139,
+     "sha256": "e2346e10ce5de1ffc6040f0b91a9397bc70bdf632bf7932924879c7976300559"
+    },
+    "spinners.json": {
+     "bytes": 19488,
+     "sha256": "ad7847a11f1b06f2c0f7d2899e2d01755d70c5c19634d750e47337673970e351"
+    }
+   },
+   "wall_s": 70.4,
+   "collected": "2026-11-26T03:34:32+00:00",
+   "dataset": "numakoudsie/phyein-usul-spinners",
+   "dataset_path": "phyein-usul-simulations/v17/",
+   "dataset_note": "the whole Kaggle output of numakoudsie/phyein-usul-simulations version 17, 9585147 bytes, filed as one version of this dataset"
   }
  ]
 }
