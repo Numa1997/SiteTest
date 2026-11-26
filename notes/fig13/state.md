@@ -21,6 +21,11 @@ the flower hunt, the catch (a motor at the top pin brings a chaotic double pendu
   `node tools/fig13/catch_targets.cjs 60 300`. Numbers in `docs/simulations/fig13-momentum-spirographs.md`.
 - Display work on the stations and films was done by a separate session (20 November 2026), merged to main.
 
+## Studied, not on the page (26 November 2026)
+- The eye in spin and fold coordinates: `tools/fig13/spin_fold.py SHEET.npy EYE.npy OUTDIR`. X = (p1+p2)/sqrt(2 Is), Y = sqrt(mu/2)(w2-w1),
+  K = X^2 + Y^2 exactly; the two streaks sit at +-acos(sqrt(If/Is)) = +-60 degrees from the spin axis (folded stick has a quarter of the
+  straight stick's moment of inertia). Pictures eye_spin_fold.png and eye_unrolled.png were shown in chat only.
+
 ## Left
 - The arrays behind the fine maps and the stability colouring are not in the repository (Kaggle notebook output, scratch files).
 - The labels under the catch picture are small on a phone (check whether the display session fixed them).
