@@ -1,5 +1,6 @@
 """Fig. 13: the eye in its natural frame, spin and fold.
-Usage: spin_fold.py SHEET.npy EYE.npy OUTDIR
+Usage: spin_fold.py SHEET.npy EYE.npy OUTDIR [web]
+With "web": no lettering (the page sets its own), and three WebP files eye-struck, eye-spin-fold, eye-unrolled.
 SHEET.npy, EYE.npy: fine chaos maps from kaggle_fractal.py (mean capped twin distance d per strike); the sheet covers
 p1 in +-35.56, p2 in +-20 kg m^2/s (watch 6.67 s), the eye p1 in +-14.4, p2 in +-8.1 (watch 26.67 s).
 
@@ -39,6 +40,24 @@ def sample(arr, hx, hy, p1, p2):
 sheet, eye = bright(np.load(sys.argv[1])), bright(np.load(sys.argv[2])); out = sys.argv[3]
 font = lambda s: ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', s)
 INK = (255, 246, 234)
+WEB = len(sys.argv) > 4 and sys.argv[4] == 'web'
+def label(d, *a, **k):
+    if not WEB: d.text(*a, **k)
+def save(im, name, web):
+    if WEB: im.save(out + '/' + web + '.webp', 'WEBP', quality=86, method=6)
+    else: im.save(out + '/' + name + '.png')
+CY, GR = (140, 230, 255), (176, 166, 166)
+
+# 0. the eye as struck (p1 across, p2 up), with the same curves: energy ellipses, the two streaks, the spin and the fold axis
+W0, H0 = 2560, 1440; HX, HY = 14.4, 8.1
+X, Y = np.meshgrid((np.arange(W0) + .5) / W0 * 2 * HX - HX, HY - (np.arange(H0) + .5) / H0 * 2 * HY)
+im = Image.fromarray(paint(sample(eye, HX, HY, X.ravel(), Y.ravel()).reshape(H0, W0)).astype(np.uint8)); d = ImageDraw.Draw(im)
+pp = lambda q: ((q[0] + HX) / (2 * HX) * W0, (HY - q[1]) / (2 * HY) * H0); th = np.linspace(0, 2 * np.pi, 721)
+for E in (9.8, 29.4, 39.2):
+    d.line([pp(Ti @ (np.sqrt(E) * np.array([np.cos(t), np.sin(t)]))) for t in th], fill=(255, 255, 255), width=3)
+for ang, colr in ((0, GR), (90, GR), (alpha, CY), (-alpha, CY)):
+    q = Ti @ (60 * np.array([np.cos(np.radians(ang)), np.sin(np.radians(ang))])); d.line([pp(-q), pp(q)], fill=colr, width=3)
+save(im, 'eye_struck', 'eye-struck')
 
 # 1. the eye in the spin-fold plane
 N, R = 2000, 8.8                                               # pixels, half-width in sqrt(J): the disc K <= 77 J lies inside the eye map
@@ -47,13 +66,13 @@ P = Ti @ np.stack([X.ravel(), Y.ravel()]); v = sample(eye, 14.4, 8.1, P[0], P[1]
 im = Image.fromarray(paint(np.nan_to_num(v, nan=0)).astype(np.uint8)); d = ImageDraw.Draw(im); px = lambda x, y: ((x + R) / (2 * R) * N, (R - y) / (2 * R) * N)
 for E in (9.8, 29.4, 39.2):
     r = np.sqrt(E); d.ellipse([*px(-r, r), *px(r, -r)], outline=(255, 255, 255), width=3)
-    d.text(px(r * np.cos(np.radians(15)) + .1, r * np.sin(np.radians(15))), '%g J' % E, font=font(34), fill=INK)
+    label(d, px(r * np.cos(np.radians(15)) + .1, r * np.sin(np.radians(15))), '%g J' % E, font=font(34), fill=INK)
 for sgn in (1, -1):
     c, s = np.cos(np.radians(alpha)), sgn * np.sin(np.radians(alpha)); d.line([px(-12 * c, -12 * s), px(12 * c, 12 * s)], fill=(140, 230, 255), width=3)
-d.line([px(-R, 0), px(R, 0)], fill=(160, 150, 150), width=2); d.line([px(0, -R), px(0, R)], fill=(160, 150, 150), width=2)
-d.text((40, N / 2 + 14), 'SPIN: both rods turn together', font=font(40), fill=INK); d.text((N / 2 + 20, 30), 'FOLD: the rods turn against each other', font=font(40), fill=INK)
-d.text(px(4.6, 8.4), '60°', font=font(40), fill=(140, 230, 255))
-im.save(out + '/eye_spin_fold.png')
+d.line([px(-R, 0), px(R, 0)], fill=GR, width=3); d.line([px(0, -R), px(0, R)], fill=GR, width=3)
+label(d, (40, N / 2 + 14), 'SPIN: both rods turn together', font=font(40), fill=INK); label(d, (N / 2 + 20, 30), 'FOLD: the rods turn against each other', font=font(40), fill=INK)
+label(d, px(4.6, 8.4), '60°', font=font(40), fill=(140, 230, 255))
+save(im, 'eye_spin_fold', 'eye-spin-fold')
 
 # 2. unrolled: direction of the strike against its energy
 W2, H2 = 2400, 1350; K0, K1 = 1.0, 3000.0
@@ -62,12 +81,12 @@ r = np.sqrt(np.exp(lk)); P = Ti @ np.stack([(r * np.cos(np.radians(ph))).ravel()
 v = sample(sheet, 20 * 16 / 9, 20.0, P[0], P[1]).reshape(H2, W2); rgb = paint(np.nan_to_num(v, nan=0)); rgb[np.isnan(v)] = (58, 52, 54)
 im = Image.fromarray(rgb.astype(np.uint8)); d = ImageDraw.Draw(im); yk = lambda E: (np.log(K1) - np.log(E)) / np.log(K1 / K0) * H2; xa = lambda a: (a + 90) / 180 * W2
 for E in (9.8, 29.4, 39.2, 196):
-    d.line([(0, yk(E)), (W2, yk(E))], fill=(255, 255, 255), width=2); d.text((14, yk(E) - 44), '%g J' % E, font=font(36), fill=INK)
+    d.line([(0, yk(E)), (W2, yk(E))], fill=(255, 255, 255), width=2); label(d, (14, yk(E) - 44), '%g J' % E, font=font(36), fill=INK)
 for a in (-alpha, alpha):
-    d.line([(xa(a), 0), (xa(a), H2)], fill=(140, 230, 255), width=2); d.text((xa(a) + 10, 12), '%+.0f°' % a, font=font(36), fill=(140, 230, 255))
-d.line([(xa(0), 0), (xa(0), H2)], fill=(160, 150, 150), width=1); d.text((xa(0) + 10, 12), '0°: pure spin', font=font(36), fill=INK); d.text((14, 12), '-90°: pure fold', font=font(36), fill=INK)
-d.text((14, H2 - 52), 'up: energy of the strike (each step x10)     across: how the strike is split between spin and fold', font=font(34), fill=INK)
-im.save(out + '/eye_unrolled.png')
+    d.line([(xa(a), 0), (xa(a), H2)], fill=(140, 230, 255), width=2); label(d, (xa(a) + 10, 12), '%+.0f°' % a, font=font(36), fill=(140, 230, 255))
+d.line([(xa(0), 0), (xa(0), H2)], fill=(160, 150, 150), width=1); label(d, (xa(0) + 10, 12), '0°: pure spin', font=font(36), fill=INK); label(d, (14, 12), '-90°: pure fold', font=font(36), fill=INK)
+label(d, (14, H2 - 52), 'up: energy of the strike (each step x10)     across: how the strike is split between spin and fold', font=font(34), fill=INK)
+save(im, 'eye_unrolled', 'eye-unrolled')
 
 # is the map mirror-symmetric about the spin axis (fold reversed)?  Compared on the unrolled picture, hard strikes only.
 hi = (np.exp(lk) > 196); a, b = v, v[:, ::-1]; ok = hi & np.isfinite(a) & np.isfinite(b)

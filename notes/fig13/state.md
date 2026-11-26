@@ -12,6 +12,9 @@ the flower hunt, the catch (a motor at the top pin brings a chaotic double pendu
   energy from the map image; tap the graph to pin an energy (its ellipse is drawn on the eye).
 - `#catalogue` "The catalogue of closed drawings": `public/scripts/fig13-catalogue.js` and `fig13-catalogue-data.js` (228 orbits; built by
   `tools/fig13/closed_map.py` → `closed_pin.py` → `catalogue_build.py`, stability by `closed_stability.py`).
+- `#straight` "The eye, straightened": `public/scripts/fig13-straight.js`, pictures eye-struck, eye-spin-fold, eye-unrolled written by
+  `tools/fig13/spin_fold.py SHEET.npy EYE.npy public/images/fig13 web`. Spin X = (p1+p2)/sqrt(2 Is), fold Y = sqrt(mu/2)(w2-w1), K = X^2+Y^2;
+  streaks at +-60 degrees (If/Is = 1/4).
 - `#families` "Where the repeating motions live" and `#zoom-title` "Into the border between order and chaos":
   `public/scripts/fig13-families.js` with ten pictures in `public/images/fig13/` (families-petals, families-stability, chaos-sheet-fine,
   chaos-eye-fine, chaos-zoom0..5). Four views with legend and plain explanation each, magnify, tap to pin, run the nearest catalogue orbit;
@@ -20,11 +23,6 @@ the flower hunt, the catch (a motor at the top pin brings a chaotic double pendu
 - The catch: `tools/fig13/gift/catch.html` and `pendulum.js` (published by `gift/publish_films.py`); 14 targets; measured with
   `node tools/fig13/catch_targets.cjs 60 300`. Numbers in `docs/simulations/fig13-momentum-spirographs.md`.
 - Display work on the stations and films was done by a separate session (20 November 2026), merged to main.
-
-## Studied, not on the page (26 November 2026)
-- The eye in spin and fold coordinates: `tools/fig13/spin_fold.py SHEET.npy EYE.npy OUTDIR`. X = (p1+p2)/sqrt(2 Is), Y = sqrt(mu/2)(w2-w1),
-  K = X^2 + Y^2 exactly; the two streaks sit at +-acos(sqrt(If/Is)) = +-60 degrees from the spin axis (folded stick has a quarter of the
-  straight stick's moment of inertia). Pictures eye_spin_fold.png and eye_unrolled.png were shown in chat only.
 
 ## Left
 - The arrays behind the fine maps and the stability colouring are not in the repository (Kaggle notebook output, scratch files).

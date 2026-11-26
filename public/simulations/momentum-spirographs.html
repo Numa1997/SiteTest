@@ -255,6 +255,9 @@
         .fam__say b { color: #fff6ea; }
         .fam__cap { padding: 0 14px 14px; font-size: 14px; line-height: 1.55; color: rgba(245,241,234,.62); }
         .fam__cap a, .fam__cap code { color: rgba(245,241,234,.85); }
+        .fam__in.is-square { max-width: min(100%, 86vh); margin: 0 auto; }
+        .fam__labels span { position: absolute; padding: 1px 5px; border-radius: 3px; background: rgba(20,13,16,.72); color: #fff6ea; font: 500 12px/1.3 var(--mono); white-space: nowrap; pointer-events: none; }
+        @media (max-width: 640px) { .fam__labels span { font-size: 10px; padding: 0 3px; white-space: normal; max-width: 92%; } }
         .fam__zoom { position: relative; }
         .fam__zoom img { display: block; width: 100%; aspect-ratio: 16 / 9; }
         .fam__frame { position: absolute; min-width: 44px; min-height: 26px; padding: 0; border: 2px solid #fff; border-radius: 3px; background: rgba(255,255,255,.08); box-shadow: 0 0 0 2px rgba(20,13,16,.7); cursor: zoom-in; transform-origin: center; }
@@ -328,7 +331,7 @@
                 <div class="f13__introside">
                     <p class="dedication">To Rim</p>
                     <ul class="onpage" aria-label="On this page">
-                        <li><a href="#eye">The eye</a></li><li><a href="#families">The repeating motions</a></li><li><a href="#zoom-title">The fractal</a></li><li><a href="#catalogue">The catalogue</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
+                        <li><a href="#eye">The eye</a></li><li><a href="#straight">The eye, straightened</a></li><li><a href="#families">The repeating motions</a></li><li><a href="#zoom-title">The fractal</a></li><li><a href="#catalogue">The catalogue</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
                     </ul>
                 </div>
             </div>
@@ -491,6 +494,23 @@
                 <div class="eye__gwrap"><canvas id="eye-graph" tabindex="0" role="img" aria-label="Graph: share of strikes that are chaotic against the energy of the strike, log scale from 0.5 to 5000 J; zero below 9.8 J, highest between 29.4 and 39.2 J, near zero above 196 J. Tap or use the arrow keys to pin an energy."></canvas></div>
                 <p class="eye__read"><span id="eye-read">Tap the graph to pin an energy: its share is read here and its ellipse is drawn on the eye.</span><button type="button" id="eye-unpin" hidden>Unpin</button></p>
                 <figcaption class="eye__cap">Both pictures read the same map as the sheet (921,600 strikes, each with its twin, 6.67 s each; <code>tools/fig13/chaos_map.py</code>); "chaotic" means map value v &gt; 0.5. Step 1 repeats the measurement live for two strikes and shows its value next to the map's: they differ only by the rounding of the map image. The theory is in sections <a href="#n-eye">5</a> and <a href="#n-x">6</a> of the lecture note.</figcaption>
+            </figure>
+        </section>
+
+        <section class="fam" id="straight" aria-labelledby="st-title">
+            <h2 id="st-title">The eye, straightened</h2>
+            <p>The eye leans, as if someone had taken the sheet by two opposite corners and pulled. Nobody pulled: the lean comes from the axes we chose to draw on. Choose the axes the pendulum itself would choose and the eye stands upright, its ellipses become circles, and its two lashes turn out to sit at exactly 60°. Three pictures of one and the same map.</p>
+            <figure class="fam__fig">
+                <div class="fam__bar">
+                    <div id="st-views" role="group" aria-label="Which picture">
+                        <button type="button" data-v="struck" aria-pressed="true">As struck</button><button type="button" data-v="sf" aria-pressed="false">Spin and fold</button><button type="button" data-v="un" aria-pressed="false">Unrolled</button>
+                    </div>
+                </div>
+                <div class="fam__in" id="st-in"><img id="st-img" alt="The chaos map of the eye in three drawings: on the page's axes, where it leans; on the axes spin and fold, where the energy curves are circles and the two streaks cross at 60 degrees; and unrolled, direction of the strike against its energy." decoding="async"><div class="fam__labels" id="st-labels" aria-hidden="true"></div><span class="fam__pin" id="st-pin" hidden></span></div>
+                <p class="fam__key"><span><i style="background:#fff"></i>equal energy: 9.8, 29.4, 39.2 J</span><span><i style="background:#8ce6ff"></i>the lashes: the elbow just reaches the folded position</span><span><i style="background:#b0a6a6"></i>the spin axis and the fold axis</span></p>
+                <p class="fam__read"><span id="st-read" aria-live="polite"></span><button type="button" id="st-unpin" hidden>Unpin</button></p>
+                <div class="fam__say" id="st-say"></div>
+                <figcaption class="fam__cap">All three pictures are the fine chaos maps of <a href="#families">the next section</a>, redrawn by <code>tools/fig13/spin_fold.py</code>; no pendulum is run again. Spin is X = (p₁ + p₂)/√(2I), with I = 8/3 kg·m² the moment of inertia of the straight stick about the pin; fold is Y = √(μ/2)·(ω₂ − ω₁), with μ = 7/96 kg·m² and ω the angular speeds of the rods just after the strike. The script checks K = X² + Y² on a thousand strikes and finds the lecture note's two lines (<a href="#n-x">section 6</a>) at ±60.000°. "As struck" and "Spin and fold" use the map watched for 26.67 s, "Unrolled" the whole sheet watched for 6.67 s.</figcaption>
             </figure>
         </section>
 
@@ -1144,6 +1164,7 @@
     <script src="../scripts/fig13-catalogue-data.js" defer></script>
     <script src="../scripts/fig13-catalogue.js" defer></script>
     <script src="../scripts/fig13-families.js" defer></script>
+    <script src="../scripts/fig13-straight.js" defer></script>
 <script>
 (() => {
 'use strict';
