@@ -44,7 +44,7 @@ CHECKS (in the header)
 - turning with the field: in each run, frame by frame, the share of rotors within σ of the field's centre whose rate over the
   last second is within LOCK_TOL of Ω (stored as the fourth field column; rotors whose own rate is already near Ω count too,
   which is why the share is not zero at K₀ = 0);
-- quantisation: angles are stored in steps of 2π/256 (0.7° at most).
+- quantisation: angles are stored as the nearest of 256 steps of 2π/256, so they are off by π/256 (0.7°) at most.
 
 OUTPUT, one file per run, spin-K<K0>-k<kappa>.bin: b"SPN1", uint32 header length, a JSON header, then
   uint8 angles (frames × N, θ mod 2π in steps of 2π/256, row-major over the lattice, row by row),
@@ -148,7 +148,7 @@ def run(out_dir="."):
                 rate = (TH[f] - TH[f - lag]) * P["FPS"] / lag
                 share[f] = float(np.mean(np.abs(rate[near] - Om) < P["LOCK_TOL"])) if near.any() else 0.0
             share[:lag] = share[lag]
-            q = (np.floor(np.mod(TH, 2 * np.pi) / (2 * np.pi) * 256).astype(np.int64) % 256).astype(np.uint8)
+            q = (np.rint(np.mod(TH, 2 * np.pi) / (2 * np.pi) * 256).astype(np.int64) % 256).astype(np.uint8)   # nearest step: error at most π/256
             fd = np.stack([sx, sy, phi, share], 1).astype("<f4")
             name = "spin-K%g-k%g.bin" % (K0, kap)
             hdr = dict(model="spinners", version=1, K0=K0, kappa=kap, frames=nf, fps=P["FPS"], N=N, N_c=P["N_c"], N_r=P["N_r"],

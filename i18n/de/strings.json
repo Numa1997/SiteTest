@@ -2901,5 +2901,18 @@
  "∞ (circle)": "∞ (Kreis)",
  "∫ F Ẋ dt, rerun with the same RK4 to sample n": "∫ F Ẋ dt, erneut mit demselben RK4 bis Abtastwert n gerechnet",
  "∫ c<sub>stop</sub> ℓ̇² dt, rerun with the same RK4 to sample n": "∫ c<sub>stop</sub> ℓ̇² dt, erneut mit demselben RK4 bis Abtastwert n gerechnet",
- "✕ Stored and recomputed ": "✕ Gespeichert und neu berechnet "
+ "✕ Stored and recomputed ": "✕ Gespeichert und neu berechnet ",
+ "Living Scenes": "Lebende Szenen",
+ "the scenes behind the pages · computed on Kaggle where they are physics": "die Szenen hinter den Seiten · auf Kaggle berechnet, wo sie Physik sind",
+ "The thirteen small moving pictures behind the pages of this site, one at a time, with their numbers to change. Where a scene is physics it is computed once on Kaggle and played back; the lecture note explains it section by section, starting with spinners pulled into step by a rotating field: Adler’s equation, the slip period and the locking radius.": "Die dreizehn kleinen bewegten Bilder hinter den Seiten dieser Website, eines nach dem anderen, mit ihren Zahlen zum Verändern. Wo eine Szene Physik ist, wird sie einmal auf Kaggle berechnet und abgespielt; die Vorlesungsnotiz erklärt sie Abschnitt für Abschnitt, zuerst die Kreisel, die ein drehendes Feld in seinen Takt zieht: Adlers Gleichung, die Schlupfperiode und der Fangradius.",
+ "overdamped rotors with their own rates, pulled by a rotating field whose strength falls off from a wandering centre and by their four neighbours (Adler’s equation on a Kuramoto lattice); the other scenes in their own sections as they are computed": "überdämpfte Rotoren mit eigener Drehrate, gezogen von einem drehenden Feld, dessen Stärke von einem wandernden Zentrum aus abfällt, und von ihren vier Nachbarn (Adlers Gleichung auf einem Kuramoto-Gitter); die übrigen Szenen in eigenen Abschnitten, sobald sie berechnet sind",
+ "SciPy DOP853 on Kaggle, tolerances 1e-9, 12 stored runs of 648 rotors over 80 s at 15 frames per second, checked against Adler’s slip period and the locking radius; the page plays the stored angles after checking their SHA-256": "SciPy DOP853 auf Kaggle, Toleranzen 1e-9, 12 gespeicherte Läufe mit 648 Rotoren über 80 s bei 15 Bildern pro Sekunde, geprüft an Adlers Schlupfperiode und am Fangradius; die Seite spielt die gespeicherten Winkel ab, nachdem sie deren SHA-256 geprüft hat",
+ "scene; the field’s pull and the neighbours’ pull (stored values); the drawing numbers of each scene; start again": "Szene; Zug des Feldes und Zug der Nachbarn (gespeicherte Werte); die Zeichenzahlen jeder Szene; neu beginnen",
+ "synchronization": "Synchronisation",
+ "phase locking": "Phasenkopplung",
+ "Adler equation": "Adler-Gleichung",
+ "Kuramoto model": "Kuramoto-Modell",
+ "overdamped motion": "überdämpfte Bewegung",
+ "slip period": "Schlupfperiode",
+ "entrainment": "Mitnahme"
 }

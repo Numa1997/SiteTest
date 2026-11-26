@@ -101,13 +101,14 @@
 
         <section class="scn" id="spin">
           <h2><span class="scn__n">S4</span> Spinners locking into step</h2>
-          <div class="scn__stage" data-bg="spin" data-bg-mask="none"></div>
+          <div class="scn__stage" data-bg="spin" data-bg-fit data-bg-mask="none"></div>
           <div class="scn__text">
             <p class="scn__where">Home page, the band before the simulations.</p>
             <p><b>What you see.</b> Little three-armed spinners turn at their own random speeds. A rotating field wanders over them, and those it
             passes turn in step with it, brighter while they are locked.</p>
             <p><b>What drives it.</b> Each spinner's angle obeys θ' = ω + K sin(φ − θ) + (pull of its neighbours), the Kuramoto and Adler picture of
-            phase locking: when the field's pull K is stronger than the spinner's own mistuning, the spinner is captured.</p>
+            phase locking: when the field's pull K is stronger than the spinner's own mistuning, the spinner is captured. The motion is computed
+            once on Kaggle for each pair of pulls offered below and played back; the derivation is in <a href="simulations/living-scenes.html#p-spin">Fig. 17</a>.</p>
           </div>
           <div class="scn__knobs" data-for="spin"></div>
         </section>
@@ -246,6 +247,11 @@
           var K = sc.K || [], html = '';
           K.forEach(function (k, i) {
             var id = host.getAttribute('data-bg') + '-' + k[0];
+            if (Array.isArray(k[5])) {   /* a list: the physics was computed on Kaggle for these values only (Fig. 17), so the knob offers just those */
+              html += '<div class="scn__k"><span>' + k[1] + '</span><span class="scn__opts" role="group" aria-label="' + k[1] + '">' + k[5].map(function (v) {
+                return '<button type="button" data-i="' + i + '" data-v="' + v + '" aria-pressed="' + (+sc[k[0]] === v) + '">' + v + '</button>'; }).join('') + '</span><output id="' + id + '">' + sc[k[0]] + (k[2] ? ' ' + k[2] : '') + '</output></div>';
+              return;
+            }
             html += '<label class="scn__k" for="' + id + '"><span>' + k[1] + (k[6] ? ' <i>(starts again)</i>' : '') + '</span>' +
               '<input type="range" id="' + id + '" min="' + k[3] + '" max="' + k[4] + '" step="' + k[5] + '" value="' + sc[k[0]] + '" data-i="' + i + '" />' +
               '<output>' + sc[k[0]] + (k[2] ? ' ' + k[2] : '') + '</output></label>';
@@ -254,6 +260,9 @@
           box.addEventListener('input', function (e) { var t = e.target, k = K[+t.getAttribute('data-i')]; if (!k) return; sc[k[0]] = +t.value;
             t.nextSibling.textContent = t.value + (k[2] ? ' ' + k[2] : ''); if (k[6]) host.__bgRestart(); });
           box.querySelector('.scn__again').addEventListener('click', function () { host.__bgRestart(); });
+          box.addEventListener('click', function (e) { var t = e.target.closest('button[data-v]'); if (!t) return; var k = K[+t.getAttribute('data-i')]; sc[k[0]] = +t.getAttribute('data-v');
+            Array.prototype.forEach.call(t.parentNode.children, function (q) { q.setAttribute('aria-pressed', String(q === t)); });
+            t.parentNode.nextSibling.textContent = sc[k[0]] + (k[2] ? ' ' + k[2] : ''); if (k[6]) host.__bgRestart(); });
         });
         /* the stored pendulum run: its parameters and checks, read from the header of the file the page plays */
         var pe = document.querySelector('[data-stored=windpend]'), ph = document.querySelector('[data-bg=wind]'), tries = 0;

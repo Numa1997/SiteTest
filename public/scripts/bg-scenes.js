@@ -792,19 +792,22 @@
   S.spin = {
     FIELD: 10, NEIGH: 1,
     K: [['FIELD', 'pull of the rotating field at its centre, K₀ (stored values)', 'rad/s', 0, 20, [0, 4, 10, 20]], ['NEIGH', 'pull between neighbours, κ (stored values)', 'rad/s', 0, 3, [0, 1, 3]]],
-    init: function () { this.t = 0; this.nc = Math.min(72, Math.floor(W / 28)); this.nr = Math.min(9, Math.max(1, Math.floor(H / 29.5))); this.load(); },
+    /* spacing: 28 px across, 29.5 down (a band shows the middle of the lattice); with data-bg-fit (Fig. 17) the whole lattice is shrunk to fit,
+       at 13 px across at least, so that the field never leaves the picture on a wide enough screen */
+    init: function () { this.t = 0; var f = host.hasAttribute('data-bg-fit') ? Math.max(13, Math.min(28, (W - 24) / 72, (H - 24) / 9 * 28 / 29.5)) : 28; this.sx = f; this.sy = f * 29.5 / 28; this.ar = 10 * f / 28;
+      this.nc = Math.min(72, Math.floor(W / this.sx)); this.nr = Math.min(9, Math.max(1, Math.floor(H / this.sy))); this.load(); },
     load: function () { var self = this, f = 'spin-K' + this.FIELD + '-k' + this.NEIGH + '.bin'; if (this.want === f) return; this.want = f;
       sceneData('spinners', f).then(function (d) { if (self.want === f) { self.D = d; self.A = new Uint8Array(d.raw, 0, d.hdr.frames * d.hdr.N); self.F = new Float32Array(d.raw.slice(d.hdr.frames * d.hdr.N)); } }, function (e) { self.err = String(e.message || e); }); },
     /* one moment τ (s) of the stored run: the rotors at alpha a */
     paint: function (tau, a) {
       var hd = this.D.hdr, N = hd.N, Nc = hd.N_c, fps = hd.fps, nf = hd.frames, u = tau * fps, f = Math.min(nf - 2, Math.floor(u)), e = u - f, A = this.A, Fd = this.F, TW = 2 * PI / 256,
-        c0 = Math.floor((Nc - this.nc) / 2), r0 = Math.floor((hd.N_r - this.nr) / 2), ox = (W - (this.nc - 1) * 28) / 2, oy = (H - (this.nr - 1) * 29.5) / 2, Om = Fd[f * 4 + 2 + 4] - Fd[f * 4 + 2], i, j, k;
-      var phi = Fd[f * 4 + 2] * (1 - e) + Fd[f * 4 + 6] * e, sx = Fd[f * 4] * (1 - e) + Fd[f * 4 + 4] * e, sy = Fd[f * 4 + 1] * (1 - e) + Fd[f * 4 + 5] * e, px = ox + (sx - c0) * 28, py = oy + (sy - r0) * 29.5;
-      x.globalAlpha = a; x.strokeStyle = col(.12); x.lineWidth = 1; x.beginPath(); x.arc(px, py, 4 * 28, 0, 7); x.stroke(); x.lineWidth = 8; x.lineCap = 'round'; ln(px - 40 * Math.cos(phi), py - 40 * Math.sin(phi), px + 40 * Math.cos(phi), py + 40 * Math.sin(phi)); x.lineCap = 'butt';
+        c0 = Math.floor((Nc - this.nc) / 2), r0 = Math.floor((hd.N_r - this.nr) / 2), SX = this.sx, SY = this.sy, AR = this.ar, ox = (W - (this.nc - 1) * SX) / 2, oy = (H - (this.nr - 1) * SY) / 2, Om = Fd[f * 4 + 2 + 4] - Fd[f * 4 + 2], i, j, k;
+      var phi = Fd[f * 4 + 2] * (1 - e) + Fd[f * 4 + 6] * e, sx = Fd[f * 4] * (1 - e) + Fd[f * 4 + 4] * e, sy = Fd[f * 4 + 1] * (1 - e) + Fd[f * 4 + 5] * e, px = ox + (sx - c0) * SX, py = oy + (sy - r0) * SY;
+      x.globalAlpha = a; x.strokeStyle = col(.12); x.lineWidth = 1; x.beginPath(); x.arc(px, py, 4 * SX, 0, 7); x.stroke(); x.lineWidth = 8 * SX / 28; x.lineCap = 'round'; ln(px - 40 * SX / 28 * Math.cos(phi), py - 40 * SX / 28 * Math.sin(phi), px + 40 * SX / 28 * Math.cos(phi), py + 40 * SX / 28 * Math.sin(phi)); x.lineCap = 'butt';
       for (j = 0; j < this.nr; j++) for (i = 0; i < this.nc; i++) {
         var n = (r0 + j) * Nc + c0 + i, a0 = A[f * N + n] * TW, a1 = A[(f + 1) * N + n] * TW, d = a1 - a0; d -= 2 * PI * Math.round(d / (2 * PI));
-        var th = a0 + d * e, lock = Math.abs(d - Om) < .6 / fps ? 1 : 0, al = .3 + .6 * lock, cx = ox + i * 28, cy = oy + j * 29.5;
-        x.strokeStyle = col(al); x.lineWidth = 1.3; x.beginPath(); for (k = 0; k < 3; k++) { var an = th + k * 2.094; x.moveTo(cx, cy); x.lineTo(cx + 10 * Math.cos(an), cy + 10 * Math.sin(an)); } x.stroke(); dot(cx + 10 * Math.cos(th), cy + 10 * Math.sin(th), 2.4, Math.min(1, al + .2));
+        var th = a0 + d * e, lock = Math.abs(d - Om) < .6 / fps ? 1 : 0, al = .3 + .6 * lock, cx = ox + i * SX, cy = oy + j * SY;
+        x.strokeStyle = col(al); x.lineWidth = 1.3; x.beginPath(); for (k = 0; k < 3; k++) { var an = th + k * 2.094; x.moveTo(cx, cy); x.lineTo(cx + AR * Math.cos(an), cy + AR * Math.sin(an)); } x.stroke(); dot(cx + AR * Math.cos(th), cy + AR * Math.sin(th), 2.4 * Math.max(.6, AR / 10), Math.min(1, al + .2));
       }
       x.globalAlpha = 1;
     },

@@ -317,5 +317,22 @@
             has: ['derivation', 'data'],
             added: '2026-11-14'
         },
+        {
+            id: 'living-scenes',
+            fig: 17,
+            title: 'Living Scenes',
+            file: 'simulations/living-scenes.html',
+            field: 'waves',
+            stage: 1,
+            subject: 'the scenes behind the pages · computed on Kaggle where they are physics',
+            summary: 'The thirteen small moving pictures behind the pages of this site, one at a time, with their numbers to change. Where a scene is physics it is computed once on Kaggle and played back; the lecture note explains it section by section, starting with spinners pulled into step by a rotating field: Adler’s equation, the slip period and the locking radius.',
+            equation: '\\dot\\psi = \\Delta - K\\sin\\psi, \\qquad T_\\text{slip} = \\frac{2\\pi}{\\sqrt{\\Delta^2 - K^2}}',
+            model: 'overdamped rotors with their own rates, pulled by a rotating field whose strength falls off from a wandering centre and by their four neighbours (Adler’s equation on a Kuramoto lattice); the other scenes in their own sections as they are computed',
+            method: 'SciPy DOP853 on Kaggle, tolerances 1e-9, 12 stored runs of 648 rotors over 80 s at 15 frames per second, checked against Adler’s slip period and the locking radius; the page plays the stored angles after checking their SHA-256',
+            controls: 'scene; the field’s pull and the neighbours’ pull (stored values); the drawing numbers of each scene; start again',
+            concepts: ['synchronization', 'phase locking', 'Adler equation', 'Kuramoto model', 'overdamped motion', 'slip period', 'entrainment', 'Kaggle'],
+            has: ['derivation'],
+            added: '2026-11-26'
+        },
     ];
 })();

@@ -22,7 +22,7 @@ lecture notes and whatnot". This is step 5 of notes/sims/PLAN.md ("a page of lec
 ## Order of the scenes
 | # | Scene | Model | State |
 |---|---|---|---|
-| 1 | spinners (`spin`) | overdamped rotors, Adler / Kuramoto, rotating field | in progress |
+| 1 | spinners (`spin`) | overdamped rotors, Adler / Kuramoto, rotating field | model, page, note §2 done 26 Nov; publishing (PR from fig17-scenes) |
 | 2 | dust in a sunbeam (`motes`) | Ornstein–Uhlenbeck (Langevin) | |
 | 3 | mixing (`mix`) | hard-disc gas of three species, event-driven | |
 | 4 | the swerve (`swerve`) | falling atoms, collisions | |
@@ -36,3 +36,18 @@ lecture notes and whatnot". This is step 5 of notes/sims/PLAN.md ("a page of lec
 - Kaggle runs need no fresh yes; monitor each. Never run models locally.
 - Publish when finished, checked against main and tested; the user checks live. Clean up after (branches, scratch, notebooks).
 - The user is "the user"; commits as the user.
+
+## Progress (26 November 2026, Berlin time)
+- 03:58 Kaggle preview v16 (commit 0e64e23): all checks good. Adler slip period to 7.7e-9, locked rate to 3.7e-9 rad/s; still field:
+  108 predicted, 115 measured, the 7 extra have slip periods 114 to 736 s (> 60 s window); rerun at 1e-11 within 0.038 rad. 62 s wall.
+  v14 failed (uint8 overflow), v15 had a meaningless relative error and a bad end-of-run comparison; both replaced.
+- After v16 the quantisation was changed from floor to nearest (error π/256); the data on main comes from the workflow run at merge.
+- Built: `public/simulations/living-scenes.html` (stage with all 13 holders, chips, knobs from K with stored-value buttons, readouts,
+  note §1 + §2 with 3 SVG figures from `figs.py`), catalog entry + thumbnail, "17" in every English nav, ENGLISH_ONLY, DE/AR strings
+  for the catalog, scenes.html knob buttons + data-bg-fit for S4, docs (bg-scenes.md, kaggle-sims.md, fig17-living-scenes.md), inventory.
+- Tested locally with the v16 file K10-k1 staged in dist only (page.cjs: all scenes drawn, no errors except the expected 404s of
+  unstaged runs).
+
+## Next
+- Merge, watch the workflow (Kaggle run, land, verify_live), check the live page.
+- Then motes (Ornstein–Uhlenbeck): model, run, section 3 of the note.
