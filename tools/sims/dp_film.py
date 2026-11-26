@@ -72,7 +72,10 @@ def colour(k):
     return pal[colour_index(k)]
 
 def grid(n):
-    return -math.pi + 2 * math.pi * np.arange(n) / n          # rad; index i is -180 + 360 i / n degrees
+    """rad; index i is the angle -180 + 360 i / n degrees, converted exactly as the page converts its slider (deg * pi / 180),
+    so a start the page's sliders reach has the same 64-bit angle here and there."""
+    deg = -180.0 + 360.0 * np.arange(n) / n
+    return deg * math.pi / 180
 
 def energy0(t1, t2, m2):
     return -(M1 + m2) * G * L1 * np.cos(t1) - m2 * G * L2 * np.cos(t2)

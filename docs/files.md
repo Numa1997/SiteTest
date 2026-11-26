@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7193 files, 983.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7194 files, 983.4 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -15,7 +15,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Simulation pages](#simulation-pages) | 41 |
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
-| [Shared scripts](#shared-scripts) | 41 |
+| [Shared scripts](#shared-scripts) | 42 |
 | [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4806 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
@@ -128,7 +128,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 209.1 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
-| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 133.2 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
+| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 137.3 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.6 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.4 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
 | [`public/simulations/butterfly-catch.html`](../public/simulations/butterfly-catch.html) | 48.9 kB | Fig. 13: catching the butterfly, the live interactive catch and its lecture note (theory and method); body from tools/fig13/catch_note_body.html. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -230,6 +230,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/curve.js`](../public/scripts/curve.js) | 46.9 kB | Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page's store. | [curve.md](scripts/curve.md) |
 | [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 104.7 kB | The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
+| [`public/scripts/dp-film.js`](../public/scripts/dp-film.js) | 12.7 kB | Fig. 2b, the double pendulum’s flip-time film: plays the film computed on Kaggle (read from R2 through simdata.js), pins a start, reads its stored map value, checks it with the page’s own RK4 and the film pixel, and hands the start to the live simulation. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/scripts/fig13-catalogue-data.js`](../public/scripts/fig13-catalogue-data.js) | 14.6 kB | Fig. 13: the catalogue of closed drawings, 228 closed orbits drawn live from their strikes, sortable, with a viewer and a push test. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/fig13-catalogue.js`](../public/scripts/fig13-catalogue.js) | 10.7 kB | Fig. 13: the catalogue of closed drawings, 228 closed orbits drawn live from their strikes, sortable, with a viewer and a push test. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/fig13-engine.js`](../public/scripts/fig13-engine.js) | 6.0 kB | Fig. 13: the general double pendulum (Hamilton's equations, RK4) and the long-exposure plate, shared by the Fig. 13 pages. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -6103,7 +6104,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 149.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 149.8 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -6322,7 +6323,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/sims/double_pendulum_gpu.py`](../tools/sims/double_pendulum_gpu.py) | 801 B | Fig. 2 in full on Kaggle’s GPU: every start of the grid (360 000, each with its twin) by dp_engine.py, stored as 25 packs in a GitHub release. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`tools/sims/double_pendulum_smoke.py`](../tools/sims/double_pendulum_smoke.py) | 576 B | Engine test for GPU runs with large data: a small part of the double pendulum grid through every step (GPU notebook, GitHub release, landing, the Worker’s /rel/ path). | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/dp_engine.py`](../tools/sims/dp_engine.py) | 19.9 kB | The double pendulum on Kaggle’s GPU (JAX, the page’s own RK4 in 64-bit), every start of the grid with its twin, packed per mass-length cell; used by double_pendulum_smoke.py (and the full run). | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
-| [`tools/sims/dp_film.py`](../tools/sims/dp_film.py) | 17.4 kB | Fig. 2 flip-time film on Kaggle’s GPU: for every start released from rest (θ₁, θ₂), the time until a rod first passes the top, swept through the mass ratio; stored maps, an H.264 film and its checks. | [chaos-and-storage.md](../notes/sims/chaos-and-storage.md) |
+| [`tools/sims/dp_film.py`](../tools/sims/dp_film.py) | 17.6 kB | Fig. 2 flip-time film on Kaggle’s GPU: for every start released from rest (θ₁, θ₂), the time until a rod first passes the top, swept through the mass ratio; stored maps, an H.264 film and its checks. | [chaos-and-storage.md](../notes/sims/chaos-and-storage.md) |
 | [`tools/sims/figure_datasets.json`](../tools/sims/figure_datasets.json) | 1.2 kB | For file_figure.py: per figure, its Kaggle dataset, title, subtitle, page and every notebook that made its data. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/file_figure.py`](../tools/sims/file_figure.py) | 8.6 kB | Files every Kaggle notebook run of a figure made before the engine (code, whole output, log, SHA-256 manifest per notebook version) as the figure’s private Kaggle dataset; Run workflow with mode = figure. | [kaggle-sims.md](kaggle-sims.md) |
 | [`tools/sims/kaggle_sims.py`](../tools/sims/kaggle_sims.py) | 4.0 kB | Text of the Kaggle notebook phyein-usul-simulations: fetches tools/sims at a pinned commit and runs one simulation model. | [kaggle-sims.md](kaggle-sims.md) |
@@ -7728,7 +7729,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/sims/engine/neon/N-5.md`](../notes/sims/engine/neon/N-5.md) | 145.3 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/engine/neon/N-6.md`](../notes/sims/engine/neon/N-6.md) | 57.2 kB | One numbered request to Neon, the model that writes the code of the engine rebuild: goal, files whole, rules, tests, answer format. | [kaggle-sims.md](kaggle-sims.md) |
 | [`notes/sims/engine/state.md`](../notes/sims/engine/state.md) | 11.0 kB | State of the engine rebuild on R2: aim, what is live, the plan, the requests to Neon, commits, the rules. Read first after a compaction. | [kaggle-sims.md](kaggle-sims.md) |
-| [`notes/sims/reports/double_pendulum/state.md`](../notes/sims/reports/double_pendulum/state.md) | 11.6 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
+| [`notes/sims/reports/double_pendulum/state.md`](../notes/sims/reports/double_pendulum/state.md) | 12.3 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/double_pendulum/study.md`](../notes/sims/reports/double_pendulum/study.md) | 16.3 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/wave_interference/state.md`](../notes/sims/reports/wave_interference/state.md) | 1.6 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
 | [`notes/sims/reports/wave_interference/study.md`](../notes/sims/reports/wave_interference/study.md) | 18.5 kB | Kaggelize reports of one simulation: the study, the build report, the caretaker reports and verdicts, the corrections, screenshots. | [kaggelize.md](kaggelize.md) |
