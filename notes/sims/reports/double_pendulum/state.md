@@ -25,7 +25,6 @@ Task (the user, 25 November 2026): kaggelize the next figure through the NEW eng
 - Merged PR 214 (model, registry, notes) at 04:00 Berlin, 26 November. Run workflow double_pendulum_film_smoke (run 45746139071)
   stopped at 04:01 Berlin: "the repository secrets R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ACCOUNT_ID are missing". Nothing
   reached Kaggle. WAITING FOR THE USER to create the R2 token and the three secrets; then rerun the smoke.
-<<<<<<< HEAD
 - CORRECTION by the user (26 November, later): the film is not one sweep but a SET OF CURVES through the parameter space
   (notes/sims/chaos-and-storage.md, "The rule" and "Fig. 2: the display and the curves"). Rebuilt: dp_film.py takes a curve;
   five curves (mass, length, ring, push, octave), one registry entry and model file each, double_pendulum_film_<curve>
@@ -43,15 +42,6 @@ Task (the user, 25 November 2026): kaggelize the next figure through the NEW eng
   (3) Page against real data: three-way proof, screenshots; docs (docs/simulations/fig02-double-pendulum.md, kaggle-sims.md row,
   PLAN.md row), lecture-note section on the films, registry pages + probe, i18n (tools/i18n/build.py), merge, verify live.
   (4) Then ask the user what to do with the old stored grid (release, 7.05 GB) and the entries double_pendulum, *_gpu, *_smoke.
-=======
-- Since then, on branch kaggelize/fig2-r2 only (not on main): the model's start angles now use the page's arithmetic
-  (deg * pi / 180); page film figure Fig. 2b (public/scripts/dp-film.js, markup, hook window.__dpLive in the page script).
-  Not yet tested in a browser: needs data (the smoke run's).
-- Then: Run workflow double_pendulum_film_smoke, read its bench and checks; then Run workflow double_pendulum_film;
-  then the page: film figure (video, readout of m_2/m_1, pin a pixel, start it live, three-way proof).
-- Nothing built yet on this branch. Next, after the user's answer: model `tools/sims/double_pendulum_r2.py` (dp_engine.py, store r2,
-  shards if over about 15 GB per Kaggle version), then the page on simdata.js.
->>>>>>> origin/main
 
 
 Written 23 November 2026 at 21:58 Berlin time by the session that started the work; the full run's outcome added at 22:10. Read this before anything else on Fig. 2.
