@@ -25,13 +25,23 @@ Task (the user, 25 November 2026): kaggelize the next figure through the NEW eng
 - Merged PR 214 (model, registry, notes) at 04:00 Berlin, 26 November. Run workflow double_pendulum_film_smoke (run 45746139071)
   stopped at 04:01 Berlin: "the repository secrets R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ACCOUNT_ID are missing". Nothing
   reached Kaggle. WAITING FOR THE USER to create the R2 token and the three secrets; then rerun the smoke.
-- Since then, on branch kaggelize/fig2-r2 only (not on main): the model's start angles now use the page's arithmetic
-  (deg * pi / 180); page film figure Fig. 2b (public/scripts/dp-film.js, markup, hook window.__dpLive in the page script).
-  Not yet tested in a browser: needs data (the smoke run's).
-- Then: Run workflow double_pendulum_film_smoke, read its bench and checks; then Run workflow double_pendulum_film;
-  then the page: film figure (video, readout of m_2/m_1, pin a pixel, start it live, three-way proof).
-- Nothing built yet on this branch. Next, after the user's answer: model `tools/sims/double_pendulum_r2.py` (dp_engine.py, store r2,
-  shards if over about 15 GB per Kaggle version), then the page on simdata.js.
+- CORRECTION by the user (26 November, later): the film is not one sweep but a SET OF CURVES through the parameter space
+  (notes/sims/chaos-and-storage.md, "The rule" and "Fig. 2: the display and the curves"). Rebuilt: dp_film.py takes a curve;
+  five curves (mass, length, ring, push, octave), one registry entry and model file each, double_pendulum_film_<curve>
+  (manual, store r2, gpu, 720 x 720, 240 frames); smoke = 72 x 72, 8 points of push, CPU/GPU bench. On main.
+- Page (branch kaggelize/fig2-r2 ONLY, not on main: without data it would show the loader's failure sentence): Fig. 2b under the
+  live figure: curve selector, the curve drawn in its parameter plane with a dot, film, frame slider, "Read a start" switch
+  (click pins; stored value, the page's RK4 rerun, film pixel), "Swing this start" hands exact values to the live simulation.
+  Tested 26 November in headless Chromium at 1600 and 390 px against MADE-UP maps (a pattern, no physics): loads through
+  simdata.js from /r2/, SHA-256 ok, plays, pointer sweep changes nothing, pin reads stored value and pixel (gap 8 of 255),
+  swing starts the live run at the pinned values, a curve without data shows the one sentence, no page errors, no sideways
+  scroll. The live-against-stored comparison can only be judged on real data.
+- WAITING FOR THE USER: R2 token and the three repository secrets (the user said: tomorrow).
+- Then, in this order: (1) GPU hours left; Run workflow double_pendulum_film_smoke with a monitor; read bench and checks.
+  (2) Full runs one by one, mass first; if the five together exceed half the GPU hours left, ask with the numbers.
+  (3) Page against real data: three-way proof, screenshots; docs (docs/simulations/fig02-double-pendulum.md, kaggle-sims.md row,
+  PLAN.md row), lecture-note section on the films, registry pages + probe, i18n (tools/i18n/build.py), merge, verify live.
+  (4) Then ask the user what to do with the old stored grid (release, 7.05 GB) and the entries double_pendulum, *_gpu, *_smoke.
 
 
 Written 23 November 2026 at 21:58 Berlin time by the session that started the work; the full run's outcome added at 22:10. Read this before anything else on Fig. 2.
