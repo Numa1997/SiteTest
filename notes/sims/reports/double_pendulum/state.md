@@ -22,7 +22,13 @@ Task (the user, 25 November 2026): kaggelize the next figure through the NEW eng
   bench), double_pendulum_film.py (720 x 720, 369 frames); registry entries, both "manual", store r2, gpu, dataset fig2.
   Encoding tested here on made-up maps only (no integration). Expected full run from the old measured GPU rate 8.97e7 start-steps/s
   (v6: 720 000 x 12 000 / 96.3 s): 720^2 x 6000 x 369 / 8.97e7 = 12 800 s = 3.6 h; to be replaced by the smoke run's measurement.
-- Next: merge, Run workflow double_pendulum_film_smoke, read its bench and checks; then Run workflow double_pendulum_film;
+- Merged PR 214 (model, registry, notes) at 04:00 Berlin, 26 November. Run workflow double_pendulum_film_smoke (run 45746139071)
+  stopped at 04:01 Berlin: "the repository secrets R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ACCOUNT_ID are missing". Nothing
+  reached Kaggle. WAITING FOR THE USER to create the R2 token and the three secrets; then rerun the smoke.
+- Since then, on branch kaggelize/fig2-r2 only (not on main): the model's start angles now use the page's arithmetic
+  (deg * pi / 180); page film figure Fig. 2b (public/scripts/dp-film.js, markup, hook window.__dpLive in the page script).
+  Not yet tested in a browser: needs data (the smoke run's).
+- Then: Run workflow double_pendulum_film_smoke, read its bench and checks; then Run workflow double_pendulum_film;
   then the page: film figure (video, readout of m_2/m_1, pin a pixel, start it live, three-way proof).
 - Nothing built yet on this branch. Next, after the user's answer: model `tools/sims/double_pendulum_r2.py` (dp_engine.py, store r2,
   shards if over about 15 GB per Kaggle version), then the page on simdata.js.
