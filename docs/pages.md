@@ -512,6 +512,8 @@ any phone, and offers the PDF itself, `Numa_Koudsie_CV.pdf`, to open or download
 replace the PDF, re-render the two images (`pdftoppm -r 170 -png Numa_Koudsie_CV.pdf p`, then save each as WebP), build and deploy.
 English only; it is not in the translation build.
 
+27 November 2026: English raised from C1 to C2. The CV has no HTML source in this repo, so the PDF itself was patched: a redaction removed the "1" after "English (C" and "Englisch (C" (text layer included), and a "2" in IBM Plex Sans 400, 8.2 pt, colour #3a322e was written in its place. The two WebP images were re-rendered as described above. The same change was made on the home page (`index.html`), its German and Arabic pages and the two `i18n/*/index.html.json` files.
+
 
 ## Lucretius beside the name, and the smaller title (5 November 2026)
 
