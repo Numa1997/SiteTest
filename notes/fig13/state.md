@@ -26,6 +26,11 @@ the flower hunt, the catch (a motor at the top pin brings a chaotic double pendu
   `node tools/fig13/catch_targets.cjs 60 300`. Numbers in `docs/simulations/fig13-momentum-spirographs.md`.
 - Display work on the stations and films was done by a separate session (20 November 2026), merged to main.
 
+## Made, awaiting a verdict (27 November 2026)
+- Film "Why the map is an eye": `tools/fig13/gift/eye.html` (1080 x 1920, 30 frames a second, 129.5 s, 16 scenes; same frame interface as the
+  other films: `FILM.frames()`, `renderFrame(f)`). Rendered with `node tools/fig13/gift/render.cjs dark OUT 1 all eye x 1080x1920` and ffmpeg;
+  the MP4 was sent in chat. Not yet in the film player or on the page. If judged good: document how it was made, then add it to `film_page.py`.
+
 ## Left
 - The arrays behind the fine maps and the stability colouring are not in the repository (Kaggle notebook output, scratch files).
 - The labels under the catch picture are small on a phone (check whether the display session fixed them).

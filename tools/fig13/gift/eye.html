@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why the map is an eye</title>
+<!-- Film (phone first, 1080 x 1920, 30 frames a second): what the chaos map of Fig. 13 shows and why it leans.
+     1. One pendulum, one strike, two numbers.  2. The sheet: across p1, up p2; the strike is a point.
+     3. The test: the pendulum and a twin started 0.0001 rad apart, integrated here (RK4, the page's equations); they part: bright. Another strike: they stay: dark.
+     4. Every strike: dots one by one, then faster, read from the fine chaos map (chaos-sheet-fine.webp), while the camera moves out.
+     5. The pupil (K < 9.8 J), the iris, far out and the two streaks.
+     6. The lean, and the exact linear map that removes it: shear p1 - s p2 (s to 3/2), stretch, turn by 62.11 degrees; then spin and fold, the 60 degrees; then back.
+     All numbers are those of tools/fig13/spin_fold_check.wl. Serve the repository root; render.cjs dark OUT 1 all eye x 1080x1920 writes the frames. -->
+<style>
+@font-face { font-family: 'Instrument Serif'; src: url(../../../public/fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Sans'; src: url(../../../public/fonts/ibm-plex-sans/ibm-plex-sans-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Mono'; src: url(../../../public/fonts/ibm-plex-mono/ibm-plex-mono-400-latin.woff2) format('woff2'); }
+:root { --bg:#140d10; --ink:#f5f1ea; --ink2:#d9cdc4; --muted:#b9a59b; --accent:#e2a2aa; }
+html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }
+#stage { position:relative; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
+canvas { position:absolute; left:28px; top:150px; }
+#h1 { position:absolute; left:40px; top:40px; font-family:'Instrument Serif',serif; font-size:62px; line-height:1; margin:0; font-weight:400; }
+.cap { position:absolute; left:42px; top:1206px; width:996px; }
+.cap .k { font-family:'IBM Plex Mono',monospace; font-size:22px; letter-spacing:.14em; color:var(--accent); }
+.cap .t { font-family:'Instrument Serif',serif; font-size:60px; line-height:1.08; margin-top:12px; }
+.cap .s { font-size:33px; line-height:1.42; color:var(--ink2); margin-top:18px; }
+#read { position:absolute; left:42px; top:1690px; width:996px; font-family:'IBM Plex Mono',monospace; font-size:27px; line-height:1.55; color:var(--ink2); white-space:pre; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <h1 id="h1">Why the map is an eye</h1>
+  <canvas id="cv" width="1024" height="1024"></canvas>
+  <div class="cap" id="capA"><div class="k"></div><div class="t"></div><div class="s"></div></div>
+  <div class="cap" id="capB"><div class="k"></div><div class="t"></div><div class="s"></div></div>
+  <div id="read"></div>
+</div>
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search), $ = id => document.getElementById(id);
+const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const ease = u => { u = clamp(u, 0, 1); return u * u * u * (u * (6 * u - 15) + 10); };       // slow in, slow out
+const INK = '#f5f1ea', MUTED = '#b9a59b', ACC = '#e2a2aa', DARK = '#140d10', CY = '#8ce6ff', TWIN = '#8ce6ff';
+const FPS = 30, W = 1024;
+
+// ------------------------------------------------------------------ the pendulum: two equal uniform rods, 1 kg, 1 m, g = 9.8
+const A = 4 / 3, B = 1 / 3, C = 1 / 2, U1 = 14.7, U2 = 4.9;
+function deriv(s) {
+    const [a, b, p1, p2] = s, d = a - b, c = C * Math.cos(d), D = A * B - c * c, cp = -C * Math.sin(d);
+    const Tk = (B * p1 * p1 - 2 * c * p1 * p2 + A * p2 * p2) / (2 * D), dT = -cp * p1 * p2 / D + Tk * 2 * c * cp / D;
+    return [(B * p1 - c * p2) / D, (A * p2 - c * p1) / D, -dT - U1 * Math.sin(a), dT - U2 * Math.sin(b)];
+}
+function run(s0, T, out) {                       // RK4, 1/2400 s steps, stored 240 times a second
+    const h = 1 / 2400, n = Math.round(T * 240), r = new Float32Array((n + 1) * 2); let s = s0.slice();
+    for (let i = 0; i <= n; i++) {
+        r[2 * i] = s[0]; r[2 * i + 1] = s[1];
+        for (let j = 0; j < 10; j++) {
+            const k1 = deriv(s), k2 = deriv(s.map((v, q) => v + h / 2 * k1[q])), k3 = deriv(s.map((v, q) => v + h / 2 * k2[q])), k4 = deriv(s.map((v, q) => v + h * k3[q]));
+            s = s.map((v, q) => v + h / 6 * (k1[q] + 2 * k2[q] + 2 * k3[q] + k4[q]));
+        }
+    }
+    return r;
+}
+const energy = (p1, p2) => (6 / 7) * p1 * p1 - (18 / 7) * p1 * p2 + (24 / 7) * p2 * p2;
+const SB = [3.03, 4.03], SA = [3.53, 1.97], WATCH = 6.67;     // an iris strike (32 J) and a pupil strike (6 J): centres of map pixels
+let RUNS;                                                      // { B, Bt, A, At }: angle histories of each strike and its twin
+const at = (r, t) => { const u = clamp(t, 0, WATCH) * 240, i = Math.min(Math.floor(u), r.length / 2 - 2), f = u - i; return [lerp(r[2 * i], r[2 * i + 2], f), lerp(r[2 * i + 1], r[2 * i + 3], f)]; };
+const tip = ([a, b]) => [Math.sin(a) + Math.sin(b), Math.cos(a) + Math.cos(b)];
+
+// ------------------------------------------------------------------ the exact linear map, in three moves (spin_fold_check.wl)
+const SHEAR = 1.5, SX = Math.sqrt(6 / 7), SY = Math.sqrt(3 / 2), TURN = -62.1144331639 * Math.PI / 180;
+function matrix(us, ud, ur) {                    // us, ud, ur in [0, 1]: how far the shear, the stretch and the turn have gone
+    const s = SHEAR * us, dx = lerp(1, SX, ud), dy = lerp(1, SY, ud), c = Math.cos(TURN * ur), n = Math.sin(TURN * ur);
+    const m = [[dx, -dx * s], [0, dy]];           // stretch . shear
+    return [[c * m[0][0] - n * m[1][0], c * m[0][1] - n * m[1][1]], [n * m[0][0] + c * m[1][0], n * m[0][1] + c * m[1][1]]];
+}
+const TINV = [[11 / (4 * Math.sqrt(3)), -Math.sqrt(7 / 3) / 4], [5 / (4 * Math.sqrt(3)), Math.sqrt(7 / 3) / 4]];   // (X, Y) -> (p1, p2)
+
+// ------------------------------------------------------------------ timeline
+const SC = [   // [name, seconds, kicker, title, sentence]
+    ['hang', 4.5, '1 · ONE EXPERIMENT', 'A pendulum, hanging still', 'Two equal rods, 1 kg and 1 m each. Nothing moves yet.'],
+    ['strike', 6.5, '2 · THE STRIKE', 'One strike, two numbers', 'p₁ is the push on the upper rod, p₂ the push on the lower rod. Then we let go.'],
+    ['sheet', 7, '3 · THE SHEET', 'Every strike is a point', 'Across: p₁. Up: p₂. This point is the strike you just saw.'],
+    ['twinB', 10.5, '4 · THE TEST', 'Give it a twin', 'The twin, in blue, starts a hair differently: one ten-thousandth of a radian. They part. This strike is chaotic, and its point turns bright.'],
+    ['twinA', 9, '5 · ANOTHER STRIKE', 'Here the twins stay together', 'You see one pendulum because the twin never leaves it. This strike is regular, and its point stays dark.'],
+    ['fill', 13, '6 · EVERY STRIKE', 'Now do it for all of them', 'Each dot is one pendulum and its twin. Bright: they parted. Dark: they stayed.'],
+    ['pupil', 8, '7 · THE PUPIL', 'Why the centre is black', 'Inside this curve a strike gives less than 9.8 J. No rod can go over the top, so there is nothing for a hair to decide.'],
+    ['iris', 8, '8 · THE IRIS', 'Where a hair decides', 'Here the strike and gravity are a match. At every near miss at the top, a hair tips it one way or the other.'],
+    ['far', 9, '9 · FAR OUT', 'Hit hard enough and it is calm again', 'Gravity hardly matters there. Only two thin lines stay bright: strikes whose elbow just manages to fold.'],
+    ['lean', 7, '10 · THE LEAN', 'Why does the eye lean?', 'Pushing one rod drags the other. The two pushes share their energy, so the curves of equal energy are tilted ellipses.'],
+    ['shear', 9, '11 · THE SHEAR', 'Slide it straight', 'Replace p₁ by p₁ − s·p₂ and let s grow. At s = 3/2 the ellipses stand upright.'],
+    ['stretch', 6, '12 · THE STRETCH', 'Round it', 'Squeeze across, pull up, until the ellipses are circles. Energy is now simply distance from the centre, squared.'],
+    ['turn', 7, '13 · THE TURN', 'Turn it by 62°', 'A plain turn puts the meaningful directions on the axes.'],
+    ['spin', 9, '14 · SPIN AND FOLD', 'The eye, straightened', 'Across: spin, both rods turning together. Up: fold, the rods turning against each other. The two lashes sit at exactly 60°.'],
+    ['why', 8, '15 · WHAT THE 3/2 IS', 'The shear measures the tie', '3/2 = C / B: the coupling between the rods, ½, over the inertia of the lower rod, ⅓. No tie, no shear, and no chaos either.'],
+    ['back', 8, '16 · AND BACK', 'Nothing was lost', 'Every move can be undone: turn back, unstretch, unshear. Each strike keeps its place.'],
+];
+const ST = {}; let TOTAL = 0; SC.forEach(s => { ST[s[0]] = [TOTAL, TOTAL + Math.round(s[1] * FPS)]; TOTAL = ST[s[0]][1]; });
+const U = (name, f) => (f - ST[name][0]) / (ST[name][1] - ST[name][0]);        // progress of a scene, below 0 before, above 1 after
+const sec = (name, f) => (f - ST[name][0]) / FPS;                              // seconds into a scene
+const ramp = (name, f, t0, dur) => ease((sec(name, f) - t0) / dur);            // an eased 0 -> 1 starting t0 seconds into a scene
+
+// ------------------------------------------------------------------ data: the fine chaos map and the dots read from it
+let MAP, DOTS, FIRST, acc, accN = -1;
+const PW = 20 * 16 / 9, PH = 20, NDOT = 90000, DOTBOX = 17;
+function prepare() {
+    const c = document.createElement('canvas'); c.width = 1280; c.height = 720; const g = c.getContext('2d', { willReadFrequently: true });
+    g.drawImage(MAP, 0, 0, 1280, 720); const px = g.getImageData(0, 0, 1280, 720).data;
+    const val = (p1, p2) => { const x = clamp(Math.floor((p1 + PW) / (2 * PW) * 1280), 0, 1279), y = clamp(Math.floor((PH - p2) / (2 * PH) * 720), 0, 719), i = 4 * (y * 1280 + x); return [px[i], px[i + 1], px[i + 2]]; };
+    let seed = 20261127; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+    DOTS = new Float32Array(NDOT * 5);
+    for (let i = 0; i < NDOT; i++) { const p1 = (rnd() * 2 - 1) * DOTBOX, p2 = (rnd() * 2 - 1) * DOTBOX, v = val(p1, p2); DOTS.set([p1, p2, v[0], v[1], v[2]], 5 * i); }
+    // the first twelve, shown one by one: six bright and six dark, near the middle, well apart
+    FIRST = []; let nb = 0, nd = 0, tries = 0;
+    while (FIRST.length < 12 && tries++ < 5000) {
+        const p1 = (rnd() * 2 - 1) * 6.2, p2 = (rnd() * 2 - 1) * 6.2, v = val(p1, p2), br = v[0] > 150, dk = v[0] < 40;
+        if (!(br || dk) || (br && nb >= 6) || (dk && nd >= 6)) continue;
+        if (FIRST.some(q => Math.hypot(q[0] - p1, q[1] - p2) < 1.6) || Math.hypot(p1 - SB[0], p2 - SB[1]) < 1.4 || Math.hypot(p1 - SA[0], p2 - SA[1]) < 1.4) continue;
+        FIRST.push([p1, p2, br]); br ? nb++ : nd++;
+    }
+    const br = FIRST.filter(q => q[2]), dk = FIRST.filter(q => !q[2]); FIRST = []; for (let i = 0; i < 6; i++) { if (br[i]) FIRST.push(br[i]); if (dk[i]) FIRST.push(dk[i]); }   // bright and dark in turn
+    acc = document.createElement('canvas'); acc.width = acc.height = 1020;
+}
+function dotCount(f) {                           // how many of the many dots are shown: slow, then faster and faster
+    const t = sec('fill', f) - 6.4; if (t <= 0) return 0;
+    return Math.min(NDOT, Math.floor(12 * Math.exp(1.62 * t)));
+}
+function accumulate(n) {                         // the dots so far, on a canvas that covers +-DOTBOX in both momenta
+    const g = acc.getContext('2d'); if (n < accN) { g.clearRect(0, 0, 1020, 1020); accN = 0; } if (accN < 0) accN = 0;
+    for (let i = accN; i < n; i++) {
+        const o = 5 * i, x = (DOTS[o] + DOTBOX) / (2 * DOTBOX) * 1020, y = (DOTBOX - DOTS[o + 1]) / (2 * DOTBOX) * 1020, r = i < 600 ? 4 : i < 6000 ? 3 : 2.4;
+        g.fillStyle = `rgb(${Math.max(DOTS[o + 2], 54)},${Math.max(DOTS[o + 3], 40)},${Math.max(DOTS[o + 4], 46)})`; g.fillRect(x - r / 2, y - r / 2, r, r);
+    }
+    accN = n;
+}
+
+// ------------------------------------------------------------------ camera and the map of the moment
+function half(f) {                               // half-width of the view, in kg m^2/s
+    let h = 7.2;
+    h = lerp(h, 16, ramp('fill', f, 6.4, 6.2));
+    h = lerp(h, 9.5, ramp('pupil', f, 0.3, 2.2)); h = lerp(h, 16, ramp('iris', f, 0.2, 2.2));
+    h = lerp(h, 20, ramp('far', f, 0.4, 3)); h = lerp(h, 15, ramp('lean', f, 0.3, 2.5));
+    h = lerp(h, 13.5, ramp('stretch', f, 0.5, 4)); h = lerp(h, 15, ramp('back', f, 1, 6));
+    return h;
+}
+function moves(f) {                              // [shear, stretch, turn], each 0 to 1
+    const b = ramp('back', f, 0.8, 6.2);
+    const us = ramp('shear', f, 1.6, 6.2), ud = ramp('stretch', f, 1, 4), ur = ramp('turn', f, 1, 5);
+    return [us * (1 - ease(clamp((b - 2 / 3) * 3, 0, 1))), ud * (1 - ease(clamp((b - 1 / 3) * 3, 0, 1))), ur * (1 - ease(clamp(b * 3, 0, 1)))];
+}
+let M, S;                                        // the matrix of the moment and the scale (px per unit)
+const scr = (p1, p2) => [W / 2 + S * (M[0][0] * p1 + M[0][1] * p2), W / 2 - S * (M[1][0] * p1 + M[1][1] * p2)];
+function image(g, img, hx, hy, alpha) {          // an image that covers p1 in +-hx, p2 in +-hy, drawn through the matrix
+    const kx = 2 * hx / img.width, ky = 2 * hy / img.height;
+    g.save(); g.globalAlpha = alpha;
+    g.setTransform(S * M[0][0] * kx, -S * M[1][0] * kx, -S * M[0][1] * ky, S * M[1][1] * ky, W / 2 + S * (-M[0][0] * hx + M[0][1] * hy), W / 2 - S * (-M[1][0] * hx + M[1][1] * hy));
+    g.drawImage(img, 0, 0); g.restore();
+}
+function ellipse(g, E, alpha, dash) {            // the strikes of energy E: a circle in (X, Y), carried back to the strike plane
+    g.save(); g.globalAlpha = alpha; g.strokeStyle = '#fff'; g.lineWidth = 3; g.setLineDash(dash || []); g.beginPath();
+    for (let i = 0; i <= 180; i++) { const a = i / 180 * 2 * Math.PI, X = Math.sqrt(E) * Math.cos(a), Y = Math.sqrt(E) * Math.sin(a), p = scr(TINV[0][0] * X + TINV[0][1] * Y, TINV[1][0] * X + TINV[1][1] * Y); i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); }
+    g.stroke(); g.restore();
+}
+function label(g, txt, x, y, col, size, align) {
+    g.font = `${size || 24}px "IBM Plex Mono"`; g.textAlign = align || 'left'; const w = g.measureText(txt).width, x0 = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+    g.fillStyle = 'rgba(20,13,16,.78)'; g.fillRect(x0 - 8, y - (size || 24) + 2, w + 16, (size || 24) + 12); g.fillStyle = col || INK; g.fillText(txt, x, y);
+}
+
+// ------------------------------------------------------------------ the pendulum drawn in real space
+function pendulum(g, cx, cy, s, ang, col, lw, alpha) {
+    const x1 = cx + s * Math.sin(ang[0]), y1 = cy + s * Math.cos(ang[0]), x2 = x1 + s * Math.sin(ang[1]), y2 = y1 + s * Math.cos(ang[1]);
+    g.save(); g.globalAlpha = alpha == null ? 1 : alpha; g.lineCap = 'round'; g.strokeStyle = col; g.lineWidth = lw; g.beginPath(); g.moveTo(cx, cy); g.lineTo(x1, y1); g.lineTo(x2, y2); g.stroke();
+    g.fillStyle = col; for (const [x, y] of [[x1, y1], [x2, y2]]) { g.beginPath(); g.arc(x, y, lw * 1.25, 0, 7); g.fill(); }
+    g.fillStyle = DARK; g.strokeStyle = col; g.lineWidth = Math.max(1.5, lw * .4); g.beginPath(); g.arc(cx, cy, lw * 1.1, 0, 7); g.fill(); g.stroke(); g.restore();
+    return [x1, y1, x2, y2];
+}
+function trail(g, r, t, cx, cy, s, col) {         // the last 1.4 s of the tip's path
+    g.save(); g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = 2.5; g.strokeStyle = col;
+    for (let k = 0; k < 28; k++) { const t1 = t - k * 0.05, t0 = t1 - 0.05; if (t0 < 0) break; g.globalAlpha = 0.55 * (1 - k / 28); g.beginPath();
+        for (let j = 0; j <= 6; j++) { const q = tip(at(r, lerp(t0, t1, j / 6))); j ? g.lineTo(cx + s * q[0], cy + s * q[1]) : g.moveTo(cx + s * q[0], cy + s * q[1]); } g.stroke(); }
+    g.restore();
+}
+function arcArrow(g, cx, cy, r, a0, a1, col, grow) {  // a curved arrow about (cx, cy): the push on a rod
+    const a = lerp(a0, a1, grow); g.save(); g.strokeStyle = col; g.fillStyle = col; g.lineWidth = 5; g.lineCap = 'round'; g.beginPath(); g.arc(cx, cy, r, a0, a, a1 < a0); g.stroke();
+    if (grow > 0.15) { const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a), d = a + (a1 < a0 ? -1 : 1) * Math.PI / 2; g.beginPath(); g.moveTo(x + 16 * Math.cos(d), y + 16 * Math.sin(d)); g.lineTo(x + 11 * Math.cos(d + 2.4), y + 11 * Math.sin(d + 2.4)); g.lineTo(x + 11 * Math.cos(d - 2.4), y + 11 * Math.sin(d - 2.4)); g.closePath(); g.fill(); }
+    g.restore();
+}
+
+// ------------------------------------------------------------------ captions: each rises in, line after line, and the old one leaves
+function captions(f) {
+    let k = SC.findIndex(s => f < ST[s[0]][1]); if (k < 0) k = SC.length - 1;
+    const t = sec(SC[k][0], f), left = (ST[SC[k][0]][1] - f) / FPS, last = k === SC.length - 1;
+    const el = $('capA'), parts = [el.children[0], el.children[1], el.children[2]];
+    if (el.dataset.k !== String(k)) { el.dataset.k = String(k); parts[0].textContent = SC[k][2]; parts[1].textContent = SC[k][3]; parts[2].textContent = SC[k][4]; }
+    parts.forEach((p, i) => { const a = ease((t - 0.15 - i * 0.28) / 0.7) * (last ? 1 : 1 - ease((0.45 - left) / 0.45)); p.style.opacity = a.toFixed(3); p.style.transform = `translateY(${((1 - ease((t - 0.15 - i * 0.28) / 0.7)) * 22).toFixed(1)}px)`; });
+    $('capB').style.display = 'none';
+}
+
+// ------------------------------------------------------------------ one frame
+function renderFrame(f) {
+    f = clamp(Math.round(f), 0, TOTAL - 1);
+    const g = $('cv').getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, W, W); g.fillStyle = DARK; g.fillRect(0, 0, W, W);
+    const mv = moves(f); M = matrix(mv[0], mv[1], mv[2]); S = W / (2 * half(f));
+    const sheetA = ramp('sheet', f, 0.6, 1.6), fillA = ramp('fill', f, 10.6, 2.2);
+    g.save(); g.beginPath(); g.rect(0, 0, W, W); g.clip();
+
+    // the map: first as dots, then whole
+    if (f >= ST.fill[0]) { accumulate(dotCount(f)); if (fillA < 1) image(g, acc, DOTBOX, DOTBOX, 1); if (fillA > 0) image(g, MAP, PW, PH, fillA); }
+
+    // the grid of the strike plane, which makes the shear visible
+    const gridA = Math.max(sheetA * 0.5 * (1 - ramp('fill', f, 9, 2)), 0.42 * ramp('lean', f, 2.2, 1.5) * (1 - ramp('spin', f, 0.5, 2) * (1 - ramp('back', f, 0.3, 1.5))));
+    if (gridA > 0.01) { g.save(); g.globalAlpha = gridA; g.strokeStyle = 'rgba(245,241,234,.55)'; g.lineWidth = 1.2; g.beginPath();
+        for (let v = -36; v <= 36; v += 4) { let a = scr(v, -40), b = scr(v, 40); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); a = scr(-40, v); b = scr(40, v); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); }
+        g.stroke(); g.restore(); }
+    // the two axes of the strike plane
+    if (sheetA > 0.01) { const grow = ramp('sheet', f, 0.8, 2), L = 40 * grow; g.save(); g.globalAlpha = sheetA * (1 - 0.55 * ramp('spin', f, 0.5, 2) * (1 - ramp('back', f, 0.3, 1.5))); g.strokeStyle = INK; g.lineWidth = 2.5; g.beginPath();
+        let a = scr(-L, 0), b = scr(L, 0); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); a = scr(0, -L); b = scr(0, L); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); g.restore(); }
+
+    // the energy curves
+    const eA = ramp('pupil', f, 1, 1.4); if (eA > 0) ellipse(g, 9.8, eA);
+    const iA = ramp('iris', f, 1.2, 1.4); if (iA > 0) { ellipse(g, 39.2, iA * 0.9); ellipse(g, 196, iA * 0.6, [10, 10]); }
+    // the two streaks and, later, the spin and fold axes
+    const lashA = ramp('far', f, 3.6, 1.5) * (1 - ramp('lean', f, 0, 1.2)) + ramp('spin', f, 1.2, 1.6) * (1 - ramp('back', f, 0.3, 1.5));
+    if (lashA > 0.01) { g.save(); g.globalAlpha = Math.min(1, lashA) * 0.9; g.strokeStyle = CY; g.lineWidth = 3; g.beginPath(); for (const x of [19 - 4 * Math.sqrt(21), 19 + 4 * Math.sqrt(21)]) { const n = Math.hypot(x, 1), a = scr(-60 * x / n, -60 / n), b = scr(60 * x / n, 60 / n); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); } g.stroke(); g.restore(); }
+    const sfA = ramp('spin', f, 0.6, 1.6) * (1 - ramp('back', f, 0.3, 1.5));
+    if (sfA > 0.01) { g.save(); g.globalAlpha = sfA; g.strokeStyle = INK; g.lineWidth = 3; g.beginPath(); let a = scr(TINV[0][0] * -40, TINV[1][0] * -40), b = scr(TINV[0][0] * 40, TINV[1][0] * 40); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); a = scr(TINV[0][1] * -40, TINV[1][1] * -40); b = scr(TINV[0][1] * 40, TINV[1][1] * 40); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke();
+        g.strokeStyle = CY; g.lineWidth = 3; g.beginPath(); g.arc(W / 2, W / 2, 150, -Math.PI / 3 * ramp('spin', f, 2.4, 1.6), 0); g.stroke(); g.restore();
+        label(g, 'spin →', W - 24, W / 2 - 18, INK, 30, 'right'); label(g, 'fold ↑', W / 2 + 18, 44, INK, 30); if (sec('spin', f) > 3) label(g, '60°', W / 2 + 162, W / 2 - 62, CY, 30); }
+
+    // the two example strikes and the first dozen dots
+    const dot = (p, bright, a, r) => { if (a <= 0.01) return; const q = scr(p[0], p[1]); g.save(); g.globalAlpha = a; g.beginPath(); g.arc(q[0], q[1], r, 0, 7); g.fillStyle = bright > 0 ? `rgba(226,162,170,${bright})` : DARK; g.fill(); g.fillStyle = `rgba(255,240,226,${bright * bright})`; g.fill(); g.strokeStyle = INK; g.lineWidth = 2.5; g.stroke(); g.restore(); };
+    const ring = (p, t) => { if (t <= 0 || t >= 1) return; const q = scr(p[0], p[1]); g.save(); g.globalAlpha = 0.7 * (1 - t); g.strokeStyle = INK; g.lineWidth = 2; g.beginPath(); g.arc(q[0], q[1], 12 + 46 * ease(t), 0, 7); g.stroke(); g.restore(); };
+    const exFade = 1 - ramp('fill', f, 9.5, 1.5);
+    if (f >= ST.sheet[0] && exFade > 0) {
+        const tB = sec('sheet', f) - 3; dot(SB, clamp((sec('twinB', f) - 4.2) / 4, 0, 1), ease(tB / 0.7) * exFade, 11); ring(SB, tB / 1.4);
+        const tA = sec('twinA', f) - 0.8; dot(SA, 0, ease(tA / 0.7) * exFade, 11); ring(SA, tA / 1.4);
+        if (tB > 0.5 && f < ST.fill[0] + 60) { const q = scr(SB[0], SB[1]); g.globalAlpha = ease((tB - 0.5) / 0.6) * (1 - ramp('fill', f, 0, 1.5)); label(g, `(${SB[0]}, ${SB[1]})`, q[0] + 20, q[1] - 14, INK, 24); g.globalAlpha = 1; }
+        if (tA > 0.5 && f < ST.fill[0] + 60) { const q = scr(SA[0], SA[1]); g.globalAlpha = ease((tA - 0.5) / 0.6) * (1 - ramp('fill', f, 0, 1.5)); label(g, `(${SA[0]}, ${SA[1]})`, q[0] + 20, q[1] + 36, INK, 24); g.globalAlpha = 1; }
+        FIRST.forEach((p, i) => { const t = sec('fill', f) - 0.9 - i * 0.44; dot(p, p[2] ? 1 : 0, ease(t / 0.5) * exFade, 8); ring(p, t / 1.1); });
+    }
+    // axis names of the strike plane
+    const nameA = sheetA * (1 - ramp('turn', f, 0.2, 1.2) * (1 - ramp('back', f, 4.5, 1.5)));
+    if (nameA > 0.01) { g.globalAlpha = nameA; const hh = half(f), e1 = scr(0.97 * hh, 0), e2 = scr(0, 0.9 * hh); label(g, 'p₁ →  push on the upper rod', Math.min(W - 22, e1[0]), e1[1] + 44, INK, 25, 'right'); label(g, 'p₂ ↑  push on the lower rod', clamp(e2[0] + 18, 20, W - 440), Math.max(40, e2[1]), INK, 25); g.globalAlpha = 1; }   // the names ride on their axes, so the shear carries them along
+    g.restore();
+
+    // the pendulum itself: large at first, then in a window at the top left
+    const inA = f < ST.fill[0] ? 1 : 1 - ramp('fill', f, 0.2, 1.2), u = ramp('sheet', f, 0.2, 2.4);
+    if (inA > 0.01) {
+        const cx = lerp(W / 2, 222, u), cy = lerp(300, 196, u), s = lerp(215, 84, u), lw = lerp(9, 5.5, u);
+        g.save(); g.globalAlpha = inA;
+        if (u > 0) { g.globalAlpha = inA * u; g.fillStyle = 'rgba(20,13,16,.9)'; g.strokeStyle = 'rgba(245,241,234,.4)'; g.lineWidth = 1.5; g.fillRect(22, 22, 400, 400); g.strokeRect(22, 22, 400, 400); g.globalAlpha = inA; }
+        let ang = [0, 0], twin = null, r = null, rt = null, t = 0;
+        if (f >= ST.twinA[0]) { r = RUNS.A; rt = RUNS.At; t = clamp((sec('twinA', f) - 1.6) * 0.95, 0, WATCH); }
+        else if (f >= ST.twinB[0]) { r = RUNS.B; rt = RUNS.Bt; t = clamp((sec('twinB', f) - 2.2) * 0.85, 0, WATCH); }
+        if (r) { ang = at(r, t); twin = at(rt, t); trail(g, rt, t, cx, cy, s, TWIN); trail(g, r, t, cx, cy, s, ACC); pendulum(g, cx, cy, s, twin, TWIN, lw, 0.9); }
+        const j = pendulum(g, cx, cy, s, ang, INK, lw);
+        const k = ramp('strike', f, 1, 1.6) * (1 - ramp('sheet', f, 0, 1.2));       // the two pushes
+        if (k > 0.01) { g.globalAlpha = inA * Math.min(1, k * 3) * (1 - ramp('sheet', f, 0, 1.2)); arcArrow(g, cx, cy, s * 0.62, Math.PI / 2 + 0.5, Math.PI / 2 - 0.55, ACC, k); arcArrow(g, j[0], j[1], s * 0.62, Math.PI / 2 + 0.5, Math.PI / 2 - 0.75, ACC, ramp('strike', f, 2.2, 1.6));
+            label(g, `p₁ = ${SB[0]}`, cx + s * 0.72, cy + s * 0.5, ACC, 30); if (sec('strike', f) > 2.2) label(g, `p₂ = ${SB[1]}`, j[0] + s * 0.72, j[1] + s * 0.5, ACC, 30); }
+        g.restore();
+    }
+    captions(f); readout(f, mv);
+}
+function readout(f, mv) {
+    const el = $('read'); let s = '';
+    const n2 = v => (v < 0 ? '−' : ' ') + Math.abs(v).toFixed(2);
+    if (f < ST.strike[0]) s = 'rods: 1 kg, 1 m each · gravity 9.8 m/s²';
+    else if (f < ST.sheet[0]) s = `strike: p₁ = ${SB[0]}, p₂ = ${SB[1]} kg·m²/s\nenergy given: ${energy(SB[0], SB[1]).toFixed(1)} J`;
+    else if (f < ST.twinB[0]) s = `this point: (${SB[0]}, ${SB[1]})\nenergy given: ${energy(SB[0], SB[1]).toFixed(1)} J`;
+    else if (f < ST.fill[0]) { const B_ = f < ST.twinA[0], t = B_ ? clamp((sec('twinB', f) - 2.2) * 0.85, 0, WATCH) : clamp((sec('twinA', f) - 1.6) * 0.95, 0, WATCH), a = tip(at(B_ ? RUNS.B : RUNS.A, t)), b = tip(at(B_ ? RUNS.Bt : RUNS.At, t)), d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+        s = `time ${t.toFixed(2)} s of ${WATCH} · energy ${energy(...(B_ ? SB : SA)).toFixed(1)} J\ntips apart by ${d < 0.001 ? d.toFixed(5) : d.toFixed(3)} m`; }
+    else if (f < ST.pupil[0]) { const n = 12 + dotCount(f), shown = Math.min(12, Math.max(0, Math.floor((sec('fill', f) - 0.9) / 0.44) + 1)); s = sec('fill', f) > 10.6 ? 'strikes on the full map: 8,294,400\neach with its twin, each watched 6.67 s' : `strikes shown: ${(sec('fill', f) < 6.4 ? shown + 2 : n + 2).toLocaleString('en')}`; }
+    else if (f < ST.iris[0]) s = 'white curve: strikes of 9.8 J\nlifting the lower rod to the top costs 9.8 J';
+    else if (f < ST.far[0]) s = 'white: 39.2 J, both rods can stand up\ndashed: 196 J, five times that';
+    else if (f < ST.lean[0]) s = 'blue: p₁ = 0.67 p₂ and p₁ = 37.3 p₂\nchaotic share above 196 J: 2.3 %';
+    else if (f < ST.shear[0]) s = 'K = (6/7)p₁² − (18/7)p₁p₂ + (24/7)p₂²\nthe middle term is the lean';
+    else { const m = M; s = `matrix   [ ${n2(m[0][0])}  ${n2(m[0][1])} ]\n         [ ${n2(m[1][0])}  ${n2(m[1][1])} ]`;
+        if (f < ST.stretch[0]) s += `    s = ${(SHEAR * mv[0]).toFixed(2)}` + (mv[0] > 0.999 ? '\nK = (6/7)(p₁ − 1.5p₂)² + (3/2)p₂²' : '');
+        else if (f < ST.turn[0]) s += `    × ${lerp(1, SX, mv[1]).toFixed(3)}, × ${lerp(1, SY, mv[1]).toFixed(3)}` + (mv[1] > 0.999 ? '\nK = X′² + Y′²' : '');
+        else if (f < ST.spin[0]) s += `    turn ${(-TURN * 180 / Math.PI * mv[2]).toFixed(1)}°`;
+        else if (f < ST.why[0]) s += '\nK = X² + Y² = spin² + fold²';
+        else if (f < ST.back[0]) s += '\nshear 3/2 = C/B = (1/2)/(1/3)';
+        else s += mv[0] < 0.001 ? '\nback where we began' : '\ndeterminant never zero: invertible'; }
+    if (el.textContent !== s) el.textContent = s;
+}
+window.renderFrame = renderFrame;
+
+function fit() { const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight, s = Math.min(cw / 1080, ch / 1920); $('stage').style.transform = `translate(${Math.max(0, (cw - 1080 * s) / 2)}px, 0) scale(${s})`; }
+(async () => {
+    fit(); addEventListener('resize', fit);
+    MAP = new Image(); MAP.src = '../../../public/images/fig13/chaos-sheet-fine.webp'; await MAP.decode();
+    await document.fonts.load('30px "IBM Plex Mono"'); await document.fonts.load('60px "Instrument Serif"'); await document.fonts.load('33px "IBM Plex Sans"');
+    prepare();
+    RUNS = { B: run([0, 0, SB[0], SB[1]], WATCH), Bt: run([1e-4, 0, SB[0], SB[1]], WATCH), A: run([0, 0, SA[0], SA[1]], WATCH), At: run([1e-4, 0, SA[0], SA[1]], WATCH) };
+    window.FILM = { frames: () => TOTAL, scenes: ST, matrix, moves, runs: RUNS, at, tip, deriv };
+    renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
+    if (!Q.get('film')) { const t0 = performance.now(); const loop = () => { renderFrame(Math.floor((performance.now() - t0) / 1000 * FPS) % TOTAL); requestAnimationFrame(loop); }; loop(); }
+})();
+</script>
+</body>
+</html>
