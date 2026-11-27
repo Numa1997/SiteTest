@@ -292,7 +292,22 @@ function fit() { const cw = document.documentElement.clientWidth, ch = document.
     await document.fonts.load('30px "IBM Plex Mono"'); await document.fonts.load('60px "Instrument Serif"'); await document.fonts.load('33px "IBM Plex Sans"');
     prepare();
     RUNS = { B: run([0, 0, SB[0], SB[1]], WATCH), Bt: run([1e-4, 0, SB[0], SB[1]], WATCH), A: run([0, 0, SA[0], SA[1]], WATCH), At: run([1e-4, 0, SA[0], SA[1]], WATCH) };
-    window.FILM = { frames: () => TOTAL, scenes: ST, matrix, moves, runs: RUNS, at, tip, deriv };
+    const checks = () => {   // the film proves its own numbers (printed by the explainer-film skill's check_film.cjs)
+        const out = [], add = (name, pass, value) => out.push({ name, pass: !!pass, value: String(value) });
+        const m = matrix(1, 1, 1), T = [[Math.sqrt(3) / 4, Math.sqrt(3) / 4], [-5 * Math.sqrt(3 / 7) / 4, 11 * Math.sqrt(3 / 7) / 4]], dm = Math.max(...m.flatMap((r, i) => r.map((v, j) => Math.abs(v - T[i][j]))));
+        add('shear, stretch and turn together equal the closed form of spin_fold_check.wl', dm < 1e-9, dm.toExponential(1));
+        const mb = moves(TOTAL - 1); add('all three moves are undone at the end', Math.max(...mb) < 1e-9, mb.map(v => v.toFixed(3)).join(', '));
+        const E = s => { const c = C * Math.cos(s[0] - s[1]), D = A * B - c * c; return (B * s[2] * s[2] - 2 * c * s[2] * s[3] + A * s[3] * s[3]) / (2 * D) - U1 * Math.cos(s[0]) - U2 * Math.cos(s[1]); };
+        let s = [0, 0, SB[0], SB[1]]; const e0 = E(s), h = 1 / 2400; for (let i = 0; i < WATCH * 2400; i++) { const k1 = deriv(s), k2 = deriv(s.map((v, q) => v + h / 2 * k1[q])), k3 = deriv(s.map((v, q) => v + h / 2 * k2[q])), k4 = deriv(s.map((v, q) => v + h * k3[q])); s = s.map((v, q) => v + h / 6 * (k1[q] + 2 * k2[q] + 2 * k3[q] + k4[q])); }
+        add('the integrator keeps the energy over the watch time (J)', Math.abs(E(s) - e0) < 1e-6, (E(s) - e0).toExponential(1));
+        const sep = (r, rt, t) => { const a = tip(at(r, t)), b = tip(at(rt, t)); return Math.hypot(a[0] - b[0], a[1] - b[1]); };
+        add('the iris twins part (tips apart after 4 s, m)', sep(RUNS.B, RUNS.Bt, 4) > 0.5, sep(RUNS.B, RUNS.Bt, 4).toFixed(2));
+        const mx = Math.max(...Array.from({ length: 67 }, (_, i) => sep(RUNS.A, RUNS.At, i / 10))); add('the pupil twins stay together (largest gap, m)', mx < 0.001, mx.toExponential(1));
+        add('the strike energies shown (J)', Math.abs(energy(...SB) - 32.2) < 0.05 && Math.abs(energy(...SA) - 6.1) < 0.05, energy(...SB).toFixed(2) + ', ' + energy(...SA).toFixed(2));
+        SC.forEach(sc => { const w = sc[4].split(/\s+/).length; add(`scene ${sc[0]}: time to read (${w} words)`, sc[1] >= 0.24 * w + 1.5, `${sc[1]} s, needs ${(0.24 * w + 1.5).toFixed(1)} s`); });
+        return out;
+    };
+    window.FILM = { frames: () => TOTAL, scenes: ST, matrix, moves, runs: RUNS, at, tip, deriv, checks };
     renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
     if (!Q.get('film')) { const t0 = performance.now(); const loop = () => { renderFrame(Math.floor((performance.now() - t0) / 1000 * FPS) % TOTAL); requestAnimationFrame(loop); }; loop(); }
 })();

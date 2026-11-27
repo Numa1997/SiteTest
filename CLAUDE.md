@@ -64,3 +64,8 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
   pictures. No question-and-answer format anywhere.
 - Lists of figures run in figure order.
 
+## Films
+- An animation, film or video that explains something is made with the skill `explainer-film` (`.claude/skills/explainer-film/`): understand
+  and compute first, storyboard, build from its template, run its checks, look at a contact sheet, render, and put nothing on the site
+  until the film has been judged. `tools/fig13/gift/eye.html` is the model. (27 November 2026.)
+

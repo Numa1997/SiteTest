@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FILM TITLE</title>
+<!-- Explainer film template (1080 x 1920, 30 frames a second). A working film: five scenes about a circle of points that is
+     sheared and brought back. Copy it, keep the parts marked KEEP, replace the parts marked REPLACE.
+     Serve the repository root over HTTP; open the page to watch it loop, or use the skill's scripts to check and render it. -->
+<style>
+/* KEEP: the stage and its type. Fonts are looked for at the server root; without them the system serif, sans and mono are used. */
+@font-face { font-family: 'Instrument Serif'; src: url(/public/fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Sans'; src: url(/public/fonts/ibm-plex-sans/ibm-plex-sans-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Mono'; src: url(/public/fonts/ibm-plex-mono/ibm-plex-mono-400-latin.woff2) format('woff2'); }
+:root { --bg:#140d10; --ink:#f5f1ea; --ink2:#d9cdc4; --muted:#b9a59b; --accent:#e2a2aa; }
+html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }
+#stage { position:relative; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
+canvas { position:absolute; left:28px; top:150px; }
+#h1 { position:absolute; left:40px; top:40px; font-family:'Instrument Serif',serif; font-size:62px; line-height:1; margin:0; font-weight:400; }
+.cap { position:absolute; left:42px; top:1206px; width:996px; }
+.cap .k { font-family:'IBM Plex Mono',monospace; font-size:22px; letter-spacing:.14em; color:var(--accent); }
+.cap .t { font-family:'Instrument Serif',serif; font-size:60px; line-height:1.08; margin-top:12px; }
+.cap .s { font-size:33px; line-height:1.42; color:var(--ink2); margin-top:18px; }
+#read { position:absolute; left:42px; top:1690px; width:996px; font-family:'IBM Plex Mono',monospace; font-size:27px; line-height:1.55; color:var(--ink2); white-space:pre; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <h1 id="h1">FILM TITLE</h1>
+  <canvas id="cv" width="1024" height="1024"></canvas>
+  <div class="cap" id="cap"><div class="k"></div><div class="t"></div><div class="s"></div></div>
+  <div id="read"></div>
+</div>
+<script>
+'use strict';
+// ====================================================================== KEEP: helpers
+const Q = new URLSearchParams(location.search), $ = id => document.getElementById(id);
+const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const ease = u => { u = clamp(u, 0, 1); return u * u * u * (u * (6 * u - 15) + 10); };       // slow in, slow out
+const INK = '#f5f1ea', MUTED = '#b9a59b', ACC = '#e2a2aa', DARK = '#140d10', BLUE = '#8ce6ff';
+const FPS = 30, W = 1024;
+
+// ====================================================================== REPLACE: the scenes
+// [name, seconds, kicker, title, sentence]. The sentence says what is on screen now, in plain words.
+const SC = [
+    ['one', 5, '1 · ONE POINT', 'A point on a sheet', 'Across is x, up is y. This point is at (3, 2).'],
+    ['many', 8, '2 · MANY POINTS', 'Now a whole ring of them', 'Every point of the ring is the same distance, 4, from the centre.'],
+    ['shear', 9, '3 · THE SHEAR', 'Slide the rows sideways', 'Replace x by x + s·y and let s grow. The higher a row, the further it slides.'],
+    ['what', 7, '4 · WHAT CHANGED', 'A circle became a tilted ellipse', 'Heights did not change, and no area was gained or lost: the determinant stays 1.'],
+    ['back', 7, '5 · AND BACK', 'Nothing was lost', 'Slide the rows back by the same amount and every point is where it began.'],
+];
+
+// ====================================================================== KEEP: the clock
+const ST = {}; let TOTAL = 0; SC.forEach(s => { ST[s[0]] = [TOTAL, TOTAL + Math.round(s[1] * FPS)]; TOTAL = ST[s[0]][1]; });
+const sec = (name, f) => (f - ST[name][0]) / FPS;                              // seconds into a scene (negative before it)
+const ramp = (name, f, t0, dur) => ease((sec(name, f) - t0) / dur);            // an eased 0 -> 1 that starts t0 s into a scene
+
+// ====================================================================== REPLACE: the state of a frame (camera, matrix, counts)
+const SMAX = 0.75;                                                             // the parameter of the move, and its final value
+function shearNow(f) { return SMAX * ramp('shear', f, 1.4, 6) * (1 - ramp('back', f, 1, 5)); }
+function half(f) {                                                             // half-width of the view, in the sheet's units
+    let h = 6;
+    h = lerp(h, 8, ramp('many', f, 0.5, 3));
+    return h;
+}
+const RING = 4, NPTS = 120;
+function shown(f) { return Math.min(NPTS, Math.floor(1 + (NPTS - 1) * ramp('many', f, 0.8, 5))); }   // how many points of the ring are there
+
+// ====================================================================== KEEP: drawing through the matrix of the moment
+let M, S;                                        // the 2 x 2 matrix and the scale (px per unit) of this frame
+const scr = (x, y) => [W / 2 + S * (M[0][0] * x + M[0][1] * y), W / 2 - S * (M[1][0] * x + M[1][1] * y)];
+function image(g, img, hx, hy, alpha) {          // an image covering x in +-hx, y in +-hy, carried by the matrix
+    const kx = 2 * hx / img.width, ky = 2 * hy / img.height;
+    g.save(); g.globalAlpha = alpha;
+    g.setTransform(S * M[0][0] * kx, -S * M[1][0] * kx, -S * M[0][1] * ky, S * M[1][1] * ky, W / 2 + S * (-M[0][0] * hx + M[0][1] * hy), W / 2 - S * (-M[1][0] * hx + M[1][1] * hy));
+    g.drawImage(img, 0, 0); g.restore();
+}
+function path(g, pts, col, lw, alpha, dash) {    // a curve given as points of the sheet
+    g.save(); g.globalAlpha = alpha; g.strokeStyle = col; g.lineWidth = lw; g.lineJoin = 'round'; g.setLineDash(dash || []); g.beginPath();
+    pts.forEach((p, i) => { const q = scr(p[0], p[1]); i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]); }); g.stroke(); g.restore();
+}
+function grid(g, step, reach, alpha) {           // the sheet's own grid: it makes any linear move visible
+    g.save(); g.globalAlpha = alpha; g.strokeStyle = 'rgba(245,241,234,.55)'; g.lineWidth = 1.2; g.beginPath();
+    for (let v = -reach; v <= reach; v += step) { let a = scr(v, -reach), b = scr(v, reach); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); a = scr(-reach, v); b = scr(reach, v); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); }
+    g.stroke(); g.restore();
+}
+function label(g, txt, x, y, col, size, align) { // mono text on a dark plate, kept inside the canvas
+    size = size || 24; g.font = `${size}px "IBM Plex Mono", monospace`; const w = g.measureText(txt).width;
+    let x0 = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x; x0 = clamp(x0, 12, W - w - 12); y = clamp(y, size + 6, W - 14);
+    g.textAlign = 'left'; g.fillStyle = 'rgba(20,13,16,.78)'; g.fillRect(x0 - 8, y - size + 2, w + 16, size + 12); g.fillStyle = col || INK; g.fillText(txt, x0, y);
+}
+function dot(g, x, y, r, fill, alpha) {          // a mark at a point of the sheet
+    if (alpha <= 0.01) return; const q = scr(x, y); g.save(); g.globalAlpha = alpha; g.beginPath(); g.arc(q[0], q[1], r, 0, 7); g.fillStyle = fill; g.fill(); g.strokeStyle = INK; g.lineWidth = 2; g.stroke(); g.restore();
+}
+function ring(g, x, y, t) {                      // one soft expanding ring that says "look here"; t runs 0 -> 1
+    if (t <= 0 || t >= 1) return; const q = scr(x, y); g.save(); g.globalAlpha = 0.7 * (1 - t); g.strokeStyle = INK; g.lineWidth = 2; g.beginPath(); g.arc(q[0], q[1], 12 + 46 * ease(t), 0, 7); g.stroke(); g.restore();
+}
+
+// ====================================================================== KEEP: captions rise in line after line; the old one fades before the next
+function captions(f) {
+    let k = SC.findIndex(s => f < ST[s[0]][1]); if (k < 0) k = SC.length - 1;
+    const t = sec(SC[k][0], f), left = (ST[SC[k][0]][1] - f) / FPS, last = k === SC.length - 1, el = $('cap');
+    if (el.dataset.k !== String(k)) { el.dataset.k = String(k); for (let i = 0; i < 3; i++) el.children[i].textContent = SC[k][2 + i]; }
+    for (let i = 0; i < 3; i++) { const up = ease((t - 0.15 - i * 0.28) / 0.7), a = up * (last ? 1 : 1 - ease((0.45 - left) / 0.45)); el.children[i].style.opacity = a.toFixed(3); el.children[i].style.transform = `translateY(${((1 - up) * 22).toFixed(1)}px)`; }
+}
+
+// ====================================================================== REPLACE: one frame, and the readout
+function renderFrame(f) {
+    f = clamp(Math.round(f), 0, TOTAL - 1);
+    const g = $('cv').getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = DARK; g.fillRect(0, 0, W, W);
+    const s = shearNow(f); M = [[1, s], [0, 1]]; S = W / (2 * half(f));
+    g.save(); g.beginPath(); g.rect(0, 0, W, W); g.clip();
+
+    grid(g, 1, 12, 0.35 * ramp('one', f, 0.3, 1.5));
+    path(g, [[-12, 0], [12, 0]], INK, 2.5, ramp('one', f, 0.5, 1.5)); path(g, [[0, -12], [0, 12]], INK, 2.5, ramp('one', f, 0.5, 1.5));
+    // names ride on their axes, so a move of the sheet carries them along
+    const h = half(f), ex = scr(0.96 * h, 0), ey = scr(0, 0.9 * h);
+    g.globalAlpha = ramp('one', f, 1, 1); label(g, 'x →', ex[0], ex[1] + 40, INK, 26, 'right'); label(g, 'y ↑', ey[0] + 16, ey[1], INK, 26); g.globalAlpha = 1;
+
+    // the first point, alone, then the ring of points one after another
+    const t1 = sec('one', f) - 1.8; dot(g, 3, 2, 10, ACC, ease(t1 / 0.7) * (1 - ramp('many', f, 0, 1))); ring(g, 3, 2, t1 / 1.4);
+    if (t1 > 0.5 && f < ST.many[0] + 30) { const q = scr(3, 2); g.globalAlpha = ease((t1 - 0.5) / 0.6) * (1 - ramp('many', f, 0, 1)); label(g, '(3, 2)', q[0] + 18, q[1] - 14); g.globalAlpha = 1; }
+    const n = f >= ST.many[0] ? shown(f) : 0;
+    for (let i = 0; i < n; i++) { const a = i / NPTS * 2 * Math.PI; dot(g, RING * Math.cos(a), RING * Math.sin(a), 5, ACC, 1); }
+    // the curve the points lie on, drawn once they are all there
+    const cA = ramp('many', f, 5.6, 1.4);
+    if (cA > 0) path(g, Array.from({ length: 181 }, (_, i) => [RING * Math.cos(i / 90 * Math.PI), RING * Math.sin(i / 90 * Math.PI)]), '#fff', 3, cA);
+    g.restore();
+    captions(f); readout(f, s);
+}
+function readout(f, s) {
+    const n2 = v => (v < 0 ? '−' : ' ') + Math.abs(v).toFixed(2); let t;
+    if (f < ST.many[0]) t = 'sheet: x across, y up';
+    else if (f < ST.shear[0]) t = `points shown: ${shown(f)} of ${NPTS}\nx² + y² = ${RING * RING}`;
+    else t = `matrix   [ ${n2(1)}  ${n2(s)} ]\n         [ ${n2(0)}  ${n2(1)} ]    s = ${s.toFixed(2)}` + (f >= ST.what[0] && f < ST.back[0] ? '   determinant 1' : '');
+    if ($('read').textContent !== t) $('read').textContent = t;
+}
+
+// ====================================================================== REPLACE: the film proves its own numbers
+function checks() {
+    const out = [], add = (name, pass, value) => out.push({ name, pass: !!pass, value: String(value) });
+    add('shear reaches its final value', Math.abs(shearNow(ST.what[0]) - SMAX) < 1e-9, shearNow(ST.what[0]));
+    add('shear is undone at the end', Math.abs(shearNow(TOTAL - 1)) < 1e-9, shearNow(TOTAL - 1));
+    add('all points of the ring are shown before the shear', shown(ST.shear[0]) === NPTS, shown(ST.shear[0]));
+    SC.forEach(sc => { const words = sc[4].split(/\s+/).length; add(`scene ${sc[0]}: time to read (${words} words)`, sc[1] >= 0.24 * words + 1.5, `${sc[1]} s, needs ${(0.24 * words + 1.5).toFixed(1)} s`); });
+    return out;
+}
+
+// ====================================================================== KEEP: start-up, the frame interface, and playing by itself
+window.renderFrame = renderFrame;
+function fit() { const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight, s = Math.min(cw / 1080, ch / 1920); $('stage').style.transform = `translate(${Math.max(0, (cw - 1080 * s) / 2)}px, 0) scale(${s})`; }
+(async () => {
+    fit(); addEventListener('resize', fit);
+    // load pictures here:  IMG = new Image(); IMG.src = '...'; await IMG.decode();
+    // precompute simulations here, stored by time, so that any frame can be drawn on its own
+    await Promise.all(['30px "IBM Plex Mono"', '60px "Instrument Serif"', '33px "IBM Plex Sans"'].map(s => document.fonts.load(s).catch(() => null)));
+    window.FILM = { frames: () => TOTAL, scenes: ST, checks };
+    renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
+    if (!Q.get('film')) { const t0 = performance.now(); const loop = () => { renderFrame(Math.floor((performance.now() - t0) / 1000 * FPS) % TOTAL); requestAnimationFrame(loop); }; loop(); }
+})();
+</script>
+</body>
+</html>

@@ -31,6 +31,9 @@ the flower hunt, the catch (a motor at the top pin brings a chaotic double pendu
   other films: `FILM.frames()`, `renderFrame(f)`). Rendered with `node tools/fig13/gift/render.cjs dark OUT 1 all eye x 1080x1920` and ffmpeg;
   the MP4 was sent in chat. Not yet in the film player or on the page. If judged good: document how it was made, then add it to `film_page.py`.
 
+- Skill `explainer-film` (`.claude/skills/explainer-film/`, 27 November 2026): the method behind the film, for any film. Its template and scripts
+  were run end to end (check, contact sheet, render to MP4). Not yet tried with a smaller model on a new topic.
+
 ## Left
 - The arrays behind the fine maps and the stability colouring are not in the repository (Kaggle notebook output, scratch files).
 - The labels under the catch picture are small on a phone (check whether the display session fixed them).
