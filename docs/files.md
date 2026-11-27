@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7238 files, 999.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7246 files, 999.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -45,6 +45,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Tools](#tools) | 404 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 7 |
+| [Skills: methods written down for Claude sessions in this repository](#skills-methods-written-down-for-claude-sessions-in-this-repository) | 8 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
@@ -56,7 +57,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 102 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
 | [`AGENTS.md`](../AGENTS.md) | 15.9 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
-| [`CLAUDE.md`](../CLAUDE.md) | 5.6 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
+| [`CLAUDE.md`](../CLAUDE.md) | 6.0 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 8.9 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
 | [`index.html`](../index.html) | 87.4 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package-lock.json`](../package-lock.json) | 72.1 kB | Pins the exact versions of the build tools (Vite and its dependencies, 141 packages), since 20 November 2026. | [rebuild.md](method/rebuild.md) |
@@ -5964,7 +5965,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 88.1 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`, DELETED 18 November 2026). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 51.3 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 51.8 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 32.0 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 16.2 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 19.0 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -6062,7 +6063,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig13/gift/dive/.gitignore`](../tools/fig13/gift/dive/.gitignore) | 9 B | Keeps dive.bin (regenerated by dive_data.py) out of the repository. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/dive/dive.json`](../tools/fig13/gift/dive/dive.json) | 36.6 kB | The dive film's grid of kicks and the butterfly's momenta, written by dive_data.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/dive_data.py`](../tools/fig13/gift/dive_data.py) | 3.7 kB | Fig. 13 films: integrates the 9 x 9 grid of kicks of the dive film (dive.bin, regenerated, about 47 s). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`tools/fig13/gift/eye.html`](../tools/fig13/gift/eye.html) | 28.4 kB | Fig. 13 film "Why the map is an eye" (1080 x 1920): one strike as a point, the twin test, the map filling dot by dot, pupil and iris, then the exact shear, stretch and turn to spin and fold, and back. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/eye.html`](../tools/fig13/gift/eye.html) | 30.7 kB | Fig. 13 film "Why the map is an eye" (1080 x 1920): one strike as a point, the twin test, the map filling dot by dot, pupil and iris, then the exact shear, stretch and turn to spin and fold, and back. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/farashatuki.json`](../tools/fig13/gift/farashatuki.json) | 13.7 kB | The outlines of فَرَاشَتُكِ traced from the Diwani plate Numa chose on 9 November 2026 (farashatuki_trace.py); the source of the word in the gift film. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/farashatuki.py`](../tools/fig13/gift/farashatuki.py) | 7.4 kB | Fig. 13 gift: فَرَاشَتُكِ written in the hand of the traced رِيمْ (rejected by Numa: disconnected letters). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/farashatuki_trace.py`](../tools/fig13/gift/farashatuki_trace.py) | 4.0 kB | Fig. 13 gift: traces فَرَاشَتُكِ from the Diwani plate Numa chose (gold on a dark board) into farashatuki.json. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -6140,7 +6141,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 152.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 153.2 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -6452,6 +6453,19 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`.claude/agents/sims-caretaker.md`](../.claude/agents/sims-caretaker.md) | 2.6 kB | Claude Code agent definition: sims-caretaker, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/sims-corrector.md`](../.claude/agents/sims-corrector.md) | 1.5 kB | Claude Code agent definition: sims-corrector, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/walkthrough-keeper.md`](../.claude/agents/walkthrough-keeper.md) | 614 B | Claude Code agent definition: walkthrough-keeper, one role of the lecture-note review. | [notes.md](notes.md) |
+
+## Skills: methods written down for Claude sessions in this repository
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`.claude/skills/explainer-film/SKILL.md`](../.claude/skills/explainer-film/SKILL.md) | 8.4 kB | Skill explainer-film: how to make a captioned explanatory film as a live HTML page and an MP4 (workflow, storyboard, motion and layout rules, a working template, and the check, contact-sheet and render scripts). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`.claude/skills/explainer-film/assets/film-template.html`](../.claude/skills/explainer-film/assets/film-template.html) | 12.8 kB | Skill explainer-film: how to make a captioned explanatory film as a live HTML page and an MP4 (workflow, storyboard, motion and layout rules, a working template, and the check, contact-sheet and render scripts). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`.claude/skills/explainer-film/references/checks-and-render.md`](../.claude/skills/explainer-film/references/checks-and-render.md) | 2.5 kB | Skill explainer-film: how to make a captioned explanatory film as a live HTML page and an MP4 (workflow, storyboard, motion and layout rules, a working template, and the check, contact-sheet and render scripts). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`.claude/skills/explainer-film/references/motion-and-layout.md`](../.claude/skills/explainer-film/references/motion-and-layout.md) | 4.7 kB | Skill explainer-film: how to make a captioned explanatory film as a live HTML page and an MP4 (workflow, storyboard, motion and layout rules, a working template, and the check, contact-sheet and render scripts). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`.claude/skills/explainer-film/references/storyboard.md`](../.claude/skills/explainer-film/references/storyboard.md) | 4.9 kB | Skill explainer-film: how to make a captioned explanatory film as a live HTML page and an MP4 (workflow, storyboard, motion and layout rules, a working template, and the check, contact-sheet and render scripts). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`.claude/skills/explainer-film/scripts/check_film.cjs`](../.claude/skills/explainer-film/scripts/check_film.cjs) | 2.3 kB | Skill explainer-film: how to make a captioned explanatory film as a live HTML page and an MP4 (workflow, storyboard, motion and layout rules, a working template, and the check, contact-sheet and render scripts). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`.claude/skills/explainer-film/scripts/contact_sheet.py`](../.claude/skills/explainer-film/scripts/contact_sheet.py) | 1.0 kB | Skill explainer-film: how to make a captioned explanatory film as a live HTML page and an MP4 (workflow, storyboard, motion and layout rules, a working template, and the check, contact-sheet and render scripts). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`.claude/skills/explainer-film/scripts/render_film.cjs`](../.claude/skills/explainer-film/scripts/render_film.cjs) | 2.5 kB | Skill explainer-film: how to make a captioned explanatory film as a live HTML page and an MP4 (workflow, storyboard, motion and layout rules, a working template, and the check, contact-sheet and render scripts). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 
 ## Working notes of project 07, the electron beam
 
@@ -7395,7 +7409,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig13/sheet-display-state.md`](../notes/fig13/sheet-display-state.md) | 5.2 kB | Fig. 13: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig13/state.md`](../notes/fig13/state.md) | 4.1 kB | Fig. 13: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig13/state.md`](../notes/fig13/state.md) | 4.4 kB | Fig. 13: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/band_test.cjs`](../notes/fig14/band_test.cjs) | 1.7 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/check.md`](../notes/fig14/check.md) | 32.9 kB | Fig. 14: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 

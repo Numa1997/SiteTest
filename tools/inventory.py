@@ -731,6 +731,7 @@ SECTIONS = [
     ('docs/', 'Documentation', None), ('tools/', 'Tools', None),
     ('i18n/', 'Translation tables', None),
     ('.claude/agents/', 'Agents of the lecture-note review', None),
+    ('.claude/skills/', 'Skills: methods written down for Claude sessions in this repository', None),
     ('notes/electron-beam/', 'Working notes of project 07, the electron beam', None), ('notes/rotor-pendula/', 'Working notes of the Rotor Pendula study', None), ('notes/droplets/', 'Working notes of the Droplet Collection study', None),
     ('notes/', 'Record of the lecture-note review', None),
 ]
