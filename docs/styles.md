@@ -7,6 +7,7 @@ Arabic pages, never edited by hand ([i18n.md](i18n.md)).
 
 | File | Lines | Loaded by | Job |
 |---|---|---|---|
+| [`motion.css`](../public/styles/motion.css) | 34 | every page, first | The pace of every click, hover and page change: one ease and two durations (see **Motion** below). |
 | [`site.css`](../public/styles/site.css) | 1175 | home, catalog, Projects | Tokens, base type, the home page (hero, timeline, plates, and since 2 November 2026 the plates as a sideways shelf with a rail of dots, lines 888–1169), footer. |
 | [`sim.css`](../public/styles/sim.css) | 254 | the eleven simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
 | [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
@@ -141,6 +142,48 @@ data.css), `--tag-soft` (`#f0eae0`, data.css), `--tan-line` (`#e3cfa3`, [data.cs
 ([catalog.css:155](../public/styles/catalog.css#L155)).
 
 ---
+
+## `motion.css` · Motion
+
+*Added 27 November 2026, at Numa's request: every click on the site moves in one calm, consistent way.*
+
+**What it is.** One small file, linked first on every page, that sets how fast and in what manner the interface moves: cards
+and sections opening and closing, the data panel sliding in, the tabs of "From symbols to code", buttons and cards answering the
+pointer, the move from one page to the next, and the glide to a place further down the page. The simulations and the animated
+backgrounds keep their own clocks and are not affected.
+
+**The settings, in plain words.**
+
+| Setting | Value | What it does |
+|---|---|---|
+| `--ease` | `cubic-bezier(.65, 0, .35, 1)` | The shape of every movement: it starts gently, is quickest in the middle and comes gently to rest, like a drawer on good runners. No bounce, no overshoot. |
+| `--ease-out` | `cubic-bezier(.33, 1, .68, 1)` | For changing page and jumping down the page: it moves at once and then settles slowly. |
+| `--dur` | `.75s` | How long a card, section or panel takes to open or close. |
+| `--dur-s` | `.45s` | How long a hover, a press or a colour change takes. |
+| `--rise`, `--rise-dur`, `--rise-step`, `--rise-wait` | 14 px, .7 s, 45 ms, 120 ms | When a card opens, its items rise 14 px into place one after another: each takes 0.7 s, the first starts 120 ms after the click and each next one 45 ms later. |
+| `--lift`, `--lift-shadow` | −2 px, a soft shadow | Under the pointer, a button or a closed card lifts 2 px and casts a soft shadow. |
+
+**To slow everything down or speed it up,** change `--dur` and `--dur-s` in `public/styles/motion.css` (for example `1s` and
+`.6s` for calmer, `.5s` and `.3s` for brisker) and commit. Nothing else needs to change: the stylesheets use these names, and
+the scripts that move the page (`scripts/fold.js`, `scripts/datalog.js`) read the same two values from the page when they run.
+
+**Readers who ask for less motion** (the "reduce motion" setting of their phone or computer) get none: the file sets every
+transition and animation of the interface to zero, and page changes simply load.
+
+**How the pieces use it.**
+- Cards and sections (`fold.css`, `fold.js`): the body opens by its own height (a grid row from `0fr` to `1fr`), its content
+  fades in, the arrow turns, all in `--dur` on `--ease`; then the items rise in. A click changes one attribute; nothing is redrawn.
+- The scroll that goes with a card follows smootherstep, t³(6t² − 15t + 10), over `--dur`; a click on a link to a place further
+  down the page glides there with ease-out in 0.7 s.
+- Page changes (`i18n.css`): the old page fades back in 0.3 s while the new one rises in over 0.5 s, about 0.7 s in all; a
+  change of language turns the page over in `--dur`.
+- The data panel (`data.css`, `datalog.js`): it slides in `--dur`; a section of its table fades its rows before folding and lets
+  them rise in when unfolding; an opened row's detail rises in.
+- Buttons, plates, catalog buttons, the walkthrough steps and the Lucretius verses: `--dur-s` on `--ease`.
+
+**Left as they were:** the entrance of the home page hero and of each simulation head (they are skipped after a page change
+anyway), the scroll-drawn rule and timeline on the home page, the sideways shelf of plates (its scroll snapping keeps the
+browser's own smooth scroll), and the Portfolios study pages, which are built separately (`portfolios-src/`).
 
 ## `site.css` · the home page and the shared base
 
@@ -337,8 +380,8 @@ Its tokens fall back to fixed colours, so it works on the home page, which has n
 
 **Breakpoints.** ≤ 720 px: smaller header, toggle and body padding ([88–94](../public/styles/fold.css#L88-L94)). ≤ 980 px: the
 home page's tools get a 48 px top margin instead of 104 px ([139–141](../public/styles/fold.css#L139-L141)). ≤ 860 px: catalog
-entries one column ([163–167](../public/styles/fold.css#L163-L167)). Reduced motion: transitions of 0.01 ms
-([95–97](../public/styles/fold.css#L95-L97)).
+entries one column ([163–167](../public/styles/fold.css#L163-L167)). Reduced motion: no transitions and no rise-in
+(here and in `motion.css`).
 
 **Print** ([98–103](../public/styles/fold.css#L98-L103)): toggles, tools and More buttons hidden, every body open, headers
 not sticky. fold.js also opens every fold and card before printing and restores them after

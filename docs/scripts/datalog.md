@@ -539,7 +539,7 @@ The ten blocks: [Fig. 1 L797](../../public/simulations/Circular%20Wave%20Interfe
   number; `body.dp-open`; `aria-expanded` on the tab and on array rows; `aria-hidden` and `inert` on the closed panel;
   `#stage.dp-reading` while reading; `aria-pressed` on both Read values buttons; `.dp-tab--away` while scrolling down on a
   phone; `.dp-rec.is-rec` while recording; on rows `is-blink0`/`is-blink1`, `is-cause`, `is-effect`, `is-open`; on sections
-  `is-folded`, `is-effect`; on Check buttons `is-ok`, `is-bad`, `is-in`, `is-na`.
+  `is-folded`, `is-closing` (rows fading before a section folds), `is-rising` (rows rising in as it unfolds; styles/motion.css sets the pace), `is-effect`; on Check buttons `is-ok`, `is-bad`, `is-in`, `is-na`.
 - DOM read: `#stage`, the `.stage__cap` inside `#stage`'s parent, `<html lang dir>`, the CSS tokens `--accent`, `--ink`,
   `--ink-3`, `--rule`, `--muted`, `--card-soft`.
 

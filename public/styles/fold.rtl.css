@@ -11,6 +11,10 @@
   --fold-tint-2: color-mix(in srgb, var(--fold-accent) 3%, var(--fold-card));
   --fold-soft-line: color-mix(in srgb, var(--fold-accent) 28%, var(--fold-card));
   --fold-top: 0px;
+  /* the fold's pace is the site's (styles/motion.css) */
+  --fold-open: var(--dur, .75s);
+  --fold-close: var(--dur, .75s);
+  --fold-ease: var(--ease, cubic-bezier(.65, 0, .35, 1));
 }
 
 /* ---------- level 1: the section card ---------- */
@@ -20,15 +24,16 @@
   border-right: 4px solid var(--fold-accent);
   border-radius: 10px;
   scroll-margin-top: calc(var(--fold-top) + 12px);
-  transition: border-color var(--fold-open) var(--fold-ease), box-shadow var(--fold-open) var(--fold-ease);
+  transition: border-color var(--fold-open) var(--fold-ease), box-shadow var(--fold-open) var(--fold-ease), transform var(--dur-s) var(--fold-ease);
 }
-.fsec[data-collapsed="1"]:hover { border-color: var(--fold-soft-line); border-right-color: var(--fold-accent); }
+/* a closed card lifts a little under the pointer; an open one stays put, so its pinned header never moves */
+.fsec[data-collapsed="1"]:hover { border-color: var(--fold-soft-line); border-right-color: var(--fold-accent); transform: translateY(var(--lift)); box-shadow: var(--lift-shadow); }
 .fsec[data-collapsed="0"] { border-color: var(--fold-soft-line); border-right-color: var(--fold-accent); box-shadow: 0 12px 32px -20px rgba(60, 40, 20, .35); }
 
 .fs-head {
   display: flex; align-items: center; justify-content: space-between; gap: 12px 16px;
   padding: 16px 20px; border-radius: 10px 6px 6px 10px; background: var(--fold-tint);
-  cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; transition: box-shadow .15s ease;
+  cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; transition: box-shadow var(--dur-s) var(--fold-ease);
 }
 .fs-head:hover { box-shadow: inset 0 0 0 999px rgba(28, 21, 24, .03); }
 .fsec[data-collapsed="0"] > .fs-head { position: sticky; top: var(--fold-top); z-index: 6; border-radius: 10px 6px 0 0; box-shadow: 0 1px 0 var(--fold-soft-line); }
@@ -45,7 +50,7 @@
 .fs-toggle {
   display: inline-flex; align-items: center; justify-content: center; flex: none; width: 36px; height: 36px; padding: 0;
   border: 1px solid var(--fold-soft-line); border-radius: 50%; background: var(--fold-card); color: var(--fold-accent); cursor: pointer;
-  transition: border-color .15s ease, color .15s ease, background-color var(--fold-open) var(--fold-ease), transform .1s ease;
+  transition: border-color var(--dur-s) var(--fold-ease), color var(--dur-s) var(--fold-ease), background-color var(--fold-open) var(--fold-ease), transform var(--dur-s) var(--fold-ease);
 }
 .fs-head:hover .fs-toggle, .fs-toggle:hover { border-color: var(--fold-accent); }
 .fs-toggle:active { transform: scale(.94); }
@@ -57,9 +62,11 @@
 /* the body unfolds by its own height */
 .fold { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr; overflow-anchor: none; transition: grid-template-rows var(--fold-open) var(--fold-ease) var(--fold-delay, 0ms); }
 .fold > .fold-i { overflow: clip; min-height: 0; min-width: 0; }  /* clip, not hidden: lets the headers inside pin to the window */
-.fold > .fold-i > * { transition: opacity var(--fold-open) var(--fold-ease) var(--fold-delay, 0ms), transform var(--fold-open) var(--fold-ease) var(--fold-delay, 0ms); }
+.fold > .fold-i > * { transition: opacity var(--fold-open) var(--fold-ease) var(--fold-delay, 0ms); }
 .fold[data-open="0"] { grid-template-rows: 0fr; transition-duration: var(--fold-close); }
-.fold[data-open="0"] > .fold-i > * { opacity: 0; transform: translateY(-8px); transition-duration: var(--fold-close); }
+.fold[data-open="0"] > .fold-i > * { opacity: 0; transition-duration: var(--fold-close); }
+/* as a card opens, its items rise in one after another (fold.js numbers them --i and takes the class off once they have arrived) */
+.fold.is-rising > .fold-i > * > * { animation: m-rise var(--rise-dur) var(--fold-ease) both; animation-delay: calc(var(--i, 0) * var(--rise-step) + var(--rise-wait)); }
 .fs-body { padding: 20px 22px 22px; }
 .fold-no-anim .fold, .fold-no-anim .fold > .fold-i > *, .fold-no-anim .chev, .fold-no-anim .fs-toggle, .fold-no-anim .fsec { transition: none !important; }
 
@@ -75,14 +82,16 @@
 .fold-tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; margin: 0 0 12px; }
 .fold-tool {
   padding: 6px 13px; border: 1px solid var(--fold-line); border-radius: 999px; background: var(--fold-card);
-  font: 12px var(--mono); color: var(--ink-2, #3a322e); cursor: pointer; transition: border-color .15s ease, color .15s ease;
+  font: 12px var(--mono); color: var(--ink-2, #3a322e); cursor: pointer;
+  transition: border-color var(--dur-s) var(--fold-ease), color var(--dur-s) var(--fold-ease), transform var(--dur-s) var(--fold-ease), box-shadow var(--dur-s) var(--fold-ease);
 }
-.fold-tool:hover { border-color: var(--fold-accent); color: var(--fold-accent); }
+.fold-tool:hover { border-color: var(--fold-accent); color: var(--fold-accent); transform: translateY(var(--lift)); box-shadow: var(--lift-shadow); }
 
 /* ---------- cards: details behind More / Less ---------- */
 .fs-more {
   display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--fold-line); border-radius: 4px;
   background: transparent; font: 12px var(--mono); color: var(--muted, #8b8079); cursor: pointer;
+  transition: border-color var(--dur-s) var(--fold-ease), color var(--dur-s) var(--fold-ease);
 }
 .fs-more:hover, [data-card][data-collapsed="0"] .fs-more { border-color: var(--fold-accent); color: var(--fold-accent); }
 
@@ -94,7 +103,8 @@
   .fsub > .fold > .fold-i > .fs-body { padding: 12px 12px 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .fold, .fold > .fold-i > *, .chev, .fs-toggle, .fsec, .fs-head { transition-duration: .01ms !important; }
+  .fold, .fold > .fold-i > *, .chev, .fs-toggle, .fsec, .fs-head { transition-duration: 0s !important; }
+  .fold.is-rising > .fold-i > * > * { animation: none; }
 }
 @media print {
   .fs-toggle, .fold-tools, .fs-more { display: none !important; }

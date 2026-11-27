@@ -16,31 +16,23 @@
     var doc = document, root = doc.documentElement;
     var motion = function () { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; };
 
-    /* one curve and two durations for everything that moves: the fold (CSS), the chevron (CSS), the scroll glide (JS) */
-    var FOLD = { open: 320, close: 240, curve: [0.4, 0, 0.2, 1] };
-    root.style.setProperty('--fold-open', FOLD.open + 'ms');
-    root.style.setProperty('--fold-close', FOLD.close + 'ms');
-    root.style.setProperty('--fold-ease', 'cubic-bezier(' + FOLD.curve.join(',') + ')');
-    function bezier(c) {
-        var cx = 3 * c[0], bx = 3 * (c[2] - c[0]) - cx, ax = 1 - cx - bx;
-        var cy = 3 * c[1], by = 3 * (c[3] - c[1]) - cy, ay = 1 - cy - by;
-        function sx(t) { return ((ax * t + bx) * t + cx) * t; }
-        function sy(t) { return ((ay * t + by) * t + cy) * t; }
-        function dx(t) { return (3 * ax * t + 2 * bx) * t + cx; }
-        return function (x) {
-            var t = x;
-            for (var i = 0; i < 6; i++) { var e = sx(t) - x; if (Math.abs(e) < 1e-5) break; var d = dx(t); if (Math.abs(d) < 1e-6) break; t -= e / d; }
-            return sy(Math.min(1, Math.max(0, t)));
-        };
+    /* the site's pace, read from styles/motion.css (--dur: a card opens or closes; --rise-*: its items rise in), so one place
+       sets the folds (CSS), the chevrons (CSS) and the scroll that goes with them (here) */
+    function ms(name, fallback) {
+        var v = getComputedStyle(root).getPropertyValue(name).trim(), n = parseFloat(v);
+        return isNaN(n) ? fallback : /ms$/.test(v) ? n : n * 1000;
     }
-    var ease = bezier(FOLD.curve);
-    /* a close that also has to drop the page gets a little longer, in step with the distance */
-    function closeMs(dist) { return dist > 0 ? Math.round(Math.min(420, Math.max(FOLD.close, dist * 0.45))) : FOLD.close; }
+    var FOLD = { get open() { return ms('--dur', 750); }, get rise() { return ms('--rise-dur', 700) + ms('--rise-wait', 120); }, step: function () { return ms('--rise-step', 45); } };
+    /* smootherstep, 6t^5 - 15t^4 + 10t^3: starts and ends at rest, with no jerk at either end; the CSS curve --ease is close to it */
+    var ease = function (t) { return t * t * t * (t * (6 * t - 15) + 10); };
+    /* a jump within the page starts at once and settles: ease-out, 1 - (1 - t)^3 */
+    var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
+    var JUMP = 700;
 
     /* moves the window on the fold's own curve and clock, so scroll and height stay in step; a wheel or touch cancels it */
     var glideId = 0;
-    function glide(to, ms) {
-        var id = ++glideId, from = window.scrollY;
+    function glide(to, ms, curve) {
+        var id = ++glideId, from = window.scrollY, f = curve || ease;
         if (Math.abs(to - from) < 1) return;
         function stop() { if (id === glideId) glideId++; }
         window.addEventListener('wheel', stop, { once: true, passive: true });
@@ -51,7 +43,7 @@
             frames++;
             if (!dur) { if (frames < 3) { requestAnimationFrame(step); return; } window.scrollTo({ top: to, behavior: 'instant' }); return; }
             if (t0 === null) t0 = now;
-            var p = ease(Math.min(1, (now - t0) / dur));
+            var p = f(Math.min(1, (now - t0) / dur));
             window.scrollTo({ top: from + (to - from) * p, behavior: 'instant' });
             if (p < 1) requestAnimationFrame(step);
         })(performance.now());
@@ -131,13 +123,33 @@
                 var line = pinLine(node), top = node.getBoundingClientRect().top;
                 if (top < line) window.scrollTo({ top: window.scrollY + top - line, behavior: 'instant' });
                 var f = foldOf(node), end = pageEnd() - (f ? f.getBoundingClientRect().height : 0);
-                var ms = closeMs(window.scrollY - end);
-                node.style.setProperty('--fold-close', ms + 'ms');
-                if (window.scrollY > end) glide(Math.max(0, end), ms);
+                if (window.scrollY > end) glide(Math.max(0, end), FOLD.open);
             }
             setFold(node, open);
+            if (open) rise(foldOf(node));
         }
         if (open && bring) reveal(node);
+    }
+
+    /* the items of a fold that has just opened rise in one after another (styles/fold.css, .is-rising). Only on opening, and
+       only the class changes: nothing is redrawn. Items below the window rise with the last one in view, so a long section
+       never keeps the reader waiting. */
+    function rise(fold) {
+        if (!fold || !motion()) return;
+        var body = fold.querySelector(':scope > .fold-i > *');   /* a section's .fs-body, a card's details */
+        if (!body) return;
+        var items = body.children, k = 0, bottom = window.innerHeight;
+        for (var i = 0; i < items.length; i++) {
+            items[i].style.setProperty('--i', k);
+            if (items[i].getBoundingClientRect().top < bottom) k++;   /* a closed fold clips its items but still lays them out where they will sit */
+        }
+        clearTimeout(fold._rise);
+        fold.classList.remove('is-rising'); void fold.offsetWidth;
+        fold.classList.add('is-rising');
+        fold._rise = setTimeout(function () {
+            fold.classList.remove('is-rising');
+            for (var j = 0; j < items.length; j++) items[j].style.removeProperty('--i');
+        }, FOLD.rise + k * FOLD.step() + 60);
     }
 
     function toggle(node) {
@@ -152,10 +164,10 @@
         if (!nodes.length && !cards.length) return;
         if (!open && nodes.length) {
             var first = nodes[0].getBoundingClientRect().top + window.scrollY - top0() - 12;
-            if (window.scrollY > first) window.scrollTo({ top: first, behavior: 'instant' });
+            if (window.scrollY > first) glide(first, FOLD.open);
         }
         var k = 0, wait = 0, delay = Array.prototype.map.call(nodes, function (n) {   /* read every position first, then write */
-            var r = n.getBoundingClientRect(), d = r.bottom > -200 && r.top < window.innerHeight + 200 ? Math.min(28 * k++, 300) : 0; wait = Math.max(wait, d); return d; });
+            var r = n.getBoundingClientRect(), d = r.bottom > -200 && r.top < window.innerHeight + 200 ? Math.min(FOLD.step() * k++, 360) : 0; wait = Math.max(wait, d); return d; });
         Array.prototype.forEach.call(nodes, function (n, i) { n.style.setProperty('--fold-delay', delay[i] + 'ms'); setFold(n, open); remember(n.id, open); });
         Array.prototype.forEach.call(cards, function (c) { setCard(c, open); });
         if (Fold.onAll) Fold.onAll(open);
@@ -220,7 +232,7 @@
         var b = e.target.closest('.fs-more');
         if (!b) return;
         var card = b.closest('[data-card]');
-        if (card) { setCard(card, card.getAttribute('data-collapsed') !== '0'); if (Fold.onCard) Fold.onCard(card); }
+        if (card) { var open = card.getAttribute('data-collapsed') !== '0'; setCard(card, open); if (open) rise(card.querySelector('.fold')); if (Fold.onCard) Fold.onCard(card); }
     });
 
     /* the page's Expand all / Collapse all */
@@ -255,7 +267,7 @@
         var offset = top0();
         chain.forEach(function (c) { var h = headOf(c); if (h) offset += h.offsetHeight; });
         var y = target.getBoundingClientRect().top + window.scrollY - offset - 12;
-        if (smooth && motion()) glide(Math.max(0, y), FOLD.open); else window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
+        if (smooth && motion()) glide(Math.max(0, y), JUMP, easeOut); else window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
     }
     function targetOf(hash) {
         if (!hash || hash.length < 2) return null;
@@ -266,10 +278,15 @@
         var a = e.target.closest('a[href^="#"]');
         if (!a) return;
         var t = targetOf(a.getAttribute('href'));
-        if (!t || !(t.closest('[data-fold-level]') || t.closest('[data-card]'))) return;
+        if (!t) return;
         e.preventDefault();
         if (history.pushState) history.pushState(null, '', a.getAttribute('href'));
-        openTo(t, true);
+        if (t.closest('[data-fold-level]') || t.closest('[data-card]')) { openTo(t, true); return; }
+        /* any other jump within the page glides there too, below whatever is pinned at the top */
+        var y = t.getBoundingClientRect().top + window.scrollY - top0() - (parseFloat(getComputedStyle(root).scrollPaddingTop) || 12);
+        if (motion()) glide(Math.max(0, Math.min(y, pageEnd())), JUMP, easeOut); else window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
+        if (t.tabIndex < 0 && !/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(t.tagName)) { t.setAttribute('tabindex', '-1'); }
+        t.focus({ preventScroll: true });
     });
     window.addEventListener('hashchange', function () { openTo(targetOf(location.hash), false); });
 

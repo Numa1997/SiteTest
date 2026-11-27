@@ -43,36 +43,39 @@ node.fsec | node.fsub            data-fold-level="1|2"  data-collapsed="0|1"
 
 The height animation is done by CSS: `.fold` is a one-row grid whose row goes from `0fr` to `1fr`, with `transition:
 grid-template-rows var(--fold-open) var(--fold-ease)` ([fold.css:57-61](../../public/styles/fold.css#L57-L61)); the body also
-fades and slides 8 px. Closing uses `--fold-close`. Closed bodies are `inert`, so they cannot take focus
+fades. Closing uses `--fold-close`. Closed bodies are `inert`, so they cannot take focus
 ([fold.js:108](../../public/scripts/fold.js#L108)).
 
 ### Timing and easing
 
-One curve and two durations serve everything that moves ([fold.js:19-23](../../public/scripts/fold.js#L19-L23)): open 320 ms,
-close 240 ms, curve `cubic-bezier(0.4, 0, 0.2, 1)`. The CSS transition uses them through the three variables; the scroll
-glide uses the same curve, evaluated in JavaScript by `bezier()` ([fold.js:24-35](../../public/scripts/fold.js#L24-L35)). A
-cubic Bézier gives time and progress as two polynomials of a parameter $u$:
-$$x(u) = a_x u^3 + b_x u^2 + c_x u, \qquad y(u) = a_y u^3 + b_y u^2 + c_y u,$$
-with $c = 3p_1$, $b = 3(p_2 - p_1) - c$, $a = 1 - c - b$ for the control points $p_1 = (0.4, 0)$ and $p_2 = (0.2, 1)$. For a
-time fraction $x$, up to six Newton steps solve $x(u) = x$, and the progress is $y(u)$. Computed with this function: at 10 %,
-25 %, 50 %, 75 % and 90 % of the time, the motion has covered 2.6 %, 23.7 %, 77.6 %, 95.9 % and 99.4 % of the distance (a slow
-start, a fast middle, a long gentle stop). Compared with a 60-step bisection, the largest error over $x \in [0, 1]$ is
-$2.3\times10^{-5}$.
+Since 27 November 2026 the pace is the site's, set once in [`styles/motion.css`](../../public/styles/motion.css) (see
+[styles.md, Motion](../styles.md#motioncss--motion)): `--dur` 0.75 s for opening and closing, `--ease`
+`cubic-bezier(.65, 0, .35, 1)`, and the rise-in values `--rise*`. `fold.css` maps `--fold-open`, `--fold-close` and `--fold-ease`
+onto them, and `fold.js` reads the same values from the page's CSS at the moment it needs them (`ms()`,
+[fold.js:21-25](../../public/scripts/fold.js#L21-L25)), so changing `motion.css` changes the scripted scroll too.
 
-A close that also has to pull the page up takes longer in step with the distance:
-`closeMs(d) = round(min(420, max(240, 0.45·d)))` ms for a scroll distance of $d$ px ([fold.js:38](../../public/scripts/fold.js#L38)).
-So any distance up to 533 px closes in 240 ms, and 933 px or more in 420 ms. The node gets this duration as its own
-`--fold-close` so the CSS and the scroll stay in step ([fold.js:135](../../public/scripts/fold.js#L135)).
+The scroll that goes with a fold follows smootherstep ([fold.js:27](../../public/scripts/fold.js#L27)),
+$$s(t) = t^3\,(6t^2 - 15t + 10), \qquad s'(0) = s'(1) = s''(0) = s''(1) = 0,$$
+which starts and stops at rest with no jolt; the CSS curve `--ease` is a close cubic Bézier to it. A jump within the page (a click
+on a `#` link) uses ease-out instead, $1 - (1 - t)^3$, over 0.7 s (`JUMP`, [fold.js:29-30](../../public/scripts/fold.js#L29-L30)):
+it answers the click at once and settles slowly.
+
+### Items rise in
+
+When a fold or a card opens, `rise(fold)` ([fold.js:137-156](../../public/scripts/fold.js#L137-L156)) numbers the items of its
+body (`--i`) and adds the class `is-rising`; `fold.css` ([line 68](../../public/styles/fold.css#L68)) then lets each item rise
+14 px and fade in over 0.7 s, starting 120 ms + `--i` × 45 ms after the click. Items that will sit below the window share the
+number of the last item in view, so a long section never keeps the reader waiting. The class comes off once every item has
+arrived. Only on opening, never on Expand all, a link jump or a redraw; nothing is re-rendered, only a class changes.
 
 ### Opening and closing one fold
 
-`toggle(node)` remembers the choice and calls `fold(node, open, true)` ([fold.js:143-147](../../public/scripts/fold.js#L143-L147)).
-`fold()` ([fold.js:126-141](../../public/scripts/fold.js#L126-L141)):
+`toggle(node)` remembers the choice and calls `fold(node, open, true)`. `fold()` ([fold.js:118-133](../../public/scripts/fold.js#L118-L133)):
 
 - **Closing.** Its pinned header may sit at the top while the fold's real top is far above. First the window jumps (no
   animation) so the fold's top is exactly where the header already appears: nothing on screen moves, but now only the body will
   fold away. Then, if the page will become too short for the current scroll position (the scroll is beyond the page end minus
-  the body height), the window glides up to the new end while the body closes, over `closeMs` of that distance.
+  the body height), the window glides up to the new end while the body closes, in the same 0.75 s.
 - **Opening.** The attributes flip and CSS animates; then `reveal()` ([fold.js:117-123](../../public/scripts/fold.js#L117-L123))
   leaves the window alone if the header sits between its pin line and the larger of (pin line + 48 px) and
   40 % of the window height; otherwise it glides so the header lands 12 px below its pin line, no further than the page end will be once the
@@ -81,27 +84,28 @@ So any distance up to 533 px closes in 240 ms, and 933 px or more in 420 ms. The
 `pinLine(node)` is where a fold's header pins: `--fold-top` for a section, plus the height of each enclosing section header for
 a part ([fold.js:97-101](../../public/scripts/fold.js#L97-L101)).
 
-`glide(to, ms)` ([fold.js:42-58](../../public/scripts/fold.js#L42-L58)) scrolls on its own animation frames with the eased
-progress. A newer glide cancels an older one through the counter `glideId`; a wheel or touch movement by the reader cancels it
+`glide(to, ms, curve)` ([fold.js:34-50](../../public/scripts/fold.js#L34-L50)) scrolls on its own animation frames with the eased
+progress (smootherstep unless another curve is given). A newer glide cancels an older one through the counter `glideId`; a wheel or touch movement by the reader cancels it
 too. With reduced motion it waits two frames, so the new layout exists, and then jumps.
 
 ### Expand all, Collapse all
 
 `all(open)` ([fold.js:150-163](../../public/scripts/fold.js#L150-L163)) moves every fold as one motion (since 3 November 2026,
 at Numa's request; before, it switched the transitions off): it reads where each fold is, gives each fold on screen (or within
-200 px of it) a start 28 ms after the one above it, at most 0.3 s (`--fold-delay`, read by the transitions in
+200 px of it) a start 45 ms (`--rise-step`) after the one above it, at most 0.36 s (`--fold-delay`, read by the transitions in
 [fold.css:53-59](../../public/styles/fold.css#L53-L59)), sets every fold and card, remembers every fold for this visit, calls
-`Fold.onAll`, and removes the delays once the motion has ended. Collapsing first jumps to the top of the first fold if the reader is below
+`Fold.onAll`, and removes the delays once the motion has ended. Collapsing first glides to the top of the first fold if the reader is below
 it. `tools(host, where)` ([fold.js:227-240](../../public/scripts/fold.js#L227-L240)) puts the two buttons once per page,
 `'before'` (default), `'after'` or `'append'` to `host`.
 
 ### Links into closed folds
 
-A click on `a[href^="#"]` whose target lies inside a fold or card is taken over: default prevented, the address updated with
+A click on any `a[href^="#"]` with a target on the page is taken over; one whose target lies outside every fold glides there
+(ease-out, 0.7 s) below whatever is pinned at the top and moves the keyboard focus there. One whose target lies inside a fold or card: default prevented, the address updated with
 `history.pushState`, then `openTo(target, true)` ([fold.js:264-273](../../public/scripts/fold.js#L264-L273)). Clicks with a
 modifier key or another mouse button are left alone. `openTo` ([fold.js:243-259](../../public/scripts/fold.js#L243-L259)) opens
 every enclosing fold from the outside in, and the target itself if it is a fold, without animation, and remembers them open;
-it opens an enclosing card; then it scrolls so the target sits 12 px below the stack of pinned headers (`--fold-top` plus each
+it opens an enclosing card; then it glides (ease-out, 0.7 s) or, without a click, scrolls so the target sits 12 px below the stack of pinned headers (`--fold-top` plus each
 enclosing header's height). On `hashchange`, and at boot when the address has a hash, it jumps without a glide
 ([fold.js:274](../../public/scripts/fold.js#L274), [fold.js:409](../../public/scripts/fold.js#L409)).
 
@@ -178,9 +182,9 @@ for `many` (Arabic has six forms). See [i18n.md](../i18n.md#words-inside-scripts
 | Name | Lines | What it does |
 |---|---|---|
 | `motion` | [17](../../public/scripts/fold.js#L17) | False when the system asks for reduced motion. |
-| `bezier` (inner `sx`, `sy`, `dx`) | [24-35](../../public/scripts/fold.js#L24-L35) | Easing function for a cubic Bézier. |
-| `closeMs` | [38](../../public/scripts/fold.js#L38) | Close duration for a scroll distance. |
-| `glide` (inner `stop`, `step`) | [42-58](../../public/scripts/fold.js#L42-L58) | Eased, cancellable window scroll. |
+| `ms`, `ease`, `easeOut` | [21-30](../../public/scripts/fold.js#L21-L30) | The site's durations read from CSS; smootherstep; ease-out. |
+| `rise` | [137-156](../../public/scripts/fold.js#L137-L156) | Items of an opening fold rise in. |
+| `glide` (inner `stop`, `step`) | [34-50](../../public/scripts/fold.js#L34-L50) | Eased, cancellable window scroll. |
 | `remember` | [68-72](../../public/scripts/fold.js#L68-L72) | Writes the reader's choice for one id. |
 | `el` | [74-79](../../public/scripts/fold.js#L74-L79) | Creates an element with class and text. |
 | `chev` | [80-88](../../public/scripts/fold.js#L80-L88) | The chevron SVG. |
@@ -217,12 +221,12 @@ for `many` (Arabic has six forms). See [i18n.md](../i18n.md#words-inside-scripts
 
 | What | Rate or delay | Where |
 |---|---|---|
-| Open | 320 ms, `cubic-bezier(0.4, 0, 0.2, 1)` | [fold.js:20](../../public/scripts/fold.js#L20) |
-| Close | 240 ms, up to 420 ms when the page must scroll | [fold.js:38](../../public/scripts/fold.js#L38) |
-| Glide | same curve; one animation frame per step | [fold.js:49-57](../../public/scripts/fold.js#L49-L57) |
-| Expand / Collapse all | one motion, each fold on screen 28 ms after the one above (0.3 s at most) | [fold.js:157-162](../../public/scripts/fold.js#L157-L162) |
+| Open, close | `--dur` 0.75 s, `--ease` (styles/motion.css) | [fold.css:14-16](../../public/styles/fold.css#L14-L16) |
+| Items rise in | 0.7 s each, 120 ms + 45 ms × item | [fold.css:68](../../public/styles/fold.css#L68), [fold.js:137-156](../../public/scripts/fold.js#L137-L156) |
+| Glide | smootherstep over `--dur`; link jumps ease-out over 0.7 s | [fold.js:27-50](../../public/scripts/fold.js#L27-L50) |
+| Expand / Collapse all | one motion, each fold on screen 45 ms after the one above (0.36 s at most) | [fold.js:162-176](../../public/scripts/fold.js#L162-L176) |
 | `openTo` | no animation; transitions back on the next frame | [249-254](../../public/scripts/fold.js#L249-L254) |
-| Reduced motion | glide jumps after two frames; CSS transitions 0.01 ms | [fold.js:48-52](../../public/scripts/fold.js#L48-L52), [fold.css:95-97](../../public/styles/fold.css#L95-L97) |
+| Reduced motion | glide jumps after two frames; no rise-in; every transition and animation 0 s (motion.css) | [fold.js:40-44](../../public/scripts/fold.js#L40-L44), [motion.css:29-33](../../public/styles/motion.css#L29-L33) |
 
 Listeners: `click` on each header and toggle; `click` on `document` for `.fs-more` and for `#` links; `hashchange`;
 `beforeprint`, `afterprint`; `resize` (passive); `wheel`, `touchmove` (once per glide, and once at load) and `keydown` (once

@@ -48,7 +48,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 .sim-top a:hover { color: var(--accent); text-decoration: none; }
 .sim-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; } @media (max-width: 440px) { .sim-nav { gap: 2px; } .sim-nav a { min-width: 23px; } }   /* twelve figures since 5 November 2026: narrower on phones, and a second line rather than a sideways scroll */
 .sim-nav span { margin-right: 6px; }
-.sim-nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; border-radius: 4px; border: 1px solid transparent; transition: border-color .2s ease, color .2s ease; }
+.sim-nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; border-radius: 4px; border: 1px solid transparent; transition: border-color var(--dur-s) var(--ease), color var(--dur-s) var(--ease); }
 .sim-nav a:hover { border-color: var(--rule); }
 .sim-nav a[aria-current="page"] { color: var(--accent); border-color: var(--accent); }
 
@@ -95,16 +95,16 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); }
 input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
 
 /* buttons: same shapes as the front page */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans); font-size: 13.5px; font-weight: 500; line-height: 1.2; color: #fff; background: var(--accent); padding: 9px 16px; border-radius: 6px; border: 1px solid var(--accent); white-space: nowrap; cursor: pointer; transition: background .2s ease, box-shadow .2s ease, transform .2s ease, color .2s ease, border-color .2s ease; }
-.btn:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; box-shadow: 0 8px 20px rgba(122, 31, 43, .25); transform: translateY(-1px); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans); font-size: 13.5px; font-weight: 500; line-height: 1.2; color: #fff; background: var(--accent); padding: 9px 16px; border-radius: 6px; border: 1px solid var(--accent); white-space: nowrap; cursor: pointer; transition: background var(--dur-s) var(--ease), box-shadow var(--dur-s) var(--ease), transform var(--dur-s) var(--ease), color var(--dur-s) var(--ease), border-color var(--dur-s) var(--ease); }
+.btn:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; box-shadow: 0 8px 20px rgba(122, 31, 43, .25); transform: translateY(var(--lift)); }
 .btn--ghost { background: transparent; color: var(--accent); border-color: var(--rule); }
 .btn--ghost:hover { background: var(--card-soft); color: var(--accent-dark); border-color: var(--accent); box-shadow: none; }
 .btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
 
 /* switches */
 .switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13.5px; color: var(--ink-2); cursor: pointer; }
-.switch input { -webkit-appearance: none; appearance: none; flex-shrink: 0; width: 34px; height: 20px; margin: 0; border-radius: 10px; background: var(--rule); position: relative; cursor: pointer; transition: background .2s ease; }
-.switch input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--card); box-shadow: 0 1px 2px rgba(0, 0, 0, .2); transition: transform .2s ease; }
+.switch input { -webkit-appearance: none; appearance: none; flex-shrink: 0; width: 34px; height: 20px; margin: 0; border-radius: 10px; background: var(--rule); position: relative; cursor: pointer; transition: background var(--dur-s) var(--ease); }
+.switch input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--card); box-shadow: 0 1px 2px rgba(0, 0, 0, .2); transition: transform var(--dur-s) var(--ease); }
 .switch input:checked { background: var(--accent); }
 .switch input:checked::after { transform: translateX(14px); }
 
@@ -142,11 +142,11 @@ input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
 .walk__hold { display: inline-flex; }
 .walk__frame { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: start; }
 .walk__steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; position: sticky; top: 20px; }
-.walk__steps button { width: 100%; text-align: left; display: flex; gap: 10px; align-items: baseline; background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 9px 12px; font-family: var(--sans); font-size: 13.5px; line-height: 1.35; color: var(--ink-3); cursor: pointer; transition: background .2s ease, color .2s ease, border-color .2s ease; }
+.walk__steps button { width: 100%; text-align: left; display: flex; gap: 10px; align-items: baseline; background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 9px 12px; font-family: var(--sans); font-size: 13.5px; line-height: 1.35; color: var(--ink-3); cursor: pointer; transition: background var(--dur-s) var(--ease), color var(--dur-s) var(--ease), border-color var(--dur-s) var(--ease); }
 .walk__steps button span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; color: var(--accent); }
 .walk__steps button:hover { color: var(--ink); background: var(--card-soft); }
 .walk__steps button[aria-selected="true"] { color: var(--ink); background: var(--card); border-color: var(--rule); box-shadow: inset 3px 0 0 var(--accent); }
-.walk__card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 20px 22px 18px; min-width: 0; box-shadow: 0 14px 40px -30px rgba(28, 21, 24, .5); animation: open .3s ease both; }
+.walk__card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 20px 22px 18px; min-width: 0; box-shadow: 0 14px 40px -30px rgba(28, 21, 24, .5); animation: m-rise var(--dur) var(--ease) both; }
 .walk__num { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 4px; }
 .walk__top h3 { font-weight: 400; font-size: clamp(20px, 2vw, 25px); line-height: 1.2; margin: 0 0 4px; }
 .walk__top { margin-bottom: 14px; }
@@ -157,7 +157,7 @@ input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
 .walk__note { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin: 0; }
 .walk__code pre { margin: 0; background: var(--ink); color: #efe6da; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 12.5px; line-height: 1.65; tab-size: 4; }
 .walk__code code { font-family: inherit; white-space: pre; }
-.k { border-radius: 3px; padding: 0 1px; cursor: help; transition: background .15s ease, color .15s ease, box-shadow .15s ease; }
+.k { border-radius: 3px; padding: 0 1px; cursor: help; transition: background var(--dur-s) var(--ease), color var(--dur-s) var(--ease), box-shadow var(--dur-s) var(--ease); }
 .walk__eq .k { color: var(--accent); }
 .walk__code .k { color: #f2b8bf; }
 .k.is-lit, .walk__table tr.is-lit td { background: var(--tan); color: var(--accent-dark); box-shadow: 0 0 0 2px var(--tan); }
@@ -165,7 +165,7 @@ input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
 .walk__tablewrap { margin-top: 16px; overflow-x: auto; }
 .walk__table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .walk__table th { text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 6px 10px; border-bottom: 1px solid var(--rule); }
-.walk__table td { padding: 7px 10px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-2); vertical-align: top; transition: background .15s ease; }
+.walk__table td { padding: 7px 10px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-2); vertical-align: top; transition: background var(--dur-s) var(--ease); }
 .walk__table code { font-family: var(--mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
 .walk__sym { font-family: var(--tex); font-style: italic; font-size: 16px; color: var(--accent); white-space: nowrap; }
 .walk__table th.now::after { content: ''; display: inline-block; width: 6px; height: 6px; margin-left: 6px; border-radius: 50%; background: var(--accent); vertical-align: middle; animation: pulse 1.6s ease-in-out infinite; }
@@ -256,7 +256,7 @@ html:not(.tex-ready) .stage__cap .tx { visibility: hidden; }
 /* Tapping (Numa, 3 November 2026): Android Chrome's blue tap highlight is switched off everywhere; a tapped link or button dims to
    72 % for the press instead, and the keyboard focus ring (:focus-visible, in the accent colour) stays as it is. */
 html, a, button, input, select, textarea, label, summary, [role="button"], [tabindex] { -webkit-tap-highlight-color: transparent; }
-a:active, button:active { opacity: .72; transition: opacity 0s; }
+a:active, button:active { opacity: .72; transition: opacity calc(var(--dur-s) / 4) var(--ease); }
 input[type="range"]:active { opacity: 1; }
 
 /* ================= the pint of Guinness: which of its two figures this is (guinness-kaggle, guinness-cart-control) ================= */

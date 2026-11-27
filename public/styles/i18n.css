@@ -54,16 +54,17 @@ html[dir='rtl'] .curve__st { direction: ltr; unicode-bidi: isolate; text-align: 
 /* ---------- moving between pages (scripts/flip.js names the kind: "page" or "lang") ---------- */
 @view-transition { navigation: auto; }
 ::view-transition { background: var(--paper, #f5f1ea); }
-/* a link: the old page settles back a little and fades, the new one rises 10 px into place, the two overlapping; 0.34 s */
-::view-transition-group(root) { animation-duration: 0.34s; }
-::view-transition-old(root) { animation: page-out 0.16s cubic-bezier(.4, 0, 1, 1) both; transform-origin: 50% 30%; }
-::view-transition-new(root) { animation: page-in 0.28s cubic-bezier(0, 0, .2, 1) 0.06s both; }
+::view-transition-group(root) { animation-duration: var(--dur, .75s); }
+/* a link to another page: the old page settles back and fades while the new one rises into place, about 0.7 s in all, on the
+   site's ease-out (styles/motion.css): it moves at once and comes to rest slowly */
+::view-transition-old(root) { animation: page-out calc(var(--dur, .75s) * .4) var(--ease, ease) both; transform-origin: 50% 30%; }
+::view-transition-new(root) { animation: page-in calc(var(--dur, .75s) * .7) var(--ease-out, ease-out) calc(var(--dur, .75s) * .2) both; }
 @keyframes page-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.985); } }
-@keyframes page-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-/* a change of language: the page turns over */
-:root:active-view-transition-type(lang)::view-transition-group(root) { animation-duration: 0.56s; }
-:root:active-view-transition-type(lang)::view-transition-old(root) { animation: lang-turn-out 0.28s cubic-bezier(.55, 0, .9, .45) both; transform-origin: 50% 50%; backface-visibility: hidden; }
-:root:active-view-transition-type(lang)::view-transition-new(root) { animation: lang-turn-in 0.28s cubic-bezier(.1, .55, .45, 1) 0.28s both; transform-origin: 50% 50%; backface-visibility: hidden; }
+@keyframes page-in { from { opacity: 0; transform: translateY(var(--rise, 14px)); } to { opacity: 1; transform: none; } }
+/* a change of language turns the page over: half a turn out, half a turn in, together one --dur */
+:root:active-view-transition-type(lang)::view-transition-group(root) { animation-duration: var(--dur, .75s); }
+:root:active-view-transition-type(lang)::view-transition-old(root) { animation: lang-turn-out calc(var(--dur, .75s) / 2) cubic-bezier(.55, 0, 1, .45) both; transform-origin: 50% 50%; backface-visibility: hidden; }
+:root:active-view-transition-type(lang)::view-transition-new(root) { animation: lang-turn-in calc(var(--dur, .75s) / 2) cubic-bezier(0, .55, .45, 1) calc(var(--dur, .75s) / 2) both; transform-origin: 50% 50%; backface-visibility: hidden; }
 @keyframes lang-turn-out { from { transform: perspective(1800px) rotateY(0deg); } to { transform: perspective(1800px) rotateY(90deg); } }
 @keyframes lang-turn-in { from { transform: perspective(1800px) rotateY(-90deg); } to { transform: perspective(1800px) rotateY(0deg); } }
 /* the arriving page has moved in already: its own entrance animations would be a second motion. The figure keeps its fade

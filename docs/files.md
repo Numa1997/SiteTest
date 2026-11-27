@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-7246 files, 999.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+7250 files, 999.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -17,7 +17,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 43 |
 | [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4821 |
-| [Stylesheets](#stylesheets) | 18 |
+| [Stylesheets](#stylesheets) | 19 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
 | [Latin Modern](#latin-modern) | 5 |
@@ -49,7 +49,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 929 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 932 |
 
 ## Repository root
 
@@ -59,7 +59,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`AGENTS.md`](../AGENTS.md) | 15.9 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 6.0 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 8.9 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
-| [`index.html`](../index.html) | 87.4 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
+| [`index.html`](../index.html) | 87.5 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package-lock.json`](../package-lock.json) | 72.1 kB | Pins the exact versions of the build tools (Vite and its dependencies, 141 packages), since 20 November 2026. | [rebuild.md](method/rebuild.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -74,54 +74,54 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`public/_headers`](../public/_headers) | 1.9 kB | Response headers Cloudflare sets on phyeinusul.com: security headers on every file, a year of caching for font files; read by Cloudflare, never served. | [usul.md](usul.md) |
 | [`public/_redirects`](../public/_redirects) | 12.6 kB | Each page at its short address (x, folder/, /), for Cloudflare with html_handling none; written by tools/redirects.py, read by Cloudflare, never served. | [usul.md](usul.md) |
-| [`public/lucretius.html`](../public/lucretius.html) | 69.8 kB | The poem page: Lucretius I 146-224 in four columns, Latin, English, German, Arabic (written by make_page.py; /de/ and /ar/ differ only in the words around the poem). | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
-| [`public/portfolios.html`](../public/portfolios.html) | 51.5 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
+| [`public/lucretius.html`](../public/lucretius.html) | 69.9 kB | The poem page: Lucretius I 146-224 in four columns, Latin, English, German, Arabic (written by make_page.py; /de/ and /ar/ differ only in the words around the poem). | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/portfolios.html`](../public/portfolios.html) | 51.6 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
-| [`public/scenes.html`](../public/scenes.html) | 21.1 kB | The scenes page: every living scene of the site on its own, with what it shows, what drives it and its numbers to change. | [bg-scenes.md](scripts/bg-scenes.md) |
-| [`public/simulations.html`](../public/simulations.html) | 13.0 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
+| [`public/scenes.html`](../public/scenes.html) | 21.2 kB | The scenes page: every living scene of the site on its own, with what it shows, what drives it and its numbers to change. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`public/simulations.html`](../public/simulations.html) | 13.1 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
 
 ## German pages (generated)
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/de/index.html`](../public/de/index.html) | 86.8 kB | German index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/lucretius.html`](../public/de/lucretius.html) | 70.1 kB | German lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/index.html`](../public/de/index.html) | 86.9 kB | German index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/lucretius.html`](../public/de/lucretius.html) | 70.2 kB | German lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/portfolios.html`](../public/de/portfolios.html) | 54.6 kB | German portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/simulations.html`](../public/de/simulations.html) | 13.2 kB | German simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/Circular Wave Interference Visualization.html`](../public/de/simulations/Circular%20Wave%20Interference%20Visualization.html) | 213.9 kB | German simulations/Circular Wave Interference Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/Double Pendulum.html`](../public/de/simulations/Double%20Pendulum.html) | 138.8 kB | German simulations/Double Pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/Circular Wave Interference Visualization.html`](../public/de/simulations/Circular%20Wave%20Interference%20Visualization.html) | 214.0 kB | German simulations/Circular Wave Interference Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/Double Pendulum.html`](../public/de/simulations/Double%20Pendulum.html) | 138.9 kB | German simulations/Double Pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/de/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 183.0 kB | German simulations/Interactive Double-Slit Experiment Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/Transverse and longitudinal waves.html`](../public/de/simulations/Transverse%20and%20longitudinal%20waves.html) | 214.2 kB | German simulations/Transverse and longitudinal waves.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/double-inverted-pendulum.html`](../public/de/simulations/double-inverted-pendulum.html) | 384.4 kB | German simulations/double-inverted-pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/draw-decompose.html`](../public/de/simulations/draw-decompose.html) | 229.5 kB | German simulations/draw-decompose.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/driven-oscillator.html`](../public/de/simulations/driven-oscillator.html) | 349.8 kB | German simulations/driven-oscillator.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/pendulum-control.html`](../public/de/simulations/pendulum-control.html) | 215.7 kB | German simulations/pendulum-control.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/phasor-sums.html`](../public/de/simulations/phasor-sums.html) | 279.0 kB | German simulations/phasor-sums.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/Transverse and longitudinal waves.html`](../public/de/simulations/Transverse%20and%20longitudinal%20waves.html) | 214.3 kB | German simulations/Transverse and longitudinal waves.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/double-inverted-pendulum.html`](../public/de/simulations/double-inverted-pendulum.html) | 384.5 kB | German simulations/double-inverted-pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/draw-decompose.html`](../public/de/simulations/draw-decompose.html) | 229.6 kB | German simulations/draw-decompose.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/driven-oscillator.html`](../public/de/simulations/driven-oscillator.html) | 349.9 kB | German simulations/driven-oscillator.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/pendulum-control.html`](../public/de/simulations/pendulum-control.html) | 215.8 kB | German simulations/pendulum-control.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/phasor-sums.html`](../public/de/simulations/phasor-sums.html) | 279.1 kB | German simulations/phasor-sums.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/simulations/rods-in-liquid.html`](../public/de/simulations/rods-in-liquid.html) | 423.0 kB | German simulations/rods-in-liquid.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/simulations/water-wave.html`](../public/de/simulations/water-wave.html) | 176.2 kB | German simulations/water-wave.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/simulations/wave-interference.html`](../public/de/simulations/wave-interference.html) | 187.7 kB | German simulations/wave-interference.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/simulations/wind-turbine.html`](../public/de/simulations/wind-turbine.html) | 204.1 kB | German simulations/wind-turbine.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/wind-turbine.html`](../public/de/simulations/wind-turbine.html) | 204.2 kB | German simulations/wind-turbine.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 
 ## Arabic pages (generated)
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/ar/index.html`](../public/ar/index.html) | 90.5 kB | Arabic index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/lucretius.html`](../public/ar/lucretius.html) | 71.5 kB | Arabic lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/index.html`](../public/ar/index.html) | 90.6 kB | Arabic index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/lucretius.html`](../public/ar/lucretius.html) | 71.6 kB | Arabic lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/portfolios.html`](../public/ar/portfolios.html) | 65.1 kB | Arabic portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/simulations.html`](../public/ar/simulations.html) | 14.0 kB | Arabic simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/simulations/Circular Wave Interference Visualization.html`](../public/ar/simulations/Circular%20Wave%20Interference%20Visualization.html) | 223.3 kB | Arabic simulations/Circular Wave Interference Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations.html`](../public/ar/simulations.html) | 14.1 kB | Arabic simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/Circular Wave Interference Visualization.html`](../public/ar/simulations/Circular%20Wave%20Interference%20Visualization.html) | 223.4 kB | Arabic simulations/Circular Wave Interference Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations/Double Pendulum.html`](../public/ar/simulations/Double%20Pendulum.html) | 149.6 kB | Arabic simulations/Double Pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/ar/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 192.1 kB | Arabic simulations/Interactive Double-Slit Experiment Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations/Transverse and longitudinal waves.html`](../public/ar/simulations/Transverse%20and%20longitudinal%20waves.html) | 222.4 kB | Arabic simulations/Transverse and longitudinal waves.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/simulations/double-inverted-pendulum.html`](../public/ar/simulations/double-inverted-pendulum.html) | 411.6 kB | Arabic simulations/double-inverted-pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/simulations/draw-decompose.html`](../public/ar/simulations/draw-decompose.html) | 238.9 kB | Arabic simulations/draw-decompose.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/double-inverted-pendulum.html`](../public/ar/simulations/double-inverted-pendulum.html) | 411.7 kB | Arabic simulations/double-inverted-pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/draw-decompose.html`](../public/ar/simulations/draw-decompose.html) | 239.0 kB | Arabic simulations/draw-decompose.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations/driven-oscillator.html`](../public/ar/simulations/driven-oscillator.html) | 362.1 kB | Arabic simulations/driven-oscillator.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/simulations/pendulum-control.html`](../public/ar/simulations/pendulum-control.html) | 230.0 kB | Arabic simulations/pendulum-control.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/pendulum-control.html`](../public/ar/simulations/pendulum-control.html) | 230.1 kB | Arabic simulations/pendulum-control.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations/phasor-sums.html`](../public/ar/simulations/phasor-sums.html) | 288.3 kB | Arabic simulations/phasor-sums.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations/rods-in-liquid.html`](../public/ar/simulations/rods-in-liquid.html) | 458.3 kB | Arabic simulations/rods-in-liquid.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/simulations/water-wave.html`](../public/ar/simulations/water-wave.html) | 185.0 kB | Arabic simulations/water-wave.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/simulations/wave-interference.html`](../public/ar/simulations/wave-interference.html) | 196.5 kB | Arabic simulations/wave-interference.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/water-wave.html`](../public/ar/simulations/water-wave.html) | 185.1 kB | Arabic simulations/water-wave.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/wave-interference.html`](../public/ar/simulations/wave-interference.html) | 196.6 kB | Arabic simulations/wave-interference.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations/wind-turbine.html`](../public/ar/simulations/wind-turbine.html) | 212.1 kB | Arabic simulations/wind-turbine.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 
 ## Simulation pages
@@ -129,12 +129,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 209.2 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
-| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 133.2 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
-| [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.6 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
-| [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.4 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
-| [`public/simulations/butterfly-catch.html`](../public/simulations/butterfly-catch.html) | 48.9 kB | Fig. 13: catching the butterfly, the live interactive catch and its lecture note (theory and method); body from tools/fig13/catch_note_body.html. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/simulations/butterfly-dashboard.html`](../public/simulations/butterfly-dashboard.html) | 28.3 kB | Fig. 13 dashboard · The Wave and the Circle: the complex plane of the motion, its height and sideways position against time joined by straight lines, and the paper turned until each wave is the circle again (a wheel, the butterfly). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 369.4 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026), in vacuum and air since 7 November 2026: the real-time simulation, its data panel, walkthrough and lecture note; listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
+| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 133.3 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
+| [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.7 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
+| [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.5 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
+| [`public/simulations/butterfly-catch.html`](../public/simulations/butterfly-catch.html) | 49.0 kB | Fig. 13: catching the butterfly, the live interactive catch and its lecture note (theory and method); body from tools/fig13/catch_note_body.html. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/butterfly-dashboard.html`](../public/simulations/butterfly-dashboard.html) | 28.4 kB | Fig. 13 dashboard · The Wave and the Circle: the complex plane of the motion, its height and sideways position against time joined by straight lines, and the paper turned until each wave is the circle again (a wheel, the butterfly). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 369.5 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026), in vacuum and air since 7 November 2026: the real-time simulation, its data panel, walkthrough and lecture note; listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 224.2 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.8 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`public/simulations/fig13/bell.html`](../public/simulations/fig13/bell.html) | 21.2 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/butterfly3d.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -158,17 +158,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/fig13/together.html`](../public/simulations/fig13/together.html) | 29.1 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/together.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/fig13/turning.html`](../public/simulations/fig13/turning.html) | 20.4 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/morph.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/flower-hunt.html`](../public/simulations/flower-hunt.html) | 40.1 kB | Fig. 13 study · The Flower Hunt: closed flowers and butterflies found as periodic orbits by Newton's method, a test bench and study notes. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/simulations/guinness-cart-control.html`](../public/simulations/guinness-cart-control.html) | 81.2 kB | Fig. 16 · A Pint of Guinness on a Cart Built to Carry It: the simulation, its data panel, walkthrough and lecture note. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
+| [`public/simulations/guinness-cart-control.html`](../public/simulations/guinness-cart-control.html) | 81.3 kB | Fig. 16 · A Pint of Guinness on a Cart Built to Carry It: the simulation, its data panel, walkthrough and lecture note. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`public/simulations/guinness-kaggle.html`](../public/simulations/guinness-kaggle.html) | 297.1 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-guinness-kaggle.md](simulations/fig12-guinness-kaggle.md) |
-| [`public/simulations/living-scenes.html`](../public/simulations/living-scenes.html) | 101.6 kB | Fig. 17 · Living Scenes: the thirteen scenes of bg-scenes.js one at a time, their knobs and stored readouts, and the lecture note (section 2: the spinners). | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
+| [`public/simulations/living-scenes.html`](../public/simulations/living-scenes.html) | 101.7 kB | Fig. 17 · Living Scenes: the thirteen scenes of bg-scenes.js one at a time, their knobs and stored readouts, and the lecture note (section 2: the spinners). | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
 | [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 233.8 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.2 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
+| [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.3 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.4 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 71.9 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
-| [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 233.1 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
-| [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.7 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
-| [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 181.9 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
+| [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.3 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
+| [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 233.2 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.8 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
+| [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 182.0 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
 | [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 200.4 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 
 ## Walkthroughs
@@ -230,7 +230,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/cart16-view.js`](../public/scripts/cart16-view.js) | 17.4 kB | Fig. 16: Cart16View, the four-wheel cart drawn on Fig. 12's StoutView2 (its camera and glass); the deck's pose from stored data. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 27.1 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
 | [`public/scripts/curve.js`](../public/scripts/curve.js) | 46.9 kB | Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page's store. | [curve.md](scripts/curve.md) |
-| [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 104.7 kB | The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
+| [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 106.1 kB | The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
 | [`public/scripts/fig13-catalogue-data.js`](../public/scripts/fig13-catalogue-data.js) | 14.6 kB | Fig. 13: the catalogue of closed drawings, 228 closed orbits drawn live from their strikes, sortable, with a viewer and a push test. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/fig13-catalogue.js`](../public/scripts/fig13-catalogue.js) | 10.7 kB | Fig. 13: the catalogue of closed drawings, 228 closed orbits drawn live from their strikes, sortable, with a viewer and a push test. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -243,7 +243,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/fig14-iso-worker.js`](../public/scripts/fig14-iso-worker.js) | 3.0 kB | Fig. 14 sheets, off the main thread (module worker): Lanczos resampling of the 3D field and marching cubes for Re psi = +c and -c. | [wave3d-view.md](scripts/wave3d-view.md) |
 | [`public/scripts/fig14-sheet-worker.js`](../public/scripts/fig14-sheet-worker.js) | 7.8 kB | Fig. 14 meshed sheet, off the main thread: band-limited resampling of a stored frame onto the sheet (1/6 a), and the numbers that scale its height. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/scripts/flip.js`](../public/scripts/flip.js) | 3.5 kB | Turns the page over on a change of language (cross-document view transition), and only then. | [i18n.md](i18n.md) |
-| [`public/scripts/fold.js`](../public/scripts/fold.js) | 26.9 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
+| [`public/scripts/fold.js`](../public/scripts/fold.js) | 28.4 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
 | [`public/scripts/guinness-glass.js`](../public/scripts/guinness-glass.js) | 3.1 kB | Fig. 12: inner radius of the Guinness tulip pint every 0.5 mm, written by tools/fig12/glass_profile.py; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/guinness-jax-play.js`](../public/scripts/guinness-jax-play.js) | 13.3 kB | Fig. 12 in JAX: plays the stored rides listed in index-jax.json in real time through StoutView2 (no interpolation, no slowing, each file checked against its SHA-256), the ride chooser, the road strip and the readings; computes nothing physical | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/guinness16-play.js`](../public/scripts/guinness16-play.js) | 39.4 kB | Fig. 16: the player; Fig. 12's best stored ride and the new cart's on one clock, SHA-256 checked, the comparison table from both indexes. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -5241,23 +5241,24 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/styles/bg-scenes.css`](../public/styles/bg-scenes.css) | 5.5 kB | Holders of the living scenes: top, fixed and band. | [bg-scenes.md](scripts/bg-scenes.md) |
-| [`public/styles/catalog.css`](../public/styles/catalog.css) | 8.0 kB | The catalog entries (paper abstracts) on the simulations page. | [styles.md](styles.md) |
-| [`public/styles/catalog.rtl.css`](../public/styles/catalog.rtl.css) | 8.2 kB | catalog.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
-| [`public/styles/data.css`](../public/styles/data.css) | 39.1 kB | The data panel (headline, ledger table, books) and the Read values strip. | [styles.md](styles.md) |
-| [`public/styles/data.rtl.css`](../public/styles/data.rtl.css) | 39.2 kB | data.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
-| [`public/styles/fold.css`](../public/styles/fold.css) | 10.8 kB | The fold-out sections: cards, header bands, toggles, Expand/Collapse all. | [styles.md](styles.md) |
-| [`public/styles/fold.rtl.css`](../public/styles/fold.rtl.css) | 11.0 kB | fold.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
-| [`public/styles/i18n.css`](../public/styles/i18n.css) | 6.8 kB | Language switch, Arabic fonts and the few right-to-left rules of the translated pages. | [styles.md](styles.md) |
+| [`public/styles/catalog.css`](../public/styles/catalog.css) | 8.2 kB | The catalog entries (paper abstracts) on the simulations page. | [styles.md](styles.md) |
+| [`public/styles/catalog.rtl.css`](../public/styles/catalog.rtl.css) | 8.4 kB | catalog.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
+| [`public/styles/data.css`](../public/styles/data.css) | 39.7 kB | The data panel (headline, ledger table, books) and the Read values strip. | [styles.md](styles.md) |
+| [`public/styles/data.rtl.css`](../public/styles/data.rtl.css) | 39.8 kB | data.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
+| [`public/styles/fold.css`](../public/styles/fold.css) | 11.9 kB | The fold-out sections: cards, header bands, toggles, Expand/Collapse all. | [styles.md](styles.md) |
+| [`public/styles/fold.rtl.css`](../public/styles/fold.rtl.css) | 12.1 kB | fold.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
+| [`public/styles/i18n.css`](../public/styles/i18n.css) | 7.1 kB | Language switch, Arabic fonts and the few right-to-left rules of the translated pages. | [styles.md](styles.md) |
 | [`public/styles/kaggle-flow.css`](../public/styles/kaggle-flow.css) | 3.2 kB | Styles of kaggle-flow.js: the computed band, soft zones and dots of the sliders, the notice. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`public/styles/lucretius-deco.css`](../public/styles/lucretius-deco.css) | 3.5 kB | Lucretius page backgrounds by address (?bg=a\|b\|c\|d); none by default. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/styles/motion.css`](../public/styles/motion.css) | 2.0 kB | The pace of every click, hover and page change: one ease and two durations, linked first on every page (Motion). | [styles.md](styles.md) |
 | [`public/styles/paper.css`](../public/styles/paper.css) | 10.1 kB | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, abstract box. | [styles.md](styles.md) |
 | [`public/styles/paper.rtl.css`](../public/styles/paper.rtl.css) | 10.3 kB | paper.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/portfolio.css`](../public/styles/portfolio.css) | 6.1 kB | The project cards and figure plates of the Portfolios page. | [styles.md](styles.md) |
 | [`public/styles/portfolio.rtl.css`](../public/styles/portfolio.rtl.css) | 6.3 kB | portfolio.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
-| [`public/styles/sim.css`](../public/styles/sim.css) | 22.4 kB | Design of the simulation pages: stage, controls, readouts, walkthrough; imports paper.css and KaTeX. | [styles.md](styles.md) |
-| [`public/styles/sim.rtl.css`](../public/styles/sim.rtl.css) | 22.6 kB | sim.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
-| [`public/styles/site.css`](../public/styles/site.css) | 27.4 kB | Design of the home, catalog and Portfolios pages: tokens, top bar, sections, cards. | [styles.md](styles.md) |
-| [`public/styles/site.rtl.css`](../public/styles/site.rtl.css) | 27.6 kB | site.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
+| [`public/styles/sim.css`](../public/styles/sim.css) | 22.7 kB | Design of the simulation pages: stage, controls, readouts, walkthrough; imports paper.css and KaTeX. | [styles.md](styles.md) |
+| [`public/styles/sim.rtl.css`](../public/styles/sim.rtl.css) | 22.9 kB | sim.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
+| [`public/styles/site.css`](../public/styles/site.css) | 28.0 kB | Design of the home, catalog and Portfolios pages: tokens, top bar, sections, cards. | [styles.md](styles.md) |
+| [`public/styles/site.rtl.css`](../public/styles/site.rtl.css) | 28.2 kB | site.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 
 ## KaTeX
 
@@ -5944,9 +5945,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 25.1 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.3 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
-| [`docs/scripts/datalog.md`](scripts/datalog.md) | 67.5 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
+| [`docs/scripts/datalog.md`](scripts/datalog.md) | 67.7 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
 | [`docs/scripts/dataset.md`](scripts/dataset.md) | 18.1 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
-| [`docs/scripts/fold.md`](scripts/fold.md) | 23.0 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
+| [`docs/scripts/fold.md`](scripts/fold.md) | 23.5 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 34.0 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
 | [`docs/scripts/simdata.md`](scripts/simdata.md) | 3.9 kB | Documentation: simdata.js: one loader of stored simulation data for every page. | [simdata.md](scripts/simdata.md) |
 | [`docs/scripts/twoway.md`](scripts/twoway.md) | 7.5 kB | Documentation: public/scripts/twoway.js. | [twoway.md](scripts/twoway.md) |
@@ -5971,7 +5972,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 19.0 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`docs/simulations/fig17-living-scenes.md`](simulations/fig17-living-scenes.md) | 3.5 kB | Documentation: Fig. 17 · Living Scenes. | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
-| [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
+| [`docs/styles.md`](styles.md) | 55.7 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 14.7 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
 ## Tools
@@ -6141,7 +6142,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 153.2 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 153.9 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -7772,6 +7773,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/lucretius/make_page.py`](../notes/lucretius/make_page.py) | 19.6 kB | Writes public/lucretius.html: Lucretius I 146-224 in four columns (Latin, Leonard, Diels, Arabic). | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-146-224.json`](../notes/lucretius/poem-146-224.json) | 15.8 kB | Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-ar-146-224.json`](../notes/lucretius/poem-ar-146-224.json) | 10.8 kB | The Arabic of Lucretius I 146-224 (tenth version, free verse, fully vowelled), translated from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
+| [`notes/motion/01-state.md`](../notes/motion/01-state.md) | 2.3 kB | State of the session that gave every click one calm motion (27 November 2026): aim, decisions, progress. | [styles.md](styles.md) |
+| [`notes/motion/02-inventory.md`](../notes/motion/02-inventory.md) | 4.9 kB | Everything that moved on a click, hover or page change before 27 November 2026: file, line, trigger, timing, verdict. | [styles.md](styles.md) |
+| [`notes/motion/motion-test.cjs`](../notes/motion/motion-test.cjs) | 12.3 kB | Opens and closes every fold, card, tab and panel at 390, 844, 1100 and 1440 px in en/de/ar, checking for jumps, flashes, overflow and console errors. | [styles.md](styles.md) |
 | [`notes/scenes17/figs.py`](../notes/scenes17/figs.py) | 7.1 kB | Fig. 17 section 2: plots the three SVG figures of the spinners note from the formulas and the stored spinners.json. | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
 | [`notes/scenes17/page.cjs`](../notes/scenes17/page.cjs) | 3.1 kB | Fig. 17 browser check: errors, sideways scroll, every scene drawn (alpha first), readouts, at 1600 and 390 px and with reduced motion. | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
 | [`notes/scenes17/state.md`](../notes/scenes17/state.md) | 4.7 kB | State of the Fig. 17 work (Living Scenes, from 26 November 2026): the ask, decisions, scene order, what is live and what is left. | [fig17-living-scenes.md](simulations/fig17-living-scenes.md) |
