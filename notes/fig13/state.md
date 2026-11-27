@@ -15,6 +15,8 @@ the flower hunt, the catch (a motor at the top pin brings a chaotic double pendu
 - `#straight` "The eye, straightened": `public/scripts/fig13-straight.js`, pictures eye-struck, eye-spin-fold, eye-unrolled written by
   `tools/fig13/spin_fold.py SHEET.npy EYE.npy public/images/fig13 web`. Spin X = (p1+p2)/sqrt(2 Is), fold Y = sqrt(mu/2)(w2-w1), K = X^2+Y^2;
   streaks at +-60 degrees (If/Is = 1/4).
+  Below the figure: the exact matrix, inverse and shear (S = [[1,-3/2],[0,1]], amount C/B), and five sources read in full and quoted
+  (Heyl 2008, Rafat et al. arXiv:0812.0393, Dullin 1994, Haham & Kol arXiv:2608.20276, Shapiro notes). Symbolic check: `tools/fig13/spin_fold_check.wl`.
 - `#families` "Where the repeating motions live" and `#zoom-title` "Into the border between order and chaos":
   `public/scripts/fig13-families.js` with ten pictures in `public/images/fig13/` (families-petals, families-stability, chaos-sheet-fine,
   chaos-eye-fine, chaos-zoom0..5). Four views with legend and plain explanation each, magnify, tap to pin, run the nearest catalogue orbit;
