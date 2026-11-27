@@ -9,6 +9,7 @@
     <meta name="description" content="لوكريتيوس، في طبيعة الأشياء، الكتاب الأول، الأبيات ⁦146–224⁩ (لا شيء يولد من العدم): النص اللاتيني وثلاث ترجمات جنبًا إلى جنب، الإنجليزية (ليونارد) والألمانية (ديلس) والعربية." />
     <meta name="author" content="نعمة سائر قدسية" />
     <meta name="theme-color" content="#f5f1ea" /><link rel="alternate" hreflang="en" href="https://phyeinusul.com/lucretius.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/lucretius.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/lucretius.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/lucretius.html" />
+    <link rel="stylesheet" href="../styles/motion.css" />
     <link rel="stylesheet" href="../styles/site.rtl.css" />
     <link rel="stylesheet" href="../styles/catalog.rtl.css" />
     <link rel="stylesheet" href="../styles/i18n.css" />
@@ -80,7 +81,7 @@
         .lp-cols b::after { display: none; }
         .lp-cols small { margin-top: 4px; }
         .lp-cols button[aria-pressed='true'] b { color: var(--accent); }
-        .lp-cols button::after { content: ''; position: absolute; left: 22%; right: 22%; bottom: -1px; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform .28s ease; }
+        .lp-cols button::after { content: ''; position: absolute; left: 22%; right: 22%; bottom: -1px; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform var(--dur-s) var(--ease); }
         .lp-cols button[aria-pressed='true']::after { transform: scaleX(1); }
         .lp__row { grid-template-columns: minmax(0, 1fr); row-gap: 18px; }
         .lp__c { padding: 2px 4px 4px; }
@@ -92,7 +93,7 @@
         .js .lp-book[data-show='la'] .lp__c:not(.lp__c--la), .js .lp-book[data-show='en'] .lp__c:not(.lp__c--en),
         .js .lp-book[data-show='de'] .lp__c:not(.lp__c--de), .js .lp-book[data-show='ar'] .lp__c:not(.lp__c--ar) { display: none; }
         .js .lp__row { row-gap: 0; }
-        .js .lp__v { animation: lp-turn .32s ease both; }
+        .js .lp__v { animation: lp-turn var(--dur) var(--ease) both; }
       }
       /* phones: a narrower frame and smaller head */
       @media (max-width: 760px) {
@@ -110,7 +111,7 @@
   
     <link rel="stylesheet" href="../fonts/arabic.css" />
     <script src="../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/lucretius.html, commit 253826bc" />
+    <meta name="translated-from" content="English public/lucretius.html, commit 2509b97+" />
   </head>
 
   <body><div class="bgs-aside bgs-aside--far" data-bg="motes" data-bg-mask="round" aria-hidden="true"></div><div class="bgs-fixed" data-bg="swerve" data-bg-mask="sides" aria-hidden="true"></div>

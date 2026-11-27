@@ -251,7 +251,7 @@
   background: var(--accent);
   color: #fff;
   font: 500 14px var(--sans);
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: background-color var(--dur-s) var(--ease), border-color var(--dur-s) var(--ease), transform var(--dur-s) var(--ease), box-shadow var(--dur-s) var(--ease);
 }
 .entry__open::after {
   content: '→';
@@ -261,6 +261,8 @@
   border-color: var(--accent-dark);
   color: #fff;
   text-decoration: none;
+  transform: translateY(var(--lift));
+  box-shadow: var(--lift-shadow);
 }
 .entry__note {
   font: 500 14px var(--sans);

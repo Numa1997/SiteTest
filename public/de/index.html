@@ -12,6 +12,7 @@
     />
     <meta name="author" content="Numa Koudsie" />
     <meta name="theme-color" content="#f5f1ea" /><link rel="alternate" hreflang="en" href="https://phyeinusul.com/index.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/index.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/index.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/index.html" />
+    <link rel="stylesheet" href="../styles/motion.css" />
     <link rel="stylesheet" href="../styles/site.css" />
     <link rel="stylesheet" href="../styles/fold.css" /><link rel="stylesheet" href="../styles/bg-scenes.css" /><link rel="stylesheet" href="../styles/i18n.css" /><script src="../scripts/flip.js"></script>
     <link
@@ -23,7 +24,7 @@
     </script>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English index.html, commit 87f60d44" />
+    <meta name="translated-from" content="English index.html, commit 87f60d4+" />
   </head>
 
   <body><div class="bgs-top bgs-top--forest" data-bg="forest" data-bg-mask="soft" data-bg-under="90" data-bg-avoid=".hero__text > *" data-bg-avoid-near=".hero__side > *" aria-hidden="true"></div><div class="bgs-fixed" data-bg="rails" data-bg-mask="none" data-bg-around=".layout" data-bg-until="[data-bg=shores]" aria-hidden="true"></div>
@@ -58,12 +59,12 @@
             .hero__side .figure__stage { aspect-ratio: 4 / 3; }
             .lq { position: relative; z-index: 30; padding: 2px 0 2px 16px; border-left: 2px solid var(--accent); animation: fade 1.2s 0.2s ease both; }
             .lq, .lq * { box-sizing: border-box; }
-            .lq-s { width: fit-content; max-width: 100%; margin: 0 0 .35em; padding: 1px 10px 1px 4px; margin-left: -4px; border-radius: 6px; cursor: default; outline: none; transition: background-color .25s ease; }
-            .lq-l { display: block; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(15px, min(1.45vw, 2.15svh), 19.5px); line-height: 1.3; color: var(--ink); transition: color .25s ease; }
+            .lq-s { width: fit-content; max-width: 100%; margin: 0 0 .35em; padding: 1px 10px 1px 4px; margin-left: -4px; border-radius: 6px; cursor: default; outline: none; transition: background-color var(--dur-s) var(--ease); }
+            .lq-l { display: block; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(15px, min(1.45vw, 2.15svh), 19.5px); line-height: 1.3; color: var(--ink); transition: color var(--dur-s) var(--ease); }
             .lq-s.is-on { background: rgba(122, 31, 43, .06); } .lq-s.is-on .lq-l { color: var(--accent-dark); } .lq-s:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
             .lq-k { margin: 6px 0 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
             .lq-all { margin: 9px 0 0; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; } .lq-all a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; } .lq-all a:hover, .lq-all a:focus-visible { border-bottom-color: var(--accent); }
-            .lq-card { position: absolute; z-index: 20; left: 0; width: min(460px, 92vw); padding: 12px 16px; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 10px; box-shadow: 0 10px 30px rgba(60, 40, 20, .14); opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .18s ease, transform .26s cubic-bezier(.2, .7, .2, 1), top .26s cubic-bezier(.2, .7, .2, 1), left .26s cubic-bezier(.2, .7, .2, 1); }
+            .lq-card { position: absolute; z-index: 20; left: 0; width: min(460px, 92vw); padding: 12px 16px; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 10px; box-shadow: 0 10px 30px rgba(60, 40, 20, .14); opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity var(--dur-s) var(--ease), transform var(--dur-s) var(--ease), top var(--dur-s) var(--ease), left var(--dur-s) var(--ease); }
             .lq-card.is-shown { opacity: 1; transform: none; } .lq-card.is-pinned { pointer-events: auto; }
             .lq-card__h { display: block; margin-bottom: 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
             .lq-card__l { display: block; font-family: var(--serif); font-style: italic; font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }

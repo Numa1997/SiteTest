@@ -758,6 +758,25 @@
         tr.classList.add('is-open');
         openDetail = d;
     }
+    /* a section folds with the site's motion (styles/motion.css): closing fades its rows, then hides them; opening shows them
+       and lets them rise in one after another. Only classes change; the table is not redrawn. */
+    function fold(sec, shut) {
+        clearTimeout(sec._fold);
+        var rows = sec.querySelectorAll('tr:not(.dp-sec__hd)'), still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var css = function (n, d) { var v = getComputedStyle(document.documentElement).getPropertyValue(n).trim(), x = parseFloat(v); return isNaN(x) ? d : /ms$/.test(v) ? x : x * 1000; };
+        sec.classList.remove('is-rising');
+        if (shut) {
+            if (still) { sec.classList.add('is-folded'); return; }
+            sec.classList.add('is-closing');
+            sec._fold = setTimeout(function () { sec.classList.add('is-folded'); sec.classList.remove('is-closing'); }, css('--dur-s', 450));
+            return;
+        }
+        sec.classList.remove('is-closing', 'is-folded');
+        if (still) return;
+        Array.prototype.forEach.call(rows, function (r, i) { r.style.setProperty('--i', Math.min(i, 12)); });
+        void sec.offsetWidth; sec.classList.add('is-rising');
+        sec._fold = setTimeout(function () { sec.classList.remove('is-rising'); }, css('--rise-dur', 700) + css('--rise-wait', 120) + 12 * css('--rise-step', 45) + 60);
+    }
     function narrow() { var m = tbl.querySelector('thead .c-mean'); return !!m && getComputedStyle(m).display === 'none'; }
     tbl.addEventListener('click', function (e) {
         var b = e.target.closest('[data-check]');
@@ -765,8 +784,8 @@
         if (e.target.closest('[data-copy]')) { snap = takeSnap(current); paintArray(); return; }
         var f = e.target.closest('[data-fold]');
         if (f) {
-            var si = +f.getAttribute('data-fold'), on = !folded(si);
-            secEls[si].classList.toggle('is-folded', on); f.setAttribute('aria-expanded', on ? 'false' : 'true');
+            var si = +f.getAttribute('data-fold'), on = !folded(si), sec = secEls[si];
+            fold(sec, on); f.setAttribute('aria-expanded', on ? 'false' : 'true');
             store('fold.' + location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, ''), secEls.map(function (el) { return el.classList.contains('is-folded') ? '1' : '0'; }).join(','));
             paint(true);
             return;

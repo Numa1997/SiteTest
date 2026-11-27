@@ -219,9 +219,10 @@ ul {
   border: 1px solid var(--accent);
   white-space: nowrap;
   transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+    background var(--dur-s) var(--ease),
+    border-color var(--dur-s) var(--ease),
+    box-shadow var(--dur-s) var(--ease),
+    transform var(--dur-s) var(--ease);
 }
 .btn:hover {
   background: var(--accent-dark);
@@ -229,7 +230,7 @@ ul {
   color: #fff;
   text-decoration: none;
   box-shadow: 0 8px 20px rgba(122, 31, 43, 0.25);
-  transform: translateY(-1px);
+  transform: translateY(var(--lift));
 }
 .btn--ghost {
   background: transparent;
@@ -340,9 +341,9 @@ ul {
   text-transform: none; line-height: 1.35;
   color: var(--ink-2);
   transition:
-    color 0.2s ease,
-    border-color 0.2s ease,
-    padding-right 0.2s ease;
+    color var(--dur-s) var(--ease),
+    border-color var(--dur-s) var(--ease),
+    padding-right var(--dur-s) var(--ease);
 }
 .index a:hover {
   color: var(--accent);
@@ -452,7 +453,7 @@ ul {
   font-size: 26px;
   line-height: 1.15;
   margin: 4px 0 2px;
-  transition: color 0.2s ease;
+  transition: color var(--dur-s) var(--ease);
 }
 .entry:hover h3 {
   color: var(--accent);
@@ -495,7 +496,7 @@ ul {
   gap: 16px;
   padding: 18px 0;
   border-bottom: 1px solid var(--rule-soft);
-  transition: background 0.2s ease;
+  transition: background var(--dur-s) var(--ease);
 }
 .row:hover {
   background: linear-gradient(to left, var(--card-soft), transparent);
@@ -589,12 +590,12 @@ ul {
   flex-direction: column;
   box-shadow: var(--shadow-sm);
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
+    transform var(--dur-s) var(--ease),
+    box-shadow var(--dur-s) var(--ease),
+    border-color var(--dur-s) var(--ease);
 }
 .plate:hover {
-  transform: translateY(-5px);
+  transform: translateY(var(--lift));
   box-shadow: var(--shadow);
   border-color: rgba(122, 31, 43, 0.4);
 }
@@ -610,7 +611,7 @@ ul {
   width: 100%;
   height: 100%;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform var(--dur) var(--ease);
 }
 .plate:hover .plate__fig svg {
   transform: scale(1.05);
@@ -683,19 +684,19 @@ ul {
   padding: 8px 16px;
   border-radius: 6px;
   transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    background var(--dur-s) var(--ease),
+    transform var(--dur-s) var(--ease),
+    box-shadow var(--dur-s) var(--ease);
 }
 .plate__launch::after {
   content: '←';
-  transition: transform 0.2s ease;
+  transition: transform var(--dur-s) var(--ease);
 }
 .plate__launch:hover {
   background: var(--accent-dark);
   color: #fff;
   text-decoration: none;
-  transform: translateX(-3px);
+  transform: translateY(var(--lift));
   box-shadow: 0 8px 20px rgba(122, 31, 43, 0.25);
 }
 .plate__launch:hover::after {
@@ -785,15 +786,15 @@ footer a {
   opacity: 0;
   transform: translateY(18px);
   transition:
-    opacity 0.7s ease var(--d, 0ms),
-    transform 0.7s ease var(--d, 0ms);
+    opacity var(--rise-dur) var(--ease) var(--d, 0ms),
+    transform var(--rise-dur) var(--ease) var(--d, 0ms);
 }
 .js .reveal.is-visible {
   opacity: 1;
   transform: none;
 }
 .js .reveal.is-visible.plate:hover {
-  transform: translateY(-5px);
+  transform: translateY(var(--lift));
 }
 
 /* ================= responsive ================= */
@@ -984,7 +985,7 @@ footer a {
   background: var(--card);
   color: var(--accent);
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background var(--dur-s) var(--ease), color var(--dur-s) var(--ease), border-color var(--dur-s) var(--ease);
 }
 .shelf__btn svg {
   width: 18px;
@@ -1018,7 +1019,7 @@ footer a {
   border-radius: 4px;
   background: var(--rule);
   cursor: pointer;
-  transition: width 0.3s ease, background 0.3s ease;
+  transition: width var(--dur-s) var(--ease), background var(--dur-s) var(--ease);
 }
 .shelf__dot:hover {
   background: var(--accent-rose);
@@ -1106,7 +1107,7 @@ footer a {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.12s ease-out;
+  transition: background var(--dur-s) var(--ease), box-shadow var(--dur-s) var(--ease), transform var(--dur-s) var(--ease);
 }
 /* the plates in view: wine with a soft ring, the same size as the others, so the dots never move under a finger */
 .shelf__rail .shelf__dot.is-on {
@@ -1128,7 +1129,7 @@ footer a {
   pointer-events: none;
   opacity: 0;
   transform: translateY(-50%) scale(0.92);
-  transition: opacity 0.18s ease, transform 0.18s ease, top 0.12s ease-out;
+  transition: opacity var(--dur-s) var(--ease), transform var(--dur-s) var(--ease), top var(--dur-s) var(--ease);
 }
 .shelf__tip.is-on {
   opacity: 1;
@@ -1197,5 +1198,5 @@ footer a {
 /* Tapping (Numa, 3 November 2026): Android Chrome's blue tap highlight is switched off everywhere; a tapped link or button dims to
    72 % for the press instead, and the keyboard focus ring (:focus-visible, in the accent colour) stays as it is. */
 html, a, button, input, select, textarea, label, summary, [role="button"], [tabindex] { -webkit-tap-highlight-color: transparent; }
-a:active, button:active { opacity: .72; transition: opacity 0s; }
+a:active, button:active { opacity: .72; transition: opacity calc(var(--dur-s) / 4) var(--ease); }   /* the press is quick to show (a tap lasts about 0.1 s) */
 input[type="range"]:active { opacity: 1; }

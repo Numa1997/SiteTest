@@ -1,0 +1,34 @@
+/* Motion: one calm movement for every click, hover and page change (Numa, 27 November 2026; docs/styles.md, "Motion").
+   Every page links this file first, so these few lines set the pace of the whole site's interface. The simulations and the
+   animated backgrounds keep their own clocks and are not governed by it.
+
+   --ease    the shape of every movement: slow in, slow out, no bounce (close to smootherstep, t^3 (6t^2 - 15t + 10))
+   --dur     opening and closing a card, a section or a panel
+   --dur-s   hover, press and colour changes
+   To slow everything down or speed it up, change --dur and --dur-s; the scripts read the same two values. */
+:root {
+  --ease: cubic-bezier(.65, 0, .35, 1);
+  --ease-out: cubic-bezier(.33, 1, .68, 1);   /* page changes and jumps within a page: they start at once and settle */
+  --dur: .75s;
+  --dur-s: .45s;
+
+  /* the items of a card that opens rise in one after another */
+  --rise: 14px;              /* how far each item rises */
+  --rise-dur: .7s;           /* how long each item takes */
+  --rise-step: 45ms;         /* the gap between one item and the next */
+  --rise-wait: 120ms;        /* the wait before the first item, while the card begins to open */
+
+  /* hover: a small lift and a soft shadow */
+  --lift: -2px;
+  --lift-shadow: 0 10px 24px -14px rgba(60, 40, 20, .32);
+}
+
+@keyframes m-rise { from { opacity: 0; transform: translateY(var(--rise)); } to { opacity: 1; transform: none; } }
+@keyframes m-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* readers who ask their system for less motion get none: every transition and animation of the interface is switched off */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0s; --dur-s: 0s; --rise-dur: 0s; --rise-step: 0ms; --rise-wait: 0ms; --lift: 0px; }
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { transition-duration: 0s !important; transition-delay: 0s !important; animation-duration: 0s !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; }
+}

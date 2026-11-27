@@ -14,7 +14,7 @@
   writing-mode: vertical-rl;
   font-family: var(--mono); font-size: 12.5px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
   color: #fff; background: var(--accent); border: 0; border-radius: 10px 0 0 10px;
-  box-shadow: var(--shadow); cursor: pointer; transition: background .2s ease, padding .2s ease;
+  box-shadow: var(--shadow); cursor: pointer; transition: background var(--dur-s) var(--ease), padding var(--dur-s) var(--ease);
 }
 .dp-tab:hover { background: var(--accent-dark); padding-right: 13px; }
 .dp-tab:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
@@ -30,11 +30,11 @@
   border-left: 1px solid var(--rule);
   box-shadow: -24px 0 48px -36px rgba(28, 21, 24, .55);
   transform: translateX(100%); visibility: hidden;
-  transition: transform .32s ease, visibility 0s .32s;
+  transition: transform var(--dur) var(--ease), visibility 0s var(--dur);
   font-size: 15px; line-height: 1.5;
   container: dp / inline-size;
 }
-.dp-open .dp { transform: none; visibility: visible; transition: transform .32s ease; }
+.dp-open .dp { transform: none; visibility: visible; transition: transform var(--dur) var(--ease); }
 .dp sub, .dp sup { font-size: 70%; }
 
 .dp__head { padding: 14px 20px 10px; }
@@ -180,7 +180,7 @@
 .dp-tbl tr.is-open > * { background: var(--card-soft); border-bottom-color: transparent; }
 .dp-spk { display: inline-block; width: 72px; height: 22px; vertical-align: middle; }
 .dp-cur { display: block; font-size: 12px; color: var(--ink-3); }
-.dp-exp { display: inline-block; font-family: var(--sans); font-size: 20px; line-height: 1; color: var(--accent); transition: transform .2s ease; }
+.dp-exp { display: inline-block; font-family: var(--sans); font-size: 20px; line-height: 1; color: var(--accent); transition: transform var(--dur) var(--ease); }
 tr.is-open .dp-exp { transform: rotate(90deg); }
 /* a row that starts to change blinks once; one that keeps changing shows only its Δ */
 .dp-tbl tr.is-blink0 > * { animation: dp-blink-a .9s ease-out; }
@@ -199,10 +199,16 @@ tr.is-open .dp-exp { transform: rotate(90deg); }
 .dp-sec__n { font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--accent); }
 .dp-sec__t { font-family: var(--serif); font-weight: 400; font-size: 21px; line-height: 1.2; letter-spacing: -.01em; color: var(--ink); }
 .dp-sec__c { margin-left: auto; font-family: var(--mono); font-size: 11.5px; font-weight: 400; color: var(--muted); }
-.dp-sec__ar { font-size: 15px; color: var(--accent); transition: transform .2s ease; }
+.dp-sec__ar { font-size: 15px; color: var(--accent); transition: transform var(--dur) var(--ease); }
 .dp-sec.is-folded .dp-sec__ar { transform: rotate(-90deg); }
 .dp-sec__note { margin: 2px 0 0; font-size: 13px; font-weight: 400; line-height: 1.4; color: var(--muted); }
 .dp-sec.is-folded tr:not(.dp-sec__hd) { display: none; }
+/* a section of the table that opens: its rows rise in one after another; one that closes fades its rows first (datalog.js).
+   An opened row's detail rises in the same way. */
+.dp-sec tr:not(.dp-sec__hd) { transition: opacity var(--dur-s) var(--ease); }
+.dp-sec.is-closing tr:not(.dp-sec__hd) { opacity: 0; }
+.dp-sec.is-rising tr:not(.dp-sec__hd) { animation: m-rise var(--rise-dur) var(--ease) both; animation-delay: calc(var(--i, 0) * var(--rise-step) + var(--rise-wait)); }
+.dp-x__in, .dp-dt__in { animation: m-rise var(--rise-dur) var(--ease) both; }
 .dp-sec.is-folded .dp-sec__hd th { border-bottom-color: var(--rule); }
 
 .dp-x > td, .dp-dt > td { padding: 0; border-bottom: 1px solid var(--rule); }
@@ -385,7 +391,7 @@ button.dp-read__v:focus-visible { outline: 2px solid var(--accent); outline-offs
 /* phones: the panel becomes a bottom sheet and the tab a pill */
 @media (max-width: 640px) {
   .dp { top: auto; left: 0; width: 100%; height: 88vh; height: 88dvh; border-left: 0; border-top: 1px solid var(--rule); border-radius: 18px 18px 0 0; transform: translateY(100%); }
-  .dp-tab { top: auto; right: 16px; bottom: 16px; transform: none; writing-mode: horizontal-tb; padding: 10px 16px; border-radius: 999px; font-size: 12px; transition: transform .24s cubic-bezier(.4, 0, .2, 1), background .2s ease; }
+  .dp-tab { top: auto; right: 16px; bottom: 16px; transform: none; writing-mode: horizontal-tb; padding: 10px 16px; border-radius: 999px; font-size: 12px; transition: transform var(--dur-s) var(--ease), background var(--dur-s) var(--ease); }
   .dp-tab:hover { padding-right: 16px; }
   .dp-tab--away { transform: translateY(calc(100% + 24px)); }
   .dp__head { padding: 10px 16px 6px; }
